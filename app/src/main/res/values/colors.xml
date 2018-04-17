@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="gray">#fd989a9e</color>
+    <color name="mine_bg">#1e82d2</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="register_hint">#999999</color>
+    <color name="exit_color">#1e82d2</color>
+    <color name="mine_color">#f0f0f0</color>
+    <color name="red">#e93f33</color>
+    <color name="agree">#057afb</color>
+</resources>

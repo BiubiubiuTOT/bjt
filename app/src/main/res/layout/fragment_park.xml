@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/secretary_top_height"
+            android:background="@color/mine_bg"
+            android:gravity="center"
+            android:text="@string/tv_park"
+            android:textColor="@color/white"
+            android:textSize="@dimen/secretary_text_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/mine_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/park_item_height"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/mine_item_margin_top">
+
+            <ImageView
+                android:layout_width="@dimen/park_item_icon"
+                android:layout_height="@dimen/park_item_icon"
+                android:src="@mipmap/my_car" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mine_item_margin"
+                android:text="@string/tv_park_my_car"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_exit_text_size" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/mine_item_margin_top"
+            android:background="@color/mine_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/park_item_height"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/mine_item_margin_top">
+
+            <ImageView
+                android:layout_width="@dimen/park_item_icon"
+                android:layout_height="@dimen/park_item_icon"
+                android:src="@mipmap/park_apply" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mine_item_margin"
+                android:text="@string/tv_park_park_apply"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_exit_text_size" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/mine_item_margin_top"
+            android:background="@color/mine_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/park_item_height"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/mine_item_margin_top">
+
+            <ImageView
+                android:layout_width="@dimen/park_item_icon"
+                android:layout_height="@dimen/park_item_icon"
+                android:src="@mipmap/park_pay" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mine_item_margin"
+                android:text="@string/tv_park_park_pay"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_exit_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

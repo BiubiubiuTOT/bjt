@@ -1,0 +1,41 @@
+package com.bangjiat.bangjiaapp.module.account.model;
+
+import com.bangjiat.bangjiaapp.api.ApiFactory;
+import com.bangjiat.bangjiaapp.api.MyCallBack;
+import com.bangjiat.bangjiaapp.common.BaseResult;
+import com.bangjiat.bangjiaapp.module.account.beans.LoginInput;
+import com.bangjiat.bangjiaapp.module.account.contract.LoginContract;
+import com.orhanobut.logger.Logger;
+
+import retrofit2.Response;
+
+/**
+ * Created by Administrator on 2018/4/14 0014.
+ */
+
+public class LoginModel implements LoginContract.Model {
+    private LoginContract.Presenter presenter;
+
+    public LoginModel(LoginContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void login(LoginInput input) {
+        ApiFactory.getService().login(input).enqueue(new MyCallBack<BaseResult<String>>() {
+            @Override
+            public void onSuc(Response<BaseResult<String>> response) {
+                BaseResult<String> body = response.body();
+                if (body.getStatus() == 200) {
+                    presenter.loginSuccess(body);
+                } else presenter.loginFail( body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.loginFail(message);
+                Logger.e(message);
+            }
+        });
+    }
+}

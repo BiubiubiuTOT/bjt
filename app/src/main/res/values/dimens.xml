@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="mine_top_height">160dp</dimen>
+    <dimen name="mine_icon">75dp</dimen>
+    <dimen name="mine_name_marginTop">10dp</dimen>
+    <dimen name="mine_item_height">45dp</dimen>
+    <dimen name="mine_item_margin">15dp</dimen>
+    <dimen name="mine_item_left_icon">22dp</dimen>
+    <dimen name="mine_item_right_icon">14dp</dimen>
+    <dimen name="mine_item_margin_top">10dp</dimen>
+    <dimen name="mine_exit_height">44dp</dimen>
+    <dimen name="mine_exit_margin_top">22dp</dimen>
+    <dimen name="mine_exit_text_size">15sp</dimen>
+    <dimen name="mine_item_height_1">44dp</dimen>
+    <dimen name="secretary_margin_top">10dp</dimen>
+    <dimen name="secretary_text_size">17sp</dimen>
+    <dimen name="secretary_icon">50dp</dimen>
+    <dimen name="secretary_top_height">44dp</dimen>
+    <dimen name="secretary_item_height">150dp</dimen>
+    <dimen name="park_item_icon">44dp</dimen>
+    <dimen name="park_item_height">74dp</dimen>
+
+</resources>
