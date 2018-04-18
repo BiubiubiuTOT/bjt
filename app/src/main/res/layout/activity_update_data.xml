@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context="com.bangjiat.bangjiaapp.module.personaldata.ui.EditDataActivity">
+
+    <include layout="@layout/toolbar_1" />
+
+    <LinearLayout
+        android:id="@+id/ll_input"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/personal_item_height"
+            android:background="@null"
+            android:paddingLeft="@dimen/mine_item_margin"
+            android:textColor="@color/personal_message" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_man"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/personal_item_height"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/mine_item_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/personal_sex_default"
+                    android:textColor="@color/personal_title_color"
+                    android:textSize="@dimen/personal_item_text_title_size" />
+
+                <ImageView
+                    android:id="@+id/iv_man"
+                    android:layout_width="@dimen/mine_item_right_icon"
+                    android:layout_height="@dimen/mine_item_right_icon"
+                    android:layout_marginRight="@dimen/mine_item_margin"
+                    android:src="@mipmap/check" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/personal_item_view_height"
+                android:layout_gravity="bottom"
+                android:background="@color/personal_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_woman"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/personal_item_height"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/mine_item_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/personal_sex_default_1"
+                    android:textColor="@color/personal_title_color"
+                    android:textSize="@dimen/personal_item_text_title_size" />
+
+                <ImageView
+                    android:id="@+id/iv_woman"
+                    android:layout_width="@dimen/mine_item_right_icon"
+                    android:layout_height="@dimen/mine_item_right_icon"
+                    android:layout_marginRight="@dimen/mine_item_margin"
+                    android:src="@mipmap/check"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

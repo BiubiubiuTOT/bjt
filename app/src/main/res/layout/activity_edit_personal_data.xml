@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context="com.bangjiat.bangjiaapp.module.personaldata.ui.PersonalDataActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/ll_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:layout_marginTop="@dimen/mine_item_margin_top"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_nickname"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/mine_item_margin_top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/personal_nickname_default"
+                android:textColor="@color/personal_message"
+                android:textSize="@dimen/personal_item_text_message_size" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/personal_item_view_height"
+            android:layout_gravity="bottom"
+            android:background="@color/personal_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_sex"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_sex"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+            <TextView
+                android:id="@+id/tv_sex"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/mine_item_margin_top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/personal_sex_default"
+                android:textColor="@color/personal_message"
+                android:textSize="@dimen/personal_item_text_message_size" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/personal_item_view_height"
+            android:layout_gravity="bottom"
+            android:background="@color/personal_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_birthday"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_birthday"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/mine_item_margin_top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/personal_birthday_default"
+                android:textColor="@color/personal_message"
+                android:textSize="@dimen/personal_item_text_message_size" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mine_item_margin"
+        android:text="@string/personal_contact"
+        android:textColor="@color/personal_message"
+        android:textSize="@dimen/personal_item_contact" />
+
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_phone"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/mine_item_margin_top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/personal_phone_default"
+                android:textColor="@color/personal_message"
+                android:textSize="@dimen/personal_item_text_message_size" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/personal_item_view_height"
+            android:layout_gravity="bottom"
+            android:background="@color/personal_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_code"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/personal_code"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin_top"
+                android:src="@mipmap/litter_code" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

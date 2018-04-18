@@ -59,6 +59,10 @@ public interface ApiService {
     @POST("user/saveFeedBack")
     Call<BaseResult<String>> saveFeedBack();
 
+
+    @POST("api/company/add/Company")
+    Call<BaseResult<String>> addCompany(@Header(Constants.TOKEN_NAME) String token, @Body CompanyInput input);
+
     /**
      * 上传反馈图片
      *

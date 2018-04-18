@@ -5,24 +5,37 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.bangjiat.bangjiaapp.R;
+import com.githang.statusbar.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseToolBarActivity extends AppCompatActivity {
+public abstract class BaseWhiteToolBarActivity extends AppCompatActivity {
     public Context mContext;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         mContext = this;
         ButterKnife.bind(this);
-        initToolbar(toolbar);
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        toolbar.setTitle("");
+        TextView textView = findViewById(R.id.toolbar_title);
+        textView.setText(getTitleStr());
+        textView.setTextColor(getResources().getColor(R.color.black));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        toolbar.setNavigationIcon(R.mipmap.back_black);
+
         setSupportActionBar(toolbar);
     }
 
@@ -33,7 +46,8 @@ public abstract class BaseToolBarActivity extends AppCompatActivity {
      */
     abstract protected int getLayoutResId();
 
-    abstract protected void initToolbar(Toolbar toolbar);
+    abstract protected String getTitleStr();
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

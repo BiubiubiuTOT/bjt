@@ -14,4 +14,7 @@
     <color name="agree">#057afb</color>
 
     <color name="scan_corner_color">#0effc2</color>
+    <color name="personal_title_color">#282828</color>
+    <color name="personal_view">#cccccc</color>
+    <color name="personal_message">#999999</color>
 </resources>

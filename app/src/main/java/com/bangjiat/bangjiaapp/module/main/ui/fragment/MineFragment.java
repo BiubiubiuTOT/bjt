@@ -12,6 +12,7 @@ import com.bangjiat.bangjiaapp.module.main.ui.activity.ContactServiceActivity;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.FeedBackActivity;
 import com.bangjiat.bangjiaapp.module.account.ui.LoginActivity;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.PersonalHeadActivity;
+import com.bangjiat.bangjiaapp.module.personaldata.ui.PersonalDataActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,11 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.tv_exit)
     public void clickExit(View view) {
         showExitDialog();
+    }
+
+    @OnClick(R.id.ll_edit)
+    public void clickEdit(View view) {
+        startActivity(new Intent(mContext, PersonalDataActivity.class));
     }
 
     private void showExitDialog() {

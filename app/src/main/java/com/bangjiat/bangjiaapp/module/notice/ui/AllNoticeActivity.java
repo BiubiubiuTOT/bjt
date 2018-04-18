@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.bangjiat.bangjiaapp.R;
-import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bangjiaapp.module.notice.adapter.NoticeAdapter;
 import com.bangjiat.bangjiaapp.module.notice.beans.NoticeBean;
 import com.bangjiat.bangjiaapp.module.notice.contract.NoticeContract;
@@ -22,7 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class AllNoticeActivity extends BaseToolBarActivity implements NoticeContract.View {
+public class AllNoticeActivity extends BaseWhiteToolBarActivity implements NoticeContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
 
@@ -30,7 +27,7 @@ public class AllNoticeActivity extends BaseToolBarActivity implements NoticeCont
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+
         super.onCreate(savedInstanceState);
         initData();
     }
@@ -72,23 +69,10 @@ public class AllNoticeActivity extends BaseToolBarActivity implements NoticeCont
     }
 
     @Override
-    protected void initToolbar(Toolbar toolbar) {
-        toolbar.setTitle("");
-        TextView textView = findViewById(R.id.toolbar_title);
-        textView.setText("全部公告");
-        textView.setTextColor(getResources().getColor(R.color.black));
-        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
-        toolbar.setNavigationIcon(R.mipmap.back_black);
+    protected String getTitleStr() {
+        return "全部公告";
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void showDialog() {

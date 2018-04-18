@@ -57,4 +57,15 @@
     <string name="tv_notice_default_title">国庆放假通知：</string>
     <string name="tv_visitor_agree">同意</string>
     <string name="tv_visitor_refuse">拒绝</string>
+    <string name="personal_nickname">昵称</string>
+    <string name="personal_nickname_default">David Lee</string>
+    <string name="personal_sex">性别</string>
+    <string name="personal_sex_default">男</string>
+    <string name="personal_sex_default_1">女</string>
+    <string name="personal_birthday">生日</string>
+    <string name="personal_birthday_default">1978-02-11</string>
+    <string name="personal_contact">联系方式</string>
+    <string name="personal_phone">手机号</string>
+    <string name="personal_phone_default">18188488288</string>
+    <string name="personal_code">名片二维码</string>
 </resources>

@@ -47,7 +47,9 @@
             android:name=".module.scan.ui.ScanActivity"
             android:launchMode="singleTop" />
         <activity android:name=".module.scan.ui.MyCodeActivity" />
-        <activity android:name=".module.scan.ui.OpenDoorCodeActivity"></activity>
+        <activity android:name=".module.scan.ui.OpenDoorCodeActivity" />
+        <activity android:name=".module.personaldata.ui.PersonalDataActivity" />
+        <activity android:name=".module.personaldata.ui.EditDataActivity"></activity>
     </application>
 
 </manifest>

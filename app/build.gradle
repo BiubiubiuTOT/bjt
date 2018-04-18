@@ -76,4 +76,6 @@ dependencies {
 
     compile 'com.github.jokermonn:permissions4m:2.1.2-lib'
     annotationProcessor 'com.github.jokermonn:permissions4m:2.1.2-processor'//权限
+
+    compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'//时间选择
 }
