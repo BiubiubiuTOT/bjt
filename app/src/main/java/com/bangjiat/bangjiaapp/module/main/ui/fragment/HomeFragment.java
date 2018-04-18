@@ -1,7 +1,9 @@
 package com.bangjiat.bangjiaapp.module.main.ui.fragment;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -11,20 +13,30 @@ import com.bangjiat.bangjiaapp.common.BaseFragment;
 import com.bangjiat.bangjiaapp.module.notice.beans.NoticeBean;
 import com.bangjiat.bangjiaapp.module.notice.ui.AllNoticeActivity;
 import com.bangjiat.bangjiaapp.module.notice.ui.NoticeItemActivity;
+import com.bangjiat.bangjiaapp.module.scan.ui.OpenDoorCodeActivity;
 import com.bangjiat.bangjiaapp.module.scan.ui.ScanActivity;
 import com.bangjiat.bangjiaapp.module.visitor.ui.VisitorActivity;
 import com.bumptech.glide.Glide;
+import com.joker.api.Permissions4M;
+import com.joker.api.wrapper.Wrapper;
+import com.orhanobut.logger.Logger;
 
 import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bertsir.zbar.QrConfig;
+import cn.bertsir.zbar.QrManager;
 import cn.bingoogolapple.bgabanner.BGABanner;
 
 
 public class HomeFragment extends BaseFragment {
     @BindView(R.id.banner_guide_content)
     BGABanner mContentBanner;
+    private static final int REQUEST_CODE = 1;
+    private static final int READ_CODE = 2;
+    private static final int CAMERA_CODE = 3;
+    private boolean isOpenRead, isOpenCamera;
 
     protected void initView() {
         mContentBanner.setData(Arrays.asList("http://pic2.ooopic.com/12/42/25/02bOOOPIC95_1024.jpg",
@@ -74,7 +86,113 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.iv_scan)
     public void clickScan(View view) {
-        startActivity(new Intent(mContext, ScanActivity.class));
+        checkPermission();
+    }
+
+    @OnClick(R.id.tv_open_door)
+    public void clickOpenDoor(View view) {
+        startActivity(new Intent(mContext, OpenDoorCodeActivity.class));
+    }
+
+    private void checkPermission() {
+        Permissions4M.get(this)
+                .requestPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .requestCodes(READ_CODE, CAMERA_CODE)
+                .requestListener(new Wrapper.PermissionRequestListener() {
+                    @Override
+                    public void permissionGranted(int code) {
+                        switch (code) {
+                            case READ_CODE:
+//                                Toast.makeText(mContext, "读权限授权成功", Toast.LENGTH_SHORT).show();
+                                isOpenRead = true;
+                                startScan();
+                                break;
+                            case CAMERA_CODE:
+                                isOpenCamera = true;
+//                                Toast.makeText(mContext, "摄像头授权成功", Toast.LENGTH_SHORT).show();
+                                startScan();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void permissionDenied(int code) {
+                        switch (code) {
+                            case READ_CODE:
+                                isOpenRead = false;
+                                Toast.makeText(mContext, "存储权限授权失败", Toast.LENGTH_SHORT).show();
+                                break;
+                            case CAMERA_CODE:
+                                isOpenCamera = false;
+                                Toast.makeText(mContext, "摄像头权限授权失败", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void permissionRationale(int code) {
+                        switch (code) {
+                            case READ_CODE:
+//                                Toast.makeText(mContext, "请开启读权限", Toast.LENGTH_SHORT).show();
+                                break;
+                            case CAMERA_CODE:
+//                                Toast.makeText(mContext, "请开启摄像头权限", Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .request();
+    }
+
+    private void startScan() {
+        if (isOpenCamera && isOpenRead) {
+            Logger.d("startScan");
+            isOpenRead = false;
+            isOpenCamera = false;
+
+            QrConfig options = new QrConfig.Builder().create();
+            QrManager.getInstance().init(options).startScan(new QrManager.OnScanResultCallback() {
+                @Override
+                public void onScanSuccess(String result) {
+                    Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            Intent intent = new Intent(mContext, ScanActivity.class);
+            intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Permissions4M.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /**
+         * 处理二维码扫描结果
+         */
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+
+            }
+        }
     }
 }
 

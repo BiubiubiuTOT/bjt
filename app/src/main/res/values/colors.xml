@@ -12,4 +12,6 @@
     <color name="mine_color">#f0f0f0</color>
     <color name="red">#e93f33</color>
     <color name="agree">#057afb</color>
+
+    <color name="scan_corner_color">#0effc2</color>
 </resources>

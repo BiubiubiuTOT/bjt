@@ -12,6 +12,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi-v7a"  // 指定要ndk需要兼容的架构(这样其他依赖包里mips,x86,armeabi,arm-v8之类的so会被过滤掉)
+        }
     }
     buildTypes {
         release {
@@ -68,5 +72,8 @@ dependencies {
 
     compile 'com.dou361.dialogui:jjdxm-dialogui:1.0.1'//加载框
 
-    compile 'cn.yipianfengye.android:zxing-library:2.2'//二维码扫描
+    compile project(':zbarlibary')//二维码扫描
+
+    compile 'com.github.jokermonn:permissions4m:2.1.2-lib'
+    annotationProcessor 'com.github.jokermonn:permissions4m:2.1.2-processor'//权限
 }
