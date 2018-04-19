@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context="com.bangjiat.bangjiaapp.module.company.ui.AddCompanyActivity">
+
+    <include layout="@layout/toolbar_1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/company_info_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/park_item_icon"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dialogui_message_margintop">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/company_title"
+                android:textColor="@color/dialog_title"
+                android:textSize="@dimen/dialog_message_text_size" />
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@color/dialog_title"
+                android:textSize="@dimen/dialog_message_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/park_item_icon"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dialogui_message_margintop">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/company_trade_title"
+                android:textColor="@color/dialog_title"
+                android:textSize="@dimen/dialog_message_text_size" />
+
+            <EditText
+                android:id="@+id/et_trade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@color/dialog_title"
+                android:textSize="@dimen/dialog_message_text_size" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/personal_item_view_height"
+            android:layout_marginLeft="@dimen/dialogui_message_margintop"
+            android:layout_marginRight="@dimen/dialogui_message_margintop"
+            android:background="@color/personal_view" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/park_item_icon"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dialogui_message_margintop">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/company_address"
+                android:textColor="@color/dialog_title"
+                android:textSize="@dimen/dialog_message_text_size" />
+
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@color/dialog_title"
+                android:textSize="@dimen/dialog_message_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

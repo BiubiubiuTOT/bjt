@@ -1,13 +1,21 @@
 package com.bangjiat.bangjiaapp.module.personaldata.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bangjiat.bangjiaapp.R;
+import com.bangjiat.bangjiaapp.common.DataUtil;
 import com.bangjiat.bangjiaapp.common.TimeUtils;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseColorToolBarActivity;
+import com.bangjiat.bangjiaapp.module.personaldata.beans.UserInfoBean;
+import com.bangjiat.bangjiaapp.module.personaldata.contract.UpdateUserInfoContract;
+import com.bangjiat.bangjiaapp.module.personaldata.presenter.UpdateUserInfoPresenter;
+import com.dou361.dialogui.DialogUIUtils;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
@@ -15,13 +23,14 @@ import com.jzxiang.pickerview.listener.OnDateSetListener;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PersonalDataActivity extends BaseColorToolBarActivity implements OnDateSetListener {
+public class PersonalDataActivity extends BaseColorToolBarActivity implements OnDateSetListener, UpdateUserInfoContract.View {
     public static final String TITLE = "title";
     public static final String TYPE = "type";
     public static final String MESSAGE = "message";
     public static final int TYPE_NICKNAME = 1;
     public static final int TYPE_PHONE = 2;
     public static final int TYPE_SEX = 3;
+    private UpdateUserInfoContract.Presenter presenter;
 
     @BindView(R.id.tv_nickname)
     TextView tv_nickname;
@@ -32,6 +41,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements On
     @BindView(R.id.tv_date)
     TextView tv_date;
     private TimePickerDialog mDialogYearMonthDay;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +88,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements On
     }
 
     private void initDate() {
+        presenter = new UpdateUserInfoPresenter(this);
         mDialogYearMonthDay = new TimePickerDialog.Builder()
                 .setType(Type.YEAR_MONTH_DAY)
                 .setCallBack(this)
@@ -125,4 +136,45 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements On
         }
     }
 
+    @Override
+    public void showDialog() {
+        dialog = DialogUIUtils.showLoadingVertical(this, "加载中...").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void updateUserInfoSuccess() {
+        finish();
+    }
+
+    @Override
+    public void updateUserInfoFail(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            saveDateAndExit();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveDateAndExit() {
+        int sex = 0;
+        if (tv_sex.getText().toString().equals("女"))
+            sex = 1;
+
+        UserInfoBean userInfoBean = new UserInfoBean(tv_nickname.getText().toString(),
+                sex, tv_date.getText().toString(), tv_phone.getText().toString());
+        userInfoBean.setUsername(DataUtil.getAccount(mContext).getPhone());
+        userInfoBean.setPassword("123456");
+        presenter.updateUserInfo(DataUtil.getToken(mContext), userInfoBean);
+    }
 }

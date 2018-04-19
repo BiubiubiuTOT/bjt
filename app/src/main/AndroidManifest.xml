@@ -38,7 +38,7 @@
         <activity android:name=".module.main.ui.activity.ModifyPhoneActivity" />
         <activity android:name=".module.main.ui.activity.ContactServiceActivity" />
         <activity android:name=".module.main.ui.activity.FeedBackActivity" />
-        <activity android:name=".module.main.ui.activity.PersonalHeadActivity" />
+        <activity android:name=".module.personaldata.ui.PersonalHeadActivity" />
         <activity android:name=".module.main.ui.activity.AboutActivity" />
         <activity android:name=".module.notice.ui.AllNoticeActivity" />
         <activity android:name=".module.visitor.ui.VisitorActivity" />
@@ -49,7 +49,24 @@
         <activity android:name=".module.scan.ui.MyCodeActivity" />
         <activity android:name=".module.scan.ui.OpenDoorCodeActivity" />
         <activity android:name=".module.personaldata.ui.PersonalDataActivity" />
-        <activity android:name=".module.personaldata.ui.EditDataActivity"></activity>
+        <activity android:name=".module.personaldata.ui.EditDataActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.bangjiat.bangjiaapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <activity
+            android:name=".module.company.ui.AddOrSelectCompanyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/edit_AlertDialog_style" />
+        <activity android:name=".module.company.ui.CompanyInfoActivity" />
+        <activity android:name=".module.company.ui.AddCompanyActivity"></activity>
     </application>
 
 </manifest>

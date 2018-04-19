@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context="com.bangjiat.bangjiaapp.module.company.ui.AddOrSelectCompanyActivity">
+
+    <LinearLayout
+        android:layout_width="@dimen/dialog_width"
+        android:layout_height="@dimen/dialog_height"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/dialog_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.bangjiat.bangjiaapp.common.YuanJiaoImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/gif_height"
+            android:background="@drawable/top_bg"
+            android:src="@mipmap/company_gif" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialogui_message_margintop"
+            android:gravity="center"
+            android:text="@string/dialog_title"
+            android:textColor="@color/dialog_title"
+            android:textSize="@dimen/dialog_title"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_add_company"
+            android:layout_width="@dimen/dialog_btn_width"
+            android:layout_height="@dimen/dialog_btn_height"
+            android:layout_marginTop="@dimen/dialogui_message_margintop"
+            android:background="@drawable/add_company_bg"
+            android:text="@string/add_company"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_btn_size" />
+
+        <Button
+            android:id="@+id/btn_select_company"
+            android:layout_width="@dimen/dialog_btn_width"
+            android:layout_height="@dimen/dialog_btn_height"
+            android:layout_marginTop="@dimen/dialogui_message_margintop"
+            android:background="@drawable/select_company_bg"
+            android:text="@string/select_company"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_btn_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialogui_close_magintop"
+            android:gravity="center"
+            android:text="@string/dialog_message"
+            android:textColor="@color/dialog_message_text_color"
+            android:textSize="@dimen/dialog_message_text_size" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="@dimen/dialogui_close"
+        android:layout_height="@dimen/dialogui_close"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dialogui_close_magintop"
+        android:src="@mipmap/close" />
+</LinearLayout>
+
+
+

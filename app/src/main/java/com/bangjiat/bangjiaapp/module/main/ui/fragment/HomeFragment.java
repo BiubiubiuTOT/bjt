@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.common.BaseFragment;
+import com.bangjiat.bangjiaapp.module.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bangjiaapp.module.notice.beans.NoticeBean;
 import com.bangjiat.bangjiaapp.module.notice.ui.AllNoticeActivity;
 import com.bangjiat.bangjiaapp.module.notice.ui.NoticeItemActivity;
-import com.bangjiat.bangjiaapp.module.scan.ui.OpenDoorCodeActivity;
 import com.bangjiat.bangjiaapp.module.scan.ui.ScanActivity;
 import com.bangjiat.bangjiaapp.module.visitor.ui.VisitorActivity;
 import com.bumptech.glide.Glide;
@@ -91,7 +91,8 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.tv_open_door)
     public void clickOpenDoor(View view) {
-        startActivity(new Intent(mContext, OpenDoorCodeActivity.class));
+//        startActivity(new Intent(mContext, OpenDoorCodeActivity.class));
+        startActivity(new Intent(mContext, AddOrSelectCompanyActivity.class));
     }
 
     private void checkPermission() {

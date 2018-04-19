@@ -68,4 +68,15 @@
     <string name="personal_phone">手机号</string>
     <string name="personal_phone_default">18188488288</string>
     <string name="personal_code">名片二维码</string>
+    <string name="dialog_title">欢迎来到\n帮家团</string>
+    <string name="add_company">新建公司</string>
+    <string name="select_company">加入公司</string>
+    <string name="dialog_message">亲，您需要先创建或加入一个公司哦！</string>
+    <string name="company_add">加入公司</string>
+    <string name="company_trade_default">软件开发</string>
+    <string name="company_trade_title">所在行业：</string>
+    <string name="company_title">公司名称：</string>
+    <string name="company_title_default">贵州邦佳大数据科技有限公司</string>
+    <string name="company_address">地址：</string>
+    <string name="company_address_default">贵阳市观山湖区互联网金融特区大厦</string>
 </resources>

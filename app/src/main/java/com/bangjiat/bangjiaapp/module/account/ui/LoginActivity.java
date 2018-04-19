@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
         presenter = new LoginPresenter(this);
         Glide.with(LoginActivity.this).load(R.mipmap.login_bg)
-                .diskCacheStrategy(DiskCacheStrategy.ALL).crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade()
                 .bitmapTransform(new BlurTransformation(this, 20, 2))
                 .into(iv_bg);
     }

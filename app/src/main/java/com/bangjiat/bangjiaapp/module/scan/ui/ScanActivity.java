@@ -32,17 +32,23 @@ import cn.bertsir.zbar.ScanCallback;
 import cn.bertsir.zbar.view.ScanView;
 
 public class ScanActivity extends BaseToolBarActivity {
-    private static final int REQUEST_IMAGE = 1;
-
     @BindView(R.id.cp)
     CameraPreview cp;
     @BindView(R.id.sv)
     ScanView sv;
+    @BindView(R.id.tv_des)
+    TextView tv_des;
+
     private MediaPlayer mediaPlayer;
     private static final float BEEP_VOLUME = 0.10f;
     private boolean playBeep;
     private boolean vibrate;
     private static final long VIBRATE_DURATION = 200L;
+    public static final String SCAN_TYPE = "scan_type";
+    private static final int REQUEST_IMAGE = 1;
+    public static final int TYPE_FRIENDS = 1;
+    public static final int TYPE_COMPANY = 2;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,11 @@ public class ScanActivity extends BaseToolBarActivity {
         sv.setCornerColor(getResources().getColor(R.color.mine_bg));
         sv.setLineColor(getResources().getColor(R.color.mine_bg));
         sv.startScan();
+
+        type = getIntent().getIntExtra(SCAN_TYPE, 1);
+
+        if (type == 2)
+            tv_des.setText("扫描对方公司二维码\n加入该公司");
     }
 
     /**
@@ -211,7 +222,6 @@ public class ScanActivity extends BaseToolBarActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
 
     @OnClick(R.id.tv_my_code)

@@ -3,16 +3,21 @@ package com.bangjiat.bangjiaapp.module.main.ui.fragment;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.common.BaseFragment;
 import com.bangjiat.bangjiaapp.common.DataUtil;
+import com.bangjiat.bangjiaapp.module.account.ui.LoginActivity;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.AboutActivity;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.ContactServiceActivity;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.FeedBackActivity;
-import com.bangjiat.bangjiaapp.module.account.ui.LoginActivity;
-import com.bangjiat.bangjiaapp.module.main.ui.activity.PersonalHeadActivity;
+import com.bangjiat.bangjiaapp.module.personaldata.ui.PersonalHeadActivity;
+import com.bangjiat.bangjiaapp.module.personaldata.beans.UserInfoBean;
+import com.bangjiat.bangjiaapp.module.personaldata.contract.GetUserInfoContract;
+import com.bangjiat.bangjiaapp.module.personaldata.presenter.GetUserInfoPresenter;
 import com.bangjiat.bangjiaapp.module.personaldata.ui.PersonalDataActivity;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +26,15 @@ import butterknife.OnClick;
 import fv.galois.wcbmenu.WCBMenu;
 
 
-public class MineFragment extends BaseFragment {
+public class MineFragment extends BaseFragment implements GetUserInfoContract.View {
     private List<String> mList;
+    private GetUserInfoContract.Presenter presenter;
 
+
+    @Override
     protected void initView() {
+        presenter = new GetUserInfoPresenter(this);
+        presenter.getUserInfo(DataUtil.getToken(mContext));
         mList = new ArrayList<>();
         mList.add("确定");
     }
@@ -79,6 +89,17 @@ public class MineFragment extends BaseFragment {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void getUserInfoFail(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void getUserInfoSuccess(UserInfoBean bean) {
+        Logger.d(bean.toString());
+
     }
 }
 

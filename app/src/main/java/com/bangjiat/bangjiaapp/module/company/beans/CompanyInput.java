@@ -1,4 +1,4 @@
-package com.bangjiat.bangjiaapp.api;
+package com.bangjiat.bangjiaapp.module.company.beans;
 
 /**
  * @author ligh

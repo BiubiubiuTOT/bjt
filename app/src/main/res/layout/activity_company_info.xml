@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context="com.bangjiat.bangjiaapp.module.company.ui.CompanyInfoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/company_info_bg"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/park_item_icon"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dialogui_message_margintop">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_title"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="@dimen/dialog_message_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_title_default"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="@dimen/dialog_message_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/park_item_icon"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dialogui_message_margintop">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_trade_title"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="@dimen/dialog_message_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_trade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_trade_default"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="@dimen/dialog_message_text_size" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/personal_item_view_height"
+                android:layout_marginLeft="@dimen/dialogui_message_margintop"
+                android:layout_marginRight="@dimen/dialogui_message_margintop"
+                android:background="@color/personal_view" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/park_item_icon"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dialogui_message_margintop">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_address"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="@dimen/dialog_message_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company_address_default"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="@dimen/dialog_message_text_size" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_add_company"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/park_item_icon"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="@string/company_add"
+        android:textColor="@color/mine_bg" />
+</RelativeLayout>

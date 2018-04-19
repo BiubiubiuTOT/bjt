@@ -25,5 +25,16 @@
     <dimen name="personal_item_text_message_size">14sp</dimen>
     <dimen name="personal_item_view_height">0.5dp</dimen>
     <dimen name="personal_item_contact">13sp</dimen>
+    <dimen name="dialog_width">275dp</dimen>
+    <dimen name="dialog_height">370dp</dimen>
+    <dimen name="gif_height">155dp</dimen>
+    <dimen name="dialogui_close">30dp</dimen>
+    <dimen name="dialogui_close_magintop">20dp</dimen>
+    <dimen name="dialog_message_text_size">14sp</dimen>
+    <dimen name="dialogui_message_margintop">10dp</dimen>
+    <dimen name="dialog_btn_size">16sp</dimen>
+    <dimen name="dialog_btn_width">245dp</dimen>
+    <dimen name="dialog_btn_height">44dp</dimen>
+    <dimen name="dialog_title">18sp</dimen>
 
 </resources>

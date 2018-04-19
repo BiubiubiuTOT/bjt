@@ -4,6 +4,8 @@ import com.bangjiat.bangjiaapp.common.BaseResult;
 import com.bangjiat.bangjiaapp.common.Constants;
 import com.bangjiat.bangjiaapp.module.account.beans.LoginInput;
 import com.bangjiat.bangjiaapp.module.account.beans.RegisterInput;
+import com.bangjiat.bangjiaapp.module.company.beans.CompanyInput;
+import com.bangjiat.bangjiaapp.module.personaldata.beans.UserInfoBean;
 
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
@@ -24,6 +27,7 @@ import retrofit2.http.Query;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  * 200 成功请求
  * http://192.168.0.118:1004/swagger-ui.html#/
+ * 102
  */
 
 public interface ApiService {
@@ -53,15 +57,52 @@ public interface ApiService {
     @POST("auth/login")
     Call<BaseResult<String>> login(@Body LoginInput loginInput);
 
+    /**
+     * 获取公告
+     *
+     * @param token
+     * @return
+     */
     @GET("sys/getSysNotice")
     Call<BaseResult<String>> getNotice(@Header(Constants.TOKEN_NAME) String token);
 
+    /**
+     * 保存反馈
+     *
+     * @return
+     */
     @POST("user/saveFeedBack")
     Call<BaseResult<String>> saveFeedBack();
 
 
+    /**
+     * 新建公司
+     *
+     * @param token
+     * @param input
+     * @return
+     */
     @POST("api/company/add/Company")
     Call<BaseResult<String>> addCompany(@Header(Constants.TOKEN_NAME) String token, @Body CompanyInput input);
+
+    /**
+     * 获取用户信息
+     *
+     * @param name
+     * @return
+     */
+    @GET("user/getUserInfo")
+    Call<BaseResult<UserInfoBean>> getUserInfo(@Header(Constants.TOKEN_NAME) String name);
+
+    /**
+     * 修改用户信息
+     *
+     * @param name
+     * @param bean
+     * @return
+     */
+    @PUT("user/updataUserInfo")
+    Call<BaseResult<String>> updateUserInfo(@Header(Constants.TOKEN_NAME) String name, @Body UserInfoBean bean);
 
     /**
      * 上传反馈图片

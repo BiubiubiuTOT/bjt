@@ -17,4 +17,7 @@
     <color name="personal_title_color">#282828</color>
     <color name="personal_view">#cccccc</color>
     <color name="personal_message">#999999</color>
+    <color name="gallery_blue">#1e82d2</color>
+    <color name="dialog_message_text_color">#666666</color>
+    <color name="dialog_title">#282828</color>
 </resources>
