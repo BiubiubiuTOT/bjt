@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context=".module.secretary.door.ui.DoorApplyActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/ll_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:id="@+id/ll_add_people"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/door_apply_add_people"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/personal_item_view_height"
+            android:layout_gravity="bottom"
+            android:background="@color/personal_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_sex"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:id="@+id/ll_apply_history"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/door_apply_history"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

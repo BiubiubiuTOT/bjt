@@ -15,7 +15,7 @@ import com.bangjiat.bangjiaapp.common.BaseActivity;
 import com.bangjiat.bangjiaapp.module.main.ui.fragment.HomeFragment;
 import com.bangjiat.bangjiaapp.module.main.ui.fragment.MineFragment;
 import com.bangjiat.bangjiaapp.module.main.ui.fragment.ParkFragment;
-import com.bangjiat.bangjiaapp.module.main.ui.fragment.SecretaryFragment;
+import com.bangjiat.bangjiaapp.module.secretary.door.ui.SecretaryFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;

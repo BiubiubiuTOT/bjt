@@ -36,5 +36,10 @@
     <dimen name="dialog_btn_width">245dp</dimen>
     <dimen name="dialog_btn_height">44dp</dimen>
     <dimen name="dialog_title">18sp</dimen>
+    <dimen name="apply_into_building_margin">25dp</dimen>
+    <dimen name="applying_image">90dp</dimen>
+    <dimen name="applying_margin_top">28dp</dimen>
+    <dimen name="applying_message_size">26sp</dimen>
+    <dimen name="applying_message_margin_top">12sp</dimen>
 
 </resources>

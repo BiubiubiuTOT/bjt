@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.personaldata.ui.PersonalDataActivity">
+    tools:context=".module.me.personaldata.ui.PersonalDataActivity">
 
     <include layout="@layout/toolbar" />
 

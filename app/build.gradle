@@ -82,4 +82,6 @@ dependencies {
     compile 'com.github.YancyYe:GalleryPick:1.2.1'//图片选择器
 
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'//gif
+
+    compile 'com.github.anzhuojinjie:IOSDialog:1.0'//ios 弹窗
 }

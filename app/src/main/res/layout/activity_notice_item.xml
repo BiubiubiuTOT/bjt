@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.notice.ui.NoticeItemActivity">
+    tools:context=".module.home.notice.ui.NoticeItemActivity">
 
     <include layout="@layout/toolbar" />
 

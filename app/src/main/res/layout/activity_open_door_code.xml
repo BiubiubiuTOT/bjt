@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/mine_color"
-    tools:context="com.bangjiat.bangjiaapp.module.scan.ui.OpenDoorCodeActivity">
+    tools:context=".module.home.scan.ui.OpenDoorCodeActivity">
 
     <include layout="@layout/toolbar" />
 

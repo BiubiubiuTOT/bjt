@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context=".module.secretary.door.ui.ApplyFailActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/applying_margin_top"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/applying_image"
+            android:layout_height="@dimen/applying_image"
+            android:src="@mipmap/apply_fail" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/applying_message_margin_top"
+            android:text="@string/apply_fail"
+            android:textColor="@color/dialog_title"
+            android:textSize="@dimen/applying_message_size" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/applying_margin_top"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/apply_fail_message"
+                android:textColor="@color/personal_message"
+                android:textSize="@dimen/dialog_message_text_size" />
+
+            <TextView
+                android:id="@+id/tv_contact_admin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/apply_contact_admin"
+                android:textColor="@color/mine_bg"
+                android:textSize="@dimen/dialog_message_text_size" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_reapply"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dialog_btn_height"
+            android:layout_margin="@dimen/apply_into_building_margin"
+            android:background="@drawable/apply_into_building_bg"
+            android:text="@string/reapply"
+            android:textColor="@color/white"
+            android:textSize="@dimen/mine_exit_text_size" />
+    </LinearLayout>
+
+</LinearLayout>

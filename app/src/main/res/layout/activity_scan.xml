@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bangjiat.bangjiaapp.module.scan.ui.ScanActivity">
+    tools:context=".module.home.scan.ui.ScanActivity">
 
     <include layout="@layout/toolbar_1" />
 

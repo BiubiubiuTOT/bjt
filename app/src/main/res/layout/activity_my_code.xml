@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.scan.ui.MyCodeActivity">
+    tools:context=".module.home.scan.ui.MyCodeActivity">
 
     <include layout="@layout/toolbar" />
 

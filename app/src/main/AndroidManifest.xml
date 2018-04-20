@@ -31,25 +31,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.account.ui.LoginActivity" />
-        <activity android:name=".module.account.ui.RegisterActivity" />
+        <activity android:name=".module.main.account.ui.LoginActivity" />
+        <activity android:name=".module.main.account.ui.RegisterActivity" />
         <activity android:name=".module.main.ui.activity.AgreementActivity" />
         <activity android:name=".module.main.ui.activity.VerifyPhoneActivity" />
         <activity android:name=".module.main.ui.activity.ModifyPhoneActivity" />
         <activity android:name=".module.main.ui.activity.ContactServiceActivity" />
         <activity android:name=".module.main.ui.activity.FeedBackActivity" />
-        <activity android:name=".module.personaldata.ui.PersonalHeadActivity" />
+        <activity android:name=".module.me.personaldata.ui.PersonalHeadActivity" />
         <activity android:name=".module.main.ui.activity.AboutActivity" />
-        <activity android:name=".module.notice.ui.AllNoticeActivity" />
-        <activity android:name=".module.visitor.ui.VisitorActivity" />
-        <activity android:name=".module.notice.ui.NoticeItemActivity" />
+        <activity android:name=".module.home.notice.ui.AllNoticeActivity" />
+        <activity android:name=".module.home.visitor.ui.VisitorActivity" />
+        <activity android:name=".module.home.notice.ui.NoticeItemActivity" />
         <activity
-            android:name=".module.scan.ui.ScanActivity"
+            android:name=".module.home.scan.ui.ScanActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".module.scan.ui.MyCodeActivity" />
-        <activity android:name=".module.scan.ui.OpenDoorCodeActivity" />
-        <activity android:name=".module.personaldata.ui.PersonalDataActivity" />
-        <activity android:name=".module.personaldata.ui.EditDataActivity" />
+        <activity android:name=".module.home.scan.ui.MyCodeActivity" />
+        <activity android:name=".module.home.scan.ui.OpenDoorCodeActivity" />
+        <activity android:name=".module.me.personaldata.ui.PersonalDataActivity" />
+        <activity android:name=".module.me.personaldata.ui.EditDataActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -62,11 +62,20 @@
         </provider>
 
         <activity
-            android:name=".module.company.ui.AddOrSelectCompanyActivity"
+            android:name=".module.home.company.ui.AddOrSelectCompanyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/edit_AlertDialog_style" />
-        <activity android:name=".module.company.ui.CompanyInfoActivity" />
-        <activity android:name=".module.company.ui.AddCompanyActivity"></activity>
+        <activity android:name=".module.home.company.ui.CompanyInfoActivity" />
+        <activity android:name=".module.home.company.ui.AddCompanyActivity" />
+        <activity android:name=".module.secretary.door.ui.DoorApplyActivity" />
+        <activity android:name=".module.secretary.door.ui.ApplyHistoryActivity" />
+        <activity android:name=".module.secretary.door.ui.ApplyDeatailActivity" />
+        <activity android:name=".module.secretary.door.ui.ApplyIntoBuildingActivity" />
+        <activity android:name=".module.secretary.door.ui.ApplyingActivity" />
+        <activity android:name=".module.secretary.door.ui.ApplyFailActivity" />
+        <activity android:name=".module.secretary.service.ui.ApplyServiceActivity" />
+        <activity android:name=".module.secretary.service.ui.NewApplyActivity"></activity>
+        <activity android:name=".common.FullImageActivity"></activity>
     </application>
 
 </manifest>

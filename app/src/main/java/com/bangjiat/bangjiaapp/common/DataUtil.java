@@ -2,7 +2,7 @@ package com.bangjiat.bangjiaapp.common;
 
 import android.content.Context;
 
-import com.bangjiat.bangjiaapp.module.account.beans.Account;
+import com.bangjiat.bangjiaapp.module.main.account.beans.Account;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -61,7 +61,7 @@ public class DataUtil {
 
     public static boolean isLogin(Context context) {
         SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.IS_LOGIN);
-        return spUtil.getBoolean(SPUtil.AccountSettings.IS_LOGIN, false);
+        return spUtil.getBoolean(SPUtil.AccountSettings.IS_LOGIN, true);
     }
 
     public static void setLogin(Context context, boolean isLogin) {

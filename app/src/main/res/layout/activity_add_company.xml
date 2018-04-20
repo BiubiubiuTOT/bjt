@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.company.ui.AddCompanyActivity">
+    tools:context=".module.home.company.ui.AddCompanyActivity">
 
     <include layout="@layout/toolbar_1" />
 

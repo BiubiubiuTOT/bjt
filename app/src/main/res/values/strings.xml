@@ -79,4 +79,17 @@
     <string name="company_title_default">贵州邦佳大数据科技有限公司</string>
     <string name="company_address">地址：</string>
     <string name="company_address_default">贵阳市观山湖区互联网金融特区大厦</string>
+    <string name="door_apply_add_people">新增人员</string>
+    <string name="door_apply_history">申请记录</string>
+    <string name="apply_into_building">提交申请</string>
+    <string name="apply_into_building_code">请填写邀请码</string>
+    <string name="returns">返回</string>
+    <string name="applying">审核中</string>
+    <string name="applying_message">您的入驻楼宇申请已提交，我们将尽快为您处理</string>
+    <string name="apply_fail">不通过</string>
+    <string name="reapply">再次申请</string>
+    <string name="apply_fail_message">很抱歉，您的入驻申请未通过，请</string>
+    <string name="apply_contact_admin">联系管理员</string>
+    <string name="apply_service_new">新的申请</string>
+    <string name="submit">提交</string>
 </resources>

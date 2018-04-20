@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.common.BaseActivity;
 import com.bangjiat.bangjiaapp.common.DataUtil;
-import com.bangjiat.bangjiaapp.module.account.ui.LoginActivity;
+import com.bangjiat.bangjiaapp.module.main.account.ui.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
