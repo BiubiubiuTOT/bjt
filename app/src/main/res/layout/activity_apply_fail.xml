@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context=".module.secretary.door.ui.ApplyFailActivity">
+    tools:context=".module.secretary.door.ui.FailActivity">
 
     <include layout="@layout/toolbar" />
 

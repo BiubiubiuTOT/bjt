@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context=".module.secretary.door.ui.ApplyDeatailActivity">
+    tools:context=".module.secretary.door.ui.DetailActivity">
 
     <include layout="@layout/toolbar" />
 

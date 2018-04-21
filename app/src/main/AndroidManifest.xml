@@ -67,15 +67,20 @@
             android:theme="@style/edit_AlertDialog_style" />
         <activity android:name=".module.home.company.ui.CompanyInfoActivity" />
         <activity android:name=".module.home.company.ui.AddCompanyActivity" />
-        <activity android:name=".module.secretary.door.ui.DoorApplyActivity" />
-        <activity android:name=".module.secretary.door.ui.ApplyHistoryActivity" />
-        <activity android:name=".module.secretary.door.ui.ApplyDeatailActivity" />
-        <activity android:name=".module.secretary.door.ui.ApplyIntoBuildingActivity" />
+        <activity android:name=".module.secretary.door.ui.MainActivity" />
+        <activity android:name=".module.secretary.door.ui.HistoryActivity" />
+        <activity android:name=".module.secretary.door.ui.DetailActivity" />
+        <activity android:name=".module.secretary.door.ui.IntoBuildingActivity" />
         <activity android:name=".module.secretary.door.ui.ApplyingActivity" />
-        <activity android:name=".module.secretary.door.ui.ApplyFailActivity" />
-        <activity android:name=".module.secretary.service.ui.ApplyServiceActivity" />
-        <activity android:name=".module.secretary.service.ui.NewApplyActivity"></activity>
-        <activity android:name=".common.FullImageActivity"></activity>
+        <activity android:name=".module.secretary.door.ui.FailActivity" />
+        <activity android:name=".module.secretary.service.ui.MainActivity" />
+        <activity android:name=".module.secretary.service.ui.NewApplyActivity" />
+        <activity android:name=".common.FullImageActivity" />
+        <activity android:name=".module.secretary.service.ui.HistoryActivity" />
+        <activity android:name=".module.secretary.service.ui.DetailActivity" />
+        <activity android:name=".module.secretary.service.ui.ApprovalHistoryActivity" />
+        <activity android:name=".module.secretary.service.ui.ApprovalDetailActivity" />
+        <activity android:name=".module.secretary.door.ui.AddPeopleActivity"></activity>
     </application>
 
 </manifest>

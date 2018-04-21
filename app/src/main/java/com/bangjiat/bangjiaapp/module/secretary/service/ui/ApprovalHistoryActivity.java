@@ -1,4 +1,4 @@
-package com.bangjiat.bangjiaapp.module.secretary.door.ui;
+package com.bangjiat.bangjiaapp.module.secretary.service.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +16,30 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ApplyHistoryActivity extends BaseColorToolBarActivity {
+/**
+ * 审批记录
+ */
+public class ApprovalHistoryActivity extends BaseColorToolBarActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
 
     private List<ApplyHistoryBean> list;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_approval_history;
+    }
+
+    @Override
+    protected String getTitleStr() {
+        return "审批记录";
     }
 
     private void initData() {
@@ -85,18 +99,8 @@ public class ApplyHistoryActivity extends BaseColorToolBarActivity {
         mAdapter.setOnItemClickListener(new ApplyHistoryAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext, ApplyDeatailActivity.class));
+                startActivity(new Intent(mContext, DetailActivity.class));
             }
         });
-    }
-
-    @Override
-    protected int getLayoutResId() {
-        return R.layout.activity_apply_history;
-    }
-
-    @Override
-    protected String getTitleStr() {
-        return "申请记录";
     }
 }

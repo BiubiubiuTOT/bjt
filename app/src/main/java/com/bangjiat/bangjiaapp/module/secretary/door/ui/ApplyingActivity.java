@@ -1,9 +1,12 @@
 package com.bangjiat.bangjiaapp.module.secretary.door.ui;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseColorToolBarActivity;
+
+import butterknife.OnClick;
 
 /**
  * 入驻申请 审核中
@@ -13,6 +16,11 @@ public class ApplyingActivity extends BaseColorToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @OnClick(R.id.btn_return)
+    public void clickReturn(View view) {
+        finish();
     }
 
     @Override

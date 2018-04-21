@@ -92,4 +92,5 @@
     <string name="apply_contact_admin">联系管理员</string>
     <string name="apply_service_new">新的申请</string>
     <string name="submit">提交</string>
+    <string name="approval_to">转批</string>
 </resources>

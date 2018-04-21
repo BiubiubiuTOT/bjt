@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.secretary.service.ui.ApplyServiceActivity">
+    tools:context="com.bangjiat.bangjiaapp.module.secretary.service.ui.MainActivity">
 
     <include layout="@layout/toolbar" />
 

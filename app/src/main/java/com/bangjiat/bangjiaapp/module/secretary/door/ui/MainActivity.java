@@ -1,4 +1,4 @@
-package com.bangjiat.bangjiaapp.module.secretary.service.ui;
+package com.bangjiat.bangjiaapp.module.secretary.door.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,7 @@ import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseColorToolBarActivity;
 
 import butterknife.OnClick;
 
-/**
- * 服务申请
- */
-public class ApplyServiceActivity extends BaseColorToolBarActivity {
+public class MainActivity extends BaseColorToolBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,21 +18,21 @@ public class ApplyServiceActivity extends BaseColorToolBarActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_apply_service;
+        return R.layout.activity_door_apply;
     }
 
     @Override
     protected String getTitleStr() {
-        return "服务申请";
+        return "门禁申请";
     }
 
-    @OnClick(R.id.ll_new_apply)
-    public void clickNewApply(View v) {
-
+    @OnClick(R.id.ll_add_people)
+    public void clickAddPeople(View v) {
+        startActivity(new Intent(mContext, AddPeopleActivity.class));
     }
 
     @OnClick(R.id.ll_apply_history)
     public void clickApplyHistory(View view) {
-        startActivity(new Intent(mContext, NewApplyActivity.class));
+        startActivity(new Intent(mContext, HistoryActivity.class));
     }
 }

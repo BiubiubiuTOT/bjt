@@ -40,7 +40,6 @@ public class DataUtil {
     public static String getToken(Context context) {
         SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.ACCOUNT_SETTINGS);
         String token = spUtil.getString(SPUtil.AccountSettings.TOKEN, "");
-        Logger.d("getToken: " + token);
 
         return token;
     }

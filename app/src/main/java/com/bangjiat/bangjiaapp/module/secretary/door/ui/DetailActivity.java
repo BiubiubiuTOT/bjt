@@ -18,7 +18,7 @@ import butterknife.BindView;
 /**
  * 申请详情
  */
-public class ApplyDeatailActivity extends BaseColorToolBarActivity {
+public class DetailActivity extends BaseColorToolBarActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     private List<ApplyHistoryBean.HandleHistory> list;

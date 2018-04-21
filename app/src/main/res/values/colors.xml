@@ -24,4 +24,5 @@
     <color name="apply_history_applying">#1e82d2</color>
     <color name="apply_history_pass">#6fd865</color>
     <color name="apply_history_fail">#e93f33</color>
+    <color name="add_people_submit">#80ffffff</color>
 </resources>

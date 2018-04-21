@@ -2,10 +2,11 @@ package com.bangjiat.bangjiaapp.api;
 
 import com.bangjiat.bangjiaapp.common.BaseResult;
 import com.bangjiat.bangjiaapp.common.Constants;
+import com.bangjiat.bangjiaapp.module.home.company.beans.CompanyInput;
 import com.bangjiat.bangjiaapp.module.main.account.beans.LoginInput;
 import com.bangjiat.bangjiaapp.module.main.account.beans.RegisterInput;
-import com.bangjiat.bangjiaapp.module.home.company.beans.CompanyInput;
 import com.bangjiat.bangjiaapp.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bangjiaapp.module.secretary.door.beans.IntoBuildingInput;
 
 import java.util.Map;
 
@@ -103,6 +104,10 @@ public interface ApiService {
      */
     @PUT("user/updataUserInfo")
     Call<BaseResult<String>> updateUserInfo(@Header(Constants.TOKEN_NAME) String name, @Body UserInfoBean bean);
+
+
+    @POST("api/company/save/CompanyAdmission")
+    Call<BaseResult<String>> intoBuilding(@Header(Constants.TOKEN_NAME) String token, @Body IntoBuildingInput input);
 
     /**
      * 上传反馈图片

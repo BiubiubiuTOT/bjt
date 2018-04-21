@@ -6,9 +6,9 @@ import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseColorToolBarActivity;
 
 /**
- * 申请入驻楼宇
+ * 入驻申请 审核未通过
  */
-public class ApplyIntoBuildingActivity extends BaseColorToolBarActivity {
+public class FailActivity extends BaseColorToolBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +17,11 @@ public class ApplyIntoBuildingActivity extends BaseColorToolBarActivity {
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_apply_into_buliding;
+        return R.layout.activity_apply_fail;
     }
 
     @Override
     protected String getTitleStr() {
-        return "申请入驻楼宇";
+        return "入驻申请";
     }
 }
