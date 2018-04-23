@@ -93,4 +93,7 @@
     <string name="apply_service_new">新的申请</string>
     <string name="submit">提交</string>
     <string name="approval_to">转批</string>
+    <string name="send_email">发件箱</string>
+    <string name="recive_email">收件箱</string>
+    <string name="search">搜索</string>
 </resources>

@@ -80,7 +80,12 @@
         <activity android:name=".module.secretary.service.ui.DetailActivity" />
         <activity android:name=".module.secretary.service.ui.ApprovalHistoryActivity" />
         <activity android:name=".module.secretary.service.ui.ApprovalDetailActivity" />
-        <activity android:name=".module.secretary.door.ui.AddPeopleActivity"></activity>
+        <activity android:name=".module.secretary.door.ui.AddPeopleActivity" />
+        <activity android:name=".module.secretary.workers.ui.WorkersManageActivity" />
+        <activity android:name=".module.secretary.workers.ui.AddWorkersActivity" />
+        <activity android:name=".module.secretary.workers.ui.UpdateWorkerActivity" />
+        <activity android:name=".module.secretary.communication.ui.MainActivity" />
+        <activity android:name=".module.secretary.communication.ui.OutBoxActivity"></activity>
     </application>
 
 </manifest>

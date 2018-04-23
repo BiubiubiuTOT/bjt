@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.common.BaseFragment;
 import com.bangjiat.bangjiaapp.module.secretary.service.ui.MainActivity;
+import com.bangjiat.bangjiaapp.module.secretary.workers.ui.WorkersManageActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -51,7 +52,7 @@ public class SecretaryFragment extends BaseFragment {
 
     @OnClick(R.id.card_message)
     public void clickMessage(View view) {
-
+        startActivity(new Intent(mContext, com.bangjiat.bangjiaapp.module.secretary.communication.ui.MainActivity.class));
     }
 
     @OnClick(R.id.card_contact_us)
@@ -61,7 +62,7 @@ public class SecretaryFragment extends BaseFragment {
 
     @OnClick(R.id.card_people)
     public void clickPeople(View view) {
-
+        startActivity(new Intent(mContext, WorkersManageActivity.class));
     }
 }
 

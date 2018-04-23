@@ -11,6 +11,7 @@
     <color name="exit_color">#1e82d2</color>
     <color name="mine_color">#f0f0f0</color>
     <color name="red">#e93f33</color>
+    <color name="red_1">#66e93f33</color>
     <color name="agree">#057afb</color>
 
     <color name="scan_corner_color">#0effc2</color>
@@ -25,4 +26,6 @@
     <color name="apply_history_pass">#6fd865</color>
     <color name="apply_history_fail">#e93f33</color>
     <color name="add_people_submit">#80ffffff</color>
+    <color name="search">#eaeaea</color>
+    <color name="outbox_title">#333333</color>
 </resources>
