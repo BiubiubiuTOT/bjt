@@ -85,7 +85,8 @@
         <activity android:name=".module.secretary.workers.ui.AddWorkersActivity" />
         <activity android:name=".module.secretary.workers.ui.UpdateWorkerActivity" />
         <activity android:name=".module.secretary.communication.ui.MainActivity" />
-        <activity android:name=".module.secretary.communication.ui.OutBoxActivity"></activity>
+        <activity android:name=".module.secretary.communication.ui.OutBoxActivity" />
+        <activity android:name=".module.secretary.communication.ui.OutBoxDetailActivity"></activity>
     </application>
 
 </manifest>

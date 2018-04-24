@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    android:clickable="true">
+    android:clickable="true"
+    android:paddingLeft="10dp">
 
     <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_height="65dp"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -18,6 +19,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/checkbox_bg"
             android:button="@null"
             android:visibility="gone" />
@@ -26,12 +28,17 @@
             android:id="@+id/iv_head"
             android:layout_width="44dp"
             android:layout_height="44dp"
+            android:layout_marginTop="5dp"
             android:src="@mipmap/my_head" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
@@ -63,6 +70,10 @@
                     android:layout_width="9dp"
                     android:layout_height="16dp"
                     android:src="@mipmap/arrow_right" />
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="1dp" />
             </LinearLayout>
 
             <TextView
@@ -77,23 +88,55 @@
                 android:id="@+id/tv_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLength="22"
                 android:text="图片在附件里，已经发给你了，图片在附件里，已..."
                 android:textColor="@color/register_hint"
                 android:textSize="12sp" />
 
-            <View
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/mine_color" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@color/personal_view" />
+
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="70dp"
+    <LinearLayout
+        android:layout_width="160dp"
         android:layout_height="match_parent"
-        android:text="删除"
-        android:textColor="@color/red" />
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/tv_mark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/gray_1"
+            android:gravity="center"
+            android:text="标为未读"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/red_2"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
