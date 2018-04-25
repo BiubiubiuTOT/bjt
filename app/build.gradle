@@ -86,4 +86,6 @@ dependencies {
     compile project(':IosDialog')//ios 弹窗
 
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'//左滑
+
+    compile 'com.github.promeg:tinypinyin:2.0.3' //姓名首字母转换
 }

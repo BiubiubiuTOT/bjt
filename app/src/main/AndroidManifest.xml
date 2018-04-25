@@ -15,6 +15,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 读取联系人权限 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
     <application
         android:name=".common.BjtApplication"
         android:allowBackup="true"
@@ -86,7 +90,23 @@
         <activity android:name=".module.secretary.workers.ui.UpdateWorkerActivity" />
         <activity android:name=".module.secretary.communication.ui.MainActivity" />
         <activity android:name=".module.secretary.communication.ui.OutBoxActivity" />
-        <activity android:name=".module.secretary.communication.ui.OutBoxDetailActivity"></activity>
+        <activity android:name=".module.secretary.communication.ui.OutBoxDetailActivity" />
+        <activity android:name=".module.secretary.contact.view.ContactListActivity" />
+        <activity
+            android:name=".module.secretary.contact.view.ContactDetailActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".module.park.car.ui.MyCarActivity" />
+        <activity android:name=".module.park.car.ui.MyCarDetailActivity" />
+        <activity android:name=".module.park.car.ui.AddCarActivity" />
+        <activity android:name=".module.park.apply.ui.ApplyMainActivity" />
+        <activity android:name=".module.park.apply.ui.ApplyHistoryActivity" />
+        <activity android:name=".module.park.apply.ui.NewApplyActivity" />
+        <activity android:name=".module.park.apply.ui.ChooseParkingActivity" />
+        <activity android:name=".module.park.apply.ui.ChooseCarActivity" />
+        <activity android:name=".module.park.pay.ui.PayMainActivity" />
+        <activity android:name=".module.park.pay.ui.PayHistoryActivity" />
+        <activity android:name=".module.park.pay.ui.PayActivity" />
+        <activity android:name=".module.park.pay.ui.PayDetailActivity"></activity>
     </application>
 
 </manifest>

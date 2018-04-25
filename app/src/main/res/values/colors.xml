@@ -31,4 +31,6 @@
     <color name="add_people_submit">#80ffffff</color>
     <color name="search">#eaeaea</color>
     <color name="outbox_title">#333333</color>
+    <color name="alpha_gray">#CC646464</color>
+    <color name="letter">#f5f5f5</color>
 </resources>

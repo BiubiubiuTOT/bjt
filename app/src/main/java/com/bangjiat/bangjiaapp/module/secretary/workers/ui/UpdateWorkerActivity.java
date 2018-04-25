@@ -153,6 +153,7 @@ public class UpdateWorkerActivity extends BaseToolBarActivity {
         tv_title.setText("编辑资料");
         tv_done.setTextColor(getResources().getColor(R.color.black));
         tv_title.setTextColor(getResources().getColor(R.color.black));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
 
         toolbar.setNavigationIcon(R.mipmap.back_black);
     }

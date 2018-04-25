@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.common.BaseFragment;
+import com.bangjiat.bangjiaapp.module.secretary.contact.view.ContactListActivity;
 import com.bangjiat.bangjiaapp.module.secretary.service.ui.MainActivity;
 import com.bangjiat.bangjiaapp.module.secretary.workers.ui.WorkersManageActivity;
 import com.bumptech.glide.Glide;
@@ -57,7 +58,7 @@ public class SecretaryFragment extends BaseFragment {
 
     @OnClick(R.id.card_contact_us)
     public void clickContactUs(View view) {
-
+        startActivity(new Intent(mContext, ContactListActivity.class));
     }
 
     @OnClick(R.id.card_people)
