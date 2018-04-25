@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bangjiat.bangjiaapp.R;
 import com.bangjiat.bangjiaapp.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bangjiaapp.module.park.apply.beans.ApplyHistoryBean;
-import com.bangjiat.bangjiaapp.module.park.apply.ui.ApplyMainActivity;
 import com.bangjiat.bangjiaapp.module.park.pay.adapter.PayAdapter;
 
 import java.util.ArrayList;
@@ -62,6 +61,7 @@ public class PayMainActivity extends BaseToolBarActivity {
 
         tv_title.setTextColor(getResources().getColor(R.color.black));
         tv_history.setVisibility(View.VISIBLE);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
         tv_history.setTextColor(getResources().getColor(R.color.black));
 
         tv_history.setOnClickListener(new View.OnClickListener() {
