@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.park.apply.ui.ChooseParkingActivity">
+    tools:context="com.bangjiat.bjt.module.park.apply.ui.ChooseParkingActivity">
 
     <include layout="@layout/toolbar" />
 

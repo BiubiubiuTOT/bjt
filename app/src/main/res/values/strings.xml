@@ -50,7 +50,7 @@
     <string name="tv_about_message">\t\t贵州邦佳大数据科技有限公司，成立于 2017年，坐落于贵阳互联网金融特区大厦， 为贵阳市政府招商引资企业。\n\n\t\t公司拥有庞大的科技研发力量，主要从事 智慧社区（园区）、智慧旅游、共享经济领域 的大数据和区块链相关研发设计和服务。目前 主要产品有《智慧楼》、《帮家停车》等。\n\n\t\t《智慧楼》是依托物联网技术，实现楼宇 的访客系统、门禁系统、停车场管理及楼秘书 办公管理系统的互联互通，达到楼宇的智能化 管理目的，提升物业管理水平和楼宇品质。</string>
     <string name="tv_about_copyright">Copyright© 2018-2019 BangJia.All Rights Reserved\n贵州邦佳大数据科技有限公司</string>
     <string name="tv_about_web">官网：https://www.bangjiat.com/</string>
-    <string name="tv_park_park_pay">停车收费</string>
+    <string name="tv_park_park_pay">停车缴费</string>
     <string name="tv_secretary_people">人员管理</string>
     <string name="tv_notice_default_message">国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国...</string>
     <string name="tv_notice_default_time">2018-03-24 16:54</string>
@@ -96,4 +96,5 @@
     <string name="send_email">发件箱</string>
     <string name="recive_email">收件箱</string>
     <string name="search">搜索</string>
+    <string name="done">完成</string>
 </resources>

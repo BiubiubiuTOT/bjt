@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.secretary.contact.view.ContactDetailActivity">
+    tools:context="com.bangjiat.bjt.module.secretary.contact.view.ContactDetailActivity">
 
     <include layout="@layout/toolbar_3" />
 

@@ -82,7 +82,7 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <com.bangjiat.bangjiaapp.module.secretary.contact.util.SideLetterBar
+        <com.bangjiat.bjt.module.secretary.contact.util.SideLetterBar
             android:id="@+id/side_bar"
             android:layout_width="@dimen/side_letter_bar_width"
             android:layout_height="match_parent"

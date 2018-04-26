@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.park.pay.ui.PayMainActivity">
+    tools:context="com.bangjiat.bjt.module.park.pay.ui.PayMainActivity">
 
     <include layout="@layout/toolbar_3" />
 

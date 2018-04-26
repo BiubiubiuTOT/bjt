@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bangjiaapp.module.secretary.service.ui.NewApplyActivity">
+    tools:context="com.bangjiat.bjt.module.secretary.service.ui.NewApplyActivity">
 
     <include layout="@layout/toolbar_2" />
 
