@@ -7,11 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.notice.adapter.NoticeAdapter;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
 import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
+import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     private void initData() {
         presenter = new NoticePresenter(this);
-//        presenter.getAllNotice(DataUtil.getToken(mContext));
+        presenter.getAllNotice(DataUtil.getToken(mContext));
 
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);

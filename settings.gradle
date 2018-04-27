@@ -1,1 +1,1 @@
-include ':app', ':zbarlibary', ':IosDialog'
+include ':app', ':zbarlibary', ':IosDialog', ':gallerypick'

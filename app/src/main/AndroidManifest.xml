@@ -108,7 +108,10 @@
         <activity android:name=".module.park.pay.ui.PayActivity" />
         <activity android:name=".module.park.pay.ui.PayDetailActivity" />
         <activity android:name=".module.park.apply.ui.ApplyDetailActivity" />
-        <activity android:name=".module.secretary.communication.ui.WriteEmailActivity"></activity>
+        <activity
+            android:name=".module.secretary.communication.ui.WriteEmailActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".common.PickActivity" />
     </application>
 
 </manifest>

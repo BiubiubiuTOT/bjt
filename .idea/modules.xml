@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/BangJiaApp.iml" filepath="$PROJECT_DIR$/BangJiaApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/IosDialog/IosDialog.iml" filepath="$PROJECT_DIR$/IosDialog/IosDialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gallerypick/gallerypick.iml" filepath="$PROJECT_DIR$/gallerypick/gallerypick.iml" />
       <module fileurl="file://$PROJECT_DIR$/zbarlibary/zbarlibary.iml" filepath="$PROJECT_DIR$/zbarlibary/zbarlibary.iml" />
     </modules>
   </component>

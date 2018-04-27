@@ -64,7 +64,7 @@ public interface ApiService {
      * @param token
      * @return
      */
-    @GET("sys/getSysNotice")
+    @GET("api/sys/getAllNotice")
     Call<BaseResult<String>> getNotice(@Header(Constants.TOKEN_NAME) String token);
 
     /**

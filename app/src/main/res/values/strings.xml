@@ -88,7 +88,7 @@
     <string name="applying_message">您的入驻楼宇申请已提交，我们将尽快为您处理</string>
     <string name="apply_fail">不通过</string>
     <string name="reapply">再次申请</string>
-    <string name="apply_fail_message">很抱歉，您的入驻申请未通过，请</string>
+    <string name="apply_fail_message">很抱歉，您的入驻申请未通过</string>
     <string name="apply_contact_admin">联系管理员</string>
     <string name="apply_service_new">新的申请</string>
     <string name="submit">提交</string>
@@ -97,4 +97,5 @@
     <string name="recive_email">收件箱</string>
     <string name="search">搜索</string>
     <string name="done">完成</string>
+    <string name="add_photo">添加到邮件(%1$d)</string>
 </resources>
