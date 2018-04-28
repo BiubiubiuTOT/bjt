@@ -3,6 +3,7 @@ package com.bangjiat.bjt.common;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author ligh
@@ -26,5 +27,11 @@ public class TimeUtils {
             e.printStackTrace();
         }
         return System.currentTimeMillis();
+    }
+
+    public static String getTime() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
+        String format1 = format.format(new Date());
+        return format1;
     }
 }

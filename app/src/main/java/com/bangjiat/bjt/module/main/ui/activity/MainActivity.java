@@ -100,7 +100,6 @@ public class MainActivity extends BaseActivity {
                     fragment_park = new ParkFragment();
                     fragmentTransaction.add(R.id.framelayout, fragment_park);
                 }
-                setColor(flag);
                 break;
             case 2:
                 if (fragment_secretary != null) {

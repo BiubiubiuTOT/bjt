@@ -85,4 +85,6 @@ dependencies {
     compile 'com.github.promeg:tinypinyin:2.0.3' //姓名首字母转换
 
     compile 'com.contrarywind:Android-PickerView:4.1.3' //时间选择
+
+    compile 'com.dinuscxj:circleprogressbar:1.1.1'//圆形进度条
 }

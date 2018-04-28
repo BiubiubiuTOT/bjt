@@ -112,6 +112,10 @@
             android:name=".module.secretary.communication.ui.WriteEmailActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".common.PickActivity" />
+        <activity android:name=".module.home.work.ui.WorkMainActivity" />
+        <activity android:name=".module.home.work.ui.EditCompanyActivity" />
+        <activity android:name=".module.home.work.kaoqin.ui.KaoqinMainActivity" />
+        <activity android:name=".module.home.work.kaoqin.ui.WorkDayActivity"></activity>
     </application>
 
 </manifest>

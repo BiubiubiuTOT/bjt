@@ -16,6 +16,7 @@ import com.bangjiat.bjt.module.home.notice.ui.AllNoticeActivity;
 import com.bangjiat.bjt.module.home.notice.ui.NoticeItemActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.home.visitor.ui.VisitorActivity;
+import com.bangjiat.bjt.module.home.work.ui.WorkMainActivity;
 import com.bumptech.glide.Glide;
 import com.joker.api.Permissions4M;
 import com.joker.api.wrapper.Wrapper;
@@ -93,6 +94,11 @@ public class HomeFragment extends BaseFragment {
     public void clickOpenDoor(View view) {
 //        startActivity(new Intent(mContext, OpenDoorCodeActivity.class));
         startActivity(new Intent(mContext, AddOrSelectCompanyActivity.class));
+    }
+
+    @OnClick(R.id.tv_work)
+    public void clickWork(View view) {
+        startActivity(new Intent(mContext, WorkMainActivity.class));
     }
 
     private void checkPermission() {
