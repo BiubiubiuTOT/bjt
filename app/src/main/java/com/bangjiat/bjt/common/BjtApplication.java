@@ -2,6 +2,8 @@ package com.bangjiat.bjt.common;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
+
 
 /**
  * @author ligh
@@ -13,6 +15,8 @@ public class BjtApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SDKInitializer.initialize(getApplicationContext());
     }
 
 }

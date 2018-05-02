@@ -22,6 +22,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class SettingFragment extends BaseFragment {
     private static final int SELECT_WORK_DAY = 2;
+    private static final int SELECT_WIFI = 3;
+    private static final int SELECT_LOCATION = 4;
 
     @BindView(R.id.tv_work_day)
     TextView tv_work_day;
@@ -29,6 +31,8 @@ public class SettingFragment extends BaseFragment {
     TextView tv_start_time;
     @BindView(R.id.tv_end_time)
     TextView tv_end_time;
+    @BindView(R.id.tv_wifi)
+    TextView tv_wifi;
 
     private OptionsPickerView<String> pvMonths;
     private List<String> ampm;
@@ -86,12 +90,12 @@ public class SettingFragment extends BaseFragment {
 
     @OnClick(R.id.ll_address)
     public void clickAddress(View view) {
-
+        startActivityForResult(new Intent(mContext, LocationActivity.class), SELECT_LOCATION);
     }
 
     @OnClick(R.id.ll_range)
     public void clickRange(View view) {
-
+        startActivityForResult(new Intent(mContext, AddWifiActivity.class), SELECT_WIFI);
     }
 
     @Override
@@ -101,6 +105,9 @@ public class SettingFragment extends BaseFragment {
             if (requestCode == SELECT_WORK_DAY) {
                 String str = data.getStringExtra("data");
                 tv_work_day.setText(str);
+            } else if (requestCode == SELECT_WIFI) {
+                String str = data.getStringExtra("data");
+                tv_wifi.setText(str);
             }
         }
     }

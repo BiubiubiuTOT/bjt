@@ -6,6 +6,9 @@ import android.view.View;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.home.work.kaoqin.ui.KaoqinMainActivity;
+import com.bangjiat.bjt.module.home.work.permission.ui.PermissionMainActivity;
+import com.bangjiat.bjt.module.home.work.worker.ui.WorkerListActivity;
+import com.bangjiat.bjt.module.home.work.leave.ui.LeaveMainActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 
 import butterknife.OnClick;
@@ -19,17 +22,17 @@ public class WorkMainActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.tv_workers)
     public void clickWorkers(View view) {
-
+        startActivity(new Intent(mContext, WorkerListActivity.class));
     }
 
     @OnClick(R.id.tv_off_work_apply)
     public void clickOffWork(View view) {
-
+        startActivity(new Intent(mContext, LeaveMainActivity.class));
     }
 
     @OnClick(R.id.tv_permission)
     public void clickPermission(View view) {
-
+        startActivity(new Intent(mContext, PermissionMainActivity.class));
     }
 
     @OnClick(R.id.tv_kaoqin)

@@ -14,8 +14,7 @@
         android:layout_height="wrap_content"
         android:lines="1"
         android:textColor="@color/white"
-        android:textSize="17sp"
-       android:text="ssss" />
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/toolbar_title"

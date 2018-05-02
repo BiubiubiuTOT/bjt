@@ -27,6 +27,7 @@ public class SplashActivity extends BaseActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_COARSE_LOCATION
     };
     private List<String> permissionsList;
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;

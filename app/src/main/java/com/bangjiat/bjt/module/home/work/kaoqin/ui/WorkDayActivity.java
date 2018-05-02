@@ -12,6 +12,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.home.work.kaoqin.adapter.WorkDayAdapter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.githang.statusbar.StatusBarCompat;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class WorkDayActivity extends BaseToolBarActivity {
         mAdapter.setOnItemClickListener(new WorkDayAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Logger.d("position: " + position);
                 mAdapter.setCheck(position);
             }
         });
