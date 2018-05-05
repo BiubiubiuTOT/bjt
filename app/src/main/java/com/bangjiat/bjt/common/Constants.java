@@ -2,6 +2,7 @@ package com.bangjiat.bjt.common;
 
 /**
  * Created by Administrator on 2018/4/14 0014.
+ * BANGJIATUANDASHUJU
  */
 
 public class Constants {

@@ -66,4 +66,34 @@ public class DataUtil {
         SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.IS_LOGIN);
         spUtil.putBoolean(SPUtil.AccountSettings.IS_LOGIN, isLogin);
     }
+
+    public static void setReceiveNotification(Context context, boolean isReceive) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        spUtil.putBoolean(SPUtil.OtherSetting.IS_RECEIVE_NOTIFICATION, isReceive);
+    }
+
+    public static boolean isReceiveNotification(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        return spUtil.getBoolean(SPUtil.OtherSetting.IS_RECEIVE_NOTIFICATION, true);
+    }
+
+    public static void setPhone(Context context, String phone) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.ACCOUNT_SETTINGS);
+        spUtil.putString(SPUtil.AccountSettings.PHONE, phone);
+    }
+
+    public static String getPhone(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.ACCOUNT_SETTINGS);
+        return spUtil.getString(SPUtil.AccountSettings.PHONE, "");
+    }
+
+    public static String getUserId(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.ACCOUNT_SETTINGS);
+        return spUtil.getString(SPUtil.AccountSettings.USER_ID, "");
+    }
+
+    public static void setUserId(Context context, String userId) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.ACCOUNT_SETTINGS);
+        spUtil.putString(SPUtil.AccountSettings.USER_ID, userId);
+    }
 }

@@ -16,11 +16,20 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             app:banner_pageChangeDuration="1000"
+            app:banner_pointAutoPlayInterval="3500"
             app:banner_pointAutoPlayAble="true"
             app:banner_pointContainerBackground="@android:color/transparent"
             app:banner_pointDrawable="@drawable/bga_banner_selector_point_hollow"
-            app:banner_pointTopBottomMargin="15dp"
+            app:banner_pointTopBottomMargin="10dp"
             app:banner_transitionEffect="alpha" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="贵阳"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/iv_scan"

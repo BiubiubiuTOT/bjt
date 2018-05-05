@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -12,8 +13,9 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
+import com.bangjiat.bjt.module.home.scan.ui.MyCodeActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.contract.UpdateUserInfoContract;
 import com.bangjiat.bjt.module.me.personaldata.presenter.UpdateUserInfoPresenter;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -47,6 +49,9 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     private TimePickerView pvTime;
     private Dialog dialog;
 
+    private boolean isEdit;
+    private UserInfo data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +74,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     }
 
     private void editData(String title, int type, String message) {
+        isEdit = true;
         Intent intent = new Intent(mContext, EditDataActivity.class);
         intent.putExtra(TITLE, title);
         intent.putExtra(TYPE, type);
@@ -88,10 +94,19 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
 
     @OnClick(R.id.ll_birthday)
     public void clickBirthday(View view) {
+        isEdit = true;
         pvTime.show();
     }
 
     private void initDate() {
+        data = (UserInfo) getIntent().getSerializableExtra("data");
+        if (data != null) {
+            tv_nickname.setText(data.getNickname());
+            tv_phone.setText(data.getPhone());
+            tv_sex.setText(data.getSex() == 0 ? "男" : "女");
+            tv_date.setText(data.getBirthday());
+        }
+
         presenter = new UpdateUserInfoPresenter(this);
 
         Calendar selectedDate = Calendar.getInstance();
@@ -109,6 +124,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
                 .setCancelColor(Color.BLACK)//取消按钮文字颜色
                 .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
                 .setRangDate(startDate, endDate)//起始终止年月日设定
+                .isCyclic(true)
                 .build();
 
     }
@@ -116,7 +132,11 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
 
     @OnClick(R.id.ll_code)
     public void clickCode(View view) {
+        Intent intent = new Intent(mContext, MyCodeActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtras(bundle);
 
+        startActivity(intent);
     }
 
     @Override
@@ -150,13 +170,27 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     }
 
     @Override
-    public void updateUserInfoSuccess() {
+    public void updateUserInfoSuccess(UserInfo info) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", info);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
     public void updateUserInfoFail(String err) {
         Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
+            saveDateAndExit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -169,14 +203,18 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     }
 
     private void saveDateAndExit() {
+        if (!isEdit) {
+            finish();
+            return;
+        }
+
         int sex = 0;
         if (tv_sex.getText().toString().equals("女"))
             sex = 1;
 
-        UserInfoBean userInfoBean = new UserInfoBean(tv_nickname.getText().toString(),
+        UserInfo userInfoBean = new UserInfo(tv_nickname.getText().toString(),
                 sex, tv_date.getText().toString(), tv_phone.getText().toString());
         userInfoBean.setUsername(DataUtil.getAccount(mContext).getPhone());
-        userInfoBean.setPassword("123456");
         presenter.updateUserInfo(DataUtil.getToken(mContext), userInfoBean);
     }
 }

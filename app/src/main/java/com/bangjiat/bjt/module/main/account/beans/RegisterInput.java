@@ -10,13 +10,6 @@ public class RegisterInput {
     private String password;
     private String code;
 
-    public RegisterInput(String username, String phone, String password, String code) {
-        this.username = username;
-        this.phone = phone;
-        this.password = password;
-        this.code = code;
-    }
-
     @Override
     public String toString() {
         return "RegisterInput{" +
@@ -25,6 +18,13 @@ public class RegisterInput {
                 ", password='" + password + '\'' +
                 ", code='" + code + '\'' +
                 '}';
+    }
+
+    public RegisterInput(String username, String phone, String password, String code) {
+        this.username = username;
+        this.phone = phone;
+        this.password = password;
+        this.code = code;
     }
 
     public String getUsername() {

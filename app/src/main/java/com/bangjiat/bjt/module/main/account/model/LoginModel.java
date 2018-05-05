@@ -28,12 +28,12 @@ public class LoginModel implements LoginContract.Model {
                 BaseResult<String> body = response.body();
                 if (body.getStatus() == 200) {
                     presenter.loginSuccess(body);
-                } else presenter.loginFail( body.getMessage());
+                } else presenter.loginFail(body.getMessage());
             }
 
             @Override
             public void onFail(String message) {
-                presenter.loginFail(message);
+                presenter.loginFail("网络出错");
                 Logger.e(message);
             }
         });

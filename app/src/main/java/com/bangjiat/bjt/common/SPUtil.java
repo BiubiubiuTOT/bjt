@@ -99,5 +99,12 @@ public class SPUtil {
         public static final String TOKEN = "token";
         public static final String ICON = "icon";
         public static final String IS_LOGIN = "is_login";
+        public static final String PHONE = "phone";
+        public static final String USER_ID = "user_id";
+    }
+
+    public class OtherSetting {
+        public static final String OTHER_SETTING = "other_setting";
+        public static final String IS_RECEIVE_NOTIFICATION = "is_receive_notification";
     }
 }  

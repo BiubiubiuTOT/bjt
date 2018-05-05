@@ -20,6 +20,8 @@ import com.bangjiat.bjt.module.main.account.presenter.RegisterPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.AgreementActivity;
 import com.bangjiat.bjt.module.main.ui.activity.MainActivity;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
+import com.orhanobut.logger.Logger;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,6 +53,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         presenter = new RegisterPresenter(this);
     }
 
@@ -78,7 +81,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     @OnClick(R.id.tv_getCode)
-    public void getCode(View v) {
+    public void clickGetCode(View v) {
+        Logger.d("clickGetCode");
         presenter.getRegisterCode(et_phone.getText().toString());
     }
 
@@ -95,6 +99,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void showError(String err) {
+        Logger.e(err);
+
         DialogPopup popup = new DialogPopup(this, err, R.mipmap.popup_error);
         popup.setBlurBackgroundEnable(true);
         popup.showPopupWindow();

@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.module.main.ui.fragment.HomeFragment;
-import com.bangjiat.bjt.module.main.ui.fragment.MineFragment;
+import com.bangjiat.bjt.module.me.MineFragment;
 import com.bangjiat.bjt.module.park.ParkFragment;
 import com.bangjiat.bjt.module.secretary.SecretaryFragment;
 

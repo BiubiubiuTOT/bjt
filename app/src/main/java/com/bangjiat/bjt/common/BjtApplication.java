@@ -1,8 +1,7 @@
 package com.bangjiat.bjt.common;
 
-import android.app.Application;
-
 import com.baidu.mapapi.SDKInitializer;
+import com.orm.SugarApp;
 
 
 /**
@@ -11,7 +10,7 @@ import com.baidu.mapapi.SDKInitializer;
  * @date 2018/4/17 0017
  */
 
-public class BjtApplication extends Application {
+public class BjtApplication extends SugarApp {
     @Override
     public void onCreate() {
         super.onCreate();
@@ -19,4 +18,8 @@ public class BjtApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
 }

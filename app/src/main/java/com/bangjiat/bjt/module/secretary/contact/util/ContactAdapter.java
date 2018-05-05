@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -23,11 +24,15 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> implements View.OnClickListener {
 
     private Context context;
-    private List<ContactInfo> mContactList;
+    private List<ContactBean> mContactList;
 
-    public ContactAdapter(Context context, List<ContactInfo> list) {
+    public ContactAdapter(Context context, List<ContactBean> list) {
         this.context = context;
         this.mContactList = list;
+    }
+
+    public List<ContactBean> getmContactList() {
+        return mContactList;
     }
 
     @Override
@@ -39,9 +44,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        ContactInfo contactInfo = mContactList.get(position);
-        holder.name.setText(contactInfo.getName());
-        holder.phone.setText(contactInfo.getPhone());
+        ContactBean contactInfo = mContactList.get(position);
+        holder.name.setText(contactInfo.getSlaveNickname());
+        holder.phone.setText(contactInfo.getSlaveUsername());
 
         //判断是否显示索引字母
         String currentLetter = contactInfo.getLetter();
@@ -56,7 +61,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
         //加载联系人头像
         Glide.with(context)
-                .load(ContactsUtils.getPhotoByte(context, contactInfo.getContactId()))
+                .load(contactInfo.getAvatar())
                 .transform(new GlideCircleTransform(context))
                 .placeholder(R.mipmap.my_head)
                 .error(R.mipmap.my_head)
@@ -70,7 +75,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         return mContactList == null ? 0 : mContactList.size();
     }
 
-    public void setContactList(List<ContactInfo> contactList) {
+    public void setContactList(List<ContactBean> contactList) {
         mContactList = contactList;
         notifyDataSetChanged();
     }

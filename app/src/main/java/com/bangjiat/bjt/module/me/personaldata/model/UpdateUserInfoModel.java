@@ -3,8 +3,9 @@ package com.bangjiat.bjt.module.me.personaldata.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.contract.UpdateUserInfoContract;
+import com.orhanobut.logger.Logger;
 
 import retrofit2.Response;
 
@@ -22,15 +23,21 @@ public class UpdateUserInfoModel implements UpdateUserInfoContract.Model {
     }
 
     @Override
-    public void updateUserInfo(String token, UserInfoBean bean) {
-        ApiFactory.getService().updateUserInfo(token, bean).enqueue(new MyCallBack<BaseResult<String>>() {
+    public void updateUserInfo(String token, final UserInfo bean) {
+        ApiFactory.getService().updateUserInfo(token, bean).enqueue(new MyCallBack<BaseResult<UserInfo>>() {
             @Override
-            public void onSuc(Response<BaseResult<String>> response) {
-
+            public void onSuc(Response<BaseResult<UserInfo>> response) {
+                BaseResult<UserInfo> body = response.body();
+                if (body.getStatus() == 200) {
+                    presenter.updateUserInfoSuccess(body.getData());
+                } else {
+                    presenter.updateUserInfoFail(body.getMessage());
+                }
             }
 
             @Override
             public void onFail(String message) {
+                Logger.e(message);
                 presenter.updateUserInfoFail(message);
             }
         });

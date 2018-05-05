@@ -1,6 +1,6 @@
 package com.bangjiat.bjt.module.me.personaldata.presenter;
 
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.contract.UpdateUserInfoContract;
 import com.bangjiat.bjt.module.me.personaldata.model.UpdateUserInfoModel;
 
@@ -20,17 +20,19 @@ public class UpdateUserInfoPresenter implements UpdateUserInfoContract.Presenter
     }
 
     @Override
-    public void updateUserInfoSuccess() {
-
+    public void updateUserInfoSuccess(UserInfo info) {
+        view.dismissDialog();
+        view.updateUserInfoSuccess(info);
     }
 
     @Override
     public void updateUserInfoFail(String err) {
-
+        view.updateUserInfoFail(err);
     }
 
     @Override
-    public void updateUserInfo(String token, UserInfoBean bean) {
+    public void updateUserInfo(String token, UserInfo bean) {
+        view.showDialog();
         model.updateUserInfo(token, bean);
     }
 }

@@ -53,7 +53,7 @@
         <activity android:name=".module.main.ui.activity.VerifyPhoneActivity" />
         <activity android:name=".module.main.ui.activity.ModifyPhoneActivity" />
         <activity android:name=".module.main.ui.activity.ContactServiceActivity" />
-        <activity android:name=".module.main.ui.activity.FeedBackActivity" />
+        <activity android:name=".module.me.feedback.ui.FeedBackActivity" />
         <activity android:name=".module.me.personaldata.ui.PersonalHeadActivity" />
         <activity android:name=".module.main.ui.activity.AboutActivity" />
         <activity android:name=".module.home.notice.ui.AllNoticeActivity" />
@@ -145,7 +145,25 @@
         <activity android:name=".module.home.work.leave.ui.LeaveNewApplyActivity" />
         <activity android:name=".module.home.work.worker.ui.WorkerListActivity" />
         <activity android:name=".module.home.work.permission.ui.PermissionMainActivity" />
-        <activity android:name=".module.home.work.permission.ui.PermissionTransferActivity"></activity>
+        <activity android:name=".module.home.work.permission.ui.PermissionTransferActivity" />
+        <activity android:name=".module.me.setting.ui.SettingActivity" />
+        <activity android:name=".module.me.setting.ui.UpdatePasswordActivity" />
+        <activity android:name=".module.me.setting.ui.ForgetPasswordActivity" />
+        <activity android:name=".module.me.bill.ui.MyBillActivity" />
+        <activity android:name=".module.me.bill.ui.PayBillActivity" />
+        <activity android:name=".module.me.bill.ui.PayResultActivity" />
+        <activity android:name=".module.secretary.contact.view.AddContactActivity" />
+        <activity android:name=".module.secretary.contact.view.ContactInfoActivity"></activity>
+        <activity android:name=".module.home.scan.ui.CompanyCodeActivity" />
+
+        <meta-data android:name="DATABASE"
+            android:value="bjt.db" />
+        <meta-data android:name="VERSION"
+            android:value="1" />
+        <meta-data android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.bangjiat.bjt" />
     </application>
 
 </manifest>

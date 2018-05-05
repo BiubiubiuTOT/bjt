@@ -1,5 +1,7 @@
 package com.bangjiat.bjt.module.me.personaldata.beans;
 
+import com.orm.SugarRecord;
+
 /**
  * @author ligh
  * @email 1256144200@qq.com
@@ -7,167 +9,120 @@ package com.bangjiat.bjt.module.me.personaldata.beans;
  */
 
 public class UserInfoBean {
+
     /**
-     * userId : 115f6598290846baacd0c827b0070095
-     * username : 17685302679
-     * password : EC901E643517F1B16EDAF3E307F62029
-     * salt : a5265d2f66e4481c9e32ce96ed2f7592
-     * phone : 17685302679
-     * locked : 0
-     * ctime : 1523674617121
+     * userInfo : {"userId":"115f6598290846baacd0c827b0070095","username":"17685302679","password":"D02C545E8396A44DFF94144B208355C0","salt":"57397963ffbc40859852f9d9f13ee40d","phone":"17685302679","locked":0,"ctime":1523674617121}
+     * count : 1
+     * companyUser : {"companyUserId":13,"companyId":12,"userId":"115f6598290846baacd0c827b0070095","type":2,"companyName":"123","phone":"17685302679"}
      */
 
-    private String userId;
-    private String username;
-    private String password;
-    private String salt;//
-    private String phone;
-    private int locked;//状态(0:正常,1:锁定)
-    private long ctime;//创建时间
-    private String avatar;//头像json字符串
-    private String birthday;//生日
-    private int sex;//性别（1、男；2、女）
-    private String remark;//备注
-    private String realname;//姓名
-    private String openId;//openId,第三方登录使用
-    private String nickname;//昵称
+    private UserInfo userInfo;
+    private int count;
+    private CompanyUserBean companyUser;
 
-    public UserInfoBean(String nickname, int sex, String birthday, String phone) {
-        this.phone = phone;
-        this.birthday = birthday;
-        this.sex = sex;
-        this.nickname = nickname;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public int getCount() {
+        return count;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public CompanyUserBean getCompanyUser() {
+        return companyUser;
     }
 
-    public int getSex() {
-        return sex;
+    public void setCompanyUser(CompanyUserBean companyUser) {
+        this.companyUser = companyUser;
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
 
-    public String getRemark() {
-        return remark;
-    }
+    public static class CompanyUserBean extends SugarRecord {
+        @Override
+        public String toString() {
+            return "CompanyUserBean{" +
+                    "companyUserId=" + companyUserId +
+                    ", companyId=" + companyId +
+                    ", userId='" + userId + '\'' +
+                    ", type=" + type +
+                    ", companyName='" + companyName + '\'' +
+                    ", phone='" + phone + '\'' +
+                    '}';
+        }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+        /**
+         * companyUserId : 13
+         * companyId : 12
+         * userId : 115f6598290846baacd0c827b0070095
+         * type : 2
+         * companyName : 123
+         * phone : 17685302679
+         */
 
-    public String getRealname() {
-        return realname;
-    }
+        private String companyUserId;
+        private String companyId;
+        private String userId;
+        private int type;
+        private String companyName;
+        private String phone;
 
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
+        public CompanyUserBean() {
+        }
 
-    public String getOpenId() {
-        return openId;
-    }
+        public String getCompanyUserId() {
+            return companyUserId;
+        }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
+        public void setCompanyUserId(String companyUserId) {
+            this.companyUserId = companyUserId;
+        }
 
-    public String getNickname() {
-        return nickname;
-    }
+        public String getCompanyId() {
+            return companyId;
+        }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+        public void setCompanyId(String companyId) {
+            this.companyId = companyId;
+        }
 
-    public String getUserId() {
-        return userId;
-    }
+        public String getUserId() {
+            return userId;
+        }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
 
-    public String getUsername() {
-        return username;
-    }
+        public int getType() {
+            return type;
+        }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+        public void setType(int type) {
+            this.type = type;
+        }
 
-    public String getPassword() {
-        return password;
-    }
+        public String getCompanyName() {
+            return companyName;
+        }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
 
-    public String getSalt() {
-        return salt;
-    }
+        public String getPhone() {
+            return phone;
+        }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getLocked() {
-        return locked;
-    }
-
-    public void setLocked(int locked) {
-        this.locked = locked;
-    }
-
-    public long getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(long ctime) {
-        this.ctime = ctime;
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfoBean{" +
-                "userId='" + userId + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", phone='" + phone + '\'' +
-                ", locked=" + locked +
-                ", ctime=" + ctime +
-                ", avatar='" + avatar + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", sex=" + sex +
-                ", remark='" + remark + '\'' +
-                ", realname='" + realname + '\'' +
-                ", openId='" + openId + '\'' +
-                ", nickname='" + nickname + '\'' +
-                '}';
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
     }
 }

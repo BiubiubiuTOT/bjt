@@ -76,6 +76,7 @@ public class AddCompanyActivity extends BaseToolBarActivity implements AddCompan
     @Override
     public void addCompanySuccess() {
         Toast.makeText(mContext, "新建公司成功！", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

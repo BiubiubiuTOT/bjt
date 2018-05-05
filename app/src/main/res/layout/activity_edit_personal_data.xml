@@ -39,7 +39,6 @@
                 android:layout_marginRight="@dimen/mine_item_margin_top"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="@string/personal_nickname_default"
                 android:textColor="@color/personal_message"
                 android:textSize="@dimen/personal_item_text_message_size" />
 
@@ -183,7 +182,6 @@
                 android:layout_marginRight="@dimen/mine_item_margin_top"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="@string/personal_phone_default"
                 android:textColor="@color/personal_message"
                 android:textSize="@dimen/personal_item_text_message_size" />
 

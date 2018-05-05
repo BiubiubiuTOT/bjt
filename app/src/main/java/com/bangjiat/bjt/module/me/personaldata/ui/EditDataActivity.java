@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.KeyboardUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 
 import butterknife.BindView;
@@ -51,6 +52,8 @@ public class EditDataActivity extends BaseToolBarActivity {
                 ll_sex.setVisibility(View.GONE);
                 et_input.setText(message);
                 et_input.selectAll();
+
+                KeyboardUtil.openKeyboard(mContext);
                 break;
             case PersonalDataActivity.TYPE_SEX:
                 ll_input.setVisibility(View.GONE);
@@ -70,6 +73,8 @@ public class EditDataActivity extends BaseToolBarActivity {
                 ll_sex.setVisibility(View.GONE);
                 et_input.setText(message);
                 et_input.selectAll();
+
+                KeyboardUtil.openKeyboard(mContext);
                 break;
         }
     }

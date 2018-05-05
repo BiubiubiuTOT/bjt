@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context=".module.main.ui.activity.FeedBackActivity">
+    tools:context=".module.me.feedback.ui.FeedBackActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -16,6 +16,7 @@
         android:background="@color/white">
 
         <EditText
+            android:id="@+id/et_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -25,6 +26,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginLeft="25dp"

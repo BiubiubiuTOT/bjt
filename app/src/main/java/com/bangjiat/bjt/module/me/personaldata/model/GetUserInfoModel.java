@@ -5,6 +5,7 @@ import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
+import com.orhanobut.logger.Logger;
 
 import retrofit2.Response;
 
@@ -34,6 +35,7 @@ public class GetUserInfoModel implements GetUserInfoContract.Model {
 
             @Override
             public void onFail(String message) {
+                Logger.e(message);
                 presenter.getUserInfoFail(message);
             }
         });

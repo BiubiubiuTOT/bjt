@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.contact.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,18 +16,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
+import com.bangjiat.bjt.module.secretary.contact.contract.ContactContract;
+import com.bangjiat.bjt.module.secretary.contact.presenter.ContactPresenter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactAdapter;
-import com.bangjiat.bjt.module.secretary.contact.util.ContactInfo;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactsUtils;
 import com.bangjiat.bjt.module.secretary.contact.util.SideLetterBar;
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 
@@ -34,9 +42,9 @@ import butterknife.BindView;
  *
  */
 
-public class ContactListActivity extends BaseToolBarActivity {
-    private List<ContactInfo> mContactList;
-    private List<ContactInfo> mSearchList;
+public class ContactListActivity extends BaseToolBarActivity implements ContactContract.View {
+    private List<ContactBean> mContactList;
+    private List<ContactBean> mSearchList;
     private ContactAdapter mContactAdapter;
 
     @BindView(R.id.et_search)
@@ -51,6 +59,8 @@ public class ContactListActivity extends BaseToolBarActivity {
     TextView mOverlay;
     @BindView(R.id.pb)
     ProgressBar mProgressBar;
+    private Dialog dialog;
+    private ContactContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +86,33 @@ public class ContactListActivity extends BaseToolBarActivity {
         tv_message.setTextColor(getResources().getColor(R.color.black));
         image.setImageResource(R.mipmap.add_contact);
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, AddContactActivity.class));
+            }
+        });
     }
 
     private void initView() {
+        // 注册订阅者
+        EventBus.getDefault().register(this);
         mSideLetterBar.setOverlay(mOverlay);
+        presenter = new ContactPresenter(this);
+        presenter.getAllContacts(DataUtil.getToken(mContext), null);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String s) {
+        presenter.getAllContacts(DataUtil.getToken(mContext), null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 注销订阅者
+        EventBus.getDefault().unregister(this);
     }
 
     private void initClick() {
@@ -137,7 +170,11 @@ public class ContactListActivity extends BaseToolBarActivity {
         mContactAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext, ContactDetailActivity.class));
+                Intent intent = new Intent(mContext, ContactDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", mContactAdapter.getmContactList().get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -151,7 +188,7 @@ public class ContactListActivity extends BaseToolBarActivity {
      * @param searchKey 搜索key
      */
     private void searchContacts(String searchKey) {
-        for (ContactInfo info : mContactList) {
+        for (ContactBean info : mContactList) {
             if (ContactsUtils.searchContact(searchKey, info)) {
                 mSearchList.add(info);
             }
@@ -191,14 +228,28 @@ public class ContactListActivity extends BaseToolBarActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mContactAdapter = new ContactAdapter(this, mContactList);
         mRecyclerView.setAdapter(mContactAdapter);
+    }
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                mContactList = ContactsUtils.getContactList(ContactListActivity.this);
-                handler.sendEmptyMessage(0);
-            }
-        });
+    @Override
+    public void showDialog() {
+//        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+//        if (dialog != null)
+//            dialog.dismiss();
+    }
+
+    @Override
+    public void fail(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void success(List<ContactBean> bean) {
+        Logger.d(bean.size());
+        mContactList = ContactsUtils.getContactList(bean);
+        handler.sendEmptyMessage(0);
     }
 }

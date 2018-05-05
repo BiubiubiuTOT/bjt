@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.contact.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -8,11 +9,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
+import com.bangjiat.bjt.module.secretary.contact.contract.UpdateContactContract;
+import com.bangjiat.bjt.module.secretary.contact.presenter.UpdateContactPresenter;
+import com.dou361.dialogui.DialogUIUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ContactDetailActivity extends BaseToolBarActivity {
+public class ContactDetailActivity extends BaseToolBarActivity implements UpdateContactContract.View {
     private Toolbar toolbar;
     private TextView tv_edit;
     private TextView toolbar_cancel;
@@ -46,6 +55,9 @@ public class ContactDetailActivity extends BaseToolBarActivity {
     @BindView(R.id.tv_delete)
     TextView tv_delete;
     private List<WcbBean> mList;
+    private ContactBean bean;
+    private Dialog dialog;
+    private UpdateContactContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +66,16 @@ public class ContactDetailActivity extends BaseToolBarActivity {
     }
 
     private void initView() {
+        presenter = new UpdateContactPresenter(this);
         mList = new ArrayList<>();
         mList.add(new WcbBean("删除联系人", getResources().getColor(R.color.red)));
+
+        bean = (ContactBean) getIntent().getSerializableExtra("data");
+        if (bean != null) {
+            tv_phone.setText(bean.getSlaveUsername());
+            tv_name.setText(bean.getSlaveNickname());
+            et_remark.setText(bean.getRemark());
+        }
     }
 
     @Override
@@ -68,6 +88,11 @@ public class ContactDetailActivity extends BaseToolBarActivity {
         showDeleteDialog();
     }
 
+    @OnClick(R.id.iv_clear)
+    public void clickClear(View view) {
+        et_remark.setText("");
+    }
+
     private void showDeleteDialog() {
         final WCBMenu wcbMenu = new WCBMenu(mContext);
         wcbMenu.setTitle("联系人删除后不可恢复？")
@@ -77,7 +102,7 @@ public class ContactDetailActivity extends BaseToolBarActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         wcbMenu.dismiss();
-                        finish();
+                        presenter.deleteContact(DataUtil.getToken(mContext), bean.getAddressListId());
                     }
                 })
                 .show();
@@ -100,7 +125,8 @@ public class ContactDetailActivity extends BaseToolBarActivity {
                 if (tv_edit.getText().equals("编辑")) {
                     showEdit();
                 } else {
-                    showCustom();
+                    bean.setRemark(et_remark.getText().toString());
+                    presenter.updateContact(DataUtil.getToken(mContext), bean);
                 }
             }
         });
@@ -152,5 +178,39 @@ public class ContactDetailActivity extends BaseToolBarActivity {
 
         ll_phone.setPadding(100, 0, 0, 0);
         ll_remark.setPadding(100, 0, 0, 0);
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog == null)
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        else dialog.show();
+    }
+
+
+    @Override
+    public void showErr(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void deleteSuccess() {
+        EventBus.getDefault().post("");
+        Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void updateSuccess() {
+        EventBus.getDefault().post("");
+        Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
+        showCustom();
+        finish();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
     }
 }

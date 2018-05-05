@@ -34,4 +34,10 @@ public class TimeUtils {
         String format1 = format.format(new Date());
         return format1;
     }
+
+    public static String formatDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
+        String str = format.format(date);
+        return str;
+    }
 }

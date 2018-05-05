@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context="com.bangjiat.bjt.module.me.setting.ui.SettingActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/tv_update_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:padding="15dp"
+        android:text="登录密码修改"
+        android:textColor="@color/dialog_title"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="22dp"
+        android:text="通知开关设置"
+        android:textColor="@color/wifi"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:padding="15dp"
+            android:text="新消息通知"
+            android:textColor="@color/dialog_title"
+            android:textSize="16sp" />
+
+        <vn.luongvo.widget.iosswitchview.SwitchView
+            android:id="@+id/switch_view"
+            android:layout_width="48dp"
+            android:layout_height="29dp"
+            app:color_off="#e5e5e5"
+            app:color_on="#6fd865" />
+    </LinearLayout>
+</LinearLayout>

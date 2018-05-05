@@ -40,7 +40,7 @@ public class PersonalHeadActivity extends BaseWhiteToolBarActivity {
 
     private void initView() {
         path = new ArrayList<>();
-        Glide.with(mContext).load(R.mipmap.head).centerCrop().into(iv_head);
+        Glide.with(mContext).load("http://img5.duitang.com/uploads/item/201611/18/20161118090311_Cw2dU.jpeg").centerCrop().into(iv_head);
         galleryConfig = new GalleryConfig.Builder()
                 .imageLoader(new GlideImageLoader())
                 .iHandlerCallBack(iHandlerCallBack)

@@ -18,8 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DesUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
-import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 
@@ -53,7 +53,6 @@ public class ScanActivity extends BaseToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.d("onCreate");
         initView();
     }
 
@@ -135,7 +134,13 @@ public class ScanActivity extends BaseToolBarActivity {
             if (cp != null) {
                 cp.setFlash(false);
             }
-            QrManager.getInstance().getResultCallback().onScanSuccess(result);
+            String decrypt = null;
+            try {
+                decrypt = DesUtil.decrypt(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            QrManager.getInstance().getResultCallback().onScanSuccess(decrypt);
             finish();
         }
     };
@@ -207,7 +212,13 @@ public class ScanActivity extends BaseToolBarActivity {
                             @Override
                             public void run() {
                                 if (!TextUtils.isEmpty(qrcontent)) {
-                                    QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                    try {
+                                        String decrypt = DesUtil.decrypt(qrcontent);
+                                        QrManager.getInstance().getResultCallback().onScanSuccess(decrypt);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
+                                    }
                                     finish();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
@@ -226,7 +237,7 @@ public class ScanActivity extends BaseToolBarActivity {
 
     @OnClick(R.id.tv_my_code)
     public void clickMyCode(View view) {
-        startActivity(new Intent(mContext, MyCodeActivity.class));
+        startActivity(new Intent(mContext, type == 2 ? CompanyCodeActivity.class : MyCodeActivity.class));
     }
 
 }

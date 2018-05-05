@@ -1,7 +1,5 @@
 package com.bangjiat.bjt.api;
 
-import com.orhanobut.logger.Logger;
-
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -20,7 +18,6 @@ public abstract class MyCallBack<T> implements Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.isSuccessful()) {
-            Logger.d(response.body().toString());
             onSuc(response);
         } else {
             try {
@@ -44,7 +41,6 @@ public abstract class MyCallBack<T> implements Callback<T> {
         }
 
         onFail(t.toString());
-
     }
 
     public abstract void onSuc(Response<T> response);

@@ -1,6 +1,6 @@
 package com.bangjiat.bjt.module.me.personaldata.contract;
 
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 
 /**
  * @author ligh
@@ -10,7 +10,7 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 
 public interface UpdateUserInfoContract {
     interface Model {
-        void updateUserInfo(String token, UserInfoBean bean);
+        void updateUserInfo(String token, UserInfo bean);
     }
 
     interface View {
@@ -18,17 +18,17 @@ public interface UpdateUserInfoContract {
 
         void dismissDialog();
 
-        void updateUserInfoSuccess();
+        void updateUserInfoSuccess(UserInfo info);
 
         void updateUserInfoFail(String err);
     }
 
     interface Presenter {
 
-        void updateUserInfoSuccess();
+        void updateUserInfoSuccess(UserInfo info);
 
         void updateUserInfoFail(String err);
 
-        void updateUserInfo(String token, UserInfoBean bean);
+        void updateUserInfo(String token, UserInfo bean);
     }
 }
