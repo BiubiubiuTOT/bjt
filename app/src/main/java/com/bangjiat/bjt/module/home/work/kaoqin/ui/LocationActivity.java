@@ -1,6 +1,9 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +41,13 @@ import com.bangjiat.bjt.module.home.work.kaoqin.beans.PoiString;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.orhanobut.logger.Logger;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -63,6 +71,8 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
     private Marker marker;
     private PoiAdapter mAdapter;
     private LatLonPoint latLonPoint;
+    private Double weidu;
+    private Double jingdu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +88,12 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new PoiAdapter(pois, mContext);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new PoiAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                mAdapter.setCheck(position);
+            }
+        });
 
         if (aMap == null) {
             aMap = mMapView.getMap();
@@ -97,7 +113,8 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
                 //发生变化时获取到经纬度传递逆地理编码获取周边数据
                 regeocodeSearch(cameraPosition.target.latitude, cameraPosition.target.longitude, 2000);
                 point = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                marker.remove();//将上一次描绘的mark清除
+                if (marker != null)
+                    marker.remove();//将上一次描绘的mark清除
             }
 
             @Override
@@ -122,6 +139,7 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
         toolbar.setTitle("");
 
+
         TextView tv_cancel = toolbar.findViewById(R.id.toolbar_cancel);
         TextView tv_done = toolbar.findViewById(R.id.toolbar_other);
         TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
@@ -143,10 +161,26 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
         tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                List<PoiString> lists = mAdapter.getLists();
+                PoiString string = new PoiString();
+                Map<Integer, Boolean> map = mAdapter.getMap();
+                Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+                for (Map.Entry<Integer, Boolean> entry : entries) {
+                    if (entry.getValue()) {
+                        string = lists.get(entry.getKey());
+                        break;
+                    }
+                }
+                Intent intent = new Intent();
+                intent.putExtra("name", string.getName());
+                intent.putExtra("jingdu", jingdu);
+                intent.putExtra("weidu", weidu);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
+
 
     @OnClick(R.id.et_search)
     public void clickSearch(View view) {
@@ -233,13 +267,12 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
         if (mListener != null && amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
-                Double weidu = amapLocation.getLatitude();
-                Double jingdu = amapLocation.getLongitude();
-                latLonPoint = new LatLonPoint(jingdu, weidu);
+                weidu = amapLocation.getLatitude();
+                jingdu = amapLocation.getLongitude();
                 regeocodeSearch(weidu, jingdu, 100);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                Logger.e("AmapErr", errText);
+                Logger.e(errText);
             }
         }
     }

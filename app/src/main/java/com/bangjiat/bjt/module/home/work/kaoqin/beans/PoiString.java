@@ -15,6 +15,9 @@ public class PoiString {
         this.isDefault = isDefault;
     }
 
+    public PoiString() {
+    }
+
     public PoiString(String name) {
         this.name = name;
     }

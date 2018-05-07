@@ -14,6 +14,7 @@ import com.bangjiat.bjt.module.home.work.kaoqin.beans.PoiString;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Ligh on 2016/9/9 15:33
@@ -30,6 +31,10 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
         this.mOnItemClickListener = listener;
     }
 
+    public List<PoiString> getLists() {
+        return lists;
+    }
+
     public Map<Integer, Boolean> getMap() {
         return map;
     }
@@ -39,13 +44,19 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
         this.mContext = context;
 
         map = new HashMap<>();
-        for (int i = 0; i < lists.size(); i++) {
+        initCheck(lists.size());
+    }
+
+    private void initCheck(int size) {
+        for (int i = 0; i < size; i++) {
             map.put(i, false);
         }
+        map.put(0, true);
     }
 
     public void setLists(List<PoiString> lists) {
         this.lists = lists;
+        initCheck(lists.size());
         notifyDataSetChanged();
     }
 
@@ -61,7 +72,14 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.checkBox.setChecked(map.get(position));
         PoiString s = lists.get(position);
-        viewHolder.tv_name.setText(s.getName());
+        if (s.isDefault()) {
+            viewHolder.tv_district.setVisibility(View.VISIBLE);
+            viewHolder.tv_district.setText(s.getName());
+            viewHolder.tv_name.setText("[位置]");
+        } else {
+            viewHolder.tv_district.setVisibility(View.GONE);
+            viewHolder.tv_name.setText(s.getName());
+        }
 
         viewHolder.itemView.setTag(position);
     }
@@ -79,18 +97,27 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
     }
 
     public void setCheck(int position) {
-        Boolean aBoolean = map.get(position);
-        map.put(position, !aBoolean);
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            if (entry.getKey() == position) {
+                Boolean value = entry.getValue();
+                entry.setValue(!value);
+            } else {
+                entry.setValue(false);
+            }
+        }
+
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name;
+        TextView tv_name, tv_district;
         CheckBox checkBox;
 
         public ViewHolder(View view) {
             super(view);
             tv_name = view.findViewById(R.id.tv_name);
+            tv_district = view.findViewById(R.id.tv_district);
             checkBox = view.findViewById(R.id.checkBox);
         }
     }

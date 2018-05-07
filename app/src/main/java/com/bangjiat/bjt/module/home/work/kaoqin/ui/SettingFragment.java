@@ -33,6 +33,8 @@ public class SettingFragment extends BaseFragment {
     TextView tv_end_time;
     @BindView(R.id.tv_wifi)
     TextView tv_wifi;
+    @BindView(R.id.tv_location)
+    TextView tv_location;
 
     private OptionsPickerView<String> pvMonths;
     private List<String> ampm;
@@ -108,6 +110,11 @@ public class SettingFragment extends BaseFragment {
             } else if (requestCode == SELECT_WIFI) {
                 String str = data.getStringExtra("data");
                 tv_wifi.setText(str);
+            } else if (requestCode == SELECT_LOCATION) {
+                String name = data.getStringExtra("name");
+                String weidu = data.getStringExtra("weidu");
+                String jingdu = data.getStringExtra("jingdu");
+                tv_location.setText(name);
             }
         }
     }

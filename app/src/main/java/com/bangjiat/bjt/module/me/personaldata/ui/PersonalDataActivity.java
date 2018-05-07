@@ -124,7 +124,6 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
             tv_phone.setText(data.getPhone());
             tv_sex.setText(data.getSex() == 0 ? "男" : "女");
             tv_date.setText(data.getBirthday());
-
             if (data.getIdNumber() != null && !data.getIdNumber().isEmpty()) {
                 tv_id_number.setText("已验证");
             }
