@@ -111,4 +111,7 @@
     <string name="count_my">我的</string>
     <string name="count_day_progress">打卡人数/应到人数</string>
     <string name="count_day_progress_message">%1$d/%2$d</string>
+    <string name="personal_id_number">身份证信息</string>
+    <string name="personal_id_number_default">未验证</string>
+    <string name="invite">邀约</string>
 </resources>

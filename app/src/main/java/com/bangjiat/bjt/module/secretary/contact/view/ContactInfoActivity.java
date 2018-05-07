@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.KeyboardUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.contract.SaveContactContract;
@@ -78,6 +79,7 @@ public class ContactInfoActivity extends BaseWhiteToolBarActivity implements Sav
 
     @Override
     public void success() {
+        KeyboardUtil.HideKeyboard(et_name);
         EventBus.getDefault().post("");
         Toast.makeText(mContext, "添加成功", Toast.LENGTH_SHORT).show();
         finish();

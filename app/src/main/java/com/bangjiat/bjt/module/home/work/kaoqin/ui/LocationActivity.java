@@ -1,77 +1,113 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.MyLocationData;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.LocationSource;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
+import com.amap.api.services.geocoder.RegeocodeRoad;
+import com.amap.api.services.geocoder.StreetNumber;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.module.home.work.kaoqin.adapter.PoiAdapter;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.PoiString;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class LocationActivity extends BaseToolBarActivity {
-    @BindView(R.id.mmap)
+public class LocationActivity extends BaseToolBarActivity implements GeocodeSearch.OnGeocodeSearchListener,
+        LocationSource, AMapLocationListener {
+    @BindView(R.id.map)
     MapView mMapView;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.et_search)
+    EditText et_search;
 
-    private BaiduMap mBaiduMap;
-    public LocationClient mLocationClient = null;
-    private MyLocationListener myListener = new MyLocationListener();
+    private AMap aMap;
+    private static final int SEARCH = 1;
+    private OnLocationChangedListener mListener;
+    private AMapLocationClient mlocationClient;
+    private AMapLocationClientOption mLocationOption;
+    private List<PoiString> pois;
+    private LatLng point;
+    private Marker marker;
+    private PoiAdapter mAdapter;
+    private LatLonPoint latLonPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMapView.onCreate(savedInstanceState);
         initView();
     }
 
     private void initView() {
-        mLocationClient = new LocationClient(getApplicationContext());
-        mLocationClient.registerLocationListener(myListener);
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.marker, null);
+        pois = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter = new PoiAdapter(pois, mContext);
+        recyclerView.setAdapter(mAdapter);
 
-        option.setScanSpan(1000 * 60);
+        if (aMap == null) {
+            aMap = mMapView.getMap();
+        }
+        MyLocationStyle locationStyle = new MyLocationStyle();
+        locationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);//定位一次，且将视角移动到地图中心点。
+        aMap.setMyLocationStyle(locationStyle);
+        aMap.setLocationSource(this);
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);
+        aMap.setMyLocationEnabled(true);
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
 
-        option.setOpenGps(true);
+        aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
 
-        option.setLocationNotify(true);
+                //发生变化时获取到经纬度传递逆地理编码获取周边数据
+                regeocodeSearch(cameraPosition.target.latitude, cameraPosition.target.longitude, 2000);
+                point = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                marker.remove();//将上一次描绘的mark清除
+            }
 
-        option.setIgnoreKillProcess(false);
-
-        option.SetIgnoreCacheException(false);
-
-        option.setWifiCacheTimeOut(5 * 60 * 1000);
-
-        option.setEnableSimulateGps(false);
-        option.setIsNeedLocationPoiList(true);
-        option.setIsNeedLocationDescribe(true);
-
-        mLocationClient.setLocOption(option);
-
-        mBaiduMap = mMapView.getMap();
-        // 开启定位图层
-        mBaiduMap.setMyLocationEnabled(true);
-
-        mLocationClient.start();
-
+            @Override
+            public void onCameraChangeFinish(CameraPosition cameraPosition) {
+                //地图发生变化之后描绘mark
+                marker = aMap.addMarker(new com.amap.api.maps.model.MarkerOptions()
+                        .position(point)
+                        .title(""));
+            }
+        });
 
 //        recyclerView.setAdapter();
     }
@@ -112,6 +148,27 @@ public class LocationActivity extends BaseToolBarActivity {
         });
     }
 
+    @OnClick(R.id.et_search)
+    public void clickSearch(View view) {
+        startActivityForResult(new Intent(mContext, SearchLocationActivity.class), SEARCH);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SEARCH) {
+                Double latitude = data.getDoubleExtra("latitude", 0);
+                Double longitude = data.getDoubleExtra("longitude", 0);
+                //通过经纬度重新再地图获取位置
+                CameraPosition cp = aMap.getCameraPosition();
+                CameraPosition cpNew = CameraPosition.fromLatLngZoom(new LatLng(latitude, longitude), cp.zoom);
+                CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cpNew);
+                aMap.moveCamera(cu);
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -130,43 +187,142 @@ public class LocationActivity extends BaseToolBarActivity {
         mMapView.onPause();
     }
 
-    public class MyLocationListener extends BDAbstractLocationListener {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            mLocationClient.stop();
-            int errorCode = location.getLocType();
-            //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
-            List<Poi> poiList = location.getPoiList();
-            String locationDescribe = location.getLocationDescribe();
-            String addrStr = location.getAddrStr();
-            Logger.d("addrStr: " + addrStr + " locationDescribe: " + locationDescribe + " errorCode: " + errorCode);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
+    }
 
-            //获取周边POI信息
-            //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
 
-            double latitude = location.getLatitude();    //获取纬度信息
-            double longitude = location.getLongitude();    //获取经度信息
-            float radius = location.getRadius();    //获取定位精度，默认值为0.0f
+    }
 
-            String coorType = location.getCoorType();
-            //获取经纬度坐标类型，以LocationClientOption中设置过的坐标类型为准
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+        Logger.d(geocodeResult.getGeocodeAddressList());
+    }
 
-            mBaiduMap.setMyLocationEnabled(true);
-            // 构造定位数据
-            MyLocationData locData = new MyLocationData.Builder()
-                    .accuracy(radius)
-                    // 此处设置开发者获取到的方向信息，顺时针0-360
-                    .direction(0).latitude(latitude)
-                    .longitude(longitude).build();
-
-            mBaiduMap.setMyLocationData(locData);
-
-            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
-            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
-                    .fromResource(R.mipmap.location);
-            MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
-            mBaiduMap.setMyLocationConfiguration(config);
-
+    @Override
+    public void activate(OnLocationChangedListener onLocationChangedListener) {
+        mListener = onLocationChangedListener;
+        if (mlocationClient == null) {
+            mlocationClient = new AMapLocationClient(mContext);
+            mLocationOption = new AMapLocationClientOption();
+            mlocationClient.setLocationListener(this);
+            mLocationOption.setOnceLocation(true); //只定位一次
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            mlocationClient.setLocationOption(mLocationOption);
+            mlocationClient.startLocation();
         }
+    }
+
+    @Override
+    public void deactivate() {
+        mListener = null;
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+            mlocationClient.onDestroy();
+        }
+        mlocationClient = null;
+        mLocationOption = null;
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (mListener != null && amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                Double weidu = amapLocation.getLatitude();
+                Double jingdu = amapLocation.getLongitude();
+                latLonPoint = new LatLonPoint(jingdu, weidu);
+                regeocodeSearch(weidu, jingdu, 100);
+            } else {
+                String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
+                Logger.e("AmapErr", errText);
+            }
+        }
+    }
+
+
+    /***
+     * 逆地理编码获取定位后的附近地址
+     * @param weidu
+     * @param jingdu
+     * @param distances 设置查找范围
+     */
+    private void regeocodeSearch(Double weidu, Double jingdu, int distances) {
+        final LatLonPoint point = new LatLonPoint(weidu, jingdu);
+        GeocodeSearch geocodeSearch = new GeocodeSearch(mContext);
+        RegeocodeQuery regeocodeQuery = new RegeocodeQuery(point, distances, geocodeSearch.AMAP);
+        geocodeSearch.getFromLocationAsyn(regeocodeQuery);
+
+        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int rCode) {
+                String preAdd = "";//地址前缀
+                if (1000 == rCode) {
+                    final RegeocodeAddress address = regeocodeResult.getRegeocodeAddress();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String area = address.getProvince();//省或直辖市
+                    String loc = address.getCity();//地级市或直辖市
+                    String subLoc = address.getDistrict();//区或县或县级市
+                    String ts = address.getTownship();//乡镇
+                    String thf = null;//道路
+                    List<RegeocodeRoad> regeocodeRoads = address.getRoads();//道路列表
+                    if (regeocodeRoads != null && regeocodeRoads.size() > 0) {
+                        RegeocodeRoad regeocodeRoad = regeocodeRoads.get(0);
+                        if (regeocodeRoad != null) {
+                            thf = regeocodeRoad.getName();
+                        }
+                    }
+                    String subthf = null;//门牌号
+                    StreetNumber streetNumber = address.getStreetNumber();
+                    if (streetNumber != null) {
+                        subthf = streetNumber.getNumber();
+                    }
+                    String fn = address.getBuilding();//标志性建筑,当道路为null时显示
+                    if (area != null) {
+                        stringBuffer.append(area);
+                        preAdd += area;
+                    }
+                    if (loc != null && !area.equals(loc)) {
+                        stringBuffer.append(loc);
+                        preAdd += loc;
+                    }
+                    if (subLoc != null) {
+                        stringBuffer.append(subLoc);
+                        preAdd += subLoc;
+                    }
+                    if (ts != null)
+                        stringBuffer.append(ts);
+                    if (thf != null)
+                        stringBuffer.append(thf);
+                    if (subthf != null)
+                        stringBuffer.append(subthf);
+                    if ((thf == null && subthf == null) && fn != null && !subLoc.equals(fn))
+                        stringBuffer.append(fn + "附近");
+
+                    List<PoiItem> list = address.getPois();
+                    Logger.d(LocationActivity.this.pois.toString());
+                    Logger.d(stringBuffer);
+                    pois.clear();
+                    for (PoiItem item : list) {
+                        pois.add(new PoiString(item.getTitle()));
+                    }
+
+                    LocationActivity.this.pois.add(0, new PoiString(stringBuffer.toString(), true));
+                    mAdapter.setLists(LocationActivity.this.pois);
+                }
+
+
+            }
+
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+            }
+        });
+
     }
 }

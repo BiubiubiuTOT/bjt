@@ -36,17 +36,20 @@
                 android:src="@mipmap/search" />
 
             <EditText
+                android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:editable="false"
+                android:focusable="false"
                 android:hint="@string/search"
                 android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/mmap"
+    <com.amap.api.maps.MapView
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -54,6 +57,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:background="@color/white" />
 </LinearLayout>

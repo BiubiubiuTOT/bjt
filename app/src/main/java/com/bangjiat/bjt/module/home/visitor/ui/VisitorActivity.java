@@ -1,14 +1,15 @@
 package com.bangjiat.bjt.module.home.visitor.ui;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.MyAdapter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
-import com.bangjiat.bjt.module.home.visitor.adapter.VisitorAdapter;
-import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +17,24 @@ import java.util.List;
 import butterknife.BindView;
 
 public class VisitorActivity extends BaseWhiteToolBarActivity {
-    @BindView(R.id.recycler_view)
-    RecyclerView recycler_view;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.rg)
+    RadioGroup rg;
+    @BindView(R.id.rb1)
+    RadioButton rb1;
+    @BindView(R.id.rb2)
+    RadioButton rb2;
+    private int index;
+
+    private Fragment fragment_visitor, fragment_invite;
+    private List<Fragment> fragments;
+    private MyAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initData();
+        initView();
     }
 
     @Override
@@ -36,28 +48,75 @@ public class VisitorActivity extends BaseWhiteToolBarActivity {
     }
 
 
-    private void initData() {
-        recycler_view.setLayoutManager(new LinearLayoutManager(this));
-        recycler_view.setHasFixedSize(true);
-        VisitorAdapter mAdapter = new VisitorAdapter(getData());
-        recycler_view.setAdapter(mAdapter);
-
-        mAdapter.setOnItemClickListener(new VisitorAdapter.OnRecyclerViewItemClickListener() {
+    private void initClick() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0: {
+                        rb1.setChecked(true);
+                    }
+                    break;
+                    case 1: {
+                        rb2.setChecked(true);
+                    }
+                    break;
+                }
+            }
+
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+
+        //rg  点击rg跳转
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb1:
+                        index = 0;
+                        break;
+                    case R.id.rb2:
+                        index = 1;
+                        break;
+                    case R.id.rb3:
+                        index = 2;
+                        break;
+                }
+                if (viewPager.getCurrentItem() != index) {
+                    viewPager.setCurrentItem(index, false);
+
+                }
+
 
             }
         });
+
+
     }
 
-    private List<VisitorBean> getData() {
-        List<VisitorBean> beanList = new ArrayList<>();
-        beanList.add(new VisitorBean("拜访人姓名：王力",
-                "访问事宜：面试", true, "已同意", "拜访时间：2018-03-24 16:54"));
-        beanList.add(new VisitorBean("拜访人姓名：王一",
-                "访问事宜：面试", true, "已拒绝", "拜访时间：2018-03-24 16:54"));
-        beanList.add(new VisitorBean("拜访人姓名：王三",
-                "访问事宜：面试", false, "", "拜访时间：2018-03-24 16:54"));
-        return beanList;
+    protected void initView() {
+        fragment_visitor = new VisitorFragment();
+        fragment_invite = new InviteFragment();
+
+        fragments = new ArrayList<>();
+
+        fragments.add(fragment_visitor);
+        fragments.add(fragment_invite);
+
+        myAdapter = new MyAdapter(getSupportFragmentManager(), fragments);
+
+        viewPager.setAdapter(myAdapter);
+        initClick();
     }
+
+
 }

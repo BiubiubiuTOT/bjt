@@ -1,7 +1,6 @@
 package com.bangjiat.bjt.module.me;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import com.bangjiat.bjt.module.main.ui.activity.AboutActivity;
 import com.bangjiat.bjt.module.main.ui.activity.ContactServiceActivity;
 import com.bangjiat.bjt.module.me.bill.ui.MyBillActivity;
 import com.bangjiat.bjt.module.me.feedback.ui.FeedBackActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
@@ -28,14 +28,17 @@ import com.bangjiat.bjt.module.me.setting.ui.SettingActivity;
 import com.bangjiat.bjt.module.secretary.contact.util.GlideCircleTransform;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.orm.SugarRecord;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class MineFragment extends BaseFragment implements GetUserInfoContract.View {
@@ -46,10 +49,11 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
     private UserInfo userInfo;
     @BindView(R.id.tv_name)
     TextView tv_name;
-    private static final int EDIT = 2;
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
         Glide.with(mContext).load("http://img5.duitang.com/uploads/item/201611/18/20161118090311_Cw2dU.jpeg").centerCrop().
                 transform(new GlideCircleTransform(mContext)).into(iv_icon);
         presenter = new GetUserInfoPresenter(this);
@@ -105,11 +109,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
     @OnClick(R.id.ll_edit)
     public void clickEdit(View view) {
         Intent intent = new Intent(mContext, PersonalDataActivity.class);
-        Bundle bundle = new Bundle();
-        if (userInfo != null)
-            bundle.putSerializable("data", userInfo);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, EDIT);
+        startActivity(intent);
     }
 
     private void showExitDialog() {
@@ -121,6 +121,8 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         wcbMenu.dismiss();
+                        SugarRecord.deleteAll(UserInfo.class);
+                        SugarRecord.deleteAll(CompanyUserBean.class);
                         DataUtil.setLogin(mContext, false);
                         startActivity(new Intent(mContext, LoginActivity.class));
                         getActivity().finish();
@@ -134,30 +136,30 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
         Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == EDIT) {
-                userInfo = (UserInfo) data.getSerializableExtra("data");
-                tv_name.setText(userInfo.getNickname());
-                UserInfo.delete(UserInfo.class);
-                userInfo.save();
-            }
-        }
-    }
 
     @Override
     public void getUserInfoSuccess(UserInfoBean bean) {
         Logger.d(bean.toString());
         userInfo = bean.getUserInfo();
+        CompanyUserBean companyUser = bean.getCompanyUser();
         DataUtil.setPhone(mContext, userInfo.getPhone());
         DataUtil.setUserId(mContext, userInfo.getUserId());
         tv_name.setText(userInfo.getNickname());
 
         userInfo.save();
-        UserInfoBean.CompanyUserBean companyUser = bean.getCompanyUser();
-        companyUser.save();
+        if (companyUser != null)
+            companyUser.save();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UserInfo s) {
+        tv_name.setText(userInfo.getNickname());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
 

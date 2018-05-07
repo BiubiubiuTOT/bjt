@@ -30,7 +30,6 @@ public class WifiUtil {
 
         wm = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
         wi = wm.getConnectionInfo();
-        startScan();
     }
 
     /**
@@ -43,6 +42,7 @@ public class WifiUtil {
     }
 
     public List<WifiBean> getWifiList() {
+        startScan();
         List<WifiBean> list = new ArrayList<>();
         WifiBean wifiBean;
         String ssid = wi.getSSID();

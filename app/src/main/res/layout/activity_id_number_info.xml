@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mine_color"
+    android:orientation="vertical"
+    tools:context="com.bangjiat.bjt.module.me.personaldata.ui.IdNumberInfoActivity">
+
+    <include layout="@layout/toolbar_1" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:hint="请输入身份证姓名"
+        android:padding="15dp"
+        android:textColor="@color/dialog_title"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/et_id_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:hint="请输入身份证号码"
+        android:padding="15dp"
+        android:textColor="@color/dialog_title"
+        android:textSize="14sp" />
+</LinearLayout>

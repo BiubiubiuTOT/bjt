@@ -22,6 +22,9 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.dou361.dialogui.DialogUIUtils;
+import com.orm.SugarRecord;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +39,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     public static final int TYPE_NICKNAME = 1;
     public static final int TYPE_PHONE = 2;
     public static final int TYPE_SEX = 3;
+    public static final int TYPE_ID_NUMBER = 4;
     private UpdateUserInfoContract.Presenter presenter;
 
     @BindView(R.id.tv_nickname)
@@ -46,11 +50,16 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     TextView tv_sex;
     @BindView(R.id.tv_date)
     TextView tv_date;
+    @BindView(R.id.tv_id_number)
+    TextView tv_id_number;
+
     private TimePickerView pvTime;
     private Dialog dialog;
 
     private boolean isEdit;
     private UserInfo data;
+    private String realName;
+    private String idNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +83,6 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     }
 
     private void editData(String title, int type, String message) {
-        isEdit = true;
         Intent intent = new Intent(mContext, EditDataActivity.class);
         intent.putExtra(TITLE, title);
         intent.putExtra(TYPE, type);
@@ -94,18 +102,34 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
 
     @OnClick(R.id.ll_birthday)
     public void clickBirthday(View view) {
-        isEdit = true;
         pvTime.show();
     }
 
+    @OnClick(R.id.ll_id_number)
+    public void clickIdNumber(View view) {
+        Intent intent = new Intent(mContext, IdNumberInfoActivity.class);
+        if (data.getIdNumber() != null && !data.getIdNumber().isEmpty()) {
+            intent.putExtra("name", data.getRealname());
+            intent.putExtra("idNumber", data.getIdNumber());
+        } else {
+            intent.putExtra(TYPE, 1);
+        }
+        startActivityForResult(intent, TYPE_ID_NUMBER);
+    }
+
     private void initDate() {
-        data = (UserInfo) getIntent().getSerializableExtra("data");
+        data = UserInfo.first(UserInfo.class);
         if (data != null) {
             tv_nickname.setText(data.getNickname());
             tv_phone.setText(data.getPhone());
             tv_sex.setText(data.getSex() == 0 ? "男" : "女");
             tv_date.setText(data.getBirthday());
+
+            if (data.getIdNumber() != null && !data.getIdNumber().isEmpty()) {
+                tv_id_number.setText("已验证");
+            }
         }
+
 
         presenter = new UpdateUserInfoPresenter(this);
 
@@ -119,12 +143,12 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
             @Override
             public void onTimeSelect(Date date, View v) {
                 tv_date.setText(TimeUtils.changeToYMD(date.getTime()));
+                isEdit = true;
             }
         }).setSubmitColor(Color.BLACK)//确定按钮文字颜色
                 .setCancelColor(Color.BLACK)//取消按钮文字颜色
                 .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
                 .setRangDate(startDate, endDate)//起始终止年月日设定
-                .isCyclic(true)
                 .build();
 
     }
@@ -135,7 +159,6 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
         Intent intent = new Intent(mContext, MyCodeActivity.class);
         Bundle bundle = new Bundle();
         intent.putExtras(bundle);
-
         startActivity(intent);
     }
 
@@ -143,6 +166,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            isEdit = true;
             String message = data.getStringExtra(MESSAGE);
             switch (requestCode) {
                 case TYPE_NICKNAME:
@@ -153,6 +177,11 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
                     break;
                 case TYPE_SEX:
                     tv_sex.setText(message);
+                    break;
+                case TYPE_ID_NUMBER:
+                    realName = data.getStringExtra("name");
+                    idNumber = data.getStringExtra("idNumber");
+                    tv_id_number.setText("已验证");
                     break;
             }
         }
@@ -171,11 +200,10 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
 
     @Override
     public void updateUserInfoSuccess(UserInfo info) {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("data", info);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
+        SugarRecord.deleteAll(UserInfo.class);
+        SugarRecord.save(info);
+
+        EventBus.getDefault().post(info);
         finish();
     }
 
@@ -215,6 +243,13 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
         UserInfo userInfoBean = new UserInfo(tv_nickname.getText().toString(),
                 sex, tv_date.getText().toString(), tv_phone.getText().toString());
         userInfoBean.setUsername(DataUtil.getAccount(mContext).getPhone());
+        if (realName != null) {
+            userInfoBean.setIdNumber(idNumber);
+            userInfoBean.setRealname(realName);
+        } else {
+            userInfoBean.setRealname(data.getRealname());
+            userInfoBean.setIdNumber(data.getIdNumber());
+        }
         presenter.updateUserInfo(DataUtil.getToken(mContext), userInfoBean);
     }
 }

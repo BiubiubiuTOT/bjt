@@ -9,7 +9,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DesUtil;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataCompany;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
@@ -30,7 +30,7 @@ public class CompanyCodeActivity extends BaseColorToolBarActivity {
     }
 
     private void initView() {
-        UserInfoBean.CompanyUserBean companyUserBean = UserInfoBean.CompanyUserBean.first(UserInfoBean.CompanyUserBean.class);
+        CompanyUserBean companyUserBean = CompanyUserBean.first(CompanyUserBean.class);
         if (companyUserBean != null) {
             QrCodeDataCompany company = new QrCodeDataCompany(companyUserBean.getCompanyName(), companyUserBean.getCompanyId(), companyUserBean.getUserId());
 

@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.PoiString;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Map;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> implements View.OnClickListener {
-    private List<String> lists;
+    private List<PoiString> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
     private Map<Integer, Boolean> map;
@@ -33,7 +34,7 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
         return map;
     }
 
-    public PoiAdapter(List<String> lists, Context context) {
+    public PoiAdapter(List<PoiString> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
 
@@ -43,9 +44,14 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
         }
     }
 
+    public void setLists(List<PoiString> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_work_day, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_pois, viewGroup, false);
         view.setOnClickListener(this);
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -54,8 +60,8 @@ public class PoiAdapter extends RecyclerView.Adapter<PoiAdapter.ViewHolder> impl
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.checkBox.setChecked(map.get(position));
-        String s = lists.get(position);
-        viewHolder.tv_name.setText(s);
+        PoiString s = lists.get(position);
+        viewHolder.tv_name.setText(s.getName());
 
         viewHolder.itemView.setTag(position);
     }

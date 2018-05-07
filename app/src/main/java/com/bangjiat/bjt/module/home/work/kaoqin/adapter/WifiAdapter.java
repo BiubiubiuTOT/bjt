@@ -37,6 +37,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
 
     public void setLists(List<WifiBean> lists) {
         this.lists = lists;
+        initCheck(lists.size());
         notifyDataSetChanged();
     }
 
@@ -44,10 +45,19 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
         this.lists = lists;
         this.mContext = context;
 
+        initCheck(lists.size());
+    }
+
+    private void initCheck(int size) {
         map = new HashMap<>();
-        for (int i = 0; i < lists.size(); i++) {
+        Boolean isCheck = false;
+        if (map.get(0) != null) {
+            isCheck = map.get(0);
+        }
+        for (int i = 0; i < size; i++) {
             map.put(i, false);
         }
+        map.put(0, isCheck);
     }
 
     @Override

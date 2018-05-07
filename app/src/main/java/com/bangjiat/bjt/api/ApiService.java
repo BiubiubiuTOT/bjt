@@ -37,7 +37,8 @@ import retrofit2.http.Query;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  * 200 成功请求
  * http://192.168.0.118:1004/swagger-ui.html#/
- * 102
+ * www.bangjiat.com
+ * www.bangjiat.com/oss/
  */
 
 public interface ApiService {

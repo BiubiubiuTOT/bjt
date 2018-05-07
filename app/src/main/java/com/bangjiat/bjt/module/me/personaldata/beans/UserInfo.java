@@ -33,6 +33,8 @@ public class UserInfo extends SugarRecord implements Serializable {
     @Ignore
     private String openId;//openId,第三方登录使用
     private String nickname;//昵称
+    private String idNumber;//昵称
+    private String job;//昵称
 
     public UserInfo(String nickname, int sex, String birthday, String phone) {
         this.phone = phone;
@@ -46,6 +48,22 @@ public class UserInfo extends SugarRecord implements Serializable {
 
     public String getAvatar() {
         return avatar;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public void setAvatar(String avatar) {

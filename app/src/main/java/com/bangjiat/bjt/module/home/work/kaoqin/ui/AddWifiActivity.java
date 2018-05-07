@@ -2,6 +2,8 @@ package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +19,8 @@ import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -26,6 +30,7 @@ public class AddWifiActivity extends BaseToolBarActivity {
     private WifiUtil wifiUtil;
     private WifiAdapter adapter;
     private List<WifiBean> wifiList;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,27 @@ public class AddWifiActivity extends BaseToolBarActivity {
         wifiList = wifiUtil.getWifiList();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        setAdapter();
+        startTimer();
+    }
+
+    private void setAdapter() {
         adapter = new WifiAdapter(wifiList, mContext);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void startTimer() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                wifiList = wifiUtil.getWifiList();
+                if (wifiList.size() > 0) {
+                    mHandler.sendEmptyMessage(1);
+                }
+            }
+        }, 2000, 5000);
     }
 
     @Override
@@ -86,5 +110,20 @@ public class AddWifiActivity extends BaseToolBarActivity {
                 }
             }
         });
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1)
+                adapter.setLists(wifiList);
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) timer.cancel();
     }
 }

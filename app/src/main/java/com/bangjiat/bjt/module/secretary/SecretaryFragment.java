@@ -6,6 +6,8 @@ import android.widget.ImageView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bjt.module.secretary.contact.view.ContactListActivity;
 import com.bangjiat.bjt.module.secretary.service.ui.MainActivity;
 import com.bangjiat.bjt.module.secretary.workers.ui.WorkersManageActivity;
@@ -63,7 +65,8 @@ public class SecretaryFragment extends BaseFragment {
 
     @OnClick(R.id.card_people)
     public void clickPeople(View view) {
-        startActivity(new Intent(mContext, WorkersManageActivity.class));
+        startActivity(new Intent(mContext, Constants.isIntoCompany() ? WorkersManageActivity.class :
+                AddOrSelectCompanyActivity.class));
     }
 }
 

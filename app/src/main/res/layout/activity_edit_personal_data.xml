@@ -143,6 +143,52 @@
                 android:src="@mipmap/arrow_right" />
         </LinearLayout>
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/personal_item_view_height"
+            android:layout_gravity="bottom"
+            android:background="@color/personal_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_id_number"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/personal_item_height"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mine_item_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_id_number"
+                android:textColor="@color/personal_title_color"
+                android:textSize="@dimen/personal_item_text_title_size" />
+
+            <TextView
+                android:id="@+id/tv_id_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/mine_item_margin_top"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/personal_id_number_default"
+                android:textColor="@color/personal_message"
+                android:textSize="@dimen/personal_item_text_message_size" />
+
+            <ImageView
+                android:layout_width="@dimen/mine_item_right_icon"
+                android:layout_height="@dimen/mine_item_right_icon"
+                android:layout_marginRight="@dimen/mine_item_margin"
+                android:src="@mipmap/arrow_right" />
+        </LinearLayout>
     </LinearLayout>
 
     <TextView

@@ -1,11 +1,13 @@
 package com.bangjiat.bjt.module.home.company.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
@@ -13,7 +15,8 @@ import com.bangjiat.bjt.module.home.company.contract.IntoCompanyContract;
 import com.bangjiat.bjt.module.home.company.presenter.IntoCompanyPresenter;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataCompany;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
+import com.bangjiat.bjt.module.me.personaldata.ui.PersonalDataActivity;
 import com.dou361.dialogui.DialogUIUtils;
 import com.google.gson.Gson;
 
@@ -81,7 +84,7 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
 
     @Override
     public void success() {
-        UserInfoBean.CompanyUserBean bean = new UserInfoBean.CompanyUserBean();
+        CompanyUserBean bean = new CompanyUserBean();
         bean.setCompanyId(company.getCompanyId());
         bean.setCompanyName(company.getCompanyName());
         bean.save();
@@ -91,6 +94,20 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
 
     @Override
     public void fail(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        if (err.equals("用户姓名为空")) {
+            showDia();
+        } else
+            Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void showDia() {
+        new AlertDialog(mContext).builder().setMsg("请先完善个人资料")
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(mContext, PersonalDataActivity.class));
+                    }
+                }).show();
     }
 }

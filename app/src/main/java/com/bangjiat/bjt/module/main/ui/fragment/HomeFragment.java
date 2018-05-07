@@ -10,15 +10,16 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.ui.AllNoticeActivity;
 import com.bangjiat.bjt.module.home.notice.ui.NoticeItemActivity;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
+import com.bangjiat.bjt.module.home.scan.ui.OpenDoorCodeActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.home.visitor.ui.VisitorActivity;
 import com.bangjiat.bjt.module.home.work.ui.WorkMainActivity;
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.view.ContactInfoActivity;
 import com.google.gson.Gson;
@@ -79,7 +80,7 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.tv_visitor)
     public void clickVisitor(View view) {
-        startActivity(new Intent(mContext, VisitorActivity.class));
+        startActivity(new Intent(mContext, Constants.isIntoCompany() ? VisitorActivity.class : AddOrSelectCompanyActivity.class));
     }
 
     @OnClick(R.id.iv_scan)
@@ -89,16 +90,13 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.tv_open_door)
     public void clickOpenDoor(View view) {
-        UserInfoBean.CompanyUserBean companyUserBean = UserInfoBean.CompanyUserBean.first(UserInfoBean.CompanyUserBean.class);
-        if (companyUserBean != null)
-            Logger.d(companyUserBean.toString());
-//        startActivity(new Intent(mContext, companyUserBean == null ? AddOrSelectCompanyActivity.class : OpenDoorCodeActivity.class));
-        startActivity(new Intent(mContext, AddOrSelectCompanyActivity.class));
+        startActivity(new Intent(mContext, Constants.isIntoCompany() ?
+                OpenDoorCodeActivity.class : AddOrSelectCompanyActivity.class));
     }
 
     @OnClick(R.id.tv_work)
     public void clickWork(View view) {
-        startActivity(new Intent(mContext, WorkMainActivity.class));
+        startActivity(new Intent(mContext, Constants.isIntoCompany() ? WorkMainActivity.class : AddOrSelectCompanyActivity.class));
     }
 
     private void checkPermission() {

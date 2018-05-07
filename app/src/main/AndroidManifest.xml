@@ -64,7 +64,9 @@
             android:launchMode="singleTop" />
         <activity android:name=".module.home.scan.ui.MyCodeActivity" />
         <activity android:name=".module.home.scan.ui.OpenDoorCodeActivity" />
-        <activity android:name=".module.me.personaldata.ui.PersonalDataActivity" />
+        <activity
+            android:name=".module.me.personaldata.ui.PersonalDataActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".module.me.personaldata.ui.EditDataActivity" />
 
         <provider
@@ -131,14 +133,9 @@
         <activity android:name=".module.home.work.kaoqin.ui.AddWifiActivity" />
         <activity android:name=".module.home.work.kaoqin.ui.LocationActivity" />
 
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
-
         <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="nXhxZ3t8db2rq7R4ewtg7plGjmf9Y1oT" />
+            android:name="com.amap.api.v2.apikey"
+            android:value="82592fabbcb044677ceb29bf19f8fa65" />
 
         <activity android:name=".module.home.work.leave.ui.LeaveMainActivity" />
         <activity android:name=".module.home.work.leave.ui.LeaveHistoryActivity" />
@@ -153,17 +150,25 @@
         <activity android:name=".module.me.bill.ui.PayBillActivity" />
         <activity android:name=".module.me.bill.ui.PayResultActivity" />
         <activity android:name=".module.secretary.contact.view.AddContactActivity" />
-        <activity android:name=".module.secretary.contact.view.ContactInfoActivity"></activity>
+        <activity android:name=".module.secretary.contact.view.ContactInfoActivity" />
         <activity android:name=".module.home.scan.ui.CompanyCodeActivity" />
 
-        <meta-data android:name="DATABASE"
+        <meta-data
+            android:name="DATABASE"
             android:value="bjt.db" />
-        <meta-data android:name="VERSION"
+        <meta-data
+            android:name="VERSION"
             android:value="1" />
-        <meta-data android:name="QUERY_LOG"
+        <meta-data
+            android:name="QUERY_LOG"
             android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME"
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.bangjiat.bjt" />
+
+        <activity android:name=".module.me.personaldata.ui.IdNumberInfoActivity" />
+        <activity android:name=".module.home.work.kaoqin.ui.SeachLocationActivity"></activity>
+        <activity android:name=".module.home.work.kaoqin.ui.SearchLocationActivity" />
     </application>
 
 </manifest>
