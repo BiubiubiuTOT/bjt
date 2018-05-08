@@ -4,6 +4,10 @@ import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.main.account.beans.LoginInput;
 import com.bangjiat.bjt.module.main.account.beans.RegisterInput;
 import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
@@ -13,7 +17,9 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
+import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 
 import java.util.List;
 import java.util.Map;
@@ -212,7 +218,58 @@ public interface ApiService {
     @POST("api/company/save/CompanyUser")
     Call<BaseResult<String>> intoCompany(@Header(Constants.TOKEN_NAME) String token, @Body IntoCompanyInput input);
 
+    /**
+     * 添加打卡规则
+     */
+    @POST("api/companyClockRule/save/CompanyClockRule")
+    Call<BaseResult<String>> saveCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token, @Body RuleInput input);
 
+    /**
+     * 修改打卡规则
+     */
+    @PUT("api/companyClockRule/update/CompanyClockRule")
+    Call<BaseResult<String>> updateCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token, @Body RuleInput input);
+
+    /**
+     * 查询打卡规则
+     */
+    @GET("api/companyClockRule/select/CompanyClockRule")
+    Call<BaseResult<RuleInput>> selectCompanyClockRule(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 上班打卡
+     */
+    @POST("api/companyClock/save/CompanyClock")
+    Call<BaseResult<String>> saveInDaka(@Header(Constants.TOKEN_NAME) String token, @Body InDakaInput inDakaInput);
+
+
+    /**
+     * 下班打卡
+     */
+    @PUT("api/companyClock/update/CompanyClock")
+    Call<BaseResult<String>> saveOutDaka(@Header(Constants.TOKEN_NAME) String token, @Body OutDakaInput input);
+
+    /**
+     * 获取个人打卡记录
+     */
+    @GET("api/companyClock/select/CompanyClockList")
+    Call<BaseResult<List<DakaHistoryResult>>> getDaka(@Header(Constants.TOKEN_NAME) String token,
+                                                      @Query("beginTime") String begin, @Query("endTime") String end);
+
+    /**
+     * 获取门禁申请记录
+     */
+    @GET("api/guard/select/GuardMainPage")
+    Call<BaseResult<ApplyHistoryBean>> getDoorApplyHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                           @Query("page") int page, @Query("size") int size);
+
+    /**
+     * 查询员工列表
+     * 查询类型：1表示查询所有员工、2表示没有开门权限的员工列表、3表示该公司的所有管理员、4、该公司所有非管理员
+     */
+    @GET("api/company/select/PageCompanyUser")
+    Call<BaseResult<WorkersResult>> getCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
+                                                   @Query("size") int size, @Query("type") int type);
     /**
      * 上传头像
      *

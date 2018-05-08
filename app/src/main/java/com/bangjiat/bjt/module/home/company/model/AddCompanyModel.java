@@ -5,6 +5,7 @@ import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.AddCompanyContract;
+import com.orhanobut.logger.Logger;
 
 import retrofit2.Response;
 

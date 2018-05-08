@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -61,8 +60,6 @@ public class SearchLocationActivity extends BaseWhiteToolBarActivity implements 
                 intent.putExtra("latitude", latitude);
                 setResult(RESULT_OK, intent);
                 finish();
-
-                Log.d("ceshi", "postion" + pos + "lat" + data.get(pos).getLatitude() + "long:" + data.get(pos).getLongitude());
             }
         });
 

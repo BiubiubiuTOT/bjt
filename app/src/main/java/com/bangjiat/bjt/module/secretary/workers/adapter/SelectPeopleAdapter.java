@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.secretary.door.beans.PeopleBean;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.Set;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapter.ViewHolder> implements View.OnClickListener {
-    private List<PeopleBean> lists;
+    private List<WorkersResult.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private OnCheckListener onCheckListener;
     private Context mContext;
@@ -41,7 +41,7 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
         onCheckListener = listener;
     }
 
-    public SelectPeopleAdapter(List<PeopleBean> lists, Context context) {
+    public SelectPeopleAdapter(List<WorkersResult.RecordsBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
 
@@ -62,8 +62,8 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final PeopleBean bean = lists.get(position);
-        viewHolder.tv_name.setText(bean.getName() + "(产品总监)");
+        final WorkersResult.RecordsBean bean = lists.get(position);
+        viewHolder.tv_name.setText(bean.getRealname() + "(" + bean.getJob() + ")");
         viewHolder.tv_phone.setText("电话：" + bean.getPhone());
 
         viewHolder.checkBox.setChecked(map.get(position));
@@ -122,7 +122,7 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
         for (Map.Entry<Integer, Boolean> entry : entries) {
             entry.setValue(false);
         }
-        isShowCheck=false;
+        isShowCheck = false;
         notifyDataSetChanged();
     }
 

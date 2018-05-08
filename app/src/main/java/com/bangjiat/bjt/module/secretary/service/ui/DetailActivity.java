@@ -11,7 +11,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.adapter.HandleHistoryAdapter;
-import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.door.beans.HandleHistoryDetail;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class DetailActivity extends BaseColorToolBarActivity {
     RecyclerView recycler_view_photo;
 
     private List<String> photoList;
-    private List<ApplyHistoryBean.HandleHistory> histories;
+    private List<HandleHistoryDetail> histories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +44,6 @@ public class DetailActivity extends BaseColorToolBarActivity {
         photoList.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3763658861,4163786043&fm=27&gp=0.jpg");
         photoList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524285092085&di=bed1257144ccf3f530be1f77191a7edb&imgtype=0&src=http%3A%2F%2Fs9.sinaimg.cn%2Fmiddle%2F5227549bha1025687dd58%26690");
 
-
-        histories = new ArrayList<>();
-        ApplyHistoryBean.HandleHistory handleHistory = new ApplyHistoryBean.
-                HandleHistory("张无忌", "2018.04.02  14:57", "发起申请", 0);
-        ApplyHistoryBean.HandleHistory handleHistory1 = new ApplyHistoryBean.
-                HandleHistory("陈小华", "2018.04.02  14:57", "已同意", 0);
-
-        histories.add(handleHistory);
-        histories.add(handleHistory1);
 
         setHandleAdapter();
         setPhotoAdapter();

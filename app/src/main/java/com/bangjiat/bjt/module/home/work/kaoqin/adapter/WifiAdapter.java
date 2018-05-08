@@ -57,7 +57,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
         for (int i = 0; i < size; i++) {
             map.put(i, false);
         }
-        map.put(0, isCheck);
+        map.put(0, true);
     }
 
     @Override

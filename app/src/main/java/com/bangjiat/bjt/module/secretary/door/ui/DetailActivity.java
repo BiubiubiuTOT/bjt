@@ -8,7 +8,7 @@ import android.view.View;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.adapter.HandleHistoryAdapter;
-import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.door.beans.HandleHistoryDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import butterknife.BindView;
 public class DetailActivity extends BaseColorToolBarActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    private List<ApplyHistoryBean.HandleHistory> list;
+    private List<HandleHistoryDetail> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +31,7 @@ public class DetailActivity extends BaseColorToolBarActivity {
 
     private void initData() {
         list = new ArrayList<>();
-        ApplyHistoryBean.HandleHistory handleHistory = new ApplyHistoryBean.
-                HandleHistory("张无忌", "2018.04.02  14:57", "发起申请", 0);
-        ApplyHistoryBean.HandleHistory handleHistory1 = new ApplyHistoryBean.
-                HandleHistory("陈小华", "2018.04.02  14:57", "已同意", 0);
 
-        list.add(handleHistory);
-        list.add(handleHistory1);
 
         setAdapter();
     }

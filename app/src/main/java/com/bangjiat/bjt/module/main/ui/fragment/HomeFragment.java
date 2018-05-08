@@ -23,6 +23,7 @@ import com.bangjiat.bjt.module.home.work.ui.WorkMainActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.view.ContactInfoActivity;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.joker.api.Permissions4M;
 import com.joker.api.wrapper.Wrapper;
 import com.orhanobut.logger.Logger;
@@ -165,8 +166,8 @@ public class HomeFragment extends BaseFragment {
             QrManager.getInstance().init(options).startScan(new QrManager.OnScanResultCallback() {
                 @Override
                 public void onScanSuccess(String result) {
-                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                    if (user != null) {
+                    try {
+                        QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
                         Intent intent = new Intent(mContext, ContactInfoActivity.class);
                         SearchContactResult bean = new SearchContactResult(user.getNickname(),
                                 user.getUserId(), user.getUsername());
@@ -174,7 +175,8 @@ public class HomeFragment extends BaseFragment {
                         bundle.putSerializable("data", bean);
                         intent.putExtras(bundle);
                         startActivity(intent);
-                    } else {
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
                         Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
                     }
                 }

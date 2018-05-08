@@ -41,6 +41,12 @@ public class WifiUtil {
         }
     }
 
+    public String getWifiName() {
+        String ssid = wi.getSSID();
+        ssid = ssid.substring(1, ssid.length() - 1);
+        return ssid;
+    }
+
     public List<WifiBean> getWifiList() {
         startScan();
         List<WifiBean> list = new ArrayList<>();

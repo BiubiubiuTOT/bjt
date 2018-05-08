@@ -1,9 +1,6 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,11 +38,8 @@ import com.bangjiat.bjt.module.home.work.kaoqin.beans.PoiString;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.orhanobut.logger.Logger;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,7 +64,6 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
     private LatLng point;
     private Marker marker;
     private PoiAdapter mAdapter;
-    private LatLonPoint latLonPoint;
     private Double weidu;
     private Double jingdu;
 
@@ -109,10 +102,13 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
         aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-
                 //发生变化时获取到经纬度传递逆地理编码获取周边数据
-                regeocodeSearch(cameraPosition.target.latitude, cameraPosition.target.longitude, 2000);
-                point = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                weidu = cameraPosition.target.latitude;
+                jingdu = cameraPosition.target.longitude;
+                regeocodeSearch(weidu, jingdu, 1000);
+                point = new LatLng(weidu, jingdu);
+
+                Logger.d(point.toString());
                 if (marker != null)
                     marker.remove();//将上一次描绘的mark清除
             }
@@ -267,8 +263,8 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
         if (mListener != null && amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
-                weidu = amapLocation.getLatitude();
-                jingdu = amapLocation.getLongitude();
+                Double weidu = amapLocation.getLatitude();
+                Double jingdu = amapLocation.getLongitude();
                 regeocodeSearch(weidu, jingdu, 100);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
@@ -337,8 +333,6 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
                         stringBuffer.append(fn + "附近");
 
                     List<PoiItem> list = address.getPois();
-                    Logger.d(LocationActivity.this.pois.toString());
-                    Logger.d(stringBuffer);
                     pois.clear();
                     for (PoiItem item : list) {
                         pois.add(new PoiString(item.getTitle()));

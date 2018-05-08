@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.door.beans.HandleHistoryDetail;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * 操作记录
  */
 public class HandleHistoryAdapter extends RecyclerView.Adapter<HandleHistoryAdapter.ViewHolder> implements View.OnClickListener {
-    private List<ApplyHistoryBean.HandleHistory> lists;
+    private List<HandleHistoryDetail> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -25,7 +25,7 @@ public class HandleHistoryAdapter extends RecyclerView.Adapter<HandleHistoryAdap
         this.mOnItemClickListener = listener;
     }
 
-    public HandleHistoryAdapter(List<ApplyHistoryBean.HandleHistory> lists, Context context) {
+    public HandleHistoryAdapter(List<HandleHistoryDetail> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -40,10 +40,10 @@ public class HandleHistoryAdapter extends RecyclerView.Adapter<HandleHistoryAdap
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final ApplyHistoryBean.HandleHistory historyBean = lists.get(position);
-        viewHolder.tv_name.setText(historyBean.getName());
-        viewHolder.tv_status.setText(historyBean.getStatusDes());
-        viewHolder.tv_time.setText(historyBean.getTime());
+        final HandleHistoryDetail historyBean = lists.get(position);
+        viewHolder.tv_name.setText(historyBean.getApplyRealname());
+        viewHolder.tv_status.setText("");
+        viewHolder.tv_time.setText(historyBean.getCtime());
 
         viewHolder.itemView.setTag(position);
     }

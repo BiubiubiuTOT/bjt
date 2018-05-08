@@ -1,5 +1,7 @@
 package com.bangjiat.bjt.module.secretary.door.beans;
 
+import java.util.List;
+
 /**
  * @author ligh
  * @email 1256144200@qq.com
@@ -7,133 +9,225 @@ package com.bangjiat.bjt.module.secretary.door.beans;
  */
 
 public class ApplyHistoryBean {
-    private String companyName;
-    private int status;//1.待审核 2.已通过 3.未通过
-    private String statusDes;
-    private HandleHistory handleHistory;
+    private int current;
+    private int pages;
+    private int size;
+    private int total;
+    private List<RecordsBean> records;
 
-    private ApplyPeople applyPeople;
-
-    public static class ApplyPeople {
-        private String name;
-        private String phoneNumber;
-        private String IdNumber;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-
-        public String getIdNumber() {
-            return IdNumber;
-        }
-
-        public void setIdNumber(String idNumber) {
-            IdNumber = idNumber;
-        }
-
-        public ApplyPeople(String name, String phoneNumber, String idNumber) {
-            this.name = name;
-            this.phoneNumber = phoneNumber;
-            IdNumber = idNumber;
-        }
+    public int getCurrent() {
+        return current;
     }
 
-    public static class HandleHistory {
-        private String name;
-        private String time;
-        private String statusDes;
-        private int status;
+    public void setCurrent(int current) {
+        this.current = current;
+    }
 
-        public HandleHistory(String name, String time, String statusDes, int status) {
-            this.name = name;
-            this.time = time;
-            this.statusDes = statusDes;
-            this.status = status;
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public List<RecordsBean> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<RecordsBean> records) {
+        this.records = records;
+    }
+
+    public static class RecordsBean {
+        /**
+         * applyTime : 0  申请时间
+         * applyUserId : string  申请人编号
+         * applyUserRealname : string  申请人姓名
+         * applyUsername : string 申请人账号
+         * approvalTime : 0 审批时间
+         * approvalUserId : string  审批人编号
+         * approvalUserRealname : string  审批人姓名
+         * approvalUsername : string  审批人账号
+         * buildId : 0  楼宇编号
+         * companyId : 0 公司编号
+         * companyName : string  公司名称
+         * ctime : 0
+         * detail : string 申请明细Json字符串
+         * guardMainId : 0 门禁申请主表编号
+         * opinion : string 拒绝时可能要填写的处理意见
+         * remark : string  门禁申请主表编号
+         * type : 0 类型:1、待审批，2、已通过，3、未通过
+         */
+
+        private int applyTime;
+        private String applyUserId;
+        private String applyUserRealname;
+        private String applyUsername;
+        private int approvalTime;
+        private String approvalUserId;
+        private String approvalUserRealname;
+        private String approvalUsername;
+        private int buildId;
+        private int companyId;
+        private String companyName;
+        private int ctime;
+        private String detail;
+        private int guardMainId;
+        private String opinion;
+        private String remark;
+        private int type;
+
+        public int getApplyTime() {
+            return applyTime;
         }
 
-        public String getName() {
-            return name;
+        public void setApplyTime(int applyTime) {
+            this.applyTime = applyTime;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public String getApplyUserId() {
+            return applyUserId;
         }
 
-        public String getTime() {
-            return time;
+        public void setApplyUserId(String applyUserId) {
+            this.applyUserId = applyUserId;
         }
 
-        public void setTime(String time) {
-            this.time = time;
+        public String getApplyUserRealname() {
+            return applyUserRealname;
         }
 
-        public String getStatusDes() {
-            return statusDes;
+        public void setApplyUserRealname(String applyUserRealname) {
+            this.applyUserRealname = applyUserRealname;
         }
 
-        public void setStatusDes(String statusDes) {
-            this.statusDes = statusDes;
+        public String getApplyUsername() {
+            return applyUsername;
         }
 
-        public int getStatus() {
-            return status;
+        public void setApplyUsername(String applyUsername) {
+            this.applyUsername = applyUsername;
         }
 
-        public void setStatus(int status) {
-            this.status = status;
+        public int getApprovalTime() {
+            return approvalTime;
         }
-    }
 
+        public void setApprovalTime(int approvalTime) {
+            this.approvalTime = approvalTime;
+        }
 
-    public String getCompanyName() {
-        return companyName;
-    }
+        public String getApprovalUserId() {
+            return approvalUserId;
+        }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
+        public void setApprovalUserId(String approvalUserId) {
+            this.approvalUserId = approvalUserId;
+        }
 
-    public int getStatus() {
-        return status;
-    }
+        public String getApprovalUserRealname() {
+            return approvalUserRealname;
+        }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
+        public void setApprovalUserRealname(String approvalUserRealname) {
+            this.approvalUserRealname = approvalUserRealname;
+        }
 
-    public String getStatusDes() {
-        return statusDes;
-    }
+        public String getApprovalUsername() {
+            return approvalUsername;
+        }
 
-    public void setStatusDes(String statusDes) {
-        this.statusDes = statusDes;
-    }
+        public void setApprovalUsername(String approvalUsername) {
+            this.approvalUsername = approvalUsername;
+        }
 
-    public HandleHistory getHandleHistory() {
-        return handleHistory;
-    }
+        public int getBuildId() {
+            return buildId;
+        }
 
-    public void setHandleHistory(HandleHistory handleHistory) {
-        this.handleHistory = handleHistory;
-    }
+        public void setBuildId(int buildId) {
+            this.buildId = buildId;
+        }
 
-    public ApplyPeople getApplyPeople() {
-        return applyPeople;
-    }
+        public int getCompanyId() {
+            return companyId;
+        }
 
-    public void setApplyPeople(ApplyPeople applyPeople) {
-        this.applyPeople = applyPeople;
+        public void setCompanyId(int companyId) {
+            this.companyId = companyId;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public int getCtime() {
+            return ctime;
+        }
+
+        public void setCtime(int ctime) {
+            this.ctime = ctime;
+        }
+
+        public String getDetail() {
+            return detail;
+        }
+
+        public void setDetail(String detail) {
+            this.detail = detail;
+        }
+
+        public int getGuardMainId() {
+            return guardMainId;
+        }
+
+        public void setGuardMainId(int guardMainId) {
+            this.guardMainId = guardMainId;
+        }
+
+        public String getOpinion() {
+            return opinion;
+        }
+
+        public void setOpinion(String opinion) {
+            this.opinion = opinion;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
     }
 }

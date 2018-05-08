@@ -1,26 +1,34 @@
 package com.bangjiat.bjt.module.secretary.door.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.adapter.ApplyHistoryAdapter;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.door.contract.DoorApplyHistoryContract;
+import com.bangjiat.bjt.module.secretary.door.presenter.DoorApplyHistoryPresenter;
+import com.dou361.dialogui.DialogUIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class HistoryActivity extends BaseColorToolBarActivity {
+public class HistoryActivity extends BaseColorToolBarActivity implements DoorApplyHistoryContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
 
-    private List<ApplyHistoryBean> list;
+    private List<ApplyHistoryBean.RecordsBean> list;
+    private Dialog dialog;
+    private DoorApplyHistoryContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,50 +38,8 @@ public class HistoryActivity extends BaseColorToolBarActivity {
 
     private void initData() {
         list = new ArrayList<>();
-        ApplyHistoryBean bean = new ApplyHistoryBean();
-        bean.setStatus(2);
-        bean.setStatusDes("已通过");
-        bean.setCompanyName("贵州邦佳大数据科技有限公司");
-
-        ApplyHistoryBean.ApplyPeople applyPeople =
-                new ApplyHistoryBean.ApplyPeople("王力", "18786166716", "522121199303287546");
-        bean.setApplyPeople(applyPeople);
-
-        ApplyHistoryBean.HandleHistory handleHistory =
-                new ApplyHistoryBean.HandleHistory("王力", "2018.04.02  14:57", "发起申请", 0);
-        bean.setHandleHistory(handleHistory);
-
-        ApplyHistoryBean bean1 = new ApplyHistoryBean();
-        bean1.setStatus(3);
-        bean1.setStatusDes("未通过");
-        bean1.setCompanyName("贵州邦佳大数据科技有限公司");
-
-        ApplyHistoryBean.ApplyPeople applyPeople1 =
-                new ApplyHistoryBean.ApplyPeople("李易", "18083608929", "52212119930328754x");
-        bean1.setApplyPeople(applyPeople1);
-
-        ApplyHistoryBean.HandleHistory handleHistory1 =
-                new ApplyHistoryBean.HandleHistory("李易", "2018.04.02  14:57", "发起申请", 0);
-        bean1.setHandleHistory(handleHistory1);
-
-        ApplyHistoryBean bean2 = new ApplyHistoryBean();
-        bean2.setStatus(1);
-        bean2.setStatusDes("待审核");
-        bean2.setCompanyName("贵州邦佳大数据科技有限公司");
-
-        ApplyHistoryBean.ApplyPeople applyPeople2 =
-                new ApplyHistoryBean.ApplyPeople("张无忌（入驻申请）", "17685302679", "52212119930328754x");
-        bean2.setApplyPeople(applyPeople2);
-
-        ApplyHistoryBean.HandleHistory handleHistory2 =
-                new ApplyHistoryBean.HandleHistory("张无忌", "2018.04.02  14:57", "发起申请", 0);
-        bean2.setHandleHistory(handleHistory2);
-
-        list.add(bean);
-        list.add(bean1);
-        list.add(bean2);
-
-        setAdapter();
+        presenter = new DoorApplyHistoryPresenter(this);
+        presenter.getDoorApplyHistory(DataUtil.getToken(mContext), 1, 10);
     }
 
     private void setAdapter() {
@@ -98,5 +64,32 @@ public class HistoryActivity extends BaseColorToolBarActivity {
     @Override
     protected String getTitleStr() {
         return "申请记录";
+    }
+
+    @Override
+    public void showDialog() {
+        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void getDoorApplyHistorySuccess(ApplyHistoryBean bean) {
+        if (bean != null) {
+            List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
+            if (records != null) {
+                list = records;
+                setAdapter();
+            }
+        }
+    }
+
+    @Override
+    public void error(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
     }
 }

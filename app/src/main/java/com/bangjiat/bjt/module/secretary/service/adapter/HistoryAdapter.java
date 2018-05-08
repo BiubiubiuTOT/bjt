@@ -42,11 +42,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final ApplyHistoryBean historyBean = lists.get(position);
-        ApplyHistoryBean.ApplyPeople applyPeople = historyBean.getApplyPeople();
-        viewHolder.tv_apply_people.setText("申请人：" + applyPeople.getName());
-        viewHolder.tv_company_name.setText("申请事项：" + historyBean.getCompanyName());
-        int status = historyBean.getStatus();
-        switch (status) {
+        switch (5) {
             case 1:
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
                 break;
@@ -57,7 +53,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_fail));
                 break;
         }
-        viewHolder.tv_apply_status.setText(historyBean.getStatusDes());
 
         viewHolder.itemView.setTag(position);
     }

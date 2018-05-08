@@ -135,12 +135,12 @@
 
         <!--公司-->
         <meta-data
-        android:name="com.amap.api.v2.apikey"
-        android:value="82592fabbcb044677ceb29bf19f8fa65" />
+            android:name="com.amap.api.v2.apikey"
+            android:value="82592fabbcb044677ceb29bf19f8fa65" />
 
         <!--<meta-data-->
-            <!--android:name="com.amap.api.v2.apikey"-->
-            <!--android:value="720bdd152c36c3dcf6fc8810d76dc78b" />-->
+        <!--android:name="com.amap.api.v2.apikey"-->
+        <!--android:value="720bdd152c36c3dcf6fc8810d76dc78b" />-->
 
         <activity android:name=".module.home.work.leave.ui.LeaveMainActivity" />
         <activity android:name=".module.home.work.leave.ui.LeaveHistoryActivity" />
@@ -149,7 +149,7 @@
         <activity android:name=".module.home.work.permission.ui.PermissionMainActivity" />
         <activity android:name=".module.home.work.permission.ui.PermissionTransferActivity" />
         <activity android:name=".module.me.setting.ui.SettingActivity" />
-        <activity android:name=".module.me.setting.ui.UpdatePass**wordActivity" />
+        <activity android:name=".module.me.setting.ui.UpdatePasswordActivity" />
         <activity android:name=".module.me.setting.ui.ForgetPasswordActivity" />
         <activity android:name=".module.me.bill.ui.MyBillActivity" />
         <activity android:name=".module.me.bill.ui.PayBillActivity" />
@@ -172,8 +172,8 @@
             android:value="com.bangjiat.bjt" />
 
         <activity android:name=".module.me.personaldata.ui.IdNumberInfoActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.SeachLocationActivity"></activity>
-        <activity android:name=".module.home.work.kaoqin.ui.SearchLocationActivity" />
+        <activity android:name=".module.home.work.kaoqin.ui.SearchLocationActivity"></activity>
+        <service android:name="com.amap.api.location.APSService"></service>
     </application>
 
 </manifest>

@@ -12,7 +12,6 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.home.work.kaoqin.adapter.WorkDayAdapter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.githang.statusbar.StatusBarCompat;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ public class WorkDayActivity extends BaseToolBarActivity {
     RecyclerView recyclerView;
     private WorkDayAdapter mAdapter;
     private List<String> list;
+    private String index = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,6 @@ public class WorkDayActivity extends BaseToolBarActivity {
         mAdapter.setOnItemClickListener(new WorkDayAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Logger.d("position: " + position);
                 mAdapter.setCheck(position);
             }
         });
@@ -80,17 +79,24 @@ public class WorkDayActivity extends BaseToolBarActivity {
             @Override
             public void onClick(View view) {
                 String str = "";
+                int i = 0;
                 Set<Map.Entry<Integer, Boolean>> entries = mAdapter.getMap().entrySet();
                 for (Map.Entry<Integer, Boolean> entry : entries) {
                     if (entry.getValue()) {
+                        i++;
                         str += list.get(entry.getKey()) + "、";
+                        index += (entry.getKey() + 1) + ",";
                     }
                 }
 
                 if (!str.isEmpty()) {
                     str = str.substring(0, str.length() - 1);
+                    if (i == 7)
+                        str = "每天";
+                    index = index.substring(0, index.length() - 1);
                     Intent intent = new Intent();
                     intent.putExtra("data", str);
+                    intent.putExtra("index", index);
                     setResult(RESULT_OK, intent);
                 }
                 finish();

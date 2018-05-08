@@ -19,6 +19,7 @@ import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.me.personaldata.ui.PersonalDataActivity;
 import com.dou361.dialogui.DialogUIUtils;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -46,11 +47,11 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
     private void initData() {
         presenter = new IntoCompanyPresenter(this);
         String str = getIntent().getStringExtra("data");
-
-        company = new Gson().fromJson(str, QrCodeDataCompany.class);
-        if (company != null) {
+        try {
+            company = new Gson().fromJson(str, QrCodeDataCompany.class);
             tv_name.setText(company.getCompanyName());
-        } else {
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             Toast.makeText(mContext, "二维码识别失败", Toast.LENGTH_SHORT).show();
             finish();
         }

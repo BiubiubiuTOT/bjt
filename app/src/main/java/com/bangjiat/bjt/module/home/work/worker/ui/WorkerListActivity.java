@@ -14,7 +14,6 @@ import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.beans.PeopleBean;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
 import com.bangjiat.bjt.module.secretary.workers.ui.AddWorkersActivity;
-import com.bangjiat.bjt.module.secretary.workers.ui.UpdateWorkerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,56 +105,36 @@ public class WorkerListActivity extends BaseToolBarActivity {
 
     private void initData() {
         beans = new ArrayList<>();
-        beans.add(new PeopleBean("张三", "17685302679"));
-        beans.add(new PeopleBean("李四", "18083608929"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
-        adapter = new SelectPeopleAdapter(beans, mContext);
-        recyclerView.setAdapter(adapter);
+//        adapter = new SelectPeopleAdapter(beans, mContext);
+//        recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new SelectPeopleAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                mContext.startActivity(new Intent(mContext, UpdateWorkerActivity.class));
-            }
-        });
-        adapter.setOnCheckChangedListener(new SelectPeopleAdapter.OnCheckListener() {
-            @Override
-            public void onCheckChanged() {
-                int total = adapter.getItemCount();
-                int select = getSelectCount();
-                if (select == 0) {
-                    tv_delete.setTextColor(getResources().getColor(R.color.red_1));
-                    tv_all.setText("全选");
-                } else {
-                    if (select == total) {
-                        tv_all.setText("取消全选");
-                    } else {
-                        tv_all.setText("全选");
-                    }
-                    tv_delete.setTextColor(getResources().getColor(R.color.red));
-                }
-            }
-        });
+//        adapter.setOnItemClickListener(new SelectPeopleAdapter.OnRecyclerViewItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                mContext.startActivity(new Intent(mContext, UpdateWorkerActivity.class));
+//            }
+//        });
+//        adapter.setOnCheckChangedListener(new SelectPeopleAdapter.OnCheckListener() {
+//            @Override
+//            public void onCheckChanged() {
+//                int total = adapter.getItemCount();
+//                int select = getSelectCount();
+//                if (select == 0) {
+//                    tv_delete.setTextColor(getResources().getColor(R.color.red_1));
+//                    tv_all.setText("全选");
+//                } else {
+//                    if (select == total) {
+//                        tv_all.setText("取消全选");
+//                    } else {
+//                        tv_all.setText("全选");
+//                    }
+//                    tv_delete.setTextColor(getResources().getColor(R.color.red));
+//                }
+//            }
+//        });
     }
 
     private int getSelectCount() {

@@ -3,13 +3,23 @@ package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
+import com.bangjiat.bjt.module.home.work.kaoqin.contract.RoleContract;
+import com.bangjiat.bjt.module.home.work.kaoqin.presenter.RolePresenter;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.orhanobut.logger.Logger;
+import com.orm.SugarRecord;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +30,7 @@ import butterknife.OnClick;
 import static android.app.Activity.RESULT_OK;
 
 
-public class SettingFragment extends BaseFragment {
+public class SettingFragment extends BaseFragment implements RoleContract.View {
     private static final int SELECT_WORK_DAY = 2;
     private static final int SELECT_WIFI = 3;
     private static final int SELECT_LOCATION = 4;
@@ -35,19 +45,35 @@ public class SettingFragment extends BaseFragment {
     TextView tv_wifi;
     @BindView(R.id.tv_location)
     TextView tv_location;
+    @BindView(R.id.iv_wifi)
+    ImageView iv_wifi;
+    @BindView(R.id.iv_wifi_delete)
+    ImageView iv_wifi_delete;
+    @BindView(R.id.iv_location)
+    ImageView iv_location;
+    @BindView(R.id.iv_location_delete)
+    ImageView iv_location_delete;
+    private RoleContract.Presenter presenter;
 
     private OptionsPickerView<String> pvMonths;
     private List<String> ampm;
     private List<String> hours;
     private List<String> minutes;
     private boolean isStart;
+    private RuleInput role;
+    private RuleInput input;
+    private String token;
 
     @Override
     protected void initView() {
+        token = DataUtil.getToken(mContext);
+        presenter = new RolePresenter(this);
+        role = RuleInput.first(RuleInput.class);
         initData();
     }
 
     private void initData() {
+        input = new RuleInput();
         ampm = new ArrayList<>();
         ampm.add("上午");
         ampm.add("下午");
@@ -66,6 +92,10 @@ public class SettingFragment extends BaseFragment {
         }
 
         initMothPicker();
+
+        if (role != null) {
+            set();
+        }
     }
 
     @Override
@@ -107,16 +137,57 @@ public class SettingFragment extends BaseFragment {
             if (requestCode == SELECT_WORK_DAY) {
                 String str = data.getStringExtra("data");
                 tv_work_day.setText(str);
+                String index = data.getStringExtra("index");
+                Logger.d(index);
+
+                if (role != null) {
+                    role.setWorkDay(index);
+                    updateRole();
+                } else {
+                    input.setWorkDay(index);
+                    saveRole();
+                }
+
             } else if (requestCode == SELECT_WIFI) {
                 String str = data.getStringExtra("data");
-                tv_wifi.setText(str);
+                setWifi(str);
+
+                if (role != null) {
+                    role.setWifiName(str);
+                    updateRole();
+                } else {
+                    input.setWifiName(str);
+                    saveRole();
+                }
+
             } else if (requestCode == SELECT_LOCATION) {
                 String name = data.getStringExtra("name");
-                String weidu = data.getStringExtra("weidu");
-                String jingdu = data.getStringExtra("jingdu");
-                tv_location.setText(name);
+                String weidu = String.valueOf(data.getDoubleExtra("weidu", 0));
+                String jingdu = String.valueOf(data.getDoubleExtra("jingdu", 0));
+
+                setAddress(name);
+
+                if (role != null) {
+                    role.setLatitude(weidu);
+                    role.setLongitude(jingdu);
+                    role.setAddress(name);
+                    updateRole();
+                } else {
+                    input.setLatitude(weidu);
+                    input.setLongitude(jingdu);
+                    input.setAddress(name);
+                    saveRole();
+                }
             }
         }
+    }
+
+    private void updateRole() {
+        presenter.updateRole(token, role);
+    }
+
+    private void saveRole() {
+        presenter.saveRole(token, input);
     }
 
     private void initMothPicker() {
@@ -124,16 +195,106 @@ public class SettingFragment extends BaseFragment {
             @Override
             public void onOptionsSelect(int i, int i1, int i2, View view) {
                 String h = hours.get(i1);
+                if (i == 1) {
+                    if (i1 < 12) {
+                        h = String.valueOf(Integer.parseInt(h) + 12);
+                    } else {
+                        h = "00";
+                    }
+                }
+
                 String mi = minutes.get(i2);
                 String str = h + ":" + mi;
                 if (isStart) {
                     tv_start_time.setText(str);
-                } else tv_end_time.setText(str);
+                    if (role != null) {
+                        role.setInTime(str);
+                        updateRole();
+                    } else {
+                        input.setInTime(str);
+                        saveRole();
+                    }
+                } else {
+                    tv_end_time.setText(str);
+                    if (role != null) {
+                        role.setOutTime(str);
+                        updateRole();
+                    } else {
+                        input.setOutTime(str);
+                        saveRole();
+                    }
+                }
             }
         })
                 .setSubmitColor(Color.BLACK)
                 .setCancelColor(Color.BLACK).build();
         pvMonths.setNPicker(ampm, hours, minutes);
+    }
+
+
+    @Override
+    public void showErr(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getRoleSuccess(RuleInput result) {
+        if (result != null) {
+            this.role = result;
+            role.save();
+            set();
+        }
+    }
+
+    private void set() {
+        String workDay = role.getWorkDay();
+        String address = role.getAddress();
+        String wifi = role.getWifiName();
+        String inTime = role.getInTime();
+        String outTime = role.getOutTime();
+
+        if (workDay != null && !workDay.equals("null")) {
+            tv_work_day.setText(workDay);
+        }
+        if (inTime != null && !inTime.equals("null")) {
+            tv_start_time.setText(inTime);
+        }
+        if (outTime != null && !outTime.equals("null")) {
+            tv_end_time.setText(outTime);
+        }
+
+        if (address != null && !address.equals("null")) {
+            setAddress(address);
+        }
+        if (wifi != null && !wifi.equals("null")) {
+            setWifi(wifi);
+        }
+    }
+
+
+    private void setWifi(String wifi) {
+        iv_wifi.setImageResource(R.mipmap.ic_location);
+        iv_wifi_delete.setVisibility(View.VISIBLE);
+        tv_wifi.setText(wifi);
+    }
+
+    private void setAddress(String address) {
+        iv_location.setImageResource(R.mipmap.ic_location);
+        iv_location_delete.setVisibility(View.VISIBLE);
+        tv_location.setText(address);
+    }
+
+    @Override
+    public void saveRoleSuccess() {
+        presenter.getRole(token);
+    }
+
+    @Override
+    public void updateSuccess() {
+        SugarRecord.deleteAll(RuleInput.class);
+        role.save();
+
+        EventBus.getDefault().post("");
     }
 }
 

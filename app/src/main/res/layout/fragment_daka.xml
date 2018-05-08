@@ -42,37 +42,59 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_in_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="上班时间9:00"
                 android:textColor="@color/dialog_message_text_color"
                 android:textSize="14sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="打卡时间8:40"
-                android:textColor="@color/outbox_title"
-                android:textSize="17sp" />
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_in_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="还未上班打卡"
+                    android:textColor="@color/outbox_title"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_in_status"
+                    android:layout_width="38dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/daka_text_bg"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text="正常"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_in_remark"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="14dp"
                 android:layout_weight="1"
-                android:text="这里显示的是上班迟到打卡的打卡备注"
                 android:textColor="@color/dialog_message_text_color"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_out_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="下班时间18:00"
                 android:textColor="@color/dialog_message_text_color"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_out_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
@@ -84,6 +106,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_daka"
         android:layout_width="124dp"
         android:layout_height="124dp"
         android:layout_marginTop="50dp"
@@ -92,6 +115,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_daka_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="上班打卡"
@@ -99,6 +123,7 @@
             android:textSize="17sp" />
 
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="08:40:35"

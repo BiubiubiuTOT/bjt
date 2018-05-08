@@ -32,11 +32,18 @@ public class KaoqinMainActivity extends BaseToolBarActivity {
     @BindView(R.id.view_setting)
     View view_setting;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         switchPage(0);
+
+        initView();
+    }
+
+    private void initView() {
+
     }
 
     @OnClick(R.id.tv_daka)
@@ -160,4 +167,5 @@ public class KaoqinMainActivity extends BaseToolBarActivity {
         tv_time.setTextColor(getResources().getColor(R.color.black));
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
     }
+
 }

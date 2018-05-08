@@ -12,6 +12,7 @@ import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.main.account.ui.LoginActivity;
 import com.bangjiat.bjt.module.main.ui.activity.AboutActivity;
 import com.bangjiat.bjt.module.main.ui.activity.ContactServiceActivity;
@@ -123,6 +124,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
                         wcbMenu.dismiss();
                         SugarRecord.deleteAll(UserInfo.class);
                         SugarRecord.deleteAll(CompanyUserBean.class);
+                        SugarRecord.deleteAll(RuleInput.class);
                         DataUtil.setLogin(mContext, false);
                         startActivity(new Intent(mContext, LoginActivity.class));
                         getActivity().finish();
@@ -153,7 +155,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(UserInfo s) {
-        tv_name.setText(userInfo.getNickname());
+        tv_name.setText(s.getNickname());
     }
 
     @Override

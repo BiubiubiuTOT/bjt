@@ -18,7 +18,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapter.ViewHolder> implements View.OnClickListener {
-    private List<ApplyHistoryBean> lists;
+    private List<ApplyHistoryBean.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,7 +26,7 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
         this.mOnItemClickListener = listener;
     }
 
-    public ApplyHistoryAdapter(List<ApplyHistoryBean> lists, Context context) {
+    public ApplyHistoryAdapter(List<ApplyHistoryBean.RecordsBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -41,23 +41,26 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final ApplyHistoryBean historyBean = lists.get(position);
-        ApplyHistoryBean.ApplyPeople applyPeople = historyBean.getApplyPeople();
-        viewHolder.tv_apply_people.setText("申请人：" + applyPeople.getName());
+        final ApplyHistoryBean.RecordsBean historyBean = lists.get(position);
+        viewHolder.tv_apply_people.setText("申请人：" + historyBean.getApplyUsername());
         viewHolder.tv_company_name.setText("公司名称：" + historyBean.getCompanyName());
-        int status = historyBean.getStatus();
+        int status = historyBean.getType();
+        String des = "";
         switch (status) {
             case 1:
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
+                des = "待审批";
                 break;
             case 2:
+                des = "已通过";
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_pass));
                 break;
             case 3:
+                des = "未通过";
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_fail));
                 break;
         }
-        viewHolder.tv_apply_status.setText(historyBean.getStatusDes());
+        viewHolder.tv_apply_status.setText(des);
 
         viewHolder.itemView.setTag(position);
     }
