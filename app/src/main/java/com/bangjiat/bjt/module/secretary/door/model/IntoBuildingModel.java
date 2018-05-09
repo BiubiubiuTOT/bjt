@@ -4,6 +4,7 @@ import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
 import com.bangjiat.bjt.module.secretary.door.contract.IntoBuildingContract;
 
 import retrofit2.Response;
@@ -29,6 +30,24 @@ public class IntoBuildingModel implements IntoBuildingContract.Model {
                 BaseResult<String> body = response.body();
                 if (body.getStatus() == 200)
                     presenter.success();
+                else presenter.fail(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.fail(message);
+            }
+        });
+    }
+
+    @Override
+    public void isIntoBuilding(String token) {
+        ApiFactory.getService().isCompanyIntoBuilding(token).enqueue(new MyCallBack<BaseResult<IsIntoBuildingResult>>() {
+            @Override
+            public void onSuc(Response<BaseResult<IsIntoBuildingResult>> response) {
+                BaseResult<IsIntoBuildingResult> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.getIsIntoBuildingSuccess(body.getData());
                 else presenter.fail(body.getMessage());
             }
 

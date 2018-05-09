@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.secretary.door.presenter;
 
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
 import com.bangjiat.bjt.module.secretary.door.contract.IntoBuildingContract;
 import com.bangjiat.bjt.module.secretary.door.model.IntoBuildingModel;
 
@@ -22,6 +23,18 @@ public class IntoBuildingPresenter implements IntoBuildingContract.Presenter {
     @Override
     public void intoBuilding(String token, IntoBuildingInput input) {
         model.intoBuilding(token, input);
+    }
+
+    @Override
+    public void getIsIntoBuildingSuccess(IsIntoBuildingResult result) {
+        view.dismissDialog();
+        view.getIsIntoBuildingSuccess(result);
+    }
+
+    @Override
+    public void isIntoBuilding(String token) {
+        view.showDialog();
+        model.isIntoBuilding(token);
     }
 
     @Override

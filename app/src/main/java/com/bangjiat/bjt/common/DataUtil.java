@@ -96,4 +96,15 @@ public class DataUtil {
         SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.ACCOUNT_SETTINGS);
         spUtil.putString(SPUtil.AccountSettings.USER_ID, userId);
     }
+
+    public static void setIntoBuilding(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        spUtil.putBoolean(SPUtil.OtherSetting.IS_INTO_BUILDING, true);
+    }
+
+    public static boolean isIntoBuilding(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        return spUtil.getBoolean(SPUtil.OtherSetting.IS_INTO_BUILDING, false);
+    }
+
 }

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> implements View.OnClickListener {
-    private List<ApplyHistoryBean> lists;
+    private List<ServiceApplyHistoryResult.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,14 +26,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         this.mOnItemClickListener = listener;
     }
 
-    public HistoryAdapter(List<ApplyHistoryBean> lists, Context context) {
+    public HistoryAdapter(List<ServiceApplyHistoryResult.RecordsBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_apply_history, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_apply_history_service, viewGroup, false);
         view.setOnClickListener(this);
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -41,18 +41,26 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final ApplyHistoryBean historyBean = lists.get(position);
-        switch (5) {
+        final ServiceApplyHistoryResult.RecordsBean historyBean = lists.get(position);
+        int status = historyBean.getStatus();
+        String des = "";
+        switch (status) {
             case 1:
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
+                des = "待审核";
                 break;
             case 2:
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_pass));
+                des = "已通过";
                 break;
             case 3:
                 viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_fail));
+                des = "未通过";
                 break;
         }
+        viewHolder.tv_apply_people.setText(historyBean.getUserRealname());
+        viewHolder.tv_apply_status.setText(des);
+        viewHolder.tv_title.setText(historyBean.getApplication());
 
         viewHolder.itemView.setTag(position);
     }
@@ -70,11 +78,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_company_name, tv_apply_people, tv_apply_status;
+        TextView tv_title, tv_apply_people, tv_apply_status;
 
         public ViewHolder(View view) {
             super(view);
-            tv_company_name = view.findViewById(R.id.tv_company_name);
+            tv_title = view.findViewById(R.id.tv_title);
             tv_apply_people = view.findViewById(R.id.tv_apply_people);
             tv_apply_status = view.findViewById(R.id.tv_apply_status);
         }

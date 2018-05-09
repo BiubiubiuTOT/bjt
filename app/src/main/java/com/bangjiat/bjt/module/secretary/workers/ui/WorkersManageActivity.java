@@ -14,11 +14,17 @@ import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.ui.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.ui.presenter.CompanyUserPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +58,8 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     private TextView tv_done;
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
+    private String token;
+    private int size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +80,6 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         tv_done = toolbar.findViewById(R.id.toolbar_other);
         TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
 
-        tv_all.setText("全选");
         tv_done.setText("完成");
         tv_title.setText("员工管理");
         showCustom();
@@ -93,6 +100,7 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     }
 
     private void showCustom() {
+        tv_all.setText("全选");
         toolbar.setNavigationIcon(R.mipmap.back_white);
         tv_delete_workers.setVisibility(View.VISIBLE);
         tv_add_workers.setVisibility(View.VISIBLE);
@@ -112,9 +120,11 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     }
 
     private void initData() {
+        EventBus.getDefault().register(this);
         beans = new ArrayList<>();
         presenter = new CompanyUserPresenter(this);
-        presenter.getCompanyUser(DataUtil.getToken(mContext), 1, 10, 1);
+        token = DataUtil.getToken(mContext);
+        presenter.getCompanyUser(token, 1, 10, 1);
     }
 
     private void setAdapter() {
@@ -126,7 +136,11 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         adapter.setOnItemClickListener(new SelectPeopleAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                mContext.startActivity(new Intent(mContext, UpdateWorkerActivity.class));
+                Intent intent = new Intent(mContext, UpdateWorkerActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", beans.get(position));
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
         adapter.setOnCheckChangedListener(new SelectPeopleAdapter.OnCheckListener() {
@@ -160,10 +174,27 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         return select;
     }
 
+    private List<String> getSelectItem() {
+        List<String> select = new ArrayList<>();
+        UserInfo userInfo = UserInfo.first(UserInfo.class);
+        HashMap<Integer, Boolean> map = adapter.getMap();
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            if (entry.getValue()) {
+                String userId = beans.get(entry.getKey()).getUserId();
+                if (!userInfo.getUserId().equals(userId))
+                    select.add(userId);
+            }
+        }
+        return select;
+    }
+
     @OnClick(R.id.tv_delete_workers)
     public void clickDeleteWorkers(View view) {
-        adapter.setShowCheck(true);
-        showDelete();
+        if (adapter != null) {
+            adapter.setShowCheck(true);
+            showDelete();
+        }
     }
 
     @OnClick(R.id.tv_add_workers)
@@ -173,7 +204,8 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
 
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
-        showDeleteDialog();
+        if (getSelectCount() != 0)
+            showDeleteDialog();
     }
 
     private void showDeleteDialog() {
@@ -182,7 +214,14 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
                 .setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        showCustom();
+                        List<String> selectItem = getSelectItem();
+                        size = selectItem.size();
+                        Logger.d(selectItem.toString());
+                        for (String s : selectItem) {
+                            String token = DataUtil.getToken(mContext);
+                            presenter.deleteCompanyUser(token, s);
+                        }
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
@@ -192,9 +231,24 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         }).show();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String s) {
+        presenter.getCompanyUser(DataUtil.getToken(mContext), 1, 10, 1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void showDialog() {
-        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        if (dialog != null && !dialog.isShowing())
+            dialog.show();
+        else {
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        }
     }
 
     @Override
@@ -215,7 +269,28 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
             if (records != null) {
                 beans = records;
                 setAdapter();
+                if (beans.size() > 0)
+                    tv_company_name.setText(beans.get(0).getCompanyName());
             }
         }
+    }
+
+    @Override
+    public void deleteCompanyUserSuccess() {
+        size--;
+        if (size == 0) {
+            error("删除成功");
+            presenter.getCompanyUser(token, 1, 10, 1);
+        }
+    }
+
+    @Override
+    public void updateCompanyUserSuccess() {
+
+    }
+
+    @Override
+    public void addCompanyUserSuccess() {
+
     }
 }

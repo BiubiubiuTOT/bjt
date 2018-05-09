@@ -19,13 +19,15 @@ import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
+import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
+import com.bangjiat.bjt.module.secretary.service.beans.NewApplyInput;
+import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 
 import java.util.List;
-import java.util.Map;
 
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -34,7 +36,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.PartMap;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -141,14 +143,6 @@ public interface ApiService {
     @POST("auth/updatePassword")
     Call<BaseResult<String>> updatePassword(@Header(Constants.TOKEN_NAME) String token, @Body UpdatePasswordInput input);
 
-    /**
-     * 上传反馈图片
-     *
-     * @return
-     */
-    @Multipart
-    @POST("/FileRecord/UploadImgWithId")
-    Call<ResponseBody> uploadFile(@Query("FileId") String uid, @PartMap Map<String, RequestBody> params);
 
     /**
      * 用户查询账单
@@ -270,14 +264,72 @@ public interface ApiService {
     @GET("api/company/select/PageCompanyUser")
     Call<BaseResult<WorkersResult>> getCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
                                                    @Query("size") int size, @Query("type") int type);
+
+    /**
+     * 获取访客记录
+     */
+    @GET("api/visitor/select/BuildVisitorPage")
+    Call<BaseResult> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
+                                       @Query("page") int page, @Query("size") int size);
+
+    /**
+     * 处理访客申请
+     */
+    @PUT("api/visitor/update/BuildVisitor")
+    Call<BaseResult> dealVisitorApply(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 删除公司员工
+     */
+    @DELETE("api/company/delete/CompanyUser")
+    Call<BaseResult<String>> deleteCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Query("userId") String userId);
+
+    /**
+     * 修改员工信息
+     */
+    @PUT("api/company/update/CompanyUser")
+    Call<BaseResult<String>> updateCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Body WorkersResult.RecordsBean bean);
+
+    /**
+     * 公司管理员添加员工
+     */
+    @POST("api/company/save/CompanyUserByAdmin")
+    Call<BaseResult> addCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Body WorkersResult.RecordsBean bean);
+
+    /**
+     * 用户提交服务申请
+     */
+    @POST("api/buildApproval/save/BuildApproval")
+    Call<BaseResult> addNewServiceApply(@Header(Constants.TOKEN_NAME) String token, @Body NewApplyInput input);
+
+    /**
+     * 获取服务申请记录
+     */
+    @GET("api/buildApproval/select/BuildApprovalPage")
+    Call<BaseResult<ServiceApplyHistoryResult>> getServiceApplyHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                                       @Query("page") int page,
+                                                                       @Query("size") int size);
+
+    /**
+     * 查询公司入驻楼宇信息
+     */
+    @GET("api/company/select/CompanyAdmission")
+    Call<BaseResult<IsIntoBuildingResult>> isCompanyIntoBuilding(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 获取楼宇管理员列表
+     */
+    @GET("api/buildApproval/select/BuildUserList")
+    Call<BaseResult<List<BuildingAdminListResult>>> getBuildingAdminList(@Header(Constants.TOKEN_NAME) String token);
+
     /**
      * 上传头像
      *
      * @return
      */
-//    @Multipart
-//    @POST("/File/AppUploadPhoto")
-//    Call<UploadIconResult> uploadIcon(@PartMap Map<String, RequestBody> params);
+    @Multipart
+    @POST("oss/upImg")
+    Call<BaseResult<String>> uploadImage(@Part MultipartBody.Part partList);
 
 
 }

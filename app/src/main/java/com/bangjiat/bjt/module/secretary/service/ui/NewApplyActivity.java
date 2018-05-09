@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.service.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,17 +8,26 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.GlideImageLoader;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
+import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
+import com.bangjiat.bjt.module.secretary.service.beans.NewApplyInput;
+import com.bangjiat.bjt.module.secretary.service.contract.NewServiceApplyContract;
+import com.bangjiat.bjt.module.secretary.service.presenter.NewServiceApplyPresenter;
+import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -32,17 +42,33 @@ import butterknife.OnClick;
 /**
  * 新的申请 服务
  */
-public class NewApplyActivity extends BaseToolBarActivity {
+public class NewApplyActivity extends BaseToolBarActivity implements NewServiceApplyContract.View {
+    private static final int GET_PERSON = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.ll_add_photo)
     LinearLayout ll_add_photo;
+    @BindView(R.id.tv_company_name)
+    TextView tv_company_name;
+    @BindView(R.id.et_content)
+    EditText et_content;
+    @BindView(R.id.et_title)
+    EditText et_title;
+    @BindView(R.id.tv_person)
+    TextView tv_person;
 
     private List<String> path;
     private List<WcbBean> mList;
     private List<WcbBean> mList1;
     private GalleryConfig galleryConfig;
     private ImageAdapter mAdapter;
+    private Dialog dialog;
+    private NewServiceApplyContract.Presenter presenter;
+    private BuildingAdminListResult result;
+    private int size;
+    private String strImage = "";
+    private String title;
+    private String content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +77,11 @@ public class NewApplyActivity extends BaseToolBarActivity {
     }
 
     private void initView() {
+        presenter = new NewServiceApplyPresenter(this);
+        CompanyUserBean bean = CompanyUserBean.first(CompanyUserBean.class);
+        if (bean != null) {
+            tv_company_name.setText(bean.getCompanyName());
+        }
         path = new ArrayList<>();
         mList = new ArrayList<>();
         mList.add(new WcbBean("从手机相册选择"));
@@ -144,6 +175,40 @@ public class NewApplyActivity extends BaseToolBarActivity {
         }
     };
 
+    @OnClick(R.id.btn_submit)
+    public void clickSubmit(View view) {
+
+        if (result == null) {
+            error("请选择审批人");
+            return;
+        }
+        title = et_title.getText().toString();
+        if (title.isEmpty()) {
+            error("请填写申请事项");
+            return;
+        }
+        content = et_content.getText().toString();
+        if (content.isEmpty()) {
+            error("请填写具体内容");
+            return;
+        }
+
+        if (path.size() > 0) {
+            size = path.size();
+            for (String s : path) {
+                presenter.uploadImage(s);
+            }
+        } else {
+            save();
+        }
+    }
+
+    private void save() {
+        NewApplyInput input = new NewApplyInput(title, content,
+                new NewApplyInput.ProgressBean(result.getUserId(), result.getRealname()));
+        presenter.addNewApply(DataUtil.getToken(mContext), input);
+    }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_new_apply;
@@ -164,6 +229,23 @@ public class NewApplyActivity extends BaseToolBarActivity {
 //                showSuccessDialog();
             }
         });
+    }
+
+    @OnClick(R.id.tv_person)
+    public void clickPerson(View view) {
+        startActivityForResult(new Intent(mContext, BuildingAdminListActivity.class), GET_PERSON);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == GET_PERSON) {
+                result = (BuildingAdminListResult) data.getSerializableExtra("data");
+                tv_person.setText(result.getRealname());
+
+            }
+        }
     }
 
     @OnClick(R.id.ll_add_photo)
@@ -217,5 +299,55 @@ public class NewApplyActivity extends BaseToolBarActivity {
             }
         }).show();
 
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        } else {
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        }
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void error(String err) {
+        Logger.e(err);
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void success() {
+        error("申请成功");
+        finish();
+    }
+
+    @Override
+    public void uploadSuccess(String data) {
+        size--;
+        if (size > 0) strImage += data + "|";
+        else strImage += data;
+
+        if (size == 0) {
+            Logger.d(strImage);
+            save1();
+        }
+    }
+
+    private void save1() {
+        NewApplyInput input = new NewApplyInput(title, content,
+                new NewApplyInput.ProgressBean(result.getUserId(), result.getRealname()), strImage);
+        presenter.addNewApply(DataUtil.getToken(mContext), input);
+    }
+
+    @Override
+    public void uploadFail(String err) {
+        error(err);
     }
 }

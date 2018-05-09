@@ -133,14 +133,14 @@
         <activity android:name=".module.home.work.kaoqin.ui.AddWifiActivity" />
         <activity android:name=".module.home.work.kaoqin.ui.LocationActivity" />
 
-        <!--公司-->
+        <!-- 公司 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="82592fabbcb044677ceb29bf19f8fa65" />
 
-        <!--<meta-data-->
-        <!--android:name="com.amap.api.v2.apikey"-->
-        <!--android:value="720bdd152c36c3dcf6fc8810d76dc78b" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.amap.api.v2.apikey" -->
+        <!-- android:value="720bdd152c36c3dcf6fc8810d76dc78b" /> -->
 
         <activity android:name=".module.home.work.leave.ui.LeaveMainActivity" />
         <activity android:name=".module.home.work.leave.ui.LeaveHistoryActivity" />
@@ -172,8 +172,11 @@
             android:value="com.bangjiat.bjt" />
 
         <activity android:name=".module.me.personaldata.ui.IdNumberInfoActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.SearchLocationActivity"></activity>
-        <service android:name="com.amap.api.location.APSService"></service>
+        <activity android:name=".module.home.work.kaoqin.ui.SearchLocationActivity" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity android:name=".module.secretary.service.ui.BuildingAdminListActivity"></activity>
     </application>
 
 </manifest>

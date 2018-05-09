@@ -36,4 +36,40 @@ public class CompanyUserPresenter implements CompanyUserContract.Presenter {
         view.showDialog();
         model.getCompanyUser(token, page, size, type);
     }
+
+    @Override
+    public void deleteCompanyUser(String token, String userId) {
+        view.showDialog();
+        model.deleteCompanyUser(token, userId);
+    }
+
+    @Override
+    public void updateCompanyUser(String token, WorkersResult.RecordsBean bean) {
+        view.showDialog();
+        model.updateCompanyUser(token, bean);
+    }
+
+    @Override
+    public void addCompanyUser(String token, WorkersResult.RecordsBean bean) {
+        view.showDialog();
+        model.addCompanyUser(token, bean);
+    }
+
+    @Override
+    public void deleteCompanyUserSuccess() {
+        view.dismissDialog();
+        view.deleteCompanyUserSuccess();
+    }
+
+    @Override
+    public void updateCompanyUserSuccess() {
+        view.dismissDialog();
+        view.updateCompanyUserSuccess();
+    }
+
+    @Override
+    public void addCompanyUserSuccess() {
+view.dismissDialog();
+view.addCompanyUserSuccess();
+    }
 }

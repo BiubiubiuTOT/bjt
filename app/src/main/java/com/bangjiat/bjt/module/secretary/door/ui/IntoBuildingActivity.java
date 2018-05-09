@@ -10,6 +10,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
 import com.bangjiat.bjt.module.secretary.door.contract.IntoBuildingContract;
 import com.bangjiat.bjt.module.secretary.door.presenter.IntoBuildingPresenter;
 import com.dou361.dialogui.DialogUIUtils;
@@ -62,6 +63,11 @@ public class IntoBuildingActivity extends BaseColorToolBarActivity implements In
     @Override
     public void fail(String err) {
         Toast.makeText(mContext, "申请失败：" + err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getIsIntoBuildingSuccess(IsIntoBuildingResult result) {
+
     }
 
     @Override

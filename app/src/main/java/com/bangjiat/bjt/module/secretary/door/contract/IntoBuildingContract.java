@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.secretary.door.contract;
 
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
 
 /**
  * @author ligh
@@ -11,6 +12,8 @@ import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
 public interface IntoBuildingContract {
     interface Model {
         void intoBuilding(String token, IntoBuildingInput input);
+
+        void isIntoBuilding(String token);
     }
 
     interface View {
@@ -22,10 +25,15 @@ public interface IntoBuildingContract {
 
         void fail(String err);
 
+        void getIsIntoBuildingSuccess(IsIntoBuildingResult result);
     }
 
     interface Presenter {
         void intoBuilding(String token, IntoBuildingInput input);
+
+        void getIsIntoBuildingSuccess(IsIntoBuildingResult result);
+
+        void isIntoBuilding(String token);
 
         void success();
 

@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.workers.ui;
 
+import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -7,15 +8,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
+import com.bangjiat.bjt.module.secretary.workers.ui.contract.CompanyUserContract;
+import com.bangjiat.bjt.module.secretary.workers.ui.presenter.CompanyUserPresenter;
+import com.dou361.dialogui.DialogUIUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class UpdateWorkerActivity extends BaseToolBarActivity {
+public class UpdateWorkerActivity extends BaseToolBarActivity implements CompanyUserContract.View {
     @BindView(R.id.et_name)
     EditText et_name;
     @BindView(R.id.et_phone)
@@ -26,6 +36,10 @@ public class UpdateWorkerActivity extends BaseToolBarActivity {
     EditText et_duty;
     @BindView(R.id.et_department)
     EditText et_department;
+    WorkersResult.RecordsBean bean;
+    private Dialog dialog;
+    private CompanyUserContract.Presenter presenter;
+    private String token;
 
 
     @Override
@@ -36,6 +50,18 @@ public class UpdateWorkerActivity extends BaseToolBarActivity {
     }
 
     private void initData() {
+        token = DataUtil.getToken(mContext);
+        presenter = new CompanyUserPresenter(this);
+        bean = (WorkersResult.RecordsBean) getIntent().getSerializableExtra("data");
+        if (bean != null) {
+            et_name.setText(bean.getRealname());
+            et_card.setText(bean.getIdNumber());
+            et_phone.setText(bean.getPhone());
+            et_department.setText(bean.getDepartment());
+            et_duty.setText(bean.getJob());
+        }
+
+
         et_name.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -137,6 +163,7 @@ public class UpdateWorkerActivity extends BaseToolBarActivity {
             }
         });
 
+
     }
 
     @Override
@@ -156,6 +183,18 @@ public class UpdateWorkerActivity extends BaseToolBarActivity {
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
 
         toolbar.setNavigationIcon(R.mipmap.back_black);
+        tv_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bean.setPhone(et_phone.getText().toString());
+                bean.setIdNumber(et_card.getText().toString());
+                bean.setDepartment(et_department.getText().toString());
+                bean.setJob(et_duty.getText().toString());
+                bean.setRealname(et_name.getText().toString());
+
+                presenter.updateCompanyUser(token, bean);
+            }
+        });
     }
 
     @OnClick(R.id.tv_delete)
@@ -164,17 +203,60 @@ public class UpdateWorkerActivity extends BaseToolBarActivity {
     }
 
     private void showDeleteDialog() {
-        new AlertDialog(mContext).builder().setMsg("确认删除吗?").
-                setPositiveButton("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        UserInfo userInfo = UserInfo.first(UserInfo.class);
+        if (!userInfo.getUserId().equals(bean.getUserId())) {
+            new AlertDialog(mContext).builder().setMsg("确认删除吗?").
+                    setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            presenter.deleteCompanyUser(token, bean.getUserId());
+                        }
+                    }).setNegativeButton("取消", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                    }
-                }).setNegativeButton("取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                }
+            }).show();
+        }
+    }
 
-            }
-        }).show();
+    @Override
+    public void showDialog() {
+        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void error(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getCompanyUserSuccess(WorkersResult result) {
+
+    }
+
+    @Override
+    public void deleteCompanyUserSuccess() {
+        EventBus.getDefault().post("");
+        error("删除成功");
+        finish();
+    }
+
+    @Override
+    public void updateCompanyUserSuccess() {
+        EventBus.getDefault().post("");
+        error("修改成功");
+        finish();
+    }
+
+    @Override
+    public void addCompanyUserSuccess() {
+
     }
 }

@@ -62,7 +62,6 @@
                 android:id="@+id/tv_company_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="贵州邦佳大数据科技有限公司"
                 android:textColor="@color/dialog_title"
                 android:textSize="14sp" />
         </LinearLayout>

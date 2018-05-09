@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.workers.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class WorkersResult {
         this.records = records;
     }
 
-    public static class RecordsBean {
+    public static class RecordsBean implements Serializable {
         /**
          * companyId : 0 公司编号
          * companyName : string
@@ -167,5 +168,32 @@ public class WorkersResult {
         public void setUserId(String userId) {
             this.userId = userId;
         }
+
+        @Override
+        public String toString() {
+            return "RecordsBean{" +
+                    "companyId=" + companyId +
+                    ", companyName='" + companyName + '\'' +
+                    ", companyUserId=" + companyUserId +
+                    ", department='" + department + '\'' +
+                    ", idNumber='" + idNumber + '\'' +
+                    ", job='" + job + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", realname='" + realname + '\'' +
+                    ", type=" + type +
+                    ", userId='" + userId + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "WorkersResult{" +
+                "current=" + current +
+                ", pages=" + pages +
+                ", size=" + size +
+                ", total=" + total +
+                ", records=" + records +
+                '}';
     }
 }

@@ -5,6 +5,7 @@ import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.ui.contract.CompanyUserContract;
+import com.orhanobut.logger.Logger;
 
 import retrofit2.Response;
 
@@ -38,5 +39,63 @@ public class CompanyUserModel implements CompanyUserContract.Model {
                 presenter.error(message);
             }
         });
+    }
+
+    @Override
+    public void deleteCompanyUser(String token, String userId) {
+        ApiFactory.getService().deleteCompanyUser(token, userId).enqueue(new MyCallBack<BaseResult<String>>() {
+            @Override
+            public void onSuc(Response<BaseResult<String>> response) {
+                BaseResult<String> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.deleteCompanyUserSuccess();
+                else
+                    presenter.error(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+                Logger.d(message);
+            }
+        });
+    }
+
+    @Override
+    public void updateCompanyUser(String token, final WorkersResult.RecordsBean bean) {
+        ApiFactory.getService().updateCompanyUser(token, bean)
+                .enqueue(new MyCallBack<BaseResult<String>>() {
+                    @Override
+                    public void onSuc(Response<BaseResult<String>> response) {
+                        BaseResult<String> body = response.body();
+                        if (body.getStatus() == 200)
+                            presenter.updateCompanyUserSuccess();
+                        else presenter.error(body.getMessage());
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        presenter.error(message);
+                    }
+                });
+    }
+
+    @Override
+    public void addCompanyUser(String token, WorkersResult.RecordsBean bean) {
+        ApiFactory.getService().addCompanyUser(token, bean)
+                .enqueue(new MyCallBack<BaseResult>() {
+                    @Override
+                    public void onSuc(Response<BaseResult> response) {
+                        BaseResult body = response.body();
+                        if (body.getStatus() == 200)
+                            presenter.addCompanyUserSuccess();
+                        else presenter.error(body.getMessage());
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        presenter.error(message);
+                    }
+                });
     }
 }

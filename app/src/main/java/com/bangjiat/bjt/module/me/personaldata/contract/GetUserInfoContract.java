@@ -17,7 +17,6 @@ public interface GetUserInfoContract {
         void getUserInfoFail(String err);
 
         void getUserInfoSuccess(UserInfoBean bean);
-
     }
 
     interface Presenter {

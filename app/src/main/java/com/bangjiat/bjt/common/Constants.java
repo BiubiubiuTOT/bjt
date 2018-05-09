@@ -20,6 +20,7 @@ import java.util.Locale;
 
 public class Constants {
     public static final String BASE_IP = "http://192.168.0.112:80/app/";
+    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
     public static final String TOKEN_NAME = "j4sc-bjt-token";
     public static String[] WEEK = {"周一", "周二", "周三",
             "周四", "周五", "周六", "周日"};

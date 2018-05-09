@@ -11,6 +11,12 @@ import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 public interface CompanyUserContract {
     interface Model {
         void getCompanyUser(String token, int page, int size, int type);
+
+        void deleteCompanyUser(String token, String userId);
+
+        void updateCompanyUser(String token, WorkersResult.RecordsBean bean);
+
+        void addCompanyUser(String token, WorkersResult.RecordsBean bean);
     }
 
     interface View {
@@ -21,6 +27,12 @@ public interface CompanyUserContract {
         void error(String err);
 
         void getCompanyUserSuccess(WorkersResult result);
+
+        void deleteCompanyUserSuccess();
+
+        void updateCompanyUserSuccess();
+
+        void addCompanyUserSuccess();
     }
 
     interface Presenter {
@@ -29,5 +41,17 @@ public interface CompanyUserContract {
         void getCompanyUserSuccess(WorkersResult result);
 
         void getCompanyUser(String token, int page, int size, int type);
+
+        void deleteCompanyUser(String token, String userId);
+
+        void updateCompanyUser(String token, WorkersResult.RecordsBean bean);
+
+        void addCompanyUser(String token, WorkersResult.RecordsBean bean);
+
+        void deleteCompanyUserSuccess();
+
+        void updateCompanyUserSuccess();
+
+        void addCompanyUserSuccess();
     }
 }
