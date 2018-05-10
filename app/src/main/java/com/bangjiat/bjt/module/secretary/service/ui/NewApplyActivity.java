@@ -279,7 +279,7 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
                 .setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        finish();
                     }
                 }).show();
     }
@@ -324,8 +324,8 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
 
     @Override
     public void success() {
-        error("申请成功");
-        finish();
+        dismissDialog();
+        showSuccessDialog();
     }
 
     @Override

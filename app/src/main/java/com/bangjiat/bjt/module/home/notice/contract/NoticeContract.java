@@ -1,5 +1,7 @@
 package com.bangjiat.bjt.module.home.notice.contract;
 
+import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
+
 /**
  * @author ligh
  * @email 1256144200@qq.com
@@ -16,7 +18,7 @@ public interface NoticeContract {
 
         void dismissDialog();
 
-        void getAllNoticeResult();
+        void getAllNoticeResult(NoticeBean bean);
 
         void showError(String err);
     }
@@ -24,7 +26,7 @@ public interface NoticeContract {
     interface Presenter {
         void getAllNotice(String token);
 
-        void getNoticeSuccess();
+        void getNoticeSuccess(NoticeBean bean);
 
         void getNoticeFail(String error);
     }

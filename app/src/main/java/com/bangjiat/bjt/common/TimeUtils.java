@@ -18,6 +18,12 @@ public class TimeUtils {
         return format.format(date);
     }
 
+    public static String changeToTime(Long l) {
+        Date date = new Date(l);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return format.format(date);
+    }
+
     public static long changeToLong(String s) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {

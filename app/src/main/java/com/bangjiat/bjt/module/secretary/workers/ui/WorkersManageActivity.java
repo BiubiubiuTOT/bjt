@@ -17,8 +17,8 @@ import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
-import com.bangjiat.bjt.module.secretary.workers.ui.contract.CompanyUserContract;
-import com.bangjiat.bjt.module.secretary.workers.ui.presenter.CompanyUserPresenter;
+import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
+import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
 import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 

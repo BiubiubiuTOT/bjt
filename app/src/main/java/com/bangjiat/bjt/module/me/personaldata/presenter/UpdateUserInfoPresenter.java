@@ -35,4 +35,22 @@ public class UpdateUserInfoPresenter implements UpdateUserInfoContract.Presenter
         view.showDialog();
         model.updateUserInfo(token, bean);
     }
+
+    @Override
+    public void uploadUserHead(String photo) {
+        view.showDialog();
+        model.uploadUserHead(photo);
+    }
+
+    @Override
+    public void uploadUserHeadSuccess(String url) {
+        view.dismissDialog();
+        view.uploadUserHeadSuccess(url);
+    }
+
+    @Override
+    public void uploadUserHeadFail(String err) {
+        view.dismissDialog();
+        view.uploadUserHeadFail(err);
+    }
 }

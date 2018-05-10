@@ -5,7 +5,7 @@ import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
 /**
  * @author ligh
  * @email 1256144200@qq.com
- * @date 2018/5/3 0003
+ * @date 2018/5/10 0010
  */
 
 public interface UpdatePasswordContract {

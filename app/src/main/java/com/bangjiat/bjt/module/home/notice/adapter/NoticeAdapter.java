@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder> implements View.OnClickListener {
-    private List<NoticeBean> lists;
+    private List<NoticeBean.SysNoticeListBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
-    public NoticeAdapter(List<NoticeBean> lists) {
+    public NoticeAdapter(List<NoticeBean.SysNoticeListBean> lists) {
         this.lists = lists;
     }
 
@@ -39,11 +40,11 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        NoticeBean noticeBean = lists.get(position);
-        viewHolder.iv_not_read.setVisibility(noticeBean.isRead() ? View.VISIBLE : View.INVISIBLE);
-        viewHolder.tv_title.setText(noticeBean.getTitle());
+        NoticeBean.SysNoticeListBean noticeBean = lists.get(position);
+//        viewHolder.iv_not_read.setVisibility(noticeBean.isRead() ? View.VISIBLE : View.INVISIBLE);
+        viewHolder.tv_title.setText(noticeBean.getName());
         viewHolder.tv_content.setText(noticeBean.getContent());
-        viewHolder.tv_time.setText(noticeBean.getTime());
+        viewHolder.tv_time.setText(TimeUtils.changeToTime(noticeBean.getCtime()));
 
         viewHolder.itemView.setTag(position);
     }

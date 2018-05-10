@@ -12,7 +12,9 @@ import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
+import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,6 +42,10 @@ public class DetailActivity extends BaseColorToolBarActivity {
         initData();
     }
 
+    /**
+     * 关于竖线的问题用 string.split("\\|")解决。 关于星号的问题用 string.split("\\*")解决。
+     * 关于斜线的问题用 sring.split("\\\\")解决。 关于中括号的问题用 sring.split("\\[\\]")解决。
+     */
     private void initData() {
         data = (ServiceApplyHistoryResult.RecordsBean) getIntent().getSerializableExtra("data");
         if (data != null) {
@@ -48,9 +54,14 @@ public class DetailActivity extends BaseColorToolBarActivity {
             tv_title.setText(data.getApplication());
 
             String sources = data.getSources();
-            String[] split = sources.split("|");
-            photoList = Arrays.asList(split);
+            if (sources != null) {
+                Logger.d(sources);
+                String[] split = sources.split("\\|");
+                Logger.d(split[0]);
+                photoList = Arrays.asList(split);
+            } else photoList = new ArrayList<>();
 
+            Logger.d(photoList.toString());
             setPhotoAdapter();
         }
     }

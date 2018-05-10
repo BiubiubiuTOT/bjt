@@ -1,4 +1,4 @@
-package com.bangjiat.bjt.module.secretary.workers.ui.contract;
+package com.bangjiat.bjt.module.secretary.workers.contract;
 
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 

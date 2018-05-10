@@ -53,13 +53,8 @@ public class NewServiceApplyModel implements NewServiceApplyContract.Model {
     @Override
     public void uploadImage(String photo) {
         File file = new File(photo);
-
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("image/jpg"), file);
-
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpg"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())

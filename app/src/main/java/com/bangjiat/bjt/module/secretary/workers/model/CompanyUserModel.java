@@ -1,10 +1,10 @@
-package com.bangjiat.bjt.module.secretary.workers.ui.model;
+package com.bangjiat.bjt.module.secretary.workers.model;
 
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
-import com.bangjiat.bjt.module.secretary.workers.ui.contract.CompanyUserContract;
+import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.orhanobut.logger.Logger;
 
 import retrofit2.Response;

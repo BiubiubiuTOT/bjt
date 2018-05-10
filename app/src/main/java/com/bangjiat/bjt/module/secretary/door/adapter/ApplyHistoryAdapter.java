@@ -42,7 +42,7 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final ApplyHistoryBean.RecordsBean historyBean = lists.get(position);
-        viewHolder.tv_apply_people.setText("申请人：" + historyBean.getApplyUsername());
+        viewHolder.tv_apply_people.setText("申请人：" + historyBean.getApplyUserRealname());
         viewHolder.tv_company_name.setText("公司名称：" + historyBean.getCompanyName());
         int status = historyBean.getType();
         String des = "";

@@ -58,9 +58,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 des = "未通过";
                 break;
         }
-        viewHolder.tv_apply_people.setText(historyBean.getUserRealname());
+        viewHolder.tv_apply_people.setText("申请人：" + historyBean.getUserRealname());
         viewHolder.tv_apply_status.setText(des);
-        viewHolder.tv_title.setText(historyBean.getApplication());
+        viewHolder.tv_title.setText("申请事项：" + historyBean.getApplication());
+//        viewHolder.tv_deal_person.setText(historyBean.get);
 
         viewHolder.itemView.setTag(position);
     }
@@ -78,13 +79,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_title, tv_apply_people, tv_apply_status;
+        TextView tv_title, tv_apply_people, tv_apply_status, tv_deal_person;
 
         public ViewHolder(View view) {
             super(view);
             tv_title = view.findViewById(R.id.tv_title);
             tv_apply_people = view.findViewById(R.id.tv_apply_people);
             tv_apply_status = view.findViewById(R.id.tv_apply_status);
+            tv_deal_person = view.findViewById(R.id.tv_deal_person);
         }
     }
 

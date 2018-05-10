@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.notice.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author ligh
@@ -9,63 +10,89 @@ import java.io.Serializable;
  */
 
 public class NoticeBean implements Serializable {
-    private boolean isRead;
-    private String title;
-    private String content;
-    private String time;
+    private List<SysNoticeListBean> sysNoticeList;
 
-    public NoticeBean(boolean isRead, String title, String content, String time) {
-        this.isRead = isRead;
-        this.title = title;
-        this.content = content;
-        this.time = time;
+    public List<SysNoticeListBean> getSysNoticeList() {
+        return sysNoticeList;
     }
 
-    public NoticeBean(String title, String content, String time) {
-        this.title = title;
-        this.content = content;
-        this.time = time;
+    public void setSysNoticeList(List<SysNoticeListBean> sysNoticeList) {
+        this.sysNoticeList = sysNoticeList;
     }
 
-    public boolean isRead() {
-        return isRead;
-    }
+    public static class SysNoticeListBean implements Serializable {
+        /**
+         * sNoticeId : 35
+         * userId : 1
+         * name : gfhfh
+         * content : fghd
+         * ctime : 1524903088634
+         * source : fhgdf
+         * type : 1
+         */
 
-    public void setRead(boolean read) {
-        isRead = read;
-    }
+        private int sNoticeId;
+        private String userId;
+        private String name;
+        private String content;
+        private long ctime;
+        private String source;
+        private int type;
 
-    public String getTitle() {
-        return title;
-    }
+        public int getSNoticeId() {
+            return sNoticeId;
+        }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+        public void setSNoticeId(int sNoticeId) {
+            this.sNoticeId = sNoticeId;
+        }
 
-    public String getContent() {
-        return content;
-    }
+        public String getUserId() {
+            return userId;
+        }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
 
-    public String getTime() {
-        return time;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    @Override
-    public String toString() {
-        return "NoticeBean{" +
-                "isRead=" + isRead +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", time='" + time + '\'' +
-                '}';
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public long getCtime() {
+            return ctime;
+        }
+
+        public void setCtime(long ctime) {
+            this.ctime = ctime;
+        }
+
+        public String getSource() {
+            return source;
+        }
+
+        public void setSource(String source) {
+            this.source = source;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
     }
 }

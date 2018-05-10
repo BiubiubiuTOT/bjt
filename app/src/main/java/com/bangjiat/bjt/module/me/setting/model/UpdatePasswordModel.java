@@ -11,7 +11,7 @@ import retrofit2.Response;
 /**
  * @author ligh
  * @email 1256144200@qq.com
- * @date 2018/5/3 0003
+ * @date 2018/5/10 0010
  */
 
 public class UpdatePasswordModel implements UpdatePasswordContract.Model {

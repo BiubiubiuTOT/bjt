@@ -1,8 +1,8 @@
-package com.bangjiat.bjt.module.secretary.workers.ui.presenter;
+package com.bangjiat.bjt.module.secretary.workers.presenter;
 
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
-import com.bangjiat.bjt.module.secretary.workers.ui.contract.CompanyUserContract;
-import com.bangjiat.bjt.module.secretary.workers.ui.model.CompanyUserModel;
+import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
+import com.bangjiat.bjt.module.secretary.workers.model.CompanyUserModel;
 
 /**
  * @author ligh

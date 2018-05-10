@@ -17,10 +17,19 @@ import java.util.Locale;
  * Created by Administrator on 2018/4/14 0014.
  * BANGJIATUANDASHUJU
  */
-
 public class Constants {
-    public static final String BASE_IP = "http://192.168.0.112:80/app/";
-    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
+    /**
+     * 本地服务器地址
+     */
+//    public static final String BASE_IP = "http://192.168.0.112:80/app/";
+//    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
+
+    /**
+     * 外网服务器地址
+     */
+    public static final String BASE_IP = "http://www.bangjiat.com/app/";
+    public static final String UPLOAD_IMAGE_IP = "http://www.bangjiat.com/";
+
     public static final String TOKEN_NAME = "j4sc-bjt-token";
     public static String[] WEEK = {"周一", "周二", "周三",
             "周四", "周五", "周六", "周日"};

@@ -55,16 +55,21 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
     protected void initView() {
         EventBus.getDefault().register(this);
 
-        Glide.with(mContext).load("http://img5.duitang.com/uploads/item/201611/18/20161118090311_Cw2dU.jpeg").centerCrop().
-                transform(new GlideCircleTransform(mContext)).into(iv_icon);
         presenter = new GetUserInfoPresenter(this);
         mList = new ArrayList<>();
         mList.add(new WcbBean("确定"));
 
         userInfo = UserInfo.first(UserInfo.class);
-        if (userInfo != null)
-            tv_name.setText(userInfo.getNickname());
-        else presenter.getUserInfo(DataUtil.getToken(mContext));
+        if (userInfo != null) {
+            setText(userInfo);
+        } else presenter.getUserInfo(DataUtil.getToken(mContext));
+    }
+
+    private void showIcon(UserInfo userInfo) {
+        if (userInfo.getAvatar() != null) {
+            Glide.with(mContext).load(userInfo.getAvatar()).centerCrop().
+                    transform(new GlideCircleTransform(mContext)).into(iv_icon);
+        }
     }
 
     @Override
@@ -146,16 +151,34 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
         CompanyUserBean companyUser = bean.getCompanyUser();
         DataUtil.setPhone(mContext, userInfo.getPhone());
         DataUtil.setUserId(mContext, userInfo.getUserId());
-        tv_name.setText(userInfo.getNickname());
+
+        setText(userInfo);
 
         userInfo.save();
         if (companyUser != null)
             companyUser.save();
     }
 
+    private void setText(UserInfo userInfo) {
+        String nickname = userInfo.getNickname();
+        if (nickname != null) {
+            tv_name.setText(nickname);
+        } else {
+            tv_name.setText("点击修改个人信息");
+        }
+        String avatar = userInfo.getAvatar();
+        if (avatar != null) {
+            showIcon(userInfo);
+        } else {
+            Glide.with(mContext).load(R.mipmap.my_head).centerCrop().
+                    transform(new GlideCircleTransform(mContext)).into(iv_icon);
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(UserInfo s) {
-        tv_name.setText(s.getNickname());
+        Logger.d(s.toString());
+        setText(s);
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 public interface UpdateUserInfoContract {
     interface Model {
         void updateUserInfo(String token, UserInfo bean);
+
+        void uploadUserHead(String photo);
     }
 
     interface View {
@@ -21,6 +23,10 @@ public interface UpdateUserInfoContract {
         void updateUserInfoSuccess(UserInfo info);
 
         void updateUserInfoFail(String err);
+
+        void uploadUserHeadSuccess(String url);
+
+        void uploadUserHeadFail(String err);
     }
 
     interface Presenter {
@@ -30,5 +36,11 @@ public interface UpdateUserInfoContract {
         void updateUserInfoFail(String err);
 
         void updateUserInfo(String token, UserInfo bean);
+
+        void uploadUserHead(String photo);
+
+        void uploadUserHeadSuccess(String url);
+
+        void uploadUserHeadFail(String err);
     }
 }

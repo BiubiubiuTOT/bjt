@@ -60,6 +60,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     private UserInfo data;
     private String realName;
     private String idNumber;
+    private String icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +121,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     private void initDate() {
         data = UserInfo.first(UserInfo.class);
         if (data != null) {
+            icon = data.getAvatar();
             tv_nickname.setText(data.getNickname());
             tv_phone.setText(data.getPhone());
             tv_sex.setText(data.getSex() == 0 ? "男" : "女");
@@ -212,6 +214,16 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     }
 
     @Override
+    public void uploadUserHeadSuccess(String url) {
+
+    }
+
+    @Override
+    public void uploadUserHeadFail(String err) {
+
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
             saveDateAndExit();
@@ -242,6 +254,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
         UserInfo userInfoBean = new UserInfo(tv_nickname.getText().toString(),
                 sex, tv_date.getText().toString(), tv_phone.getText().toString());
         userInfoBean.setUsername(DataUtil.getAccount(mContext).getPhone());
+        userInfoBean.setAvatar(icon);
         if (realName != null) {
             userInfoBean.setIdNumber(idNumber);
             userInfoBean.setRealname(realName);

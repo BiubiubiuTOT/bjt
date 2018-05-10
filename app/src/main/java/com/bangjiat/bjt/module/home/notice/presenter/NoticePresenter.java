@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.home.notice.presenter;
 
+import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
 import com.bangjiat.bjt.module.home.notice.model.NoticeModel;
 
@@ -24,12 +25,12 @@ public class NoticePresenter implements NoticeContract.Presenter {
     }
 
     @Override
-    public void getNoticeSuccess() {
-
+    public void getNoticeSuccess(NoticeBean bean) {
+        view.getAllNoticeResult(bean);
     }
 
     @Override
     public void getNoticeFail(String error) {
-
+        view.showError(error);
     }
 }

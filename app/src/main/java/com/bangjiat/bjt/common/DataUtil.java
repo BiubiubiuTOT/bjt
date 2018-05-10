@@ -59,7 +59,7 @@ public class DataUtil {
 
     public static boolean isLogin(Context context) {
         SPUtil spUtil = new SPUtil(context, SPUtil.AccountSettings.IS_LOGIN);
-        return spUtil.getBoolean(SPUtil.AccountSettings.IS_LOGIN, true);
+        return spUtil.getBoolean(SPUtil.AccountSettings.IS_LOGIN, false);
     }
 
     public static void setLogin(Context context, boolean isLogin) {

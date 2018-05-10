@@ -51,7 +51,11 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
         mAdapter.setOnItemClickListener(new ApplyHistoryAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext, DetailActivity.class));
+                ApplyHistoryBean.RecordsBean recordsBean = list.get(position);
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                intent.putExtra("name", recordsBean.getCompanyName());
+                intent.putExtra("id", recordsBean.getGuardMainId());
+                startActivity(intent);
             }
         });
     }

@@ -85,19 +85,19 @@ public class ServiceApplyHistoryResult {
 
         private String application;
         private String approvalUser;
-        private int bApprovalId;
-        private int buildId;
-        private int companyId;
+        private String bApprovalId;
+        private String buildId;
+        private String companyId;
         private String companyName;
         private String content;
-        private int ctime;
+        private String ctime;
         private String remark;
         private String sources;
         private int status;
         private String userId;
         private String userRealname;
         private String username;
-        private int utime;
+        private String utime;
 
         public String getApplication() {
             return application;
@@ -115,27 +115,27 @@ public class ServiceApplyHistoryResult {
             this.approvalUser = approvalUser;
         }
 
-        public int getBApprovalId() {
+        public String getBApprovalId() {
             return bApprovalId;
         }
 
-        public void setBApprovalId(int bApprovalId) {
+        public void setBApprovalId(String bApprovalId) {
             this.bApprovalId = bApprovalId;
         }
 
-        public int getBuildId() {
+        public String getBuildId() {
             return buildId;
         }
 
-        public void setBuildId(int buildId) {
+        public void setBuildId(String buildId) {
             this.buildId = buildId;
         }
 
-        public int getCompanyId() {
+        public String getCompanyId() {
             return companyId;
         }
 
-        public void setCompanyId(int companyId) {
+        public void setCompanyId(String companyId) {
             this.companyId = companyId;
         }
 
@@ -155,11 +155,11 @@ public class ServiceApplyHistoryResult {
             this.content = content;
         }
 
-        public int getCtime() {
+        public String getCtime() {
             return ctime;
         }
 
-        public void setCtime(int ctime) {
+        public void setCtime(String ctime) {
             this.ctime = ctime;
         }
 
@@ -211,11 +211,11 @@ public class ServiceApplyHistoryResult {
             this.username = username;
         }
 
-        public int getUtime() {
+        public String getUtime() {
             return utime;
         }
 
-        public void setUtime(int utime) {
+        public void setUtime(String utime) {
             this.utime = utime;
         }
 

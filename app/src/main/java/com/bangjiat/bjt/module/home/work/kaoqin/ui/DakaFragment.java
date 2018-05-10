@@ -83,23 +83,27 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
 
     @OnClick(R.id.ll_daka)
     public void clickDaka(View view) {
-        WifiUtil util = new WifiUtil(mContext);
-        wifiName = util.getWifiName();
+        if (input != null) {
+            WifiUtil util = new WifiUtil(mContext);
+            wifiName = util.getWifiName();
 
-        if (!wifiName.equals(input.getWifiName())) {
-            error("当前连接wifi与设置wifi不符，打卡失败");
-            return;
+            if (!wifiName.equals(input.getWifiName())) {
+                error("当前连接wifi与设置wifi不符，打卡失败");
+                return;
+            }
+
+            String workDay = input.getWorkDay();
+            int i = Constants.dayOfWeek();
+            Logger.d("dayOfWeek:" + i);
+            if (!workDay.contains(String.valueOf(i))) {
+                error("今天不上班");
+                return;
+            }
+
+            distance();
+        } else {
+            error("请先设置考勤");
         }
-
-        String workDay = input.getWorkDay();
-        int i = Constants.dayOfWeek();
-        Logger.d("dayOfWeek:" + i);
-        if (!workDay.contains(String.valueOf(i))) {
-            error("今天不上班");
-            return;
-        }
-
-        distance();
     }
 
     private void distance() {

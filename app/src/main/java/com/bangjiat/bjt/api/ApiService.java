@@ -4,12 +4,15 @@ import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
+import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.main.account.beans.LoginInput;
+import com.bangjiat.bjt.module.main.account.beans.RecoveredPasswordInput;
 import com.bangjiat.bjt.module.main.account.beans.RegisterInput;
+import com.bangjiat.bjt.module.main.account.beans.ValidateCodeInput;
 import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
 import com.bangjiat.bjt.module.me.feedback.beans.FeedBackInput;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
@@ -18,6 +21,7 @@ import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.door.beans.DoorApplyDetailResult;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
 import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
 import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
@@ -83,7 +87,7 @@ public interface ApiService {
      * @return
      */
     @GET("api/sys/getAllNotice")
-    Call<BaseResult<String>> getNotice(@Header(Constants.TOKEN_NAME) String token);
+    Call<BaseResult<NoticeBean>> getNotice(@Header(Constants.TOKEN_NAME) String token);
 
     /**
      * 保存反馈
@@ -258,6 +262,12 @@ public interface ApiService {
                                                            @Query("page") int page, @Query("size") int size);
 
     /**
+     * 公司管理员提交门禁申请
+     */
+    @POST("api/guard/save/GuardMain")
+    Call<BaseResult<String>> addDoorApply(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+
+    /**
      * 查询员工列表
      * 查询类型：1表示查询所有员工、2表示没有开门权限的员工列表、3表示该公司的所有管理员、4、该公司所有非管理员
      */
@@ -331,5 +341,22 @@ public interface ApiService {
     @POST("oss/upImg")
     Call<BaseResult<String>> uploadImage(@Part MultipartBody.Part partList);
 
+    /**
+     * 获取门禁申请明细
+     */
+    @GET("api/guard/select/GuardList")
+    Call<BaseResult<List<DoorApplyDetailResult>>> getDoorApplyDetail(@Header(Constants.TOKEN_NAME) String token,
+                                                                     @Query("guardMainId") String guardMainId);
 
+    /**
+     * 找回密码验证
+     */
+    @POST("auth/validateCode")
+    Call<BaseResult<String>> validateCode(@Body ValidateCodeInput input);
+
+    /**
+     * 找回密码
+     */
+    @POST("auth/getBackPassword")
+    Call<BaseResult<String>> updatePassword(@Body RecoveredPasswordInput input);
 }

@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
-import com.bangjiat.bjt.module.secretary.door.ui.HistoryActivity;
 
 import butterknife.OnClick;
 
@@ -34,6 +33,6 @@ public class LeaveMainActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.ll_apply_history)
     public void clickApplyHistory(View view) {
-        startActivity(new Intent(mContext, HistoryActivity.class));
+        startActivity(new Intent(mContext, LeaveHistoryActivity.class));
     }
 }

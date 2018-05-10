@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.me.personaldata.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,13 +12,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.GlideImageLoader;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.bangjiat.bjt.module.me.personaldata.contract.UpdateUserInfoContract;
+import com.bangjiat.bjt.module.me.personaldata.presenter.UpdateUserInfoPresenter;
 import com.bumptech.glide.Glide;
+import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
 import com.yancy.gallerypick.inter.IHandlerCallBack;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +33,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class PersonalHeadActivity extends BaseWhiteToolBarActivity {
+public class PersonalHeadActivity extends BaseWhiteToolBarActivity implements UpdateUserInfoContract.View {
     @BindView(R.id.iv_head)
     ImageView iv_head;
     private List<String> path;
     private GalleryConfig galleryConfig;
     private final int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
+    private Dialog dialog;
+    private UpdateUserInfoContract.Presenter presenter;
+    private UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +50,10 @@ public class PersonalHeadActivity extends BaseWhiteToolBarActivity {
     }
 
     private void initView() {
+        presenter = new UpdateUserInfoPresenter(this);
+        userInfo = UserInfo.first(UserInfo.class);
         path = new ArrayList<>();
-        Glide.with(mContext).load("http://img5.duitang.com/uploads/item/201611/18/20161118090311_Cw2dU.jpeg").centerCrop().into(iv_head);
+        Glide.with(mContext).load(userInfo.getAvatar()).centerCrop().into(iv_head);
         galleryConfig = new GalleryConfig.Builder()
                 .imageLoader(new GlideImageLoader())
                 .iHandlerCallBack(iHandlerCallBack)
@@ -82,6 +95,7 @@ public class PersonalHeadActivity extends BaseWhiteToolBarActivity {
         }
     }
 
+    private String url;
     IHandlerCallBack iHandlerCallBack = new IHandlerCallBack() {
         @Override
         public void onStart() {
@@ -91,10 +105,9 @@ public class PersonalHeadActivity extends BaseWhiteToolBarActivity {
         @Override
         public void onSuccess(List<String> photoList) {
             Logger.d("onSuccess: 返回数据");
-            for (String s : photoList) {
-                Logger.d(s);
-                Glide.with(mContext).load(s).centerCrop().into(iv_head);
-            }
+            url = photoList.get(0);
+            Logger.d(url);
+            presenter.uploadUserHead(url);
             path.clear();
         }
 
@@ -127,5 +140,44 @@ public class PersonalHeadActivity extends BaseWhiteToolBarActivity {
     @Override
     protected String getTitleStr() {
         return "个人头像";
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void updateUserInfoSuccess(UserInfo info) {
+        Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
+        Glide.with(mContext).load(url).centerCrop().into(iv_head);
+        userInfo.delete();
+        info.save();
+        EventBus.getDefault().post(info);
+    }
+
+    @Override
+    public void updateUserInfoFail(String err) {
+        Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void uploadUserHeadSuccess(String url) {
+        userInfo.setAvatar(url);
+        presenter.updateUserInfo(DataUtil.getToken(mContext), userInfo);
+    }
+
+    @Override
+    public void uploadUserHeadFail(String err) {
+        Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
     }
 }

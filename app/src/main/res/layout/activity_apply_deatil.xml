@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="5dp"
         app:cardElevation="0dp">
 
         <LinearLayout
@@ -28,116 +28,15 @@
                 android:id="@+id/tv_company_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="贵州邦佳大数据科技有限公司"
                 android:textColor="@color/dialog_title"
                 android:textSize="14sp" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="姓名："
-                    android:textColor="@color/dialog_title"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_people_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="张无忌"
-                    android:textColor="@color/dialog_title"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/mine_color" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="电话："
-                    android:textColor="@color/dialog_title"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_people_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="17794482264"
-                    android:textColor="@color/dialog_title"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/mine_color" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="身份证号："
-                    android:textColor="@color/dialog_title"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_id_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="520501197411120501"
-                    android:textColor="@color/dialog_title"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:text="操作记录"
-        android:textColor="@color/dialog_title"
-        android:textSize="16sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+         />
 </LinearLayout>

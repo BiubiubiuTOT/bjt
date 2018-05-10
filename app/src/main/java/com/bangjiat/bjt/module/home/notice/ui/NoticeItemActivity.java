@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 
@@ -24,11 +25,12 @@ public class NoticeItemActivity extends BaseWhiteToolBarActivity {
     }
 
     private void initData() {
-        NoticeBean bean = (NoticeBean) getIntent().getSerializableExtra("data");
+        NoticeBean.SysNoticeListBean bean = (NoticeBean.SysNoticeListBean) getIntent().getSerializableExtra("data");
+        if (bean == null) return;
 
-        tv_title.setText(bean.getTitle());
+        tv_title.setText(bean.getName());
         tv_content.setText(bean.getContent());
-        tv_time.setText(bean.getTime());
+        tv_time.setText(TimeUtils.changeToTime(bean.getCtime()));
     }
 
     @Override

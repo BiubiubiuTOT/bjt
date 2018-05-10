@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
+import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
+import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
 import com.bangjiat.bjt.module.home.notice.ui.AllNoticeActivity;
 import com.bangjiat.bjt.module.home.notice.ui.NoticeItemActivity;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
@@ -28,6 +32,8 @@ import com.joker.api.Permissions4M;
 import com.joker.api.wrapper.Wrapper;
 import com.orhanobut.logger.Logger;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.bertsir.zbar.QrConfig;
@@ -36,14 +42,22 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.bingoogolapple.bgabanner.BGALocalImageSize;
 
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements NoticeContract.View {
     @BindView(R.id.banner_guide_content)
     BGABanner mContentBanner;
+    @BindView(R.id.tv_content)
+    TextView tv_content;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
     private static final int READ_CODE = 2;
     private static final int CAMERA_CODE = 3;
     private boolean isOpenRead, isOpenCamera;
+    private NoticeBean.SysNoticeListBean sysNoticeListBean;
+    private NoticeContract.Presenter presenter;
 
     protected void initView() {
+        presenter = new NoticePresenter(this);
+        presenter.getAllNotice(DataUtil.getToken(mContext));
         BGALocalImageSize localImageSize = new BGALocalImageSize(720, 1280, 320, 640);
         mContentBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
                 R.drawable.banner1,
@@ -71,12 +85,13 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.tv_content)
     public void clickContent(View view) {
-        Intent intent = new Intent(mContext, NoticeItemActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("data", new NoticeBean("国庆放假通知：", "国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特国庆七天假期，国际互联网金融特区大厦国庆七天假期，" +
-                "国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦。", "2018-03-24 16:54"));
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if (sysNoticeListBean != null) {
+            Intent intent = new Intent(mContext, NoticeItemActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("data", sysNoticeListBean);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     @OnClick(R.id.tv_visitor)
@@ -196,5 +211,31 @@ public class HomeFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void showDialog() {
+
+    }
+
+    @Override
+    public void dismissDialog() {
+
+    }
+
+    @Override
+    public void getAllNoticeResult(NoticeBean bean) {
+        if (bean != null) {
+            List<NoticeBean.SysNoticeListBean> sysNoticeList = bean.getSysNoticeList();
+            if (sysNoticeList != null) {
+                sysNoticeListBean = sysNoticeList.get(0);
+                tv_title.setText(sysNoticeListBean.getName());
+                tv_content.setText(sysNoticeListBean.getContent());
+            }
+        }
+    }
+
+    @Override
+    public void showError(String err) {
+
+    }
 }
 

@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.door.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class ApplyHistoryBean {
         this.records = records;
     }
 
-    public static class RecordsBean {
+    public static class RecordsBean implements Serializable{
         /**
          * applyTime : 0  申请时间
          * applyUserId : string  申请人编号
@@ -76,29 +77,29 @@ public class ApplyHistoryBean {
          * type : 0 类型:1、待审批，2、已通过，3、未通过
          */
 
-        private int applyTime;
+        private String applyTime;
         private String applyUserId;
         private String applyUserRealname;
         private String applyUsername;
-        private int approvalTime;
+        private String approvalTime;
         private String approvalUserId;
         private String approvalUserRealname;
         private String approvalUsername;
-        private int buildId;
-        private int companyId;
+        private String buildId;
+        private String companyId;
         private String companyName;
-        private int ctime;
+        private String ctime;
         private String detail;
-        private int guardMainId;
+        private String guardMainId;
         private String opinion;
         private String remark;
         private int type;
 
-        public int getApplyTime() {
+        public String getApplyTime() {
             return applyTime;
         }
 
-        public void setApplyTime(int applyTime) {
+        public void setApplyTime(String applyTime) {
             this.applyTime = applyTime;
         }
 
@@ -126,11 +127,11 @@ public class ApplyHistoryBean {
             this.applyUsername = applyUsername;
         }
 
-        public int getApprovalTime() {
+        public String getApprovalTime() {
             return approvalTime;
         }
 
-        public void setApprovalTime(int approvalTime) {
+        public void setApprovalTime(String approvalTime) {
             this.approvalTime = approvalTime;
         }
 
@@ -158,19 +159,19 @@ public class ApplyHistoryBean {
             this.approvalUsername = approvalUsername;
         }
 
-        public int getBuildId() {
+        public String getBuildId() {
             return buildId;
         }
 
-        public void setBuildId(int buildId) {
+        public void setBuildId(String buildId) {
             this.buildId = buildId;
         }
 
-        public int getCompanyId() {
+        public String getCompanyId() {
             return companyId;
         }
 
-        public void setCompanyId(int companyId) {
+        public void setCompanyId(String companyId) {
             this.companyId = companyId;
         }
 
@@ -182,11 +183,11 @@ public class ApplyHistoryBean {
             this.companyName = companyName;
         }
 
-        public int getCtime() {
+        public String getCtime() {
             return ctime;
         }
 
-        public void setCtime(int ctime) {
+        public void setCtime(String ctime) {
             this.ctime = ctime;
         }
 
@@ -198,11 +199,11 @@ public class ApplyHistoryBean {
             this.detail = detail;
         }
 
-        public int getGuardMainId() {
+        public String getGuardMainId() {
             return guardMainId;
         }
 
-        public void setGuardMainId(int guardMainId) {
+        public void setGuardMainId(String guardMainId) {
             this.guardMainId = guardMainId;
         }
 

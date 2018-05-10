@@ -1,16 +1,23 @@
 package com.bangjiat.bjt.module.secretary.door.ui;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.adapter.SelectPeopleAdapter;
-import com.bangjiat.bjt.module.secretary.door.beans.PeopleBean;
+import com.bangjiat.bjt.module.secretary.door.contract.DoorApplyContract;
+import com.bangjiat.bjt.module.secretary.door.presenter.DoorApplyPresenter;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
+import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -22,14 +29,20 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AddPeopleActivity extends BaseToolBarActivity {
+public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.tv_select_all)
     TextView tv_select_all;
+    @BindView(R.id.tv_company_name)
+    TextView tv_company_name;
+
     private TextView tv_submit;
-    private List<PeopleBean> beans;
+    private List<WorkersResult.RecordsBean> beans;
     private SelectPeopleAdapter adapter;
+    private Dialog dialog;
+    private DoorApplyContract.Presenter presenter;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,30 +51,106 @@ public class AddPeopleActivity extends BaseToolBarActivity {
     }
 
     private void initData() {
-        beans = new ArrayList<>();
-        beans.add(new PeopleBean("张三", "17685302679"));
-        beans.add(new PeopleBean("李四", "18083608929"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-        beans.add(new PeopleBean("王五", "18785166716"));
-
+        presenter = new DoorApplyPresenter(this);
+        token = DataUtil.getToken(mContext);
+        presenter.getCompanyUser(token, 1, 10, 2);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
+    }
+
+    private int getSelectCount() {
+        int select = 0;
+        HashMap<Integer, Boolean> map = adapter.getMap();
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            if (entry.getValue())
+                select++;
+        }
+        return select;
+    }
+
+    private String[] getSelectBeans() {
+        List<String> list = new ArrayList<>();
+        HashMap<Integer, Boolean> map = adapter.getMap();
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            if (entry.getValue()) {
+                list.add(beans.get(entry.getKey()).getUserId());
+            }
+        }
+        String[] strings = new String[list.size()];
+        return list.toArray(strings);
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_add_people;
+    }
+
+    @Override
+    protected void initToolbar(Toolbar toolbar) {
+        toolbar.setTitle("");
+        TextView textView = findViewById(R.id.toolbar_title);
+        textView.setText("新增人员");
+        tv_submit = findViewById(R.id.toolbar_other);
+        tv_submit.setText("提交");
+        tv_submit.setTextColor(getResources().getColor(R.color.add_people_submit));
+        toolbar.setNavigationIcon(R.mipmap.back_white);
+
+        tv_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getSelectCount() > 0) {
+                    String[] selectBeans = getSelectBeans();
+                    Logger.d(selectBeans);
+                    presenter.addApply(token, selectBeans);
+                }
+            }
+        });
+    }
+
+    @OnClick(R.id.tv_select_all)
+    public void clickSelect(View view) {
+        adapter.selectAll();
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void error(String err) {
+        Logger.d(err);
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getCompanyUserSuccess(WorkersResult result) {
+        if (result != null) {
+            List<WorkersResult.RecordsBean> records = result.getRecords();
+            if (records != null) {
+                tv_company_name.setText(records.get(0).getCompanyName());
+                beans = records;
+                if (adapter != null) {
+                    adapter.setLists(records);
+                } else {
+                    setAdapter();
+                }
+            }
+        }
+    }
+
+    private void setAdapter() {
         adapter = new SelectPeopleAdapter(beans, mContext);
         recyclerView.setAdapter(adapter);
 
@@ -91,53 +180,21 @@ public class AddPeopleActivity extends BaseToolBarActivity {
         });
     }
 
-    private int getSelectCount() {
-        int select = 0;
-        HashMap<Integer, Boolean> map = adapter.getMap();
-        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
-        for (Map.Entry<Integer, Boolean> entry : entries) {
-            if (entry.getValue())
-                select++;
-        }
-        return select;
-    }
-
-    private List<PeopleBean> getSelectBeans() {
-        List<PeopleBean> list = new ArrayList<>();
-        HashMap<Integer, Boolean> map = adapter.getMap();
-        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
-        for (Map.Entry<Integer, Boolean> entry : entries) {
-            if (entry.getValue())
-                list.add(beans.get(entry.getKey()));
-        }
-        return list;
-    }
-
     @Override
-    protected int getLayoutResId() {
-        return R.layout.activity_add_people;
+    public void addApplySuccess() {
+//        adapter.selectAll();
+//        presenter.getCompanyUser(token, 1, 10, 2);
+        showSuccessDialog();
     }
 
-    @Override
-    protected void initToolbar(Toolbar toolbar) {
-        toolbar.setTitle("");
-        TextView textView = findViewById(R.id.toolbar_title);
-        textView.setText("新增人员");
-        tv_submit = findViewById(R.id.toolbar_other);
-        tv_submit.setText("提交");
-        tv_submit.setTextColor(getResources().getColor(R.color.add_people_submit));
-        toolbar.setNavigationIcon(R.mipmap.back_white);
-
-        tv_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Logger.d(adapter.getMap().toString());
-            }
-        });
-    }
-
-    @OnClick(R.id.tv_select_all)
-    public void clickSelect(View view) {
-        adapter.selectAll();
+    private void showSuccessDialog() {
+        new AlertDialog(this).builder()
+                .setMsg("提交成功，等待审核")
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                }).show();
     }
 }

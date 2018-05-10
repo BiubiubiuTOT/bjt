@@ -212,11 +212,9 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
         public boolean handleMessage(Message msg) {
             mProgressBar.setVisibility(View.GONE);
 
-            if (mContactList.size() > 0) {
-                mSearchBox.setEnabled(true);
-                mContactAdapter.setContactList(mContactList);
-                mSideLetterBar.setVisibility(View.VISIBLE);
-            }
+            mSearchBox.setEnabled(true);
+            mContactAdapter.setContactList(mContactList);
+            mSideLetterBar.setVisibility(View.VISIBLE);
             return true;
         }
     });
