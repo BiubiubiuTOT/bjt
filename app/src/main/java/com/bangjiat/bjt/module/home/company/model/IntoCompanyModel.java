@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.home.company.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.IntoCompanyContract;
 import com.orhanobut.logger.Logger;
@@ -40,6 +41,24 @@ public class IntoCompanyModel implements IntoCompanyContract.Model {
             @Override
             public void onFail(String message) {
                 Logger.e(message);
+                presenter.fail(message);
+            }
+        });
+    }
+
+    @Override
+    public void getCompanyDetail(String token, String companyId) {
+        ApiFactory.getService().getCompanyDetail(token, companyId).enqueue(new MyCallBack<BaseResult<CompanyDetailResult>>() {
+            @Override
+            public void onSuc(Response<BaseResult<CompanyDetailResult>> response) {
+                BaseResult<CompanyDetailResult> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.getCompanyDetailSuccess(body.getData());
+                else presenter.fail(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
                 presenter.fail(message);
             }
         });

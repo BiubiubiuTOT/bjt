@@ -134,4 +134,6 @@ dependencies {
     compile 'com.amap.api:location:latest.integration'
     compile 'com.amap.api:search:latest.integration'
     compile 'com.amap.api:3dmap:latest.integration'
+
+    compile 'com.xgr.easypay:EasyPay:1.0.2'//支付
 }

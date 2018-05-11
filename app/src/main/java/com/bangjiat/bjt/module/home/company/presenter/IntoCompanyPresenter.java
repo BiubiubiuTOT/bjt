@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.home.company.presenter;
 
+import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.IntoCompanyContract;
 import com.bangjiat.bjt.module.home.company.model.IntoCompanyModel;
@@ -23,6 +24,18 @@ public class IntoCompanyPresenter implements IntoCompanyContract.Presenter {
     public void intoCompany(String token, IntoCompanyInput input) {
         view.showDialog();
         model.intoCompany(token, input);
+    }
+
+    @Override
+    public void getCompanyDetailSuccess(CompanyDetailResult result) {
+        view.dismissDialog();
+        view.getCompanyDetailSuccess(result);
+    }
+
+    @Override
+    public void getCompanyDetail(String token, String companyId) {
+        view.showDialog();
+        model.getCompanyDetail(token, companyId);
     }
 
     @Override

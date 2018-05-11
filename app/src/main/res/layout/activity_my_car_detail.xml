@@ -46,7 +46,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="李晓天"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -76,7 +75,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="520114178968482578"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -102,12 +100,11 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/tv_jiashi_card"
+                    android:id="@+id/tv_licenceNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:text="4857815"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -133,12 +130,11 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/tv_xingshi_card"
+                    android:id="@+id/tv_driveNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:text="6958758"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -165,20 +161,11 @@
                     android:textSize="15sp" />
 
                 <ImageView
-                    android:id="@+id/ll_add_photo"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_marginLeft="60dp"
-                    android:gravity="center"
-                    android:src="@mipmap/my_head" />
-
-
-                <ImageView
                     android:id="@+id/iv_car"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:src="@mipmap/my_head"
-                    android:visibility="gone" />
+                    android:layout_marginLeft="60dp"
+                    android:gravity="center" />
             </LinearLayout>
 
             <View
@@ -202,12 +189,11 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/tv_car_number"
+                    android:id="@+id/tv_plateNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:text="贵A87B592"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -237,7 +223,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="法拉利"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -263,11 +248,10 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/tv_version"
+                    android:id="@+id/tv_model"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="A-785"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -298,7 +282,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:text="黄色"
                     android:textColor="@color/dialog_title"
                     android:textSize="14sp" />
             </LinearLayout>

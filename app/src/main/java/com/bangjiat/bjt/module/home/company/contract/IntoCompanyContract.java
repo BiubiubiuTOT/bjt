@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.home.company.contract;
 
+import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 
 /**
@@ -11,6 +12,8 @@ import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 public interface IntoCompanyContract {
     interface Model {
         void intoCompany(String token, IntoCompanyInput input);
+
+        void getCompanyDetail(String token, String companyId);
     }
 
     interface View {
@@ -21,10 +24,16 @@ public interface IntoCompanyContract {
         void success();
 
         void fail(String err);
+
+        void getCompanyDetailSuccess(CompanyDetailResult result);
     }
 
     interface Presenter {
         void intoCompany(String token, IntoCompanyInput input);
+
+        void getCompanyDetailSuccess(CompanyDetailResult result);
+
+        void getCompanyDetail(String token, String companyId);
 
         void success();
 

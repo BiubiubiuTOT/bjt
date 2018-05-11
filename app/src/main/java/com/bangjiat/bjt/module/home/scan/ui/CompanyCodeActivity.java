@@ -6,12 +6,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.common.DesUtil;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataCompany;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import cn.bertsir.zbar.QRUtils;
@@ -32,17 +30,10 @@ public class CompanyCodeActivity extends BaseColorToolBarActivity {
     private void initView() {
         CompanyUserBean companyUserBean = CompanyUserBean.first(CompanyUserBean.class);
         if (companyUserBean != null) {
-            QrCodeDataCompany company = new QrCodeDataCompany(companyUserBean.getCompanyName(), companyUserBean.getCompanyId(), companyUserBean.getUserId());
+            QrCodeDataCompany company = new QrCodeDataCompany(companyUserBean.getCompanyId(), 1);
 
             String json = new Gson().toJson(company);
-            String bjt = null;
-            try {
-                bjt = DesUtil.encrypt(json);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Logger.d(bjt);
-            mBitmap = QRUtils.getInstance().createQRCode(bjt);
+            mBitmap = QRUtils.getInstance().createQRCode(json);
             iv_code.setImageBitmap(mBitmap);
             tv_name.setText(companyUserBean.getCompanyName());
         }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/mine_color"
+    android:orientation="vertical"
     tools:context=".module.home.scan.ui.OpenDoorCodeActivity">
 
     <include layout="@layout/toolbar" />
@@ -21,7 +21,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/open_door_bg"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="15dp">

@@ -25,6 +25,8 @@ import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.home.visitor.ui.VisitorActivity;
 import com.bangjiat.bjt.module.home.work.ui.WorkMainActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
+import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
+import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
 import com.bangjiat.bjt.module.secretary.contact.view.ContactInfoActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -42,7 +44,7 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.bingoogolapple.bgabanner.BGALocalImageSize;
 
 
-public class HomeFragment extends BaseFragment implements NoticeContract.View {
+public class HomeFragment extends BaseFragment implements NoticeContract.View, SearchContactContract.View {
     @BindView(R.id.banner_guide_content)
     BGABanner mContentBanner;
     @BindView(R.id.tv_content)
@@ -54,9 +56,11 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View {
     private boolean isOpenRead, isOpenCamera;
     private NoticeBean.SysNoticeListBean sysNoticeListBean;
     private NoticeContract.Presenter presenter;
+    private SearchContactContract.Presenter searchPresenter;
 
     protected void initView() {
         presenter = new NoticePresenter(this);
+        searchPresenter = new SearchContactPresenter(this);
         presenter.getAllNotice(DataUtil.getToken(mContext));
         BGALocalImageSize localImageSize = new BGALocalImageSize(720, 1280, 320, 640);
         mContentBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
@@ -183,16 +187,14 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View {
                 public void onScanSuccess(String result) {
                     try {
                         QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                        Intent intent = new Intent(mContext, ContactInfoActivity.class);
-                        SearchContactResult bean = new SearchContactResult(user.getNickname(),
-                                user.getUserId(), user.getUsername());
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("data", bean);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        if (user != null)
+                            searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
+                        else {
+                            fail("");
+                        }
                     } catch (JsonSyntaxException e) {
                         e.printStackTrace();
-                        Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
+                        fail("");
                     }
                 }
             });
@@ -236,6 +238,20 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View {
     @Override
     public void showError(String err) {
 
+    }
+
+    @Override
+    public void fail(String err) {
+        Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void success(SearchContactResult bean) {
+        Intent intent = new Intent(mContext, ContactInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", bean);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
 

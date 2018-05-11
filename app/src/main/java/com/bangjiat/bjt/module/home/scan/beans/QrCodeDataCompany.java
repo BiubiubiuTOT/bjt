@@ -7,55 +7,27 @@ package com.bangjiat.bjt.module.home.scan.beans;
  */
 
 public class QrCodeDataCompany {
-    private String companyName;
-    private String companyId;
-    private String industry;
-    private int qrCodeType;
+    private String cid;//公司id
+    private int type;
 
-    public QrCodeDataCompany(String companyName, String companyId, String industry) {
-        this.companyName = companyName;
-        this.companyId = companyId;
-        this.industry = industry;
+    public QrCodeDataCompany(String cid, int type) {
+        this.cid = cid;
+        this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "QrCodeDataCompany{" +
-                "companyName='" + companyName + '\'' +
-                ", companyId='" + companyId + '\'' +
-                ", industry='" + industry + '\'' +
-                '}';
+    public String getCid() {
+        return cid;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public void setCid(String cid) {
+        this.cid = cid;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public int getType() {
+        return type;
     }
 
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getIndustry() {
-        return industry;
-    }
-
-    public void setIndustry(String industry) {
-        this.industry = industry;
-    }
-
-    public int getQrCodeType() {
-        return qrCodeType;
-    }
-
-    public void setQrCodeType(int qrCodeType) {
-        this.qrCodeType = qrCodeType;
+    public void setType(int type) {
+        this.type = type;
     }
 }

@@ -1,19 +1,30 @@
 package com.bangjiat.bjt.module.park.car.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.GlideImageLoader;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
+import com.bangjiat.bjt.module.main.contract.UploadImageContract;
+import com.bangjiat.bjt.module.main.presenter.UploadImagePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bangjiat.bjt.module.park.car.contract.CarListContract;
+import com.bangjiat.bjt.module.park.car.presenter.CarListPresenter;
 import com.bumptech.glide.Glide;
+import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -25,7 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AddCarActivity extends BaseWhiteToolBarActivity {
+public class AddCarActivity extends BaseWhiteToolBarActivity implements UploadImageContract.View, CarListContract.View {
     private GalleryConfig galleryConfig;
     private List<WcbBean> mList;
     private List<String> path;
@@ -34,7 +45,28 @@ public class AddCarActivity extends BaseWhiteToolBarActivity {
     ImageView iv_car;
     @BindView(R.id.ll_add_photo)
     LinearLayout ll_add_photo;
+    @BindView(R.id.et_name)
+    EditText et_name;
+    @BindView(R.id.et_id_number)
+    EditText et_id_number;
+    @BindView(R.id.et_driveNumber)
+    EditText et_driveNumber;
+    @BindView(R.id.et_plateNumber)
+    EditText et_plateNumber;
+    @BindView(R.id.et_brand)
+    EditText et_brand;
+    @BindView(R.id.et_color)
+    EditText et_color;
+    @BindView(R.id.et_model)
+    EditText et_model;
+    @BindView(R.id.et_licenceNumber)
+    EditText er_licenceNumber;
+
     private List<WcbBean> mList1;
+    private UploadImageContract.Presenter uploadImagePresenter;
+    private CarListContract.Presenter addCarPresenter;
+    private Dialog dialog;
+    private String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +107,8 @@ public class AddCarActivity extends BaseWhiteToolBarActivity {
     }
 
     private void initData() {
+        uploadImagePresenter = new UploadImagePresenter(this);
+        addCarPresenter = new CarListPresenter(this);
         path = new ArrayList<>();
         mList = new ArrayList<>();
         mList.add(new WcbBean("从手机相册选择"));
@@ -154,5 +188,83 @@ public class AddCarActivity extends BaseWhiteToolBarActivity {
     @Override
     protected String getTitleStr() {
         return "添加车辆";
+    }
+
+    @Override
+    public void success(String url) {
+        dismissDialog();
+        imageUrl = url;
+
+        addCar();
+    }
+
+    private void addCar() {
+        CarBean bean = new CarBean();
+        bean.setBrand(et_brand.getText().toString());
+        bean.setColor(et_color.getText().toString());
+        bean.setModel(et_model.getText().toString());
+        bean.setDriveNumber(et_driveNumber.getText().toString());
+        bean.setLicenceNumber(er_licenceNumber.getText().toString());
+        bean.setPlateNumber(et_plateNumber.getText().toString());
+        bean.setName(et_name.getText().toString());
+        bean.setIdNumber(et_id_number.getText().toString());
+        bean.setResource(imageUrl);
+        addCarPresenter.addCar(DataUtil.getToken(mContext), bean);
+    }
+
+    @Override
+    public void fail(String err) {
+        dismissDialog();
+        error("照片上传失败");
+    }
+
+    @OnClick(R.id.btn_submit)
+    public void clickSubmit(View view) {
+        if (path.size() > 0) {
+            showDialog();
+            uploadImagePresenter.uploadImage(path.get(0));
+        } else {
+            error("请选择车辆正面照片");
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void error(String err) {
+        Constants.showErrorDialog(mContext, err);
+    }
+
+    @Override
+    public void getCarListSuccess(List<CarBean> bean) {
+
+    }
+
+    @Override
+    public void addCarSuccess() {
+        showSuccessExitDialog("添加成功");
+    }
+
+    public void showSuccessExitDialog(String msg) {
+        new AlertDialog(this).builder().setMsg(msg).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).show();
     }
 }

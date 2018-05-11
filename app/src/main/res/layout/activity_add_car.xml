@@ -42,6 +42,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -72,6 +73,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_id_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -102,6 +104,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_licenceNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -132,6 +135,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_driveNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -206,6 +210,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_plateNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -236,6 +241,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_brand"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -266,6 +272,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_model"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -296,6 +303,7 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/et_color"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -312,6 +320,7 @@
                 android:background="@color/mine_color" />
 
             <Button
+                android:id="@+id/btn_submit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dialog_btn_height"
                 android:layout_marginBottom="20dp"

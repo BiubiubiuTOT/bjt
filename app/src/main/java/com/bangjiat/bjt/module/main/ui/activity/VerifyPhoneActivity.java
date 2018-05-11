@@ -154,6 +154,7 @@ public class VerifyPhoneActivity extends BaseActivity implements ValidateCodeCon
         showDialog(err);
     }
 
+
     private void showDialog(String msg) {
         new AlertDialog(mContext).builder().setMsg(msg).
                 setPositiveButton("确定", new View.OnClickListener() {

@@ -48,7 +48,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="12dp"
                     android:layout_toEndOf="@+id/iv_icon"
-                    android:text="杰克斯派若"
                     android:textColor="#282828"
                     android:textSize="16sp" />
 

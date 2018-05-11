@@ -1,9 +1,12 @@
 package com.bangjiat.bjt.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.view.View;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 
 import java.security.MessageDigest;
@@ -21,16 +24,17 @@ public class Constants {
     /**
      * 本地服务器地址
      */
-//    public static final String BASE_IP = "http://192.168.0.112:80/app/";
-//    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
+    public static final String BASE_IP = "http://192.168.0.112:80/app/";
+    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
 
     /**
      * 外网服务器地址
      */
-    public static final String BASE_IP = "http://www.bangjiat.com/app/";
-    public static final String UPLOAD_IMAGE_IP = "http://www.bangjiat.com/";
+//    public static final String BASE_IP = "http://www.bangjiat.com/app/";
+//    public static final String UPLOAD_IMAGE_IP = "http://www.bangjiat.com/";
 
     public static final String TOKEN_NAME = "j4sc-bjt-token";
+
     public static String[] WEEK = {"周一", "周二", "周三",
             "周四", "周五", "周六", "周日"};
     public static int[] WEEK_INDEX = {1, 2, 3, 4, 5, 6, 7};
@@ -125,5 +129,25 @@ public class Constants {
         Calendar calendar = Calendar.getInstance();
         int dayIndex = calendar.get(Calendar.DAY_OF_WEEK);
         return dayIndex;
+    }
+
+    public static void showErrorDialog(Context context, String msg) {
+        new AlertDialog(context).builder().setMsg(msg).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
+    }
+
+    public static void showSuccessExitDialog(final Activity context, String msg) {
+        new AlertDialog(context).builder().setMsg(msg).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        context.finish();
+                    }
+                }).show();
     }
 }

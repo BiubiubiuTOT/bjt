@@ -176,7 +176,12 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".module.secretary.service.ui.BuildingAdminListActivity"></activity>
+        <activity android:name=".module.secretary.service.ui.BuildingAdminListActivity" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

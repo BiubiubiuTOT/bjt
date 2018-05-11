@@ -2,6 +2,7 @@ package com.bangjiat.bjt.api;
 
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
@@ -18,6 +19,8 @@ import com.bangjiat.bjt.module.me.feedback.beans.FeedBackInput;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
@@ -359,4 +362,55 @@ public interface ApiService {
      */
     @POST("auth/getBackPassword")
     Call<BaseResult<String>> updatePassword(@Body RecoveredPasswordInput input);
+
+    /**
+     * 查询个人车辆信息列表
+     */
+    @GET("api/carparkCar/select/CarparkCarList")
+    Call<BaseResult<List<CarBean>>> getCarList(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 新增车辆
+     */
+    @POST("api/carparkCar/save/CarparkCar")
+    Call<BaseResult> addCar(@Header(Constants.TOKEN_NAME) String token, @Body CarBean bean);
+
+    /**
+     * 支付宝支付信息
+     *
+     * @param token
+     * @param money
+     * @param name
+     * @return
+     */
+    @GET("")
+    Call<BaseResult<String>> getAliPayInfo(@Header(Constants.TOKEN_NAME) String token,
+                                           @Query("money") String money, @Query("name") String name);
+
+    /**
+     * 查询员工车辆信息列表
+     */
+    @GET("api/carparkApply/select/CarparkCarList")
+    Call<BaseResult<List<CarBean>>> getWorkersCarList(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 公司管理员提交停车申请
+     */
+    @POST("api/carparkApply/save/CarparkApply")
+    Call<BaseResult<String>> addParkApply(@Header(Constants.TOKEN_NAME) String token, @Body ParkApplyInput input);
+
+    /**
+     * 获取停车场列表(停车申请时调用)
+     */
+    @GET("api/carparkApply/select/CarparkSpacePage")
+    Call<BaseResult<String>> getParkSpace(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
+                                          @Query("size") int size, @Query("key") String key);
+
+    /**
+     * 根据ID查询公司信息
+     */
+    @GET("api/company/select/Company")
+    Call<BaseResult<CompanyDetailResult>> getCompanyDetail(@Header(Constants.TOKEN_NAME) String token,
+                                                           @Query("companyId") String companyId);
+
 }

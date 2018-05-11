@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.common.DesUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 
 import java.io.IOException;
@@ -134,13 +133,7 @@ public class ScanActivity extends BaseToolBarActivity {
             if (cp != null) {
                 cp.setFlash(false);
             }
-            String decrypt = null;
-            try {
-                decrypt = DesUtil.decrypt(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            QrManager.getInstance().getResultCallback().onScanSuccess(decrypt);
+            QrManager.getInstance().getResultCallback().onScanSuccess(result);
             finish();
         }
     };
@@ -213,8 +206,8 @@ public class ScanActivity extends BaseToolBarActivity {
                             public void run() {
                                 if (!TextUtils.isEmpty(qrcontent)) {
                                     try {
-                                        String decrypt = DesUtil.decrypt(qrcontent);
-                                        QrManager.getInstance().getResultCallback().onScanSuccess(decrypt);
+//                                        String decrypt = DesUtil.decrypt(qrcontent);
+                                        QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         QrManager.getInstance().getResultCallback().onScanSuccess(qrcontent);

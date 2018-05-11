@@ -12,14 +12,20 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.CompanyCodeActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
+import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
+import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
+import com.bangjiat.bjt.module.secretary.contact.view.ContactInfoActivity;
 import com.bangjiat.bjt.module.secretary.workers.adapter.AddWorkersAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
 
@@ -36,13 +42,14 @@ import cn.bertsir.zbar.QrManager;
 /**
  * 新增员工
  */
-public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUserContract.View {
+public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUserContract.View, SearchContactContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
     private AddWorkersAdapter mAdapter;
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
+    private SearchContactContract.Presenter searchPresenter;
     private int i;
 
     @Override
@@ -53,6 +60,7 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
 
     private void initData() {
         presenter = new CompanyUserPresenter(this);
+        searchPresenter = new SearchContactPresenter(this);
         ArrayList<WorkersResult.RecordsBean> lists = new ArrayList<>();
         lists.add(new WorkersResult.RecordsBean());
         mAdapter = new AddWorkersAdapter(lists);
@@ -113,7 +121,8 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
             @Override
             public void onScanSuccess(String result) {
                 try {
-
+                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
+                    searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                     Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
@@ -169,5 +178,19 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
             EventBus.getDefault().post("");
             finish();
         }
+    }
+
+    @Override
+    public void fail(String err) {
+        Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void success(SearchContactResult bean) {
+        Intent intent = new Intent(mContext, ContactInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", bean);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

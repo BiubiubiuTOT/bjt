@@ -9,76 +9,27 @@ import java.io.Serializable;
  */
 
 public class QrCodeDataUser implements Serializable {
-    private String userId;
-    private String nickname;
-    private String idNumber;
-    private String avatar;
-    private String username;
-    private int qrCodeType;
+    private String un;//手机号
+    private int type;
 
-    public QrCodeDataUser(String userId, String nickname, String username, String avatar, int qrCodeType) {
-        this.userId = userId;
-        this.nickname = nickname;
-        this.username = username;
-        this.avatar = avatar;
-        this.qrCodeType = qrCodeType;
+    public QrCodeDataUser(String un, int type) {
+        this.un = un;
+        this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "QrCodeDataUser{" +
-                "userId='" + userId + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", idNumber='" + idNumber + '\'' +
-                ", avatar='" + avatar + '\'' +
-                '}';
+    public String getUn() {
+        return un;
     }
 
-    public String getUserId() {
-        return userId;
+    public void setUn(String un) {
+        this.un = un;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public int getType() {
+        return type;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public int getQrCodeType() {
-        return qrCodeType;
-    }
-
-    public void setQrCodeType(int qrCodeType) {
-        this.qrCodeType = qrCodeType;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setType(int type) {
+        this.type = type;
     }
 }

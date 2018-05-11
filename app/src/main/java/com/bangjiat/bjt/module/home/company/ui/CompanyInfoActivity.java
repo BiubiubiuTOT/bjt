@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.IntoCompanyContract;
 import com.bangjiat.bjt.module.home.company.presenter.IntoCompanyPresenter;
@@ -34,9 +35,9 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
     TextView tv_address;
     @BindView(R.id.tv_trade)
     TextView tv_trade;
-    QrCodeDataCompany company;
     private Dialog dialog;
     private IntoCompanyContract.Presenter presenter;
+    private CompanyDetailResult company;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,12 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
         presenter = new IntoCompanyPresenter(this);
         String str = getIntent().getStringExtra("data");
         try {
-            company = new Gson().fromJson(str, QrCodeDataCompany.class);
-            tv_name.setText(company.getCompanyName());
+            QrCodeDataCompany company = new Gson().fromJson(str, QrCodeDataCompany.class);
+            if (company != null)
+                presenter.getCompanyDetail(DataUtil.getToken(mContext), company.getCid());
+            else {
+                Toast.makeText(mContext, "二维码识别失败", Toast.LENGTH_SHORT).show();
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
             Toast.makeText(mContext, "二维码识别失败", Toast.LENGTH_SHORT).show();
@@ -87,7 +92,7 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
     public void success() {
         CompanyUserBean bean = new CompanyUserBean();
         bean.setCompanyId(company.getCompanyId());
-        bean.setCompanyName(company.getCompanyName());
+        bean.setCompanyName(company.getName());
         bean.save();
         Toast.makeText(mContext, "加入公司成功", Toast.LENGTH_SHORT).show();
         finish();
@@ -99,6 +104,13 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
             showDia();
         } else
             Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void getCompanyDetailSuccess(CompanyDetailResult result) {
+        company = result;
+        tv_name.setText(result.getName());
 
     }
 
