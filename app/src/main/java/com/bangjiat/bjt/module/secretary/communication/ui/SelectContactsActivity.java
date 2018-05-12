@@ -1,6 +1,5 @@
-package com.bangjiat.bjt.module.secretary.contact.view;
+package com.bangjiat.bjt.module.secretary.communication.ui;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,22 +26,19 @@ import com.bangjiat.bjt.module.secretary.contact.presenter.ContactPresenter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactAdapter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactsUtils;
 import com.bangjiat.bjt.module.secretary.contact.util.SideLetterBar;
+import com.bangjiat.bjt.module.secretary.contact.view.ContactDetailActivity;
 import com.orhanobut.logger.Logger;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 
-/**
- *
- */
-
-public class ContactListActivity extends BaseToolBarActivity implements ContactContract.View {
+public class SelectContactsActivity extends BaseToolBarActivity implements ContactContract.View {
     private List<ContactBean> mContactList;
     private List<ContactBean> mSearchList;
     private ContactAdapter mContactAdapter;
@@ -59,8 +55,8 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
     TextView mOverlay;
     @BindView(R.id.pb)
     ProgressBar mProgressBar;
-    private Dialog dialog;
     private ContactContract.Presenter presenter;
+    private TextView tv_other;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,48 +68,55 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_contact_list;
+        return R.layout.activity_select_contacts;
     }
 
     @Override
     protected void initToolbar(Toolbar toolbar) {
         toolbar.setTitle("");
-        toolbar.setNavigationIcon(R.mipmap.back_black);
 
-        ImageView image = toolbar.findViewById(R.id.toolbar_image);
         TextView tv_message = toolbar.findViewById(R.id.toolbar_title);
-        tv_message.setText("通讯录");
-        tv_message.setTextColor(getResources().getColor(R.color.black));
-        image.setImageResource(R.mipmap.add_contact);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        TextView tv_cancel = toolbar.findViewById(R.id.toolbar_cancel);
+        tv_other = toolbar.findViewById(R.id.toolbar_other);
+        tv_message.setText("添加联系人");
+        tv_cancel.setText("关闭");
+        tv_cancel.setTextColor(getResources().getColor(R.color.mine_bg));
+        tv_other.setText("完成");
+        tv_other.setVisibility(View.VISIBLE);
+        tv_other.setTextColor(getResources().getColor(R.color.mine_bg));
 
-        image.setOnClickListener(new View.OnClickListener() {
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(mContext, AddContactActivity.class));
+                finish();
             }
         });
+        tv_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<ContactBean> selectItems = getSelectItems();
+                Logger.d("size: " + selectItems.size() + " " + selectItems.toString());
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", (Serializable) selectItems);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        tv_message.setTextColor(getResources().getColor(R.color.black));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+
     }
 
     private void initView() {
         // 注册订阅者
-        EventBus.getDefault().register(this);
         mSideLetterBar.setOverlay(mOverlay);
         presenter = new ContactPresenter(this);
         presenter.getAllContacts(DataUtil.getToken(mContext), null);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(String s) {
-        presenter.getAllContacts(DataUtil.getToken(mContext), null);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 注销订阅者
-        EventBus.getDefault().unregister(this);
-    }
 
     private void initClick() {
         mSideLetterBar.setOnLetterChangedListener(new SideLetterBar.OnLetterChangedListener() {
@@ -224,19 +227,52 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
         mSearchList = new ArrayList<>();
         mContactList = new ArrayList<>();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mContactAdapter = new ContactAdapter(this, mContactList, 0);
+        mContactAdapter = new ContactAdapter(this, mContactList, 1);
         mRecyclerView.setAdapter(mContactAdapter);
+        mContactAdapter.setOnCheckChangedListener(new ContactAdapter.OnCheckListener() {
+            @Override
+            public void onCheckChanged() {
+                int select = getSelectCount();
+                if (select == 0) {
+                    tv_other.setText("完成");
+                } else {
+                    tv_other.setText("完成（" + select + "）");
+                }
+            }
+        });
+    }
+
+    private int getSelectCount() {
+        int select = 0;
+        HashMap<Integer, Boolean> map = mContactAdapter.getMap();
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            if (entry.getValue())
+                select++;
+        }
+        Logger.d("map: " + map.size() + " select: " + select);
+        return select;
+    }
+
+    private List<ContactBean> getSelectItems() {
+        List<ContactBean> contactBeans = new ArrayList<>();
+        List<ContactBean> beanList = mContactAdapter.getmContactList();
+        HashMap<Integer, Boolean> map = mContactAdapter.getMap();
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            if (entry.getValue()) {
+                contactBeans.add(beanList.get(entry.getKey()));
+            }
+        }
+        return contactBeans;
     }
 
     @Override
     public void showDialog() {
-//        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
     }
 
     @Override
     public void dismissDialog() {
-//        if (dialog != null)
-//            dialog.dismiss();
     }
 
     @Override
@@ -246,7 +282,7 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
 
     @Override
     public void success(List<ContactBean> bean) {
-        Logger.d(bean.size());
+        Logger.d(bean.toString());
         mContactList = ContactsUtils.getContactList(bean);
         handler.sendEmptyMessage(0);
     }

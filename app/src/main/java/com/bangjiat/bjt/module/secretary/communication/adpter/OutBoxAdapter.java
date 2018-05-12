@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.communication.adpter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.secretary.communication.beans.OutBoxBean;
+import com.bangjiat.bjt.common.TimeUtils;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
+import com.bangjiat.bjt.module.secretary.contact.util.GlideCircleTransform;
+import com.bumptech.glide.Glide;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 
 import java.util.HashMap;
@@ -24,11 +29,14 @@ import java.util.Set;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder> {
-    private List<OutBoxBean> lists;
+    private final Context context;
+    private List<EmailBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private OnCheckListener onCheckListener;
     private final HashMap<Integer, Boolean> map;
     private boolean isShowCheck;
+    private int type;
+    private UserInfo info;
 
     private onSwipeListener mOnSwipeListener;
 
@@ -52,12 +60,15 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
         return map;
     }
 
-    public List<OutBoxBean> getLists() {
+    public List<EmailBean> getLists() {
         return lists;
     }
 
-    public OutBoxAdapter(List<OutBoxBean> lists) {
+    public OutBoxAdapter(List<EmailBean> lists, Context context, int type) {
         this.lists = lists;
+        info = UserInfo.first(UserInfo.class);
+        this.context = context;
+        this.type = type;
 
         map = new HashMap<>();
         resetMap();
@@ -75,8 +86,22 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         viewHolder.tv_mark.setVisibility(View.VISIBLE);
         viewHolder.tv_delete.setText("删除");
-        final OutBoxBean bean = lists.get(position);
-        viewHolder.tv_name.setText(bean.getName());
+        final EmailBean bean = lists.get(position);
+        if (type == 0) {
+            viewHolder.tv_name.setText(info.getNickname());
+            if (bean.getEmailStatus() == 0) {
+                viewHolder.view_unRead.setVisibility(View.VISIBLE);
+            }
+        } else {
+            viewHolder.view_unRead.setVisibility(View.GONE);
+            viewHolder.tv_name.setText(bean.getReceiver());
+        }
+        viewHolder.tv_time.setText(TimeUtils.convertTimeToFormat(bean.getSendDate()));
+        viewHolder.tv_message.setText(bean.getTitle());
+        viewHolder.tv_detail.setText(bean.getContent());
+        String receiverAvatar = bean.getReceiverAvatar();
+        Glide.with(context).load(receiverAvatar).centerCrop().
+                transform(new GlideCircleTransform(context)).placeholder(R.mipmap.my_head).into(viewHolder.iv_head);
         ((SwipeMenuLayout) viewHolder.itemView).setSwipeEnable(!isShowCheck);
         viewHolder.iv_right.setVisibility(isShowCheck ? View.GONE : View.VISIBLE);
 
@@ -172,9 +197,10 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_message, tv_detail, tv_time, tv_delete, tv_mark;
-        ImageView iv_right;
+        ImageView iv_right, iv_head;
         CheckBox checkBox;
         LinearLayout ll_main;
+        View view_unRead;
 
         public ViewHolder(View view) {
             super(view);
@@ -185,8 +211,10 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
             tv_detail = view.findViewById(R.id.tv_detail);
             tv_time = view.findViewById(R.id.tv_time);
             iv_right = view.findViewById(R.id.iv_right);
+            iv_head = view.findViewById(R.id.iv_head);
             checkBox = view.findViewById(R.id.checkbox);
             ll_main = view.findViewById(R.id.ll_main);
+            view_unRead = view.findViewById(R.id.view_unRead);
         }
     }
 

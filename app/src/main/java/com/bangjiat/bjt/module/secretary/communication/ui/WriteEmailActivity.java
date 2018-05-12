@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.communication.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -17,14 +18,24 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.GlideImageLoader;
 import com.bangjiat.bjt.common.PickActivity;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
+import com.bangjiat.bjt.module.main.contract.UploadImageContract;
+import com.bangjiat.bjt.module.main.presenter.UploadImagePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
+import com.bangjiat.bjt.module.secretary.communication.contract.SendEmailContract;
+import com.bangjiat.bjt.module.secretary.communication.presenter.SendEmailPresenter;
+import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
+import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -36,11 +47,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class WriteEmailActivity extends BaseToolBarActivity {
+public class WriteEmailActivity extends BaseToolBarActivity implements UploadImageContract.View, SendEmailContract.View {
+    private static final int SELECT_CONTACTS = 2;
     @BindView(R.id.ll_accessory)
     LinearLayout ll_accessory;
-    @BindView(R.id.et_input)
-    EditText et_input;
+    @BindView(R.id.et_content)
+    EditText et_content;
+    @BindView(R.id.tv_receive_name)
+    TextView tv_receive_name;
+    @BindView(R.id.tv_send_name)
+    TextView tv_send_name;
+    @BindView(R.id.et_title)
+    TextView et_title;
     @BindView(R.id.tv_select_accessory)
     TextView tv_select_accessory;
     @BindView(R.id.scrollView)
@@ -54,6 +72,16 @@ public class WriteEmailActivity extends BaseToolBarActivity {
     private GalleryConfig galleryConfig;
     private List<String> path;
     private List<WcbBean> mList1;
+    private UploadImageContract.Presenter upImgPresenter;
+    private SendEmailContract.Presenter presenter;
+    private List<ContactBean> selectList;
+    private Dialog dialog;
+    private int size;
+    private String receiver;
+    private String receiverId;
+    private String strImage = "";
+    private UserInfo info;
+    private List<WcbBean> mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +91,12 @@ public class WriteEmailActivity extends BaseToolBarActivity {
     }
 
     private void initView() {
+        mList = new ArrayList<>();
+        mList.add(new WcbBean("删除联系人", getResources().getColor(R.color.red)));
+        info = UserInfo.first(UserInfo.class);
+        tv_send_name.setText(info.getNickname());
+        upImgPresenter = new UploadImagePresenter(this);
+        presenter = new SendEmailPresenter(this);
         path = new ArrayList<>();
         mList1 = new ArrayList<>();
         mList1.add(new WcbBean("查看原图"));
@@ -77,9 +111,9 @@ public class WriteEmailActivity extends BaseToolBarActivity {
                 if (mHeight == lastHight) return;
 
                 if (mHeight > lastHight) {
-                    toTop();
+//                    toTop();
                 } else {
-                    toBottom();
+//                    toBottom();
                     if (isClick) {
                         dismissView(tv_select_accessory);
                     }
@@ -134,6 +168,7 @@ public class WriteEmailActivity extends BaseToolBarActivity {
             tv_select_accessory.setText(photoList.size() + "");
             path.clear();
             path.addAll(photoList);
+            size = path.size();
         }
 
         @Override
@@ -234,6 +269,37 @@ public class WriteEmailActivity extends BaseToolBarActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.iv_add_contacts)
+    public void clickAddContacts(View view) {
+        startActivityForResult(new Intent(mContext, SelectContactsActivity.class), SELECT_CONTACTS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_CONTACTS) {
+                selectList = (List<ContactBean>) data.getSerializableExtra("data");
+                if (selectList != null && selectList.size() > 0) {
+                    receiver = getReceiverName(selectList);
+                    tv_receive_name.setText(receiver);
+                }
+            }
+        }
+    }
+
+    private String getReceiverName(List<ContactBean> selectList) {
+        String string = "";
+        receiverId = "";
+        for (ContactBean bean : selectList) {
+            string += bean.getSlaveNickname() + ",";
+            receiverId += bean.getSlaveUserId() + ",";
+        }
+        receiverId = receiverId.substring(0, receiverId.length() - 1);
+        string = string.substring(0, string.length() - 1);
+        return string;
+    }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_write_email;
@@ -262,14 +328,98 @@ public class WriteEmailActivity extends BaseToolBarActivity {
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                showCancelSendDialog();
             }
         });
         tv_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (path.size() > 0) {
+                    showDialog();
+                    for (String p : path) {
+                        upImgPresenter.uploadImage(p);
+                    }
+                } else sendEmail();
             }
         });
+    }
+
+    private void sendEmail() {
+        EmailBean bean = new EmailBean();
+        bean.setContent(et_content.getText().toString());
+        bean.setTitle(et_title.getText().toString());
+        bean.setReceiver(receiver);
+        bean.setSender(info.getNickname());
+        bean.setSenderId(info.getUserId());
+        bean.setSendDate(System.currentTimeMillis());
+        bean.setReceiverId(receiverId);
+        bean.setResource(strImage);
+
+        Logger.d(bean.toString());
+        presenter.sendEmail(DataUtil.getToken(mContext), bean);
+    }
+
+    private void showCancelSendDialog() {
+        final WCBMenu wcbMenu = new WCBMenu(mContext);
+        wcbMenu.setTitle("确定要退出登录吗？")
+                .setCancel("取消")
+                .setStringList(mList)
+                .setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        wcbMenu.dismiss();
+                        finish();
+                    }
+                })
+                .show();
+
+    }
+
+    @Override
+    public void success(String data) {
+        size--;
+        if (size > 0) strImage += data + "|";
+        else strImage += data;
+
+        if (size == 0) {
+            dismissDialog();
+            Logger.d(strImage);
+            sendEmail();
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null) dialog.dismiss();
+    }
+
+    @Override
+    public void success() {
+        showSuccessExitDialog();
+    }
+
+    public void showSuccessExitDialog() {
+        new AlertDialog(mContext).builder().setMsg("邮件发送成功").
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).show();
+    }
+
+    @Override
+    public void fail(String err) {
+        dismissDialog();
+        Logger.e(err);
     }
 }

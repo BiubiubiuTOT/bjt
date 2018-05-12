@@ -21,6 +21,11 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bangjiat.bjt.module.park.pay.beans.PayBean;
+import com.bangjiat.bjt.module.park.pay.beans.PayInput;
+import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
+import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
+import com.bangjiat.bjt.module.secretary.communication.beans.EmailResult;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
@@ -388,6 +393,12 @@ public interface ApiService {
                                            @Query("money") String money, @Query("name") String name);
 
     /**
+     * 微信支付信息
+     */
+    @GET("")
+    Call<BaseResult<String>> getWXPayInfo(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
      * 查询员工车辆信息列表
      */
     @GET("api/carparkApply/select/CarparkCarList")
@@ -413,4 +424,77 @@ public interface ApiService {
     Call<BaseResult<CompanyDetailResult>> getCompanyDetail(@Header(Constants.TOKEN_NAME) String token,
                                                            @Query("companyId") String companyId);
 
+    /**
+     * 用户发邮件
+     */
+    @POST("api/emailBox/save/SendEmailBox")
+    Call<BaseResult<String>> sendEmail(@Header(Constants.TOKEN_NAME) String token, @Body EmailBean bean);
+
+    /**
+     * 搜索发件箱邮件列表
+     */
+    @GET("api/emailBox/select/PageEmailBox")
+    Call<BaseResult<EmailResult>> getOutBoxList(@Header(Constants.TOKEN_NAME) String token,
+                                                @Query("key") String key, @Query("page") int page, @Query("size") int size);
+
+    /**
+     * 搜索收件箱邮件列表
+     */
+    @GET("api/emailBox/select/PageEmailBoxRecord")
+    Call<BaseResult<EmailResult>> getInBoxList(@Header(Constants.TOKEN_NAME) String token,
+                                               @Query("key") String key, @Query("page") int page, @Query("size") int size);
+
+    /**
+     * 删除发件箱邮件
+     */
+    @DELETE("api/emailBox/delete/EmailBox")
+    Call<BaseResult<String>> deleteOutBox(@Header(Constants.TOKEN_NAME) String token, @Query("list") String[] strings);
+
+    /**
+     * 删除收件箱邮件
+     */
+    @DELETE("api/emailBox/delete/EmailBoxRecord")
+    Call<BaseResult<String>> deleteInbox(@Header(Constants.TOKEN_NAME) String token, @Query("list") String[] strings);
+
+    /**
+     * 查看发件箱邮件详情
+     */
+    @GET("api/emailBox/select/EmailBox")
+    Call<BaseResult<EmailBean>> getOutBoxDetail(@Header(Constants.TOKEN_NAME) String token, @Query("emailId") String id);
+
+    /**
+     * 查看收件箱邮件详情
+     */
+    @GET("api/emailBox/select/EmailBoxRecord")
+    Call<BaseResult<EmailBean>> getInBoxDetail(@Header(Constants.TOKEN_NAME) String token, @Query("emailId") String id);
+
+    /**
+     * 标记邮件
+     */
+    @PUT("api/emailBox/update/EmailBoxRecordList")
+    Call<BaseResult<String>> markEmails(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+
+    /**
+     * 获取收件箱未读邮件数量
+     */
+    @GET("api/emailBox/select/EmailBoxRecordCount")
+    Call<BaseResult<String>> getUnReadCount(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 停车缴费信息添加
+     */
+    @POST("api/carparkPayment/save/CarparkPayment")
+    Call<BaseResult<String>> addPayInfo(@Header(Constants.TOKEN_NAME) String token, @Body PayBean bean);
+
+    /**
+     * 停车缴费支付接口
+     */
+    @POST("api/carparkPayment/pay/CarparkPayment")
+    Call<BaseResult<String>> pay(@Header(Constants.TOKEN_NAME) String token, @Body PayInput input);
+
+    /**
+     * 获取停车缴费列表
+     */
+    @GET("api/carparkApplyDetail/select/ApplyDetailList")
+    Call<BaseResult<PayListResult>> getPayList(@Header(Constants.TOKEN_NAME) String token);
 }

@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.secretary.contact.view;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.secretary.communication.ui.WriteEmailActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.contract.UpdateContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.UpdateContactPresenter;
@@ -66,6 +68,7 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     }
 
     private void initView() {
+
         presenter = new UpdateContactPresenter(this);
         mList = new ArrayList<>();
         mList.add(new WcbBean("删除联系人", getResources().getColor(R.color.red)));
@@ -187,6 +190,11 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
         else dialog.show();
     }
 
+    @OnClick(R.id.tv_send)
+    public void clickSend(View view) {
+        Intent intent = new Intent(mContext, WriteEmailActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void showErr(String err) {

@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.park.pay.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,18 +10,25 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
-import com.bangjiat.bjt.module.park.apply.beans.ApplyHistoryBean;
 import com.bangjiat.bjt.module.park.pay.adapter.PayAdapter;
+import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
+import com.bangjiat.bjt.module.park.pay.contract.PayContract;
+import com.bangjiat.bjt.module.park.pay.presenter.PayPresenter;
+import com.dou361.dialogui.DialogUIUtils;
+import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class PayMainActivity extends BaseToolBarActivity {
+public class PayMainActivity extends BaseToolBarActivity implements PayContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    private Dialog dialog;
+    private PayContract.Presenter presenter;
+    List<PayListResult.DataBean> beans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +38,13 @@ public class PayMainActivity extends BaseToolBarActivity {
     }
 
     private void initData() {
-        List<ApplyHistoryBean> beans = new ArrayList<>();
-        beans.add(new ApplyHistoryBean());
-        recyclerView.setHasFixedSize(true);
+        presenter = new PayPresenter(this);
+        presenter.getPayList(DataUtil.getToken(mContext));
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setHasFixedSize(true);
+    }
+
+    private void setAdapter(List<PayListResult.DataBean> beans) {
         PayAdapter mAdapter = new PayAdapter(beans, mContext);
         recyclerView.setAdapter(mAdapter);
 
@@ -70,5 +81,44 @@ public class PayMainActivity extends BaseToolBarActivity {
                 startActivity(new Intent(mContext, PayHistoryActivity.class));
             }
         });
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void getPayListSuccess(PayListResult str) {
+        if (str != null) {
+            beans = str.getData();
+            if (beans != null)
+                setAdapter(beans);
+        }
+    }
+
+    @Override
+    public void paySuccess(String str) {
+
+    }
+
+    @Override
+    public void addPayInfoSuccess(String err) {
+
+    }
+
+    @Override
+    public void fail(String err) {
+        Logger.e(err);
     }
 }

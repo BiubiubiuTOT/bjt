@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.park.pay.ui;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -9,14 +10,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.park.pay.beans.PayBean;
+import com.bangjiat.bjt.module.park.pay.beans.PayInput;
+import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
+import com.bangjiat.bjt.module.park.pay.contract.PayContract;
+import com.bangjiat.bjt.module.park.pay.presenter.PayPresenter;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.dou361.dialogui.DialogUIUtils;
+import com.orhanobut.logger.Logger;
 import com.xgr.easypay.EasyPay;
 import com.xgr.easypay.alipay.AliPay;
 import com.xgr.easypay.alipay.AlipayInfoImpli;
@@ -33,7 +42,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class PayActivity extends BaseWhiteToolBarActivity {
+public class PayActivity extends BaseWhiteToolBarActivity implements PayContract.View {
     @BindView(R.id.tv_parking)
     TextView tv_parking;
     @BindView(R.id.tv_car_number)
@@ -61,6 +70,12 @@ public class PayActivity extends BaseWhiteToolBarActivity {
     private List<String> months;
     private int month = -1;
     private int payType;
+    private Dialog dialog;
+    private PayContract.Presenter presenter;
+    private long beginTime;
+    private long endTime;
+    private String token;
+    private String totalFee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +85,8 @@ public class PayActivity extends BaseWhiteToolBarActivity {
     }
 
     private void initView() {
+        token = DataUtil.getToken(mContext);
+        presenter = new PayPresenter(this);
         initMonths();
         options1Items = new ArrayList<>();
         options1Items.add("支付宝");
@@ -112,7 +129,7 @@ public class PayActivity extends BaseWhiteToolBarActivity {
         pvMonths = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int i, int i1, int i2, View view) {
-                PayActivity.this.month = i;
+                PayActivity.this.month = i + 1;
                 String s = months.get(i);
                 et_total_month.setText(s);
                 float n = Float.parseFloat(tv_money_month.getText().toString());
@@ -132,11 +149,11 @@ public class PayActivity extends BaseWhiteToolBarActivity {
             @Override
             public void onTimeSelect(Date date, View v) {
                 PayActivity.this.date = date;
-                long time = date.getTime();
+                beginTime = date.getTime();
 
                 setEnd();
 
-                et_start_time.setText(TimeUtils.changeToYMD(time));
+                et_start_time.setText(TimeUtils.changeToYMD(beginTime));
 
             }
         }).setSubmitColor(Color.BLACK)
@@ -148,9 +165,11 @@ public class PayActivity extends BaseWhiteToolBarActivity {
         if (month != -1 && date != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            calendar.add(calendar.MONTH, month + 1);
+            calendar.add(calendar.MONTH, month);
 
-            et_end_time.setText(TimeUtils.changeToYMD(calendar.getTime().getTime()));
+            endTime = calendar.getTime().getTime();
+
+            et_end_time.setText(TimeUtils.changeToYMD(endTime));
         }
     }
 
@@ -174,16 +193,38 @@ public class PayActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.btn_done)
     public void clickDone(View view) {
-        if (payType == 0) {
-            alipay();
-        } else wxpay();
+        if (month == -1) {
+            fail("请选择缴纳月数");
+            return;
+        }
+        if (date == null) {
+            fail("请选择生效日期");
+            return;
+        }
+        PayBean bean = new PayBean();
+        totalFee = et_total_money.getText().toString();
+        bean.setTotalFee(totalFee);
+        bean.setPayWay(payType);
+        bean.setBeginTime(beginTime);
+        bean.setEndTime(endTime);
+        bean.setMonths(month);
+        bean.setMonthFee(tv_money_month.getText().toString());
+        bean.setCarId(1);//车辆编号
+        bean.setSpaceId(1);//停车场编号
+        bean.setSpaceName("");//停车场名称
+        bean.setPlateNumber("");//车牌号
+
+        presenter.addPayInfo(token, bean);
     }
 
-    private void alipay() {
+    /**
+     * 支付宝支付
+     */
+    private void alipay(String s) {
         AliPay aliPay = new AliPay();
         //构造支付宝订单实体。一般都是由服务端直接返回。
         AlipayInfoImpli alipayInfoImpli = new AlipayInfoImpli();
-        alipayInfoImpli.setOrderInfo(et_msg.getText().toString());
+        alipayInfoImpli.setOrderInfo(s);
         //策略场景类调起支付方法开始支付，以及接收回调。
         EasyPay.pay(aliPay, this, alipayInfoImpli, new IPayCallback() {
             @Override
@@ -207,9 +248,12 @@ public class PayActivity extends BaseWhiteToolBarActivity {
         Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 微信支付
+     */
     private void wxpay() {
         //实例化微信支付策略
-        String wxAppId = "";
+        String wxAppId = "wx432ba0b2e3addde9";
         WXPay wxPay = WXPay.getInstance(this, wxAppId);
         //构造微信订单实体。一般都是由服务端直接返回。
         WXPayInfoImpli wxPayInfoImpli = new WXPayInfoImpli();
@@ -219,7 +263,7 @@ public class PayActivity extends BaseWhiteToolBarActivity {
         wxPayInfoImpli.setPartnerid("");
         wxPayInfoImpli.setAppid("");
         wxPayInfoImpli.setNonceStr("");
-        wxPayInfoImpli.setPackageValue("");
+        wxPayInfoImpli.setPackageValue("Sign=WXPay");
         //策略场景类调起支付方法开始支付，以及接收回调。
         EasyPay.pay(wxPay, this, wxPayInfoImpli, new IPayCallback() {
             @Override
@@ -248,5 +292,43 @@ public class PayActivity extends BaseWhiteToolBarActivity {
     @Override
     protected String getTitleStr() {
         return "停车缴费";
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void getPayListSuccess(PayListResult str) {
+
+    }
+
+    @Override
+    public void paySuccess(String str) {
+        if (payType == 1) {
+            alipay(str);
+        } else wxpay();
+    }
+
+    @Override
+    public void addPayInfoSuccess(String err) {
+        PayInput input = new PayInput(err, totalFee);
+        presenter.pay(token, input);
+    }
+
+    @Override
+    public void fail(String err) {
+        Logger.e(err);
     }
 }

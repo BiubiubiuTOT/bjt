@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,9 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     EditText et_duty;
     @BindView(R.id.et_department)
     EditText et_department;
+    @BindView(R.id.ll_delete)
+    RelativeLayout rl_delete;
+
     WorkersResult.RecordsBean bean;
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
@@ -53,7 +57,12 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
         token = DataUtil.getToken(mContext);
         presenter = new CompanyUserPresenter(this);
         bean = (WorkersResult.RecordsBean) getIntent().getSerializableExtra("data");
+        UserInfo userInfo = UserInfo.first(UserInfo.class);
         if (bean != null) {
+            if (!userInfo.getUserId().equals(bean.getUserId())) {
+                rl_delete.setVisibility(View.VISIBLE);
+            }
+
             et_name.setText(bean.getRealname());
             et_card.setText(bean.getIdNumber());
             et_phone.setText(bean.getPhone());
@@ -203,21 +212,18 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     }
 
     private void showDeleteDialog() {
-        UserInfo userInfo = UserInfo.first(UserInfo.class);
-        if (!userInfo.getUserId().equals(bean.getUserId())) {
-            new AlertDialog(mContext).builder().setMsg("确认删除吗?").
-                    setPositiveButton("确定", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            presenter.deleteCompanyUser(token, bean.getUserId());
-                        }
-                    }).setNegativeButton("取消", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        new AlertDialog(mContext).builder().setMsg("确认删除吗?").
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        presenter.deleteCompanyUser(token, bean.getUserId());
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                }
-            }).show();
-        }
+            }
+        }).show();
     }
 
     @Override

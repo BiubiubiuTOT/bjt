@@ -14,11 +14,9 @@
         android:layout_marginTop="140dp"
         android:src="@mipmap/splash_icon" />
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="让一切更简单"
-        android:textColor="@color/white"
-        android:textSize="17sp" />
+        android:src="@mipmap/login_easy" />
 </LinearLayout>

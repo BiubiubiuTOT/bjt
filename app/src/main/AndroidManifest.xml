@@ -103,8 +103,8 @@
         <activity android:name=".module.secretary.workers.ui.AddWorkersActivity" />
         <activity android:name=".module.secretary.workers.ui.UpdateWorkerActivity" />
         <activity android:name=".module.secretary.communication.ui.MainActivity" />
-        <activity android:name=".module.secretary.communication.ui.OutBoxActivity" />
-        <activity android:name=".module.secretary.communication.ui.OutBoxDetailActivity" />
+        <activity android:name=".module.secretary.communication.ui.BoxActivity" />
+        <activity android:name=".module.secretary.communication.ui.BoxDetailActivity" />
         <activity android:name=".module.secretary.contact.view.ContactListActivity" />
         <activity
             android:name=".module.secretary.contact.view.ContactDetailActivity"
@@ -182,6 +182,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".module.secretary.communication.ui.SelectContactsActivity"></activity>
     </application>
 
 </manifest>

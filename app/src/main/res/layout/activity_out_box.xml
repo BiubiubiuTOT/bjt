@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bjt.module.secretary.communication.ui.OutBoxActivity">
+    tools:context="com.bangjiat.bjt.module.secretary.communication.ui.BoxActivity">
 
     <include layout="@layout/toolbar_5" />
 
@@ -36,10 +36,12 @@
                 android:src="@mipmap/search" />
 
             <EditText
+                android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="@string/search"
+                android:imeOptions="actionSearch"
                 android:textSize="15sp" />
         </LinearLayout>
 

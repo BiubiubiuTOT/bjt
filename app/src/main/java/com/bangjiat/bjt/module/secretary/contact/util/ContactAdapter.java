@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,14 +27,35 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     private Context context;
     private List<ContactBean> mContactList;
+    private int type;
+    private final HashMap<Integer, Boolean> map;
+    private OnCheckListener onCheckListener;
 
-    public ContactAdapter(Context context, List<ContactBean> list) {
+    public ContactAdapter(Context context, List<ContactBean> list, int type) {
         this.context = context;
+        this.type = type;
         this.mContactList = list;
+
+        map = new HashMap<>();
+        resetMap(list.size());
+    }
+
+    private void resetMap(int size) {
+        for (int i = 0; i < size; i++) {
+            map.put(i, false);
+        }
+    }
+
+    public HashMap<Integer, Boolean> getMap() {
+        return map;
     }
 
     public List<ContactBean> getmContactList() {
         return mContactList;
+    }
+
+    public void setOnCheckChangedListener(OnCheckListener listener) {
+        onCheckListener = listener;
     }
 
     @Override
@@ -43,10 +66,23 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        holder.checkbox.setVisibility(type == 1 ? View.VISIBLE : View.GONE);
+
         ContactBean contactInfo = mContactList.get(position);
         holder.name.setText(contactInfo.getSlaveNickname());
         holder.phone.setText(contactInfo.getSlaveUsername());
+
+        holder.checkbox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                map.put(holder.getAdapterPosition(), !map.get(holder.getAdapterPosition()));
+                notifyDataSetChanged();
+
+                onCheckListener.onCheckChanged();
+            }
+        });
 
         //判断是否显示索引字母
         String currentLetter = contactInfo.getLetter();
@@ -64,7 +100,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
                 .load(contactInfo.getAvatar())
                 .transform(new GlideCircleTransform(context))
                 .placeholder(R.mipmap.my_head)
-                .error(R.mipmap.my_head)
                 .into(holder.iv);
 
         holder.itemView.setTag(position);
@@ -77,6 +112,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     public void setContactList(List<ContactBean> contactList) {
         mContactList = contactList;
+        resetMap(contactList.size());
         notifyDataSetChanged();
     }
 
@@ -101,6 +137,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         private ImageView iv;
         private TextView name;
         private TextView phone;
+        private CheckBox checkbox;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -109,11 +146,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             iv = itemView.findViewById(R.id.iv);
             name = itemView.findViewById(R.id.name);
             phone = itemView.findViewById(R.id.phone);
+            checkbox = itemView.findViewById(R.id.checkbox);
         }
     }
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    public interface OnCheckListener {
+        void onCheckChanged();
     }
 
     private OnItemClickListener mOnItemClickListener;

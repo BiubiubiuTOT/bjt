@@ -110,4 +110,20 @@ public class ContactBean implements Serializable {
     public void setLetter(String letter) {
         this.letter = letter;
     }
+
+    @Override
+    public String toString() {
+        return "ContactBean{" +
+                "letter='" + letter + '\'' +
+                ", addressListId='" + addressListId + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", ctime='" + ctime + '\'' +
+                ", remark='" + remark + '\'' +
+                ", slaveNickname='" + slaveNickname + '\'' +
+                ", slaveUserId='" + slaveUserId + '\'' +
+                ", slaveUsername='" + slaveUsername + '\'' +
+                ", status='" + status + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

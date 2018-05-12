@@ -39,6 +39,6 @@ public class PayDetailActivity extends BaseWhiteToolBarActivity {
 
     @Override
     protected String getTitleStr() {
-        return "详细详细";
+        return "详细信息";
     }
 }

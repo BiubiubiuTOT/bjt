@@ -47,12 +47,19 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <View
+                    android:id="@+id/view_unRead"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/unread_bg"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="老陈"
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
@@ -61,7 +68,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="昨天 09:04"
                     android:textColor="@color/personal_message"
                     android:textSize="10sp" />
 
@@ -80,7 +86,6 @@
                 android:id="@+id/tv_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="帮家团APP思维导图"
                 android:textColor="@color/outbox_title"
                 android:textSize="12sp" />
 
@@ -91,7 +96,6 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:maxLength="22"
-                android:text="图片在附件里，已经发给你了，图片在附件里，已..."
                 android:textColor="@color/register_hint"
                 android:textSize="12sp" />
 

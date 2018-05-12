@@ -1,24 +1,33 @@
 package com.bangjiat.bjt.module.secretary.communication.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.communication.adpter.OutBoxAdapter;
-import com.bangjiat.bjt.module.secretary.communication.beans.OutBoxBean;
+import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
+import com.bangjiat.bjt.module.secretary.communication.beans.EmailResult;
+import com.bangjiat.bjt.module.secretary.communication.contract.BoxContract;
+import com.bangjiat.bjt.module.secretary.communication.contract.DealBoxContract;
+import com.bangjiat.bjt.module.secretary.communication.presenter.BoxPresenter;
+import com.bangjiat.bjt.module.secretary.communication.presenter.DealBoxPresenter;
+import com.dou361.dialogui.DialogUIUtils;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +39,8 @@ import butterknife.OnClick;
 /**
  * 发件箱
  */
-public class OutBoxActivity extends BaseToolBarActivity {
+public class BoxActivity extends BaseToolBarActivity implements BoxContract.View, DealBoxContract.View {
+    public static final int WRITE_EMAIL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.rl)
@@ -41,13 +51,21 @@ public class OutBoxActivity extends BaseToolBarActivity {
     TextView tv_mark;
     @BindView(R.id.tv_edit)
     TextView tv_edit;
+    @BindView(R.id.et_search)
+    EditText et_search;
 
     private TextView tv_select;
     private TextView tv_done;
     private ImageView image;
     private OutBoxAdapter mAdapter;
     private Toolbar toolbar;
-    private List<OutBoxBean> boxBeans;
+    private List<EmailBean> boxBeans;
+    private Dialog dialog;
+    private BoxContract.Presenter presenter;
+    private DealBoxContract.Presenter dealPresenter;
+    private String token;
+    private int type;
+    private TextView tv_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +75,32 @@ public class OutBoxActivity extends BaseToolBarActivity {
     }
 
     private void initData() {
-        boxBeans = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            boxBeans.add(new OutBoxBean("老陈" + i));
+        presenter = new BoxPresenter(this);
+        dealPresenter = new DealBoxPresenter(this);
+        token = DataUtil.getToken(mContext);
+
+        type = getIntent().getIntExtra("type", 1);
+        if (type == 1) {
+            tv_title.setText("已发送");
+            presenter.getOutBoxList(token, "", 1, 10);
+        } else {
+            tv_title.setText("收件箱");
+            presenter.getInBoxList(token, "", 1, 10);
         }
 
+        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                presenter.getOutBoxList(token, et_search.getText().toString(), 1, 10);
+                return true;
+            }
+        });
+    }
+
+    private void setAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
-        mAdapter = new OutBoxAdapter(boxBeans);
+        mAdapter = new OutBoxAdapter(boxBeans, mContext, type);
 
         recyclerView.setAdapter(mAdapter);
 
@@ -121,8 +157,19 @@ public class OutBoxActivity extends BaseToolBarActivity {
 
         mAdapter.setOnItemClickListener(new OutBoxAdapter.OnRecyclerViewItemClickListener() {
             @Override
-            public void onItemClick( int position) {
-                startActivity(new Intent(mContext, OutBoxDetailActivity.class));
+            public void onItemClick(int position) {
+                Intent intent = new Intent(mContext, BoxDetailActivity.class);
+                Bundle extras = new Bundle();
+                EmailBean value = boxBeans.get(position);
+                extras.putSerializable("data", value);
+                extras.putInt("type", type);
+                intent.putExtras(extras);
+                startActivity(intent);
+
+                if (type == 0) {
+                    value.setEmailStatus(1);
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -146,6 +193,41 @@ public class OutBoxActivity extends BaseToolBarActivity {
 
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
+        if (getSelectCount() > 0) {
+            String[] strings = getString();
+            Logger.d(strings);
+            dealPresenter.deleteInBox(token, strings);
+        }
+    }
+
+    @OnClick(R.id.tv_mark)
+    public void clickMark(View view) {
+        if (getSelectCount() > 0) {
+            String[] strings = getString();
+            Logger.d(strings);
+            dealPresenter.markBox(token, strings);
+        }
+    }
+
+    private String[] getString() {
+        int size = getSelectCount();
+        int n = 0;
+        String[] strings = new String[size];
+        HashMap<Integer, Boolean> map = mAdapter.getMap();
+        Logger.d("map size: " + map.size() + " list size:" + boxBeans.size());
+        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
+        for (Map.Entry<Integer, Boolean> entry : entries) {
+            Boolean value = entry.getValue();
+            int key = entry.getKey();
+            if (value) {
+                strings[n] = String.valueOf(boxBeans.get(key).getEmailId());
+                n++;
+            }
+        }
+        return strings;
+    }
+
+    private void delete() {
         int i = 0;
         HashMap<Integer, Boolean> map = mAdapter.getMap();
         Logger.d("map size: " + map.size() + " list size:" + boxBeans.size());
@@ -197,11 +279,10 @@ public class OutBoxActivity extends BaseToolBarActivity {
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
         toolbar.setTitle("");
         image = toolbar.findViewById(R.id.toolbar_image);
-        TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
+        tv_title = toolbar.findViewById(R.id.toolbar_title);
         tv_select = toolbar.findViewById(R.id.toolbar_cancel);
         tv_done = toolbar.findViewById(R.id.toolbar_other);
 
-        tv_title.setText("已发送");
         tv_select.setText("全选");
         tv_done.setText("完成");
         image.setImageResource(R.mipmap.email_color);
@@ -224,8 +305,74 @@ public class OutBoxActivity extends BaseToolBarActivity {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(mContext, WriteEmailActivity.class));
+                startActivityForResult(new Intent(mContext, WriteEmailActivity.class), WRITE_EMAIL);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == WRITE_EMAIL) {
+                if (type == 1) {
+                    presenter.getOutBoxList(token, "", 1, 10);
+                } else {
+                    presenter.getInBoxList(token, "", 1, 10);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void showDialog() {
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void success(EmailResult list) {
+        if (list != null) {
+            List<EmailBean> records = list.getRecords();
+            if (records != null && records.size() > 0) {
+                boxBeans = records;
+                Logger.d(boxBeans.toString());
+                setAdapter();
+            }
+        }
+    }
+
+    @Override
+    public void fail(String err) {
+        Logger.e(err);
+    }
+
+    @Override
+    public void deleteOutBoxSuccess() {
+        delete();
+    }
+
+    @Override
+    public void deleteInBoxSuccess() {
+
+    }
+
+    @Override
+    public void markBoxSuccess() {
+        showCustom();
+    }
+
+    @Override
+    public void getUnReadCountsSuccess(String s) {
+
     }
 }

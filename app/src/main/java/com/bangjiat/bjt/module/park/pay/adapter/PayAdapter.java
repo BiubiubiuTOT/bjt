@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.park.apply.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> implements View.OnClickListener {
-    private List<ApplyHistoryBean> lists;
+    private List<PayListResult.DataBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,7 +27,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
         this.mOnItemClickListener = listener;
     }
 
-    public PayAdapter(List<ApplyHistoryBean> lists, Context context) {
+    public PayAdapter(List<PayListResult.DataBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -41,7 +42,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final ApplyHistoryBean historyBean = lists.get(position);
+        final PayListResult.DataBean historyBean = lists.get(position);
 
         viewHolder.itemView.setTag(position);
     }
