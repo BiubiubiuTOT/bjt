@@ -2,7 +2,12 @@ package com.bangjiat.bjt.module.park.apply.presenter;
 
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
+import com.bangjiat.bjt.module.park.apply.model.ParkApplyModel;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
+
+import java.util.List;
 
 /**
  * @author ligh
@@ -11,48 +16,66 @@ import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
  */
 
 public class ParkApplyPresenter implements ParkApplyContract.Presenter {
-    @Override
-    public void error() {
-        
+    private ParkApplyContract.View view;
+    private ParkApplyContract.Model model;
+
+    public ParkApplyPresenter(ParkApplyContract.View view) {
+        this.view = view;
+        model = new ParkApplyModel(this);
     }
 
     @Override
-    public void getWorkersCarSuccess() {
+    public void error(String err) {
+        view.dismissDialog();
+        view.error(err);
 
     }
 
     @Override
-    public void getParkSpaceSuccess() {
+    public void getParkSpaceSuccess(ParkingResult s) {
+        view.dismissDialog();
+        view.getParkSpaceSuccess(s);
+    }
 
+    @Override
+    public void getWorkersCarSuccess(List<CarBean> list) {
+        view.dismissDialog();
+        view.getWorkersCarSuccess(list);
     }
 
     @Override
     public void parkApplySuccess() {
-
+        view.dismissDialog();
+        view.parkApplySuccess();
     }
 
     @Override
     public void dealParkApplySuccess() {
-
+        view.dismissDialog();
+        view.dealParkApplySuccess();
     }
 
     @Override
     public void getWorkersCar(String token) {
-
+        view.showDialog();
+        model.getWorkersCar(token);
     }
 
     @Override
     public void getParkSpace(String token, int page, int size, String key) {
-
+        view.showDialog();
+        model.getParkSpace(token, page, size, key);
     }
 
     @Override
     public void parkApply(String token, ParkApplyInput input) {
-
+        view.showDialog();
+        model.parkApply(token, input);
     }
 
     @Override
     public void dealParkApply(String token, DealParkApplyInput input) {
-
+        view.showDialog();
+        model.dealParkApply(token, input);
     }
 }

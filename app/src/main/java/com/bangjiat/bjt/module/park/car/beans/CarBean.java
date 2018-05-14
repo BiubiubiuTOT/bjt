@@ -28,7 +28,7 @@ public class CarBean implements Serializable {
     private String brand;
     private int carId;
     private String color;
-    private int ctime;
+    private long ctime;
     private String driveNumber;
     private String idNumber;
     private String licenceNumber;
@@ -63,11 +63,11 @@ public class CarBean implements Serializable {
         this.color = color;
     }
 
-    public int getCtime() {
+    public long getCtime() {
         return ctime;
     }
 
-    public void setCtime(int ctime) {
+    public void setCtime(long ctime) {
         this.ctime = ctime;
     }
 
@@ -161,4 +161,5 @@ public class CarBean implements Serializable {
                 ", username='" + username + '\'' +
                 '}';
     }
+
 }

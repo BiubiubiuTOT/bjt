@@ -8,7 +8,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.CarDetailAdapter;
 import com.bangjiat.bjt.module.park.apply.adapter.HistoryDetailAdapter;
-import com.bangjiat.bjt.module.park.apply.beans.CarInfoBean;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,9 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity {
     }
 
     private void initData() {
-        List<CarInfoBean> carInfoBeans = new ArrayList<>();
-        carInfoBeans.add(new CarInfoBean());
-        carInfoBeans.add(new CarInfoBean());
+        List<CarBean> carInfoBeans = new ArrayList<>();
+        carInfoBeans.add(new CarBean());
+        carInfoBeans.add(new CarBean());
         recyclerViewCar.setHasFixedSize(true);
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(mContext));
 

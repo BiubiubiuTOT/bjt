@@ -19,8 +19,11 @@ import com.bangjiat.bjt.module.me.feedback.beans.FeedBackInput;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
+import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
@@ -44,6 +47,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -414,8 +418,8 @@ public interface ApiService {
      * 获取停车场列表(停车申请时调用)
      */
     @GET("api/carparkApply/select/CarparkSpacePage")
-    Call<BaseResult<String>> getParkSpace(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
-                                          @Query("size") int size, @Query("key") String key);
+    Call<BaseResult<ParkingResult>> getParkSpace(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
+                                                 @Query("size") int size, @Query("key") String key);
 
     /**
      * 根据ID查询公司信息
@@ -447,14 +451,14 @@ public interface ApiService {
     /**
      * 删除发件箱邮件
      */
-    @DELETE("api/emailBox/delete/EmailBox")
-    Call<BaseResult<String>> deleteOutBox(@Header(Constants.TOKEN_NAME) String token, @Query("list") String[] strings);
+    @HTTP(method = "DELETE", path = "api/emailBox/delete/EmailBox", hasBody = true)
+    Call<BaseResult<String>> deleteOutBox(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
      * 删除收件箱邮件
      */
-    @DELETE("api/emailBox/delete/EmailBoxRecord")
-    Call<BaseResult<String>> deleteInbox(@Header(Constants.TOKEN_NAME) String token, @Query("list") String[] strings);
+    @HTTP(method = "DELETE", path = "api/emailBox/delete/EmailBoxRecord", hasBody = true)
+    Call<BaseResult<String>> deleteInbox(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
      * 查看发件箱邮件详情
@@ -496,5 +500,24 @@ public interface ApiService {
      * 获取停车缴费列表
      */
     @GET("api/carparkApplyDetail/select/ApplyDetailList")
-    Call<BaseResult<PayListResult>> getPayList(@Header(Constants.TOKEN_NAME) String token);
+    Call<BaseResult<List<PayListResult>>> getPayList(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 获取停车场详情
+     */
+    @GET("api/carparkPayment/carpark/select/CarparkSpace")
+    Call<BaseResult<ParkingDetail>> getParkingDetail(@Header(Constants.TOKEN_NAME) String token, @Query("spaceId") int spaceId);
+
+    /**
+     * 停车场管理员审批停车申请
+     */
+    @PUT("api/carparkApply/update/CarparkApply")
+    Call<BaseResult<String>> dealParkApply(@Header(Constants.TOKEN_NAME) String token, @Body DealParkApplyInput input);
+
+    /**
+     * 提交请假申请
+     */
+    @POST("api/companyLeave/save/CompanyLeave")
+    Call<BaseResult> addCompanyLeave(@Header(Constants.TOKEN_NAME) String token);
+
 }

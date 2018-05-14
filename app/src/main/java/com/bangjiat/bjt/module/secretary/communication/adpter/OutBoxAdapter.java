@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.bangjiat.bjt.module.secretary.communication.ui.BoxActivity.IN;
+
 /**
  * Created by Ligh on 2016/9/9 15:33
  * 邮箱:1256144200@qq.com
@@ -87,13 +89,10 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
         viewHolder.tv_mark.setVisibility(View.VISIBLE);
         viewHolder.tv_delete.setText("删除");
         final EmailBean bean = lists.get(position);
-        if (type == 0) {
+        if (type == IN) {
             viewHolder.tv_name.setText(info.getNickname());
-            if (bean.getEmailStatus() == 0) {
-                viewHolder.view_unRead.setVisibility(View.VISIBLE);
-            }
+            viewHolder.view_unRead.setVisibility(bean.getEmailStatus() == 0 ? View.VISIBLE : View.GONE);
         } else {
-            viewHolder.view_unRead.setVisibility(View.GONE);
             viewHolder.tv_name.setText(bean.getReceiver());
         }
         viewHolder.tv_time.setText(TimeUtils.convertTimeToFormat(bean.getSendDate()));
@@ -135,8 +134,13 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
                     viewHolder.tv_delete.setText("确认删除");
                 } else {
                     mOnSwipeListener.onDelete(viewHolder.getAdapterPosition());
-                    ((SwipeMenuLayout) viewHolder.itemView).quickClose();
                 }
+            }
+        });
+        viewHolder.tv_mark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnSwipeListener.onMark(viewHolder.getAdapterPosition());
             }
         });
 

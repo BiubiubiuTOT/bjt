@@ -31,10 +31,10 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity {
 
     private void initView() {
         list = new ArrayList<>();
-        list.add("年假");
         list.add("事假");
         list.add("病假");
         list.add("出差");
+        list.add("年假");
 
         initPicker();
     }

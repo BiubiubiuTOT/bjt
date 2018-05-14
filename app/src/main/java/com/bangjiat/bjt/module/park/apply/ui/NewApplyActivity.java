@@ -10,7 +10,8 @@ import android.widget.TextView;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.CarAdapter;
-import com.bangjiat.bjt.module.park.apply.beans.CarInfoBean;
+import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +25,12 @@ public class NewApplyActivity extends BaseWhiteToolBarActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    private List<CarInfoBean> list;
+    private List<CarBean> list;
 
     public static final int SELECT_PARKING = 1;
     public static final int SELECT_CAR = 2;
     private CarAdapter adapter;
+    private ParkingResult.PageDataBean.RecordsBean recordsBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +73,11 @@ public class NewApplyActivity extends BaseWhiteToolBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PARKING) {
-                tv_parking_name.setText(data.getStringExtra("data"));
+                recordsBean = (ParkingResult.PageDataBean.RecordsBean) data.getSerializableExtra("data");
+                tv_parking_name.setText(recordsBean.getName());
             } else if (requestCode == SELECT_CAR) {
                 Bundle extras = data.getExtras();
-                List<CarInfoBean> beans = (List<CarInfoBean>) extras.getSerializable(("data"));
+                List<CarBean> beans = (List<CarBean>) extras.getSerializable(("data"));
                 if (beans != null) {
                     adapter.setLists(beans);
                 }

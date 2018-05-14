@@ -2,6 +2,10 @@ package com.bangjiat.bjt.module.park.apply.contract;
 
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
+
+import java.util.List;
 
 /**
  * @author ligh
@@ -25,11 +29,11 @@ public interface ParkApplyContract {
 
         void dismissDialog();
 
-        void error();
+        void error(String err);
 
-        void getWorkersCarSuccess();
+        void getWorkersCarSuccess(List<CarBean> list);
 
-        void getParkSpaceSuccess();
+        void getParkSpaceSuccess(ParkingResult s);
 
         void parkApplySuccess();
 
@@ -37,11 +41,11 @@ public interface ParkApplyContract {
     }
 
     interface Presenter {
-        void error();
+        void error(String err);
 
-        void getWorkersCarSuccess();
+        void getParkSpaceSuccess(ParkingResult s);
 
-        void getParkSpaceSuccess();
+        void getWorkersCarSuccess( List<CarBean> list);
 
         void parkApplySuccess();
 

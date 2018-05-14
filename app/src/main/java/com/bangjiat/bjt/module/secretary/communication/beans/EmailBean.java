@@ -37,6 +37,7 @@ public class EmailBean implements Serializable {
     private String copyerId;//抄送人编号
     private long ctime;
     private int emailId;//邮件编号
+    private int recordId;//邮件编号
     private long readDate;
     private String receiver;//收件人
     private String receiverAvatar;//收件人头像
@@ -210,6 +211,14 @@ public class EmailBean implements Serializable {
 
     public void setEmailStatus(int emailStatus) {
         this.emailStatus = emailStatus;
+    }
+
+    public int getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(int recordId) {
+        this.recordId = recordId;
     }
 
     @Override

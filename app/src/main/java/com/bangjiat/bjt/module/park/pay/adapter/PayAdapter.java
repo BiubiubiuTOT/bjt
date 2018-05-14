@@ -5,10 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.park.apply.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> implements View.OnClickListener {
-    private List<PayListResult.DataBean> lists;
+    private List<PayListResult> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -27,7 +28,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
         this.mOnItemClickListener = listener;
     }
 
-    public PayAdapter(List<PayListResult.DataBean> lists, Context context) {
+    public PayAdapter(List<PayListResult> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -42,7 +43,10 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final PayListResult.DataBean historyBean = lists.get(position);
+        final PayListResult historyBean = lists.get(position);
+        viewHolder.tv_number.setText("车牌号：" + historyBean.getPlateNumber());
+        viewHolder.tv_parking.setText("停车场：" + historyBean.getSpaceName());
+        viewHolder.tv_time.setText("到期日：" + TimeUtils.changeToYMD(historyBean.getEndTime()));
 
         viewHolder.itemView.setTag(position);
     }
@@ -61,6 +65,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_number, tv_parking, tv_type, tv_time;
+        ImageView iv_car;
 
         public ViewHolder(View view) {
             super(view);
@@ -68,6 +73,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
             tv_parking = view.findViewById(R.id.tv_parking);
             tv_type = view.findViewById(R.id.tv_type);
             tv_time = view.findViewById(R.id.tv_time);
+            iv_car = view.findViewById(R.id.iv_car);
         }
     }
 

@@ -16,6 +16,10 @@ import com.bangjiat.bjt.module.secretary.communication.presenter.DealBoxPresente
 import com.bangjiat.bjt.module.secretary.contact.view.ContactListActivity;
 import com.dou361.dialogui.DialogUIUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -32,6 +36,7 @@ public class MainActivity extends BaseToolBarActivity implements DealBoxContract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         presenter = new DealBoxPresenter(this);
         token = DataUtil.getToken(mContext);
         presenter.getUnReadCounts(token);
@@ -129,5 +134,16 @@ public class MainActivity extends BaseToolBarActivity implements DealBoxContract
     public void getUnReadCountsSuccess(String s) {
         if (!s.equals("0"))
             tv_unread_counts.setText(s);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUnReadCountsChange(String s) {
+        presenter.getUnReadCounts(token);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

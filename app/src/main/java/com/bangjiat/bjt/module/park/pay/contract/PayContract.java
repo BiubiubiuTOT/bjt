@@ -1,8 +1,11 @@
 package com.bangjiat.bjt.module.park.pay.contract;
 
+import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
+
+import java.util.List;
 
 /**
  * @author ligh
@@ -17,6 +20,8 @@ public interface PayContract {
         void pay(String token, PayInput input);
 
         void getPayList(String token);
+
+        void getParkingDetail(String token, int spaceId);
     }
 
     interface View {
@@ -24,11 +29,13 @@ public interface PayContract {
 
         void dismissDialog();
 
-        void getPayListSuccess(PayListResult str);
+        void getPayListSuccess(List<PayListResult> str);
 
         void paySuccess(String str);
 
         void addPayInfoSuccess(String err);
+
+        void getParkingDetailSuccess(ParkingDetail detail);
 
         void fail(String err);
     }
@@ -40,11 +47,15 @@ public interface PayContract {
 
         void getPayList(String token);
 
-        void getPayListSuccess(PayListResult str);
+        void getPayListSuccess(List<PayListResult> str);
 
         void paySuccess(String str);
 
         void addPayInfoSuccess(String err);
+
+        void getParkingDetail(String token, int spaceId);
+
+        void getParkingDetailSuccess(ParkingDetail detail);
 
         void fail(String err);
     }

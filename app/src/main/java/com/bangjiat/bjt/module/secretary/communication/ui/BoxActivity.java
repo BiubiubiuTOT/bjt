@@ -28,6 +28,8 @@ import com.dou361.dialogui.DialogUIUtils;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     private String token;
     private int type;
     private TextView tv_title;
+    public static final int IN = 0;
+    public static final int OUT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         token = DataUtil.getToken(mContext);
 
         type = getIntent().getIntExtra("type", 1);
-        if (type == 1) {
+        if (type == OUT) {
             tv_title.setText("已发送");
             presenter.getOutBoxList(token, "", 1, 10);
         } else {
@@ -142,6 +146,16 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         mAdapter.setOnSwipeListener(new OutBoxAdapter.onSwipeListener() {
             @Override
             public void onDelete(int pos) {
+                EmailBean bean = boxBeans.get(pos);
+                String[] strings = new String[1];
+                if (type == OUT) {
+                    strings[0] = String.valueOf(bean.getEmailId());
+                    dealPresenter.deleteOutBox(token, strings);
+                } else {
+                    strings[0] = String.valueOf(bean.getRecordId());
+                    dealPresenter.deleteInBox(token, strings);
+                }
+
                 boxBeans.remove(pos);
                 mAdapter.notifyItemRemoved(pos);
                 mAdapter.notifyItemRangeChanged(pos, boxBeans.size() - pos);
@@ -151,7 +165,23 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
             @Override
             public void onMark(int pos) {
+                EmailBean bean = boxBeans.get(pos);
+                String[] strings = new String[1];
+                if (type == OUT) {
+                    strings[0] = String.valueOf(bean.getEmailId());
+                } else {
+                    strings[0] = String.valueOf(bean.getRecordId());
+                    if (bean.getEmailStatus() == 0) {
+                        bean.setEmailStatus(1);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+                dealPresenter.markBox(token, strings);
 
+                SwipeMenuLayout viewCache = SwipeMenuLayout.getViewCache();
+                if (null != viewCache) {
+                    viewCache.smoothClose();
+                }
             }
         });
 
@@ -166,9 +196,20 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
                 intent.putExtras(extras);
                 startActivity(intent);
 
-                if (type == 0) {
+                if (type == IN && value.getEmailStatus() == 0) {
                     value.setEmailStatus(1);
                     mAdapter.notifyDataSetChanged();
+
+                    EmailBean bean = boxBeans.get(position);
+                    String[] strings = new String[1];
+                    if (type == OUT) {
+                        strings[0] = String.valueOf(bean.getEmailId());
+                    } else {
+                        strings[0] = String.valueOf(bean.getRecordId());
+                    }
+                    dealPresenter.markBox(token, strings);
+
+                    EventBus.getDefault().post("");
                 }
             }
         });
@@ -196,7 +237,14 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         if (getSelectCount() > 0) {
             String[] strings = getString();
             Logger.d(strings);
-            dealPresenter.deleteInBox(token, strings);
+
+            if (type == OUT) {
+                dealPresenter.deleteOutBox(token, strings);
+            } else {
+                dealPresenter.deleteInBox(token, strings);
+            }
+
+            delete();
         }
     }
 
@@ -206,7 +254,14 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             String[] strings = getString();
             Logger.d(strings);
             dealPresenter.markBox(token, strings);
+
+            SwipeMenuLayout viewCache = SwipeMenuLayout.getViewCache();
+            if (null != viewCache) {
+                viewCache.smoothClose();
+            }
+            showCustom();
         }
+
     }
 
     private String[] getString() {
@@ -220,7 +275,11 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             Boolean value = entry.getValue();
             int key = entry.getKey();
             if (value) {
-                strings[n] = String.valueOf(boxBeans.get(key).getEmailId());
+                if (type == OUT) {
+                    strings[n] = String.valueOf(boxBeans.get(key).getEmailId());
+                } else {
+                    strings[n] = String.valueOf(boxBeans.get(key).getRecordId());
+                }
                 n++;
             }
         }
@@ -358,17 +417,16 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
     @Override
     public void deleteOutBoxSuccess() {
-        delete();
     }
 
     @Override
     public void deleteInBoxSuccess() {
-
+        EventBus.getDefault().post("");
     }
 
     @Override
     public void markBoxSuccess() {
-        showCustom();
+        EventBus.getDefault().post("");
     }
 
     @Override

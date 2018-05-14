@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.park.apply.beans.CarInfoBean;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> implements View.OnClickListener {
-    private List<CarInfoBean> lists;
+    private List<CarBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,12 +28,12 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
         this.mOnItemClickListener = listener;
     }
 
-    public CarAdapter(List<CarInfoBean> lists, Context context) {
+    public CarAdapter(List<CarBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
 
-    public void setLists(List<CarInfoBean> lists) {
+    public void setLists(List<CarBean> lists) {
         this.lists = lists;
         notifyDataSetChanged();
     }
@@ -46,12 +48,13 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final CarInfoBean bean = lists.get(position);
+        final CarBean bean = lists.get(position);
 
-        viewHolder.tv_number.setText(bean.getCarNumber());
-        viewHolder.tv_name.setText(bean.getUserName());
-        viewHolder.tv_type.setText(bean.getType());
-        viewHolder.tv_color.setText(bean.getColor());
+        viewHolder.tv_number.setText("车牌：" + bean.getPlateNumber());
+        viewHolder.tv_name.setText("姓名：" + bean.getName());
+        viewHolder.tv_type.setText("车型：" + bean.getModel());
+        viewHolder.tv_color.setText("颜色：" + bean.getColor());
+        Glide.with(mContext).load(bean.getResource()).centerCrop().into(viewHolder.iv_car);
 
         viewHolder.itemView.setTag(position);
     }
@@ -70,6 +73,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_number, tv_type, tv_color;
+        ImageView iv_car;
 
         public ViewHolder(View view) {
             super(view);
@@ -77,6 +81,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
             tv_type = view.findViewById(R.id.tv_type);
             tv_color = view.findViewById(R.id.tv_color);
             tv_number = view.findViewById(R.id.tv_number);
+            iv_car = view.findViewById(R.id.iv_car);
         }
     }
 

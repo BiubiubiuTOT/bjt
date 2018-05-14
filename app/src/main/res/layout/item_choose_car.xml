@@ -28,10 +28,11 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/iv_car"
                 android:layout_width="58dp"
                 android:layout_height="58dp"
                 android:layout_margin="10dp"
-                android:src="@mipmap/my_head" />
+                />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -45,7 +46,6 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="姓名：张飞"
                     android:textColor="@color/outbox_title"
                     android:textSize="12sp" />
 
@@ -54,7 +54,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="车型：达瑞-A7562"
                     android:textColor="@color/outbox_title"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -71,7 +70,6 @@
                     android:id="@+id/tv_car_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="车牌：贵A58236"
                     android:textColor="@color/outbox_title"
                     android:textSize="12sp" />
 
@@ -80,7 +78,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="颜色：银色"
                     android:textColor="@color/outbox_title"
                     android:textSize="12sp" />
             </LinearLayout>

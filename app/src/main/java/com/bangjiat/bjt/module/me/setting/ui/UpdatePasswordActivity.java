@@ -40,6 +40,7 @@ public class UpdatePasswordActivity extends BaseToolBarActivity implements Updat
     @OnClick(R.id.tv_forget_password)
     public void clickForgetPassword(View view) {
         startActivity(new Intent(mContext, ForgetPasswordActivity.class));
+        finish();
     }
 
     private void initView() {
@@ -77,7 +78,11 @@ public class UpdatePasswordActivity extends BaseToolBarActivity implements Updat
 
     @Override
     public void showDialog() {
-        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
     }
 
     @Override

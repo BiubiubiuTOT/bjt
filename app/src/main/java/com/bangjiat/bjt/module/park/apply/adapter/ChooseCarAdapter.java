@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.park.apply.beans.CarInfoBean;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bumptech.glide.Glide;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public class ChooseCarAdapter extends RecyclerView.Adapter<ChooseCarAdapter.ViewHolder> implements View.OnClickListener {
     private final HashMap<Integer, Boolean> map;
-    private List<CarInfoBean> lists;
+    private List<CarBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -33,7 +35,7 @@ public class ChooseCarAdapter extends RecyclerView.Adapter<ChooseCarAdapter.View
         return map;
     }
 
-    public ChooseCarAdapter(List<CarInfoBean> lists, Context context) {
+    public ChooseCarAdapter(List<CarBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
 
@@ -53,12 +55,13 @@ public class ChooseCarAdapter extends RecyclerView.Adapter<ChooseCarAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final CarInfoBean bean = lists.get(position);
+        final CarBean bean = lists.get(position);
 
-        viewHolder.tv_car_number.setText(bean.getCarNumber());
-        viewHolder.tv_name.setText(bean.getUserName());
-        viewHolder.tv_type.setText(bean.getType());
-        viewHolder.tv_color.setText(bean.getColor());
+        viewHolder.tv_car_number.setText("车牌：" + bean.getPlateNumber());
+        viewHolder.tv_name.setText("姓名：" + bean.getName());
+        viewHolder.tv_type.setText("车型：" + bean.getModel());
+        viewHolder.tv_color.setText("颜色：" + bean.getColor());
+        Glide.with(mContext).load(bean.getResource()).centerCrop().into(viewHolder.iv_car);
 
         viewHolder.checkbox.setChecked(map.get(position));
         viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +92,7 @@ public class ChooseCarAdapter extends RecyclerView.Adapter<ChooseCarAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_car_number, tv_type, tv_color;
         CheckBox checkbox;
+        ImageView iv_car;
 
         public ViewHolder(View view) {
             super(view);
@@ -97,6 +101,7 @@ public class ChooseCarAdapter extends RecyclerView.Adapter<ChooseCarAdapter.View
             tv_color = view.findViewById(R.id.tv_color);
             tv_car_number = view.findViewById(R.id.tv_car_number);
             checkbox = view.findViewById(R.id.checkbox);
+            iv_car = view.findViewById(R.id.iv_car);
         }
     }
 

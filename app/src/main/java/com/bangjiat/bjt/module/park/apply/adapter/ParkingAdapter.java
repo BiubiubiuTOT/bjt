@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ViewHolder> implements View.OnClickListener {
-    private List<String> lists;
+    private List<ParkingResult.PageDataBean.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -25,7 +26,7 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ViewHold
         this.mOnItemClickListener = listener;
     }
 
-    public ParkingAdapter(List<String> lists, Context context) {
+    public ParkingAdapter(List<ParkingResult.PageDataBean.RecordsBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -40,8 +41,8 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        String s = lists.get(position);
-        viewHolder.tv_name.setText(s);
+        ParkingResult.PageDataBean.RecordsBean s = lists.get(position);
+        viewHolder.tv_name.setText(s.getName());
 
         viewHolder.itemView.setTag(position);
     }

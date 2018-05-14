@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.park.apply.beans.CarInfoBean;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.ViewHolder> implements View.OnClickListener {
-    private List<CarInfoBean> lists;
+    private List<CarBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,12 +26,12 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
         this.mOnItemClickListener = listener;
     }
 
-    public CarDetailAdapter(List<CarInfoBean> lists, Context context) {
+    public CarDetailAdapter(List<CarBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
 
-    public void setLists(List<CarInfoBean> lists) {
+    public void setLists(List<CarBean> lists) {
         this.lists = lists;
         notifyDataSetChanged();
     }
@@ -46,7 +46,7 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final CarInfoBean bean = lists.get(position);
+        final CarBean bean = lists.get(position);
 
         viewHolder.itemView.setTag(position);
     }

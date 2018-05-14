@@ -34,6 +34,7 @@ public class Constants {
 //    public static final String UPLOAD_IMAGE_IP = "http://www.bangjiat.com/";
 
     public static final String TOKEN_NAME = "j4sc-bjt-token";
+    public static final String TOKEN_NAME_SPECIAL = "j4sc-b-token";
 
     public static String[] WEEK = {"周一", "周二", "周三",
             "周四", "周五", "周六", "周日"};

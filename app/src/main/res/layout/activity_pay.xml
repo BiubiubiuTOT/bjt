@@ -46,7 +46,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="贵A·B2423"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -77,7 +76,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="邦佳停车场"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -103,7 +101,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="188.00"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
                 </LinearLayout>

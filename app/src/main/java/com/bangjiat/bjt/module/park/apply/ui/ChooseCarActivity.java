@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.park.apply.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,11 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.ChooseCarAdapter;
-import com.bangjiat.bjt.module.park.apply.beans.CarInfoBean;
+import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
+import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
+import com.bangjiat.bjt.module.park.apply.presenter.ParkApplyPresenter;
+import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.dou361.dialogui.DialogUIUtils;
+import com.orhanobut.logger.Logger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,12 +30,14 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-public class ChooseCarActivity extends BaseToolBarActivity {
+public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    private List<CarInfoBean> list;
+    private List<CarBean> list;
     private ChooseCarAdapter mAdapter;
+    private Dialog dialog;
+    private ParkApplyContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +47,17 @@ public class ChooseCarActivity extends BaseToolBarActivity {
     }
 
     private void initData() {
-        list = new ArrayList<>();
-        list.add(new CarInfoBean("张三", "贵A53216", "奇瑞QQ", "红色"));
-        list.add(new CarInfoBean("李四", "贵C5564V", "上海大众", "白色"));
-        list.add(new CarInfoBean("王五", "贵J23w23", "五菱宏光", "白色"));
+        presenter = new ParkApplyPresenter(this);
+        presenter.getWorkersCar(DataUtil.getToken(mContext));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
+
+    }
+
+    private void setAdapter() {
         mAdapter = new ChooseCarAdapter(list, mContext);
         recyclerView.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -82,8 +93,8 @@ public class ChooseCarActivity extends BaseToolBarActivity {
         });
     }
 
-    private List<CarInfoBean> getData() {
-        List<CarInfoBean> beans = new ArrayList<>();
+    private List<CarBean> getData() {
+        List<CarBean> beans = new ArrayList<>();
         HashMap<Integer, Boolean> map = mAdapter.getMap();
         Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
         for (Map.Entry<Integer, Boolean> entry : entries) {
@@ -94,4 +105,44 @@ public class ChooseCarActivity extends BaseToolBarActivity {
         return beans;
     }
 
+    @Override
+    public void showDialog() {
+        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void error(String err) {
+        Logger.e(err);
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getWorkersCarSuccess(List<CarBean> list) {
+        if (list != null && list.size() > 0) {
+            this.list = list;
+            Logger.d(list.toString());
+            setAdapter();
+        }
+    }
+
+    @Override
+    public void getParkSpaceSuccess(ParkingResult s) {
+
+    }
+
+    @Override
+    public void parkApplySuccess() {
+
+    }
+
+    @Override
+    public void dealParkApplySuccess() {
+
+    }
 }

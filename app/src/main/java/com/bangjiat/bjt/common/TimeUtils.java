@@ -14,7 +14,7 @@ import java.util.Locale;
 public class TimeUtils {
     public static String changeToYMD(Long l) {
         Date date = new Date(l);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
         return format.format(date);
     }
 
@@ -56,7 +56,7 @@ public class TimeUtils {
      */
     public static String convertTimeToFormat(long timeStamp) {
         long curTime = System.currentTimeMillis() / (long) 1000;
-        long time = curTime - timeStamp;
+        long time = curTime - timeStamp / (long) 1000;
 
         if (time < 60 && time >= 0) {
             return "刚刚";

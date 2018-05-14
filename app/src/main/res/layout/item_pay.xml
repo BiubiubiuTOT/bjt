@@ -17,6 +17,7 @@
 
         <ImageView
             android:layout_width="58dp"
+            android:id="@+id/iv_car"
             android:layout_height="58dp"
             android:src="@mipmap/my_head" />
 

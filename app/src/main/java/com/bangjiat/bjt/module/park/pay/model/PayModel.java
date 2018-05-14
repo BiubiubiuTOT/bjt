@@ -3,10 +3,13 @@ package com.bangjiat.bjt.module.park.pay.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
 import com.bangjiat.bjt.module.park.pay.contract.PayContract;
+
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -62,13 +65,31 @@ public class PayModel implements PayContract.Model {
 
     @Override
     public void getPayList(String token) {
-        ApiFactory.getService().getPayList(token).enqueue(new MyCallBack<BaseResult<PayListResult>>() {
+        ApiFactory.getService().getPayList(token).enqueue(new MyCallBack<BaseResult<List<PayListResult>>>() {
             @Override
-            public void onSuc(Response<BaseResult<PayListResult>> response) {
-                BaseResult<PayListResult> body = response.body();
+            public void onSuc(Response<BaseResult<List<PayListResult>>> response) {
+                BaseResult<List<PayListResult>> body = response.body();
                 if (body.getStatus() == 200) {
                     presenter.getPayListSuccess(body.getData());
                 } else presenter.fail(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.fail(message);
+            }
+        });
+    }
+
+    @Override
+    public void getParkingDetail(String token, int spaceId) {
+        ApiFactory.getService().getParkingDetail(token, spaceId).enqueue(new MyCallBack<BaseResult<ParkingDetail>>() {
+            @Override
+            public void onSuc(Response<BaseResult<ParkingDetail>> response) {
+                BaseResult<ParkingDetail> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.getParkingDetailSuccess(body.getData());
+                else presenter.fail(body.getMessage());
             }
 
             @Override

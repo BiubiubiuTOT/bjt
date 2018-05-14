@@ -8,15 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.park.pay.adapter.PayAdapter;
+import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
 import com.bangjiat.bjt.module.park.pay.contract.PayContract;
 import com.bangjiat.bjt.module.park.pay.presenter.PayPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -28,11 +31,12 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
     RecyclerView recyclerView;
     private Dialog dialog;
     private PayContract.Presenter presenter;
-    List<PayListResult.DataBean> beans;
+    List<PayListResult> beans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
 
         initData();
     }
@@ -44,14 +48,16 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
         recyclerView.setHasFixedSize(true);
     }
 
-    private void setAdapter(List<PayListResult.DataBean> beans) {
+    private void setAdapter(final List<PayListResult> beans) {
         PayAdapter mAdapter = new PayAdapter(beans, mContext);
         recyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new PayAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext, PayActivity.class));
+                Intent intent = new Intent(mContext, PayActivity.class);
+                intent.putExtra("data", beans.get(position));
+                startActivity(intent);
             }
         });
     }
@@ -99,11 +105,12 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
     }
 
     @Override
-    public void getPayListSuccess(PayListResult str) {
+    public void getPayListSuccess(List<PayListResult> str) {
         if (str != null) {
-            beans = str.getData();
-            if (beans != null)
+            if (str != null) {
+                beans = str;
                 setAdapter(beans);
+            }
         }
     }
 
@@ -118,7 +125,13 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
     }
 
     @Override
+    public void getParkingDetailSuccess(ParkingDetail detail) {
+
+    }
+
+    @Override
     public void fail(String err) {
         Logger.e(err);
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
     }
 }

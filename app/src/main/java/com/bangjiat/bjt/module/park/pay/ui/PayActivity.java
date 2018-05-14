@@ -3,6 +3,8 @@ package com.bangjiat.bjt.module.park.pay.ui;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -10,9 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
@@ -33,6 +37,10 @@ import com.xgr.easypay.callback.IPayCallback;
 import com.xgr.easypay.wxpay.WXPay;
 import com.xgr.easypay.wxpay.WXPayInfoImpli;
 
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,6 +84,8 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     private long endTime;
     private String token;
     private String totalFee;
+    private PayListResult result;
+    private String monthFee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +95,15 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     }
 
     private void initView() {
+        result = (PayListResult) getIntent().getSerializableExtra("data");
         token = DataUtil.getToken(mContext);
         presenter = new PayPresenter(this);
+        if (result != null) {
+            tv_parking.setText(result.getSpaceName());
+            tv_car_number.setText(result.getPlateNumber());
+            presenter.getParkingDetail(token, result.getSpaceId());
+        }
+
         initMonths();
         options1Items = new ArrayList<>();
         options1Items.add("支付宝");
@@ -116,7 +133,7 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         pvModes = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                payType = options1;
+                payType = options1 + 1;
                 et_pay_mode.setText(options1Items.get(options1));
             }
         }).setSubmitColor(Color.BLACK)
@@ -209,10 +226,11 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         bean.setEndTime(endTime);
         bean.setMonths(month);
         bean.setMonthFee(tv_money_month.getText().toString());
-        bean.setCarId(1);//车辆编号
-        bean.setSpaceId(1);//停车场编号
-        bean.setSpaceName("");//停车场名称
-        bean.setPlateNumber("");//车牌号
+        bean.setMonthFee(monthFee);
+        bean.setCarId(result.getCarId());//车辆编号
+        bean.setSpaceId(result.getSpaceId());//停车场编号
+        bean.setSpaceName(result.getSpaceName());//停车场名称
+        bean.setPlateNumber(result.getPlateNumber());//车牌号
 
         presenter.addPayInfo(token, bean);
     }
@@ -229,7 +247,7 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         EasyPay.pay(aliPay, this, alipayInfoImpli, new IPayCallback() {
             @Override
             public void success() {
-                toast("支付成功");
+                Constants.showSuccessExitDialog(PayActivity.this, "支付成功");
             }
 
             @Override
@@ -251,24 +269,17 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     /**
      * 微信支付
      */
-    private void wxpay() {
+    private void wxpay(WXPayInfoImpli wxPayInfoImpli) {
         //实例化微信支付策略
         String wxAppId = "wx432ba0b2e3addde9";
-        WXPay wxPay = WXPay.getInstance(this, wxAppId);
-        //构造微信订单实体。一般都是由服务端直接返回。
-        WXPayInfoImpli wxPayInfoImpli = new WXPayInfoImpli();
-        wxPayInfoImpli.setTimestamp("");
-        wxPayInfoImpli.setSign("");
-        wxPayInfoImpli.setPrepayId("");
-        wxPayInfoImpli.setPartnerid("");
-        wxPayInfoImpli.setAppid("");
-        wxPayInfoImpli.setNonceStr("");
         wxPayInfoImpli.setPackageValue("Sign=WXPay");
+        wxPayInfoImpli.setTimestamp(String.valueOf(System.currentTimeMillis()/1000));
+        WXPay wxPay = WXPay.getInstance(this, wxAppId);
         //策略场景类调起支付方法开始支付，以及接收回调。
         EasyPay.pay(wxPay, this, wxPayInfoImpli, new IPayCallback() {
             @Override
             public void success() {
-                toast("支付成功");
+                Constants.showSuccessExitDialog(PayActivity.this, "支付成功");
             }
 
             @Override
@@ -299,8 +310,10 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         if (dialog != null) {
             if (!dialog.isShowing())
                 dialog.show();
-        } else
+        } else {
             dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+            dialog.setCancelable(false);
+        }
     }
 
     @Override
@@ -310,15 +323,67 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     }
 
     @Override
-    public void getPayListSuccess(PayListResult str) {
+    public void getPayListSuccess(List<PayListResult> str) {
 
     }
 
     @Override
     public void paySuccess(String str) {
+        Logger.d(str);
         if (payType == 1) {
             alipay(str);
-        } else wxpay();
+        } else wxpay(parseXml(str));
+    }
+
+    private WXPayInfoImpli parseXml(String xmlString) {
+        WXPayInfoImpli orderInfo = null;
+        XmlPullParser xmlPullParser = Xml.newPullParser(); //由android.util.Xml创建一个XmlPullParser实例
+        InputStream is = new ByteArrayInputStream(xmlString.getBytes());
+        try {
+            xmlPullParser.setInput(is, "UTF-8");               //设置输入流 并指明编码方式
+            int eventType = xmlPullParser.getEventType();
+            //eventType 默认值为0，每次调用parser.next()会自动向后读取
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        if (xmlPullParser.getName().equals("xml")) {
+                            orderInfo = new WXPayInfoImpli();
+                        } else if (xmlPullParser.getName().equals("appid")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setAppid(xmlPullParser.getText());
+                        } else if (xmlPullParser.getName().equals("nonce_str")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setNonceStr(xmlPullParser.getText());
+                        } else if (xmlPullParser.getName().equals("package")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setPackageValue(xmlPullParser.getText());
+                        } else if (xmlPullParser.getName().equals("mch_id")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setPartnerid(xmlPullParser.getText());
+                        } else if (xmlPullParser.getName().equals("prepay_id")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setPrepayId(xmlPullParser.getText());
+                        } else if (xmlPullParser.getName().equals("timestamp")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setTimestamp(String.valueOf(Long.parseLong(xmlPullParser.getText()) * 1000));
+                        } else if (xmlPullParser.getName().equals("sign")) {
+                            eventType = xmlPullParser.next();
+                            orderInfo.setSign(xmlPullParser.getText());
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (xmlPullParser.getName().equals("xml")) {
+                            Log.i("tag", "XML 解析完毕");
+                            eventType = xmlPullParser.next();
+                        }
+                        break;
+                }
+                eventType = xmlPullParser.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderInfo;
     }
 
     @Override
@@ -328,7 +393,16 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     }
 
     @Override
+    public void getParkingDetailSuccess(ParkingDetail detail) {
+        if (detail != null) {
+            monthFee = detail.getMonthFee();
+            tv_money_month.setText(monthFee);
+        }
+    }
+
+    @Override
     public void fail(String err) {
         Logger.e(err);
+        Constants.showErrorDialog(mContext, err);
     }
 }

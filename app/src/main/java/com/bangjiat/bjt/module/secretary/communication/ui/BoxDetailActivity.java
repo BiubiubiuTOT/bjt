@@ -69,7 +69,7 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
         if (bean != null) {
             photoList = new ArrayList<>();
             String resource = bean.getResource();
-            if (!resource.isEmpty()) {
+            if (resource != null && !resource.isEmpty()) {
                 String[] split = resource.split("\\|");
                 Logger.d(split[0]);
                 photoList = Arrays.asList(split);

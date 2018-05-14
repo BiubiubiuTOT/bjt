@@ -1,6 +1,6 @@
 package com.bangjiat.bjt.module.park.pay.beans;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * @author ligh
@@ -8,166 +8,148 @@ import java.util.List;
  * @date 2018/5/12 0012
  */
 
-public class PayListResult {
+public class PayListResult implements Serializable {
     /**
-     * data : [{"applyId":0,"beginTime":0,"carId":0,"carName":"string","ctime":0,"detailId":0,"endTime":0,"lotNumber":"string","plateNumber":"string","spaceId":0,"spaceName":"string","status":0,"type":0,"userId":"string"}]
-     * message : string
+     * applyId : 0
+     * beginTime : 0
+     * carId : 0
+     * carName : string
+     * ctime : 0
+     * detailId : 0
+     * endTime : 0
+     * lotNumber : string
+     * plateNumber : string
+     * spaceId : 0
+     * spaceName : string
      * status : 0
+     * type : 0
+     * userId : string
      */
 
-    private List<DataBean> data;
+    private int applyId;
+    private long beginTime;
+    private int carId;
+    private String carName;
+    private long ctime;
+    private int detailId;
+    private long endTime;
+    private String lotNumber;
+    private String plateNumber;
+    private int spaceId;
+    private String spaceName;
+    private int status;
+    private int type;
+    private String userId;
 
-    public List<DataBean> getData() {
-        return data;
+    public int getApplyId() {
+        return applyId;
     }
 
-    public void setData(List<DataBean> data) {
-        this.data = data;
+    public void setApplyId(int applyId) {
+        this.applyId = applyId;
     }
 
-    public static class DataBean {
-        /**
-         * applyId : 0
-         * beginTime : 0
-         * carId : 0
-         * carName : string
-         * ctime : 0
-         * detailId : 0
-         * endTime : 0
-         * lotNumber : string
-         * plateNumber : string
-         * spaceId : 0
-         * spaceName : string
-         * status : 0
-         * type : 0
-         * userId : string
-         */
+    public long getBeginTime() {
+        return beginTime;
+    }
 
-        private int applyId;
-        private int beginTime;
-        private int carId;
-        private String carName;
-        private int ctime;
-        private int detailId;
-        private int endTime;
-        private String lotNumber;
-        private String plateNumber;
-        private int spaceId;
-        private String spaceName;
-        private int status;
-        private int type;
-        private String userId;
+    public void setBeginTime(long beginTime) {
+        this.beginTime = beginTime;
+    }
 
-        public int getApplyId() {
-            return applyId;
-        }
+    public int getCarId() {
+        return carId;
+    }
 
-        public void setApplyId(int applyId) {
-            this.applyId = applyId;
-        }
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
 
-        public int getBeginTime() {
-            return beginTime;
-        }
+    public String getCarName() {
+        return carName;
+    }
 
-        public void setBeginTime(int beginTime) {
-            this.beginTime = beginTime;
-        }
+    public void setCarName(String carName) {
+        this.carName = carName;
+    }
 
-        public int getCarId() {
-            return carId;
-        }
+    public long getCtime() {
+        return ctime;
+    }
 
-        public void setCarId(int carId) {
-            this.carId = carId;
-        }
+    public void setCtime(long ctime) {
+        this.ctime = ctime;
+    }
 
-        public String getCarName() {
-            return carName;
-        }
+    public int getDetailId() {
+        return detailId;
+    }
 
-        public void setCarName(String carName) {
-            this.carName = carName;
-        }
+    public void setDetailId(int detailId) {
+        this.detailId = detailId;
+    }
 
-        public int getCtime() {
-            return ctime;
-        }
+    public long getEndTime() {
+        return endTime;
+    }
 
-        public void setCtime(int ctime) {
-            this.ctime = ctime;
-        }
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
 
-        public int getDetailId() {
-            return detailId;
-        }
+    public String getLotNumber() {
+        return lotNumber;
+    }
 
-        public void setDetailId(int detailId) {
-            this.detailId = detailId;
-        }
+    public void setLotNumber(String lotNumber) {
+        this.lotNumber = lotNumber;
+    }
 
-        public int getEndTime() {
-            return endTime;
-        }
+    public String getPlateNumber() {
+        return plateNumber;
+    }
 
-        public void setEndTime(int endTime) {
-            this.endTime = endTime;
-        }
+    public void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
+    }
 
-        public String getLotNumber() {
-            return lotNumber;
-        }
+    public int getSpaceId() {
+        return spaceId;
+    }
 
-        public void setLotNumber(String lotNumber) {
-            this.lotNumber = lotNumber;
-        }
+    public void setSpaceId(int spaceId) {
+        this.spaceId = spaceId;
+    }
 
-        public String getPlateNumber() {
-            return plateNumber;
-        }
+    public String getSpaceName() {
+        return spaceName;
+    }
 
-        public void setPlateNumber(String plateNumber) {
-            this.plateNumber = plateNumber;
-        }
+    public void setSpaceName(String spaceName) {
+        this.spaceName = spaceName;
+    }
 
-        public int getSpaceId() {
-            return spaceId;
-        }
+    public int getStatus() {
+        return status;
+    }
 
-        public void setSpaceId(int spaceId) {
-            this.spaceId = spaceId;
-        }
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-        public String getSpaceName() {
-            return spaceName;
-        }
+    public int getType() {
+        return type;
+    }
 
-        public void setSpaceName(String spaceName) {
-            this.spaceName = spaceName;
-        }
+    public void setType(int type) {
+        this.type = type;
+    }
 
-        public int getStatus() {
-            return status;
-        }
+    public String getUserId() {
+        return userId;
+    }
 
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
