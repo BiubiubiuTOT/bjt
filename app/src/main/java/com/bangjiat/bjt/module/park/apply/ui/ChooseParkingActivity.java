@@ -11,6 +11,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.ParkingAdapter;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
 import com.bangjiat.bjt.module.park.apply.presenter.ParkApplyPresenter;
@@ -108,6 +109,11 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
 
     @Override
     public void dealParkApplySuccess() {
+
+    }
+
+    @Override
+    public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
 
     }
 }

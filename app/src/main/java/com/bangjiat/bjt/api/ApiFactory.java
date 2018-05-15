@@ -21,7 +21,7 @@ public class ApiFactory {
             .readTimeout(5, TimeUnit.MINUTES)
             .connectTimeout(5, TimeUnit.MINUTES)
             .writeTimeout(5, TimeUnit.MINUTES)
-            .addInterceptor(new HttpLoggingInterceptor())
+//            .addInterceptor(new HttpLoggingInterceptor())
             .build();
 
     private static Retrofit stringRetrofit = new Retrofit.Builder()

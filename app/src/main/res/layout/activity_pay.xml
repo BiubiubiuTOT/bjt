@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -80,15 +80,42 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="缴费方式"
+                        android:textColor="@color/dialog_title"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/et_pay_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:editable="false"
+                        android:hint="请选择付费方式"
+                        android:textColor="@color/dialog_title"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
+                        android:id="@+id/tv_money_des"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
@@ -111,9 +138,10 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
+                        android:id="@+id/tv_des"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
@@ -128,7 +156,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:editable="false"
-                        android:hint="请选择缴纳月数"
+                        android:hint="请选择交纳月数"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -144,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -172,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -205,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -238,13 +266,13 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="缴费方式"
+                        android:text="支付方式"
                         android:textColor="@color/dialog_title"
                         android:textSize="15sp" />
 

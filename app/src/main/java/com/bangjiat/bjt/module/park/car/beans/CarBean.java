@@ -38,6 +38,15 @@ public class CarBean implements Serializable {
     private String resource;
     private String userId;
     private String username;
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getBrand() {
         return brand;

@@ -10,6 +10,9 @@ import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
+import com.bangjiat.bjt.module.home.work.leave.beans.CompanyLeaveResult;
+import com.bangjiat.bjt.module.home.work.leave.beans.DealLeaveInput;
+import com.bangjiat.bjt.module.home.work.leave.beans.LeaveBean;
 import com.bangjiat.bjt.module.main.account.beans.LoginInput;
 import com.bangjiat.bjt.module.main.account.beans.RecoveredPasswordInput;
 import com.bangjiat.bjt.module.main.account.beans.RegisterInput;
@@ -20,6 +23,7 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
@@ -518,6 +522,37 @@ public interface ApiService {
      * 提交请假申请
      */
     @POST("api/companyLeave/save/CompanyLeave")
-    Call<BaseResult> addCompanyLeave(@Header(Constants.TOKEN_NAME) String token);
+    Call<BaseResult> addCompanyLeave(@Header(Constants.TOKEN_NAME) String token, @Body LeaveBean bean);
+
+    /**
+     * 待审批事项和审批记录（status为1则是待审批事项，否则查询所有记录）
+     */
+    @GET("api/companyLeave/select/CompanyLeavePage")
+//1、待审批事项 2、查询所有记录
+    Call<BaseResult<CompanyLeaveResult>> getCompanyLeave(@Header(Constants.TOKEN_NAME) String token, @Query("status") int status,
+                                                         @Query("page") int page, @Query("size") int size);
+
+    /**
+     * 用户查询申请记录
+     */
+    @GET("api/companyLeave/select/LeaveSelfPage")
+//可不传：1、待审批、2、通过、3、未通过
+    Call<BaseResult<CompanyLeaveResult>> getSelefLeve(@Header(Constants.TOKEN_NAME) String token, @Query("status") int status,
+                                                      @Query("page") int page, @Query("size") int size);
+
+    /**
+     * 申请审批:1表示同意，2表示拒绝，3表示转批
+     */
+    @PUT("api/companyLeave/update/CompanyLeave")
+    Call<BaseResult<String>> dealLeave(@Header(Constants.TOKEN_NAME) String token, @Body DealLeaveInput input);
+
+    /**
+     * 查询停车申请记录列表
+     * ,@Query("spaceId") int spaceId
+     */
+    @GET("api/carparkApply/select/CarparkApplyPage")
+    Call<BaseResult<ParkApplyHistoryResult>> getParkApplyHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                                 @Query("page") int page,
+                                                                 @Query("size") int size);
 
 }

@@ -4,6 +4,7 @@ import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
@@ -89,6 +90,24 @@ public class ParkApplyModel implements ParkApplyContract.Model {
                 if (body.getStatus() == 200)
                     presenter.dealParkApplySuccess();
                 presenter.error(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
+
+    @Override
+    public void getParkApplyHistory(String token, int page, int size, int spaceId) {
+        ApiFactory.getService().getParkApplyHistory(token, page, size).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
+            @Override
+            public void onSuc(Response<BaseResult<ParkApplyHistoryResult>> response) {
+                BaseResult<ParkApplyHistoryResult> body = response.body();
+                if (body.getStatus() == 200) {
+                    presenter.getParkApplyHistorySuccess(body.getData());
+                } else presenter.error(body.getMessage());
             }
 
             @Override

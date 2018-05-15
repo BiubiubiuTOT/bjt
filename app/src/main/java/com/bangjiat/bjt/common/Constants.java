@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.view.View;
 
 import com.adorkable.iosdialog.AlertDialog;
+import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 
 import java.security.MessageDigest;
@@ -143,12 +145,18 @@ public class Constants {
     }
 
     public static void showSuccessExitDialog(final Activity context, String msg) {
-        new AlertDialog(context).builder().setMsg(msg).
+        new AlertDialog(context).builder().setMsg(msg).setCancelable(false).
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         context.finish();
                     }
                 }).show();
+    }
+
+    public static String getLeaveTypeStr(Context context, int type) {
+        Resources res = context.getResources();
+        String[] formats = res.getStringArray(R.array.leave_type);
+        return formats[type - 1];
     }
 }

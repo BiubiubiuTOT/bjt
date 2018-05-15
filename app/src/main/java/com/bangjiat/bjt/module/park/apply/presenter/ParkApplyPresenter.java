@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.park.apply.presenter;
 
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
@@ -69,6 +70,19 @@ public class ParkApplyPresenter implements ParkApplyContract.Presenter {
 
     @Override
     public void parkApply(String token, ParkApplyInput input) {
+        if (input.getSpaceName().isEmpty()) {
+            view.error("请选择停车场");
+            return;
+        }
+        if (input.getDetailList() == null) {
+            view.error("请选择车辆");
+            return;
+        }
+        if (input.getDetailList().size() == 0) {
+            view.error("请选择车辆");
+            return;
+        }
+
         view.showDialog();
         model.parkApply(token, input);
     }
@@ -77,5 +91,17 @@ public class ParkApplyPresenter implements ParkApplyContract.Presenter {
     public void dealParkApply(String token, DealParkApplyInput input) {
         view.showDialog();
         model.dealParkApply(token, input);
+    }
+
+    @Override
+    public void getParkApplyHistory(String token, int page, int size, int spaceId) {
+        view.showDialog();
+        model.getParkApplyHistory(token, page, size, spaceId);
+    }
+
+    @Override
+    public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
+        view.dismissDialog();
+        view.getParkApplyHistorySuccess(result);
     }
 }

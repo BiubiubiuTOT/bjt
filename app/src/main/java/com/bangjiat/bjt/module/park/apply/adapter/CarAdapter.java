@@ -5,12 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -38,6 +37,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
         notifyDataSetChanged();
     }
 
+    public List<CarBean> getLists() {
+        return lists;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_car, viewGroup, false);
@@ -47,14 +50,30 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         final CarBean bean = lists.get(position);
 
         viewHolder.tv_number.setText("车牌：" + bean.getPlateNumber());
         viewHolder.tv_name.setText("姓名：" + bean.getName());
         viewHolder.tv_type.setText("车型：" + bean.getModel());
         viewHolder.tv_color.setText("颜色：" + bean.getColor());
-        Glide.with(mContext).load(bean.getResource()).centerCrop().into(viewHolder.iv_car);
+
+        viewHolder.cb_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewHolder.cb_2.setChecked(false);
+                bean.setType(2);
+                notifyDataSetChanged();
+            }
+        });
+        viewHolder.cb_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewHolder.cb_1.setChecked(false);
+                bean.setType(1);
+                notifyDataSetChanged();
+            }
+        });
 
         viewHolder.itemView.setTag(position);
     }
@@ -73,7 +92,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_number, tv_type, tv_color;
-        ImageView iv_car;
+        CheckBox cb_1, cb_2;
 
         public ViewHolder(View view) {
             super(view);
@@ -81,7 +100,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
             tv_type = view.findViewById(R.id.tv_type);
             tv_color = view.findViewById(R.id.tv_color);
             tv_number = view.findViewById(R.id.tv_number);
-            iv_car = view.findViewById(R.id.iv_car);
+            cb_1 = view.findViewById(R.id.checkbox_1);
+            cb_2 = view.findViewById(R.id.checkbox_2);
         }
     }
 

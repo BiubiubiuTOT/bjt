@@ -1,4 +1,4 @@
-package com.bangjiat.bjt.module.park.apply.adapter;
+package com.bangjiat.bjt.module.home.work.leave.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.TimeUtils;
-import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
+import com.bangjiat.bjt.module.home.work.leave.beans.CompanyLeaveResult;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import java.util.List;
  * 邮箱:1256144200@qq.com
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
-public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapter.ViewHolder> implements View.OnClickListener {
-    private List<ParkApplyHistoryResult.RecordsBean> lists;
+public class LeaveHistroryAdapter extends RecyclerView.Adapter<LeaveHistroryAdapter.ViewHolder> implements View.OnClickListener {
+    private List<CompanyLeaveResult.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -27,14 +27,14 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
         this.mOnItemClickListener = listener;
     }
 
-    public ApplyHistoryAdapter(List<ParkApplyHistoryResult.RecordsBean> lists, Context context) {
+    public LeaveHistroryAdapter(List<CompanyLeaveResult.RecordsBean> lists, Context context) {
         this.lists = lists;
-        this.mContext = context;
+        this.mContext = mContext;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_apply_history_1, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_leave, viewGroup, false);
         view.setOnClickListener(this);
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -42,27 +42,36 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final ParkApplyHistoryResult.RecordsBean historyBean = lists.get(position);
-        viewHolder.tv_apply_people.setText("申请人：" + historyBean.getApplyer());
-        viewHolder.tv_company_name.setText("公司名称：" + historyBean.getCompany());
-        viewHolder.tv_car_number.setText("申请时间：" + TimeUtils.changeToTime(historyBean.getApplyTime()));
-        int status = historyBean.getStatus();
+        CompanyLeaveResult.RecordsBean noticeBean = lists.get(position);
+        int status = noticeBean.getStatus();
         String des = "";
         switch (status) {
             case 1:
-                viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
                 des = "待审核";
                 break;
             case 2:
-                viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_pass));
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_pass));
                 des = "已通过";
                 break;
             case 3:
-                viewHolder.tv_apply_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_fail));
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_fail));
                 des = "未通过";
                 break;
         }
-        viewHolder.tv_apply_status.setText(des);
+        viewHolder.tv_status.setText(des);
+        int type = noticeBean.getType();
+        String typeDes = "";
+        if (type == 1) {
+            typeDes = "事假";
+        } else if (type == 2) {
+            typeDes = "病假";
+        } else if (type == 3) {
+            typeDes = "出差";
+        } else typeDes = "其他";
+        viewHolder.tv_type.setText("请假类型：" + typeDes);
+        viewHolder.tv_person.setText("申请人：" + noticeBean.getApplyer());
+        viewHolder.tv_status.setText("时间：" + TimeUtils.changeToTime(noticeBean.getCtime()));
 
         viewHolder.itemView.setTag(position);
     }
@@ -80,14 +89,14 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_company_name, tv_apply_people, tv_apply_status, tv_car_number;
+        TextView tv_person, tv_time, tv_type, tv_status;
 
         public ViewHolder(View view) {
             super(view);
-            tv_company_name = view.findViewById(R.id.tv_company_name);
-            tv_apply_people = view.findViewById(R.id.tv_apply_people);
-            tv_apply_status = view.findViewById(R.id.tv_apply_status);
-            tv_car_number = view.findViewById(R.id.tv_car_number);
+            tv_person = view.findViewById(R.id.tv_person);
+            tv_time = view.findViewById(R.id.tv_time);
+            tv_status = view.findViewById(R.id.tv_status);
+            tv_type = view.findViewById(R.id.tv_type);
         }
     }
 

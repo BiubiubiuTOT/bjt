@@ -46,27 +46,6 @@
                 android:textColor="@color/outbox_title"
                 android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="付费方式："
-                    android:textColor="@color/outbox_title"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="月付费"
-                    android:textColor="@color/mine_bg"
-                    android:textSize="12sp" />
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_time"

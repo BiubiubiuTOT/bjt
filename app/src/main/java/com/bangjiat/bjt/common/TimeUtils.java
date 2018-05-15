@@ -20,7 +20,7 @@ public class TimeUtils {
 
     public static String changeToTime(Long l) {
         Date date = new Date(l);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd hh:mm");
         return format.format(date);
     }
 

@@ -5,10 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyDetail;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.ViewHolder> implements View.OnClickListener {
-    private List<CarBean> lists;
+    private List<ParkApplyDetail> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,14 +27,18 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
         this.mOnItemClickListener = listener;
     }
 
-    public CarDetailAdapter(List<CarBean> lists, Context context) {
+    public CarDetailAdapter(List<ParkApplyDetail> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
 
-    public void setLists(List<CarBean> lists) {
+    public void setLists(List<ParkApplyDetail> lists) {
         this.lists = lists;
         notifyDataSetChanged();
+    }
+
+    public List<ParkApplyDetail> getLists() {
+        return lists;
     }
 
     @Override
@@ -46,7 +51,18 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final CarBean bean = lists.get(position);
+        final ParkApplyDetail bean = lists.get(position);
+        viewHolder.tv_name.setText(bean.getCarName());
+        viewHolder.tv_car_number.setText(bean.getPlateNumber());
+        int type = bean.getType();
+        if (type == 1) {
+            viewHolder.ll_number.setVisibility(View.VISIBLE);
+            viewHolder.tv_type.setText("固定车位");
+            viewHolder.tv_number.setText("");
+        } else {
+            viewHolder.ll_number.setVisibility(View.GONE);
+            viewHolder.tv_type.setText("临停车位");
+        }
 
         viewHolder.itemView.setTag(position);
     }
@@ -64,12 +80,16 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_car_number;
+        TextView tv_name, tv_car_number, tv_type, tv_number;
+        LinearLayout ll_number;
 
         public ViewHolder(View view) {
             super(view);
             tv_name = view.findViewById(R.id.tv_name);
             tv_car_number = view.findViewById(R.id.tv_car_number);
+            tv_type = view.findViewById(R.id.tv_type);
+            tv_number = view.findViewById(R.id.tv_number);
+            ll_number = view.findViewById(R.id.ll_number);
         }
     }
 

@@ -9,8 +9,17 @@ import java.util.List;
  */
 
 public class ParkApplyInput {
+    @Override
+    public String toString() {
+        return "ParkApplyInput{" +
+                "spaceName='" + spaceName + '\'' +
+                ", spaceId=" + spaceId +
+                ", detailList=" + detailList +
+                '}';
+    }
+
     private String spaceName;
-    private String spaceId;
+    private int spaceId;
     private List<Detail> detailList;
 
     public static class Detail {
@@ -18,7 +27,26 @@ public class ParkApplyInput {
         private String plateNumber;//车牌号
         private String userId;
         private int type;//1、固定,2、临时
-        private String carId;
+        private int carId;
+
+        public Detail(String carName, String plateNumber, String userId, int type, int carId) {
+            this.carName = carName;
+            this.plateNumber = plateNumber;
+            this.userId = userId;
+            this.type = type;
+            this.carId = carId;
+        }
+
+        @Override
+        public String toString() {
+            return "Detail{" +
+                    "carName='" + carName + '\'' +
+                    ", plateNumber='" + plateNumber + '\'' +
+                    ", userId='" + userId + '\'' +
+                    ", type=" + type +
+                    ", carId=" + carId +
+                    '}';
+        }
     }
 
     public String getSpaceName() {
@@ -29,11 +57,11 @@ public class ParkApplyInput {
         this.spaceName = spaceName;
     }
 
-    public String getSpaceId() {
+    public int getSpaceId() {
         return spaceId;
     }
 
-    public void setSpaceId(String spaceId) {
+    public void setSpaceId(int spaceId) {
         this.spaceId = spaceId;
     }
 
@@ -44,4 +72,6 @@ public class ParkApplyInput {
     public void setDetailList(List<Detail> detailList) {
         this.detailList = detailList;
     }
+
+
 }

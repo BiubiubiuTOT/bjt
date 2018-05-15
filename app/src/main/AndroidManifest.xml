@@ -182,7 +182,8 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".module.secretary.communication.ui.SelectContactsActivity"></activity>
+        <activity android:name=".module.secretary.communication.ui.SelectContactsActivity" />
+        <activity android:name=".module.home.work.leave.ui.LeaveDetailActivity"></activity>
     </application>
 
 </manifest>

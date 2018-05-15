@@ -64,14 +64,13 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_number, tv_parking, tv_type, tv_time;
+        TextView tv_number, tv_parking, tv_time;
         ImageView iv_car;
 
         public ViewHolder(View view) {
             super(view);
             tv_number = view.findViewById(R.id.tv_number);
             tv_parking = view.findViewById(R.id.tv_parking);
-            tv_type = view.findViewById(R.id.tv_type);
             tv_time = view.findViewById(R.id.tv_time);
             iv_car = view.findViewById(R.id.iv_car);
         }

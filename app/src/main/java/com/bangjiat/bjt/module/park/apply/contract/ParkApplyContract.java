@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.park.apply.contract;
 
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
@@ -22,6 +23,8 @@ public interface ParkApplyContract {
         void parkApply(String token, ParkApplyInput input);
 
         void dealParkApply(String token, DealParkApplyInput input);
+
+        void getParkApplyHistory(String token, int page, int size, int spaceId);
     }
 
     interface View {
@@ -38,6 +41,8 @@ public interface ParkApplyContract {
         void parkApplySuccess();
 
         void dealParkApplySuccess();
+
+        void getParkApplyHistorySuccess(ParkApplyHistoryResult result);
     }
 
     interface Presenter {
@@ -45,7 +50,7 @@ public interface ParkApplyContract {
 
         void getParkSpaceSuccess(ParkingResult s);
 
-        void getWorkersCarSuccess( List<CarBean> list);
+        void getWorkersCarSuccess(List<CarBean> list);
 
         void parkApplySuccess();
 
@@ -58,5 +63,9 @@ public interface ParkApplyContract {
         void parkApply(String token, ParkApplyInput input);
 
         void dealParkApply(String token, DealParkApplyInput input);
+
+        void getParkApplyHistory(String token, int page, int size, int spaceId);
+
+        void getParkApplyHistorySuccess(ParkApplyHistoryResult result);
     }
 }

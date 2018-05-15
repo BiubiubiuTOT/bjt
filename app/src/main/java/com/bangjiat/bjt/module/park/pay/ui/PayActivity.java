@@ -3,8 +3,6 @@ package com.bangjiat.bjt.module.park.pay.ui;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Xml;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -37,10 +35,9 @@ import com.xgr.easypay.callback.IPayCallback;
 import com.xgr.easypay.wxpay.WXPay;
 import com.xgr.easypay.wxpay.WXPayInfoImpli;
 
-import org.xmlpull.v1.XmlPullParser;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,14 +67,26 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     EditText et_total_money;
     @BindView(R.id.et_msg)
     EditText et_msg;
+    @BindView(R.id.et_pay_type)
+    EditText et_pay_type;
+    @BindView(R.id.tv_des)
+    TextView tv_des;
+    @BindView(R.id.tv_money_des)
+    TextView tv_money_des;
+
     private TimePickerView pvTime;
     private List<String> options1Items;
     private OptionsPickerView<String> pvModes;
+    private OptionsPickerView<String> pvTypes;
     private OptionsPickerView<String> pvMonths;
+    private OptionsPickerView<String> pvYears;
     public Date date;
     private List<String> months;
-    private int month = -1;
-    private int payType;
+    private List<String> years;
+    private List<String> types;
+    private int number = -1;
+    private int payMode;
+    private int payType = -1;
     private Dialog dialog;
     private PayContract.Presenter presenter;
     private long beginTime;
@@ -86,6 +95,7 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     private String totalFee;
     private PayListResult result;
     private String monthFee;
+    private ParkingDetail detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +115,46 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         }
 
         initMonths();
+        initTypes();
+        initYears();
         options1Items = new ArrayList<>();
         options1Items.add("支付宝");
         options1Items.add("微信");
         initTimePicker();
         initMothPicker();
         initModePicker();
+        initTypePicker();
+        initYearPicker();
+    }
+
+    private void initTypePicker() {
+        pvTypes = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                payType = options1 + 1;
+                et_pay_type.setText(types.get(options1));
+
+                if (options1 == 1) {
+                    et_total_month.setHint("请选择交纳年数");
+                    tv_des.setText("交纳年数");
+                    tv_money_des.setText("每年费用");
+                    tv_money_month.setText(detail.getYearFee());
+                } else {
+                    et_total_month.setHint("请选择交纳月数");
+                    tv_des.setText("交纳月数");
+                    tv_money_des.setText("每月费用");
+                    tv_money_month.setText(detail.getMonthFee());
+                }
+                number = -1;
+                et_total_month.setText("");
+                et_end_time.setText("");
+                et_total_money.setText("");
+                et_start_time.setText("");
+                date = null;
+            }
+        }).setSubmitColor(Color.BLACK)
+                .setCancelColor(Color.BLACK).build();
+        pvTypes.setPicker(types);
     }
 
     private void initMonths() {
@@ -129,11 +173,26 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         months.add("十二个月");
     }
 
+    private void initYears() {
+        years = new ArrayList<>();
+        years.add("一年");
+        years.add("两年");
+        years.add("三年");
+        years.add("四年");
+        years.add("五年");
+    }
+
+    private void initTypes() {
+        types = new ArrayList<>();
+        types.add("月付费");
+        types.add("年付费");
+    }
+
     private void initModePicker() {
         pvModes = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                payType = options1 + 1;
+                payMode = options1 + 1;
                 et_pay_mode.setText(options1Items.get(options1));
             }
         }).setSubmitColor(Color.BLACK)
@@ -146,7 +205,7 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         pvMonths = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int i, int i1, int i2, View view) {
-                PayActivity.this.month = i + 1;
+                PayActivity.this.number = i + 1;
                 String s = months.get(i);
                 et_total_month.setText(s);
                 float n = Float.parseFloat(tv_money_month.getText().toString());
@@ -158,6 +217,24 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
                 .setSubmitColor(Color.BLACK)
                 .setCancelColor(Color.BLACK).build();
         pvMonths.setPicker(months);
+    }
+
+    private void initYearPicker() {
+        pvYears = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int i, int i1, int i2, View view) {
+                PayActivity.this.number = i + 1;
+                String s = years.get(i);
+                et_total_month.setText(s);
+                float n = Float.parseFloat(tv_money_month.getText().toString());
+                et_total_money.setText(String.valueOf((i + 1) * n));
+
+                setEnd();
+            }
+        })
+                .setSubmitColor(Color.BLACK)
+                .setCancelColor(Color.BLACK).build();
+        pvYears.setPicker(years);
     }
 
     private void initTimePicker() {
@@ -179,10 +256,13 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     }
 
     private void setEnd() {
-        if (month != -1 && date != null) {
+        if (number != -1 && date != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            calendar.add(calendar.MONTH, month);
+            if (payType == 2) {
+                calendar.add(calendar.MONTH, number * 12);
+            } else
+                calendar.add(calendar.MONTH, number);
 
             endTime = calendar.getTime().getTime();
 
@@ -192,7 +272,9 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
 
     @OnTouch(R.id.et_total_month)
     public boolean onTouchTotalMonth(View v, MotionEvent event) {
-        pvMonths.show();
+        if (payType == 2) {
+            pvYears.show();
+        } else pvMonths.show();
         return true;
     }
 
@@ -208,29 +290,51 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         return true;
     }
 
+    @OnTouch(R.id.et_pay_type)
+    public boolean onTouchPayType(View v, MotionEvent event) {
+        pvTypes.show();
+        return true;
+    }
+
     @OnClick(R.id.btn_done)
     public void clickDone(View view) {
-        if (month == -1) {
-            fail("请选择缴纳月数");
+
+        if (payType == -1) {
+            fail("请选择缴费方式");
+            return;
+        }
+        if (number == -1) {
+            if (payType == 2) {
+                fail("请选择交纳年数");
+            } else fail("请选择交纳月数");
+
             return;
         }
         if (date == null) {
             fail("请选择生效日期");
             return;
         }
+        if (payMode == -1) {
+            fail("请选择支付方式");
+            return;
+
+        }
+
         PayBean bean = new PayBean();
         totalFee = et_total_money.getText().toString();
         bean.setTotalFee(totalFee);
-        bean.setPayWay(payType);
+        bean.setPayWay(payMode);
         bean.setBeginTime(beginTime);
         bean.setEndTime(endTime);
-        bean.setMonths(month);
-        bean.setMonthFee(tv_money_month.getText().toString());
-        bean.setMonthFee(monthFee);
+        bean.setNumber(number);
+        bean.setFee(monthFee);
+        bean.setType(payType);
         bean.setCarId(result.getCarId());//车辆编号
         bean.setSpaceId(result.getSpaceId());//停车场编号
         bean.setSpaceName(result.getSpaceName());//停车场名称
         bean.setPlateNumber(result.getPlateNumber());//车牌号
+
+        Logger.d(bean.toString());
 
         presenter.addPayInfo(token, bean);
     }
@@ -270,12 +374,8 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
      * 微信支付
      */
     private void wxpay(WXPayInfoImpli wxPayInfoImpli) {
-        //实例化微信支付策略
         String wxAppId = "wx432ba0b2e3addde9";
-        wxPayInfoImpli.setPackageValue("Sign=WXPay");
-        wxPayInfoImpli.setTimestamp(String.valueOf(System.currentTimeMillis()/1000));
         WXPay wxPay = WXPay.getInstance(this, wxAppId);
-        //策略场景类调起支付方法开始支付，以及接收回调。
         EasyPay.pay(wxPay, this, wxPayInfoImpli, new IPayCallback() {
             @Override
             public void success() {
@@ -330,59 +430,33 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     @Override
     public void paySuccess(String str) {
         Logger.d(str);
-        if (payType == 1) {
+        if (payMode == 1) {
             alipay(str);
-        } else wxpay(parseXml(str));
+        } else wxpay(parseJson(str));
     }
 
-    private WXPayInfoImpli parseXml(String xmlString) {
-        WXPayInfoImpli orderInfo = null;
-        XmlPullParser xmlPullParser = Xml.newPullParser(); //由android.util.Xml创建一个XmlPullParser实例
-        InputStream is = new ByteArrayInputStream(xmlString.getBytes());
+    private WXPayInfoImpli parseJson(String str) {
+        WXPayInfoImpli orderInfo = new WXPayInfoImpli();
         try {
-            xmlPullParser.setInput(is, "UTF-8");               //设置输入流 并指明编码方式
-            int eventType = xmlPullParser.getEventType();
-            //eventType 默认值为0，每次调用parser.next()会自动向后读取
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                switch (eventType) {
-                    case XmlPullParser.START_TAG:
-                        if (xmlPullParser.getName().equals("xml")) {
-                            orderInfo = new WXPayInfoImpli();
-                        } else if (xmlPullParser.getName().equals("appid")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setAppid(xmlPullParser.getText());
-                        } else if (xmlPullParser.getName().equals("nonce_str")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setNonceStr(xmlPullParser.getText());
-                        } else if (xmlPullParser.getName().equals("package")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setPackageValue(xmlPullParser.getText());
-                        } else if (xmlPullParser.getName().equals("mch_id")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setPartnerid(xmlPullParser.getText());
-                        } else if (xmlPullParser.getName().equals("prepay_id")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setPrepayId(xmlPullParser.getText());
-                        } else if (xmlPullParser.getName().equals("timestamp")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setTimestamp(String.valueOf(Long.parseLong(xmlPullParser.getText()) * 1000));
-                        } else if (xmlPullParser.getName().equals("sign")) {
-                            eventType = xmlPullParser.next();
-                            orderInfo.setSign(xmlPullParser.getText());
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        if (xmlPullParser.getName().equals("xml")) {
-                            Log.i("tag", "XML 解析完毕");
-                            eventType = xmlPullParser.next();
-                        }
-                        break;
-                }
-                eventType = xmlPullParser.next();
-            }
-        } catch (Exception e) {
+            String packageValue = new JSONObject(str).getString("package");
+            String noncestr = new JSONObject(str).getString("noncestr");
+            String partnerid = new JSONObject(str).getString("partnerid");
+            String timestamp = new JSONObject(str).getString("timestamp");
+            String prepayid = new JSONObject(str).getString("prepayid");
+            String sign = new JSONObject(str).getString("sign");
+            String appid = new JSONObject(str).getString("appid");
+
+            orderInfo.setTimestamp(timestamp);
+            orderInfo.setPackageValue(packageValue);
+            orderInfo.setPrepayId(prepayid);
+            orderInfo.setNonceStr(noncestr);
+            orderInfo.setPartnerid(partnerid);
+            orderInfo.setSign(sign);
+            orderInfo.setAppid(appid);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return orderInfo;
     }
 
@@ -395,6 +469,7 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     @Override
     public void getParkingDetailSuccess(ParkingDetail detail) {
         if (detail != null) {
+            this.detail = detail;
             monthFee = detail.getMonthFee();
             tv_money_month.setText(monthFee);
         }

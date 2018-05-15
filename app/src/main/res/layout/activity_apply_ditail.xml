@@ -28,7 +28,6 @@
                 android:id="@+id/tv_company_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="贵州邦佳大数据科技有限公司"
                 android:textColor="@color/dialog_title"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -40,27 +39,14 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="操作记录"
-        android:textColor="@color/dialog_title"
-        android:textSize="16sp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_history"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
 
     <RelativeLayout
         android:id="@+id/rl_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="7dp">
+        android:padding="7dp"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/btn_refuse"

@@ -12,8 +12,8 @@ public class PayBean {
      * carId : 0
      * ctime : 0
      * endTime : 0
-     * monthFee : 0
-     * months : 0
+     * fee : 0
+     * number : 0
      * payWay : 0
      * paymentId : 0
      * plateNumber : string
@@ -31,8 +31,8 @@ public class PayBean {
     private int carId;
     private long ctime;
     private long endTime;
-    private String monthFee;//每月费用
-    private int months;
+    private String fee;//每月费用
+    private int number;
     private int payWay;//(1表示支付宝，2表示微信)
     private int paymentId;
     private String plateNumber;
@@ -44,9 +44,18 @@ public class PayBean {
     private String totalFee;
     private String userId;
     private String username;
+    private int type;//缴费类型：1、按月缴费；2、按年缴费
 
     public long getBeginTime() {
         return beginTime;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public void setBeginTime(long beginTime) {
@@ -77,20 +86,20 @@ public class PayBean {
         this.endTime = endTime;
     }
 
-    public String getMonthFee() {
-        return monthFee;
+    public String getFee() {
+        return fee;
     }
 
-    public void setMonthFee(String monthFee) {
-        this.monthFee = monthFee;
+    public void setFee(String fee) {
+        this.fee = fee;
     }
 
-    public int getMonths() {
-        return months;
+    public int getNumber() {
+        return number;
     }
 
-    public void setMonths(int months) {
-        this.months = months;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public int getPayWay() {

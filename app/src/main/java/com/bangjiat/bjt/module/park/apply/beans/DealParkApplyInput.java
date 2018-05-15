@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class DealParkApplyInput {
-    private String applyId;
+    private int applyId;
     private int type;//操作类型1表示同意，2表示拒绝
     private List<Detail> detailList;
 
@@ -17,5 +17,59 @@ public class DealParkApplyInput {
         private String userId;
         private int type;//1、固定,2、临时
         private String lotNumber;//车位编号
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public String getLotNumber() {
+            return lotNumber;
+        }
+
+        public void setLotNumber(String lotNumber) {
+            this.lotNumber = lotNumber;
+        }
+
+        public Detail(String userId, int type, String lotNumber) {
+            this.userId = userId;
+            this.type = type;
+            this.lotNumber = lotNumber;
+        }
+    }
+
+    public int getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(int applyId) {
+        this.applyId = applyId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public List<Detail> getDetailList() {
+        return detailList;
+    }
+
+    public void setDetailList(List<Detail> detailList) {
+        this.detailList = detailList;
     }
 }

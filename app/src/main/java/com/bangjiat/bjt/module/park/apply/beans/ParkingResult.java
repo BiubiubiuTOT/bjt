@@ -244,6 +244,28 @@ public class ParkingResult {
             public void setFixed(int fixed) {
                 this.fixed = fixed;
             }
+
+            @Override
+            public String toString() {
+                return "RecordsBean{" +
+                        "spaceId=" + spaceId +
+                        ", name='" + name + '\'' +
+                        ", address='" + address + '\'' +
+                        ", longitude='" + longitude + '\'' +
+                        ", latitude='" + latitude + '\'' +
+                        ", number=" + number +
+                        ", open=" + open +
+                        ", monthFee=" + monthFee +
+                        ", yearFee=" + yearFee +
+                        ", hourFee=" + hourFee +
+                        ", temporaryNumber=" + temporaryNumber +
+                        ", fixedNumber=" + fixedNumber +
+                        ", contact='" + contact + '\'' +
+                        ", contactWay='" + contactWay + '\'' +
+                        ", temporary=" + temporary +
+                        ", fixed=" + fixed +
+                        '}';
+            }
         }
     }
 }

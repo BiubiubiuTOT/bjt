@@ -33,7 +33,7 @@ public class ParkingDetail {
     private long ctime;
     private int fixed;
     private int fixedNumber;
-    private int hourFee;
+    private String hourFee;
     private String latitude;
     private String longitude;
     private String monthFee;
@@ -43,7 +43,7 @@ public class ParkingDetail {
     private int spaceId;
     private int temporary;
     private int temporaryNumber;
-    private int yearFee;
+    private String yearFee;
 
     public String getAddress() {
         return address;
@@ -93,11 +93,11 @@ public class ParkingDetail {
         this.fixedNumber = fixedNumber;
     }
 
-    public int getHourFee() {
+    public String getHourFee() {
         return hourFee;
     }
 
-    public void setHourFee(int hourFee) {
+    public void setHourFee(String hourFee) {
         this.hourFee = hourFee;
     }
 
@@ -173,11 +173,11 @@ public class ParkingDetail {
         this.temporaryNumber = temporaryNumber;
     }
 
-    public int getYearFee() {
+    public String getYearFee() {
         return yearFee;
     }
 
-    public void setYearFee(int yearFee) {
+    public void setYearFee(String yearFee) {
         this.yearFee = yearFee;
     }
 }

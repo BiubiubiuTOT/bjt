@@ -43,7 +43,7 @@ import butterknife.OnClick;
  * 新的申请 服务
  */
 public class NewApplyActivity extends BaseToolBarActivity implements NewServiceApplyContract.View {
-    private static final int GET_PERSON = 2;
+    public static final int GET_PERSON = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.ll_add_photo)

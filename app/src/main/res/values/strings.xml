@@ -114,4 +114,11 @@
     <string name="personal_id_number">身份证信息</string>
     <string name="personal_id_number_default">未验证</string>
     <string name="invite">邀约</string>
+
+    <string-array name="leave_type">
+        <item>事假</item>
+        <item>病假</item>
+        <item>出差</item>
+        <item>其他</item>
+    </string-array>
 </resources>

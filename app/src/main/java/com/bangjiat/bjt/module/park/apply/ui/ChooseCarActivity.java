@@ -14,6 +14,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.ChooseCarAdapter;
+import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
 import com.bangjiat.bjt.module.park.apply.presenter.ParkApplyPresenter;
@@ -143,6 +144,11 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
 
     @Override
     public void dealParkApplySuccess() {
+
+    }
+
+    @Override
+    public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
 
     }
 }
