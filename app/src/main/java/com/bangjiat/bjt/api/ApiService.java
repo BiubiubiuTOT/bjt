@@ -7,12 +7,14 @@ import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaTotalResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.home.work.leave.beans.CompanyLeaveResult;
 import com.bangjiat.bjt.module.home.work.leave.beans.DealLeaveInput;
 import com.bangjiat.bjt.module.home.work.leave.beans.LeaveBean;
+import com.bangjiat.bjt.module.home.work.permission.beans.UpdateAdminInput;
 import com.bangjiat.bjt.module.main.account.beans.LoginInput;
 import com.bangjiat.bjt.module.main.account.beans.RecoveredPasswordInput;
 import com.bangjiat.bjt.module.main.account.beans.RegisterInput;
@@ -554,5 +556,60 @@ public interface ApiService {
     Call<BaseResult<ParkApplyHistoryResult>> getParkApplyHistory(@Header(Constants.TOKEN_NAME) String token,
                                                                  @Query("page") int page,
                                                                  @Query("size") int size);
+
+    /**
+     * 给员工添加管理员权限
+     */
+    @POST("api/company/save/CompanyAdminUser")
+    Call<BaseResult<String>> addAdmin(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+
+    /**
+     * 删除公司管理员权限
+     */
+    @HTTP(method = "DELETE", path = "api/company/delete/CompanyAdminUser", hasBody = true)
+    Call<BaseResult<String>> deleteAdmin(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+
+    /**
+     * 工作台管理员权限转交
+     */
+    @PUT("api/company/update/CompanyAdminUser")
+    Call<BaseResult<String>> updateAdmin(@Header(Constants.TOKEN_NAME) String token, @Body UpdateAdminInput userId);
+
+    /**
+     * 获取所有员工打卡记录
+     */
+    @GET("api/companyClock/select/CompanyClockAllList")
+    Call<BaseResult<List<DakaHistoryResult>>> getAllColckList(@Header(Constants.TOKEN_NAME) String token,
+                                                              @Query("beginTime") long bg, @Query("endTime") long end);
+
+    /**
+     * 获取个人打卡记录
+     */
+    @GET("api/companyClock/select/CompanyClockList")
+    Call<BaseResult<List<DakaHistoryResult>>> getClockList(@Header(Constants.TOKEN_NAME) String token,
+                                                           @Query("beginTime") long bg, @Query("endTime") long end);
+
+    /**
+     * 获取单个员工的打卡记录
+     */
+    @GET("api/companyClock/select/CompanyUserClockList")
+    Call<BaseResult<List<DakaHistoryResult>>> getUserClockList(@Header(Constants.TOKEN_NAME) String token,
+                                                               @Query("beginTime") long bg, @Query("endTime") long end,
+                                                               @Query("userId") String userId);
+
+    /**
+     * 获取打卡记录统计信息
+     */
+    @GET("api/companyClock/select/selectCompanyClockTotal")
+    Call<BaseResult<DakaTotalResult>> getClockTotal(@Header(Constants.TOKEN_NAME) String token,
+                                                    @Query("beginTime") long bg, @Query("endTime") long end);
+
+    /**
+     * 获取员工自己的打卡统计信息
+     */
+    @GET("api/companyClock/select/UserClockTotalList")
+    Call<BaseResult<DakaTotalResult>> getUserClockTotal(@Header(Constants.TOKEN_NAME) String token,
+                                                        @Query("beginTime") long bg, @Query("endTime") long end,
+                                                        @Query("userId") String userId);
 
 }

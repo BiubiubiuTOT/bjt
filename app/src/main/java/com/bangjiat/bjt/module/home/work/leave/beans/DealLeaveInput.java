@@ -34,4 +34,13 @@ public class DealLeaveInput {
     public void setProgress(Progress progress) {
         this.progress = progress;
     }
+
+    @Override
+    public String toString() {
+        return "DealLeaveInput{" +
+                "leaveId=" + leaveId +
+                ", type=" + type +
+                ", progress=" + progress +
+                '}';
+    }
 }

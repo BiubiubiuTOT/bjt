@@ -33,6 +33,6 @@ public class PermissionMainActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.btn_setting)
     public void clickSetting(View view) {
-
+        startActivity(new Intent(mContext, AdminSettingActivity.class));
     }
 }

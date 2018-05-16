@@ -18,9 +18,9 @@ import com.bangjiat.bjt.module.home.work.leave.beans.LeaveBean;
 import com.bangjiat.bjt.module.home.work.leave.beans.Progress;
 import com.bangjiat.bjt.module.home.work.leave.contract.LeaveContract;
 import com.bangjiat.bjt.module.home.work.leave.presenter.LeavePresenter;
+import com.bangjiat.bjt.module.home.work.permission.ui.AdminSettingActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
-import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
-import com.bangjiat.bjt.module.secretary.service.ui.BuildingAdminListActivity;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -59,7 +59,7 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
     private long start;
     private long end;
     private int type = -1;
-    private BuildingAdminListResult result;
+    private WorkersResult.RecordsBean result;
     private Dialog dialog;
     private LeaveContract.Presenter presenter;
 
@@ -96,7 +96,9 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
 
     @OnClick(R.id.tv_person)
     public void onClickPerson(View v) {
-        startActivityForResult(new Intent(mContext, BuildingAdminListActivity.class), GET_PERSON);
+        Intent intent = new Intent(mContext, AdminSettingActivity.class);
+        intent.putExtra("type", 1);
+        startActivityForResult(intent, GET_PERSON);
     }
 
     @Override
@@ -104,9 +106,8 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == GET_PERSON) {
-                result = (BuildingAdminListResult) data.getSerializableExtra("data");
-                if (result != null)
-                    tv_person.setText(result.getRealname());
+                result = (WorkersResult.RecordsBean) data.getSerializableExtra("data");
+                tv_person.setText(result.getRealname());
             }
         }
     }
@@ -185,7 +186,7 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
         leaveBean.setEndTime(end);
         leaveBean.setReason(reason);
         leaveBean.setType(type);
-        leaveBean.setProgress(new Progress(result.getUserId(), result.getRealname(), result.getUsername()));
+        leaveBean.setProgress(new Progress(result.getUserId(), result.getRealname(), result.getPhone()));
 
         Logger.d(leaveBean.toString());
         presenter.addLeave(DataUtil.getToken(mContext), leaveBean);

@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.beans;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 /**
  * @author ligh
@@ -17,6 +18,9 @@ public class RuleInput extends SugarRecord {
     private String inTime;
     private String outTime;
     private String workDay;//上班日：1,2,3,4,5；用,号分开，表示周一到周五都上班
+    private int comapanyId;
+    @Ignore
+    private long ctime;
 
     public String getRuleId() {
         return ruleId;
@@ -82,17 +86,35 @@ public class RuleInput extends SugarRecord {
         this.workDay = workDay;
     }
 
+    public int getComapanyId() {
+        return comapanyId;
+    }
+
+    public void setComapanyId(int comapanyId) {
+        this.comapanyId = comapanyId;
+    }
+
+    public long getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(long ctime) {
+        this.ctime = ctime;
+    }
+
     @Override
     public String toString() {
         return "RuleInput{" +
-                "address='" + address + '\'' +
+                "ruleId='" + ruleId + '\'' +
+                ", address='" + address + '\'' +
                 ", wifiName='" + wifiName + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", inTime='" + inTime + '\'' +
                 ", outTime='" + outTime + '\'' +
                 ", workDay='" + workDay + '\'' +
+                ", comapanyId=" + comapanyId +
+                ", ctime=" + ctime +
                 '}';
     }
-
 }

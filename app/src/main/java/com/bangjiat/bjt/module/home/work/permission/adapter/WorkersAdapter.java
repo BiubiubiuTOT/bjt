@@ -1,4 +1,4 @@
-package com.bangjiat.bjt.module.home.work.permission.ui;
+package com.bangjiat.bjt.module.home.work.permission.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.secretary.door.beans.PeopleBean;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHolder> implements View.OnClickListener {
-    private List<PeopleBean> lists;
+    private List<WorkersResult.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,7 +26,7 @@ public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHold
         this.mOnItemClickListener = listener;
     }
 
-    public WorkersAdapter(List<PeopleBean> lists, Context context) {
+    public WorkersAdapter(List<WorkersResult.RecordsBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -41,8 +41,14 @@ public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final PeopleBean bean = lists.get(position);
-        viewHolder.tv_name.setText(bean.getName() + "(产品总监)");
+        final WorkersResult.RecordsBean bean = lists.get(position);
+        String realname = bean.getRealname();
+        String job = bean.getJob();
+        if (realname == null)
+            realname = "无";
+        if (job == null)
+            job = "无";
+        viewHolder.tv_name.setText(realname + "(" + job + ")");
         viewHolder.tv_phone.setText("电话：" + bean.getPhone());
 
         viewHolder.itemView.setTag(position);

@@ -1,4 +1,4 @@
-package com.bangjiat.bjt.module.park.apply.adapter;
+package com.bangjiat.bjt.module.home.work.leave.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bangjiat.bjt.common.TimeUtils;
+import com.bangjiat.bjt.module.secretary.workers.beans.ApproverBean;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdapter.ViewHolder> implements View.OnClickListener {
-    private List<CarBean> lists;
+    private List<ApproverBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,12 +27,12 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
         this.mOnItemClickListener = listener;
     }
 
-    public HistoryDetailAdapter(List<CarBean> lists, Context context) {
+    public HistoryDetailAdapter(List<ApproverBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
 
-    public void setLists(List<CarBean> lists) {
+    public void setLists(List<ApproverBean> lists) {
         this.lists = lists;
         notifyDataSetChanged();
     }
@@ -46,7 +47,35 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final CarBean bean = lists.get(position);
+        final ApproverBean bean = lists.get(position);
+        int status = bean.getStatus();
+        String des = "";
+        switch (status) {
+            case 0:
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
+                des = "待审核";
+                break;
+            case 1:
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_pass));
+                des = "已同意";
+                break;
+            case 2:
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_fail));
+                des = "已拒绝";
+                break;
+            case 3:
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.apply_history_applying));
+                des = "已转批";
+                break;
+            default:
+                viewHolder.tv_status.setTextColor(mContext.getResources().getColor(R.color.dialog_title));
+                des = "发起申请";
+                break;
+        }
+        viewHolder.tv_status.setText(des);
+        viewHolder.tv_time.setText(TimeUtils.changeToTime(bean.getLastTime()));
+        viewHolder.tv_name.setText(bean.getLastUserRealname());
+
 
         viewHolder.itemView.setTag(position);
     }

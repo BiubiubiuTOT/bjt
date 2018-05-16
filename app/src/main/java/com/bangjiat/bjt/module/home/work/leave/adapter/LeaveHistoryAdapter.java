@@ -18,7 +18,7 @@ import java.util.List;
  * 邮箱:1256144200@qq.com
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
-public class LeaveHistroryAdapter extends RecyclerView.Adapter<LeaveHistroryAdapter.ViewHolder> implements View.OnClickListener {
+public class LeaveHistoryAdapter extends RecyclerView.Adapter<LeaveHistoryAdapter.ViewHolder> implements View.OnClickListener {
     private List<CompanyLeaveResult.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
@@ -27,9 +27,9 @@ public class LeaveHistroryAdapter extends RecyclerView.Adapter<LeaveHistroryAdap
         this.mOnItemClickListener = listener;
     }
 
-    public LeaveHistroryAdapter(List<CompanyLeaveResult.RecordsBean> lists, Context context) {
+    public LeaveHistoryAdapter(List<CompanyLeaveResult.RecordsBean> lists, Context context) {
         this.lists = lists;
-        this.mContext = mContext;
+        this.mContext = context;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class LeaveHistroryAdapter extends RecyclerView.Adapter<LeaveHistroryAdap
         } else typeDes = "其他";
         viewHolder.tv_type.setText("请假类型：" + typeDes);
         viewHolder.tv_person.setText("申请人：" + noticeBean.getApplyer());
-        viewHolder.tv_status.setText("时间：" + TimeUtils.changeToTime(noticeBean.getCtime()));
+        viewHolder.tv_time.setText("时间：" + TimeUtils.changeToTime(noticeBean.getCtime()));
 
         viewHolder.itemView.setTag(position);
     }

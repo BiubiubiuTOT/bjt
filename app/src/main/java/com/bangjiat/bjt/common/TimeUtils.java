@@ -1,7 +1,10 @@
 package com.bangjiat.bjt.common;
 
+import com.orhanobut.logger.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -21,6 +24,12 @@ public class TimeUtils {
     public static String changeToTime(Long l) {
         Date date = new Date(l);
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd hh:mm");
+        return format.format(date);
+    }
+
+    public static String changeToHM(Long l) {
+        Date date = new Date(l);
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
         return format.format(date);
     }
 
@@ -73,5 +82,43 @@ public class TimeUtils {
         } else {
             return "刚刚";
         }
+    }
+
+    /**
+     * 获取当天0点的毫秒数
+     *
+     * @return
+     */
+    public static long getBeginOfDay() {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        Date beginOfDate = calendar1.getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Logger.d("当天0点时间:" + format.format(beginOfDate));
+        return beginOfDate.getTime();
+    }
+
+    /**
+     * 获取当月0点的毫秒数
+     *
+     * @return
+     */
+    public static long getBeginOfMonth() {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), 1, 0, 0, 0);
+        Date beginOfDate = calendar1.getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Logger.d("当月0点时间:" + format.format(beginOfDate));
+        return beginOfDate.getTime();
+    }
+
+    /**
+     * 获取当天日
+     */
+    public static int getDayOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_MONTH);
     }
 }

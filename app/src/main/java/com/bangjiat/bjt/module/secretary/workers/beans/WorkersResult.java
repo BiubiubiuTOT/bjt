@@ -184,7 +184,9 @@ public class WorkersResult {
                     ", userId='" + userId + '\'' +
                     '}';
         }
+
     }
+
 
     @Override
     public String toString() {

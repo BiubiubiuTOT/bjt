@@ -1,22 +1,38 @@
 package com.bangjiat.bjt.module.home.work.leave.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
+import com.bangjiat.bjt.module.home.work.leave.adapter.HistoryDetailAdapter;
 import com.bangjiat.bjt.module.home.work.leave.beans.CompanyLeaveResult;
 import com.bangjiat.bjt.module.home.work.leave.beans.DealLeaveInput;
+import com.bangjiat.bjt.module.home.work.leave.beans.Progress;
 import com.bangjiat.bjt.module.home.work.leave.contract.LeaveContract;
+import com.bangjiat.bjt.module.home.work.leave.presenter.LeavePresenter;
+import com.bangjiat.bjt.module.home.work.permission.ui.AdminSettingActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.secretary.workers.beans.ApproverBean;
+import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.dou361.dialogui.DialogUIUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.bangjiat.bjt.module.secretary.service.ui.NewApplyActivity.GET_PERSON;
 
 public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements LeaveContract.View {
     private CompanyLeaveResult.RecordsBean bean;
@@ -28,8 +44,13 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     TextView tv_end_time;
     @BindView(R.id.tv_reason)
     TextView tv_reason;
+    @BindView(R.id.recycler_view)
+    RecyclerView recycler_view;
     private Dialog dialog;
     private int type;
+    private WorkersResult.RecordsBean result;
+    private Progress progress;
+    private LeaveContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +59,23 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     }
 
     private void initData() {
+        presenter = new LeavePresenter(this);
+        recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
+        recycler_view.setHasFixedSize(true);
         bean = (CompanyLeaveResult.RecordsBean) getIntent().getSerializableExtra("data");
         if (bean != null) {
             String leaveTypeStr = Constants.getLeaveTypeStr(mContext, bean.getType());
-            tv_type.setText(leaveTypeStr);
-            tv_start_time.setText(TimeUtils.changeToTime(bean.getBeginTime()));
-            tv_end_time.setText(TimeUtils.changeToTime(bean.getEndTime()));
-            tv_reason.setText(bean.getReason());
+            tv_type.setText("请假类型：" + leaveTypeStr);
+            tv_start_time.setText("开始时间：" + TimeUtils.changeToTime(bean.getBeginTime()));
+            tv_end_time.setText("结束时间：" + TimeUtils.changeToTime(bean.getEndTime()));
+            tv_reason.setText("请假事由：" + bean.getReason());
+
+            String approver = bean.getApprover();
+            List<ApproverBean> list = new Gson().fromJson(approver, new TypeToken<List<ApproverBean>>() {
+            }.getType());
+            HistoryDetailAdapter mAdapter = new HistoryDetailAdapter(list, mContext);
+            recycler_view.setAdapter(mAdapter);
+            Logger.d(list.toString());
         }
     }
 
@@ -58,7 +89,11 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
         DealLeaveInput input = new DealLeaveInput();
         input.setLeaveId(bean.getLeaveId());
         input.setType(type);
-//        Progress progress=new Progress();
+        if (progress != null)
+            input.setProgress(progress);
+
+        Logger.d(input.toString());
+        presenter.dealLeave(DataUtil.getToken(mContext), input);
     }
 
     @OnClick(R.id.btn_refuse)
@@ -67,10 +102,13 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
         deal();
     }
 
+
     @OnClick(R.id.btn_to)
     public void clickTo(View view) {
         type = 3;
-        deal();
+        Intent intent = new Intent(mContext, AdminSettingActivity.class);
+        intent.putExtra("type", 1);
+        startActivityForResult(intent, GET_PERSON);
     }
 
     @Override
@@ -118,5 +156,17 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     @Override
     public void dealLeaveSuccess() {
         Constants.showSuccessExitDialog(this, "审批成功");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == GET_PERSON) {
+                result = (WorkersResult.RecordsBean) data.getSerializableExtra("data");
+                progress = new Progress(result.getUserId(), result.getRealname(), result.getPhone());
+                deal();
+            }
+        }
     }
 }

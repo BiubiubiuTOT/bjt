@@ -10,7 +10,7 @@ import android.view.View;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
-import com.bangjiat.bjt.module.home.work.leave.adapter.LeaveHistroryAdapter;
+import com.bangjiat.bjt.module.home.work.leave.adapter.LeaveHistoryAdapter;
 import com.bangjiat.bjt.module.home.work.leave.beans.CompanyLeaveResult;
 import com.bangjiat.bjt.module.home.work.leave.contract.LeaveContract;
 import com.bangjiat.bjt.module.home.work.leave.presenter.LeavePresenter;
@@ -27,7 +27,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     private LeaveContract.Presenter presenter;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    private LeaveHistroryAdapter mAdapter;
+    private LeaveHistoryAdapter mAdapter;
     private List<CompanyLeaveResult.RecordsBean> list;
 
 
@@ -45,9 +45,9 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     }
 
     private void setAdapter() {
-        mAdapter = new LeaveHistroryAdapter(list, mContext);
+        mAdapter = new LeaveHistoryAdapter(list, mContext);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new LeaveHistroryAdapter.OnRecyclerViewItemClickListener() {
+        mAdapter.setOnItemClickListener(new LeaveHistoryAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 CompanyLeaveResult.RecordsBean recordsBean = list.get(position);
@@ -92,7 +92,13 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
 
     @Override
     public void getCompanyLeaveSuccess(CompanyLeaveResult result) {
-
+        if (result != null) {
+            List<CompanyLeaveResult.RecordsBean> records = result.getRecords();
+            if (records != null && records.size() > 0) {
+                list = records;
+                setAdapter();
+            }
+        }
     }
 
     @Override

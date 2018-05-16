@@ -163,7 +163,7 @@
             android:value="bjt.db" />
         <meta-data
             android:name="VERSION"
-            android:value="1" />
+            android:value="2" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -183,7 +183,10 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".module.secretary.communication.ui.SelectContactsActivity" />
-        <activity android:name=".module.home.work.leave.ui.LeaveDetailActivity"></activity>
+        <activity android:name=".module.home.work.leave.ui.LeaveDetailActivity" />
+        <activity android:name=".module.home.work.permission.ui.AdminSettingActivity" />
+        <activity android:name=".module.home.work.permission.ui.AddAdminActivity" />
+        <activity android:name=".module.home.work.permission.ui.DeleteAdminActivity"></activity>
     </application>
 
 </manifest>

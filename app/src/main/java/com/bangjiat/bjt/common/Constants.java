@@ -113,6 +113,26 @@ public class Constants {
         }
     }
 
+    /**
+     * @param time
+     * @param startTime
+     * @return true;迟到
+     */
+    public static boolean isLate(String time, String startTime) {
+        String[] end = time.split(":");
+        int eth = Integer.parseInt(end[0]);//小时
+        int etm = Integer.parseInt(end[1]);//秒
+        int time1 = eth * 60 + etm;
+
+        //开始时间
+        String[] start = startTime.split(":");
+        int sth = Integer.parseInt(start[0]);//小时
+        int stm = Integer.parseInt(start[1]);//秒
+        int start1 = sth * 60 + stm;
+
+        return time1 > start1;
+    }
+
     public static String DateToWeek(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

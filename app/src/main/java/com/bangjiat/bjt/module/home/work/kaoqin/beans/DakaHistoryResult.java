@@ -30,22 +30,22 @@ public class DakaHistoryResult {
      * userRealname : string
      */
 
-    private int clockId;
-    private int ctime;
-    private String inAddress;
-    private String inLatitude;
-    private String inLongitude;
-    private int inTime;
-    private int inType;
-    private int inWay;
-    private String lateRemark;
-    private String leaveRemark;
-    private String outAddress;
-    private String outLatitude;
-    private String outLongitude;
-    private int outTime;
-    private int outType;
-    private int outWay;
+    private int clockId;//打卡编号
+    private long ctime;
+    private String inAddress;//上班打卡的地址
+    private String inLatitude;//上班打卡的纬度
+    private String inLongitude;//上班打卡的经度
+    private long inTime;//上班打卡时间
+    private int inType;//上班打卡类型：1、正常；2、迟到；3、外勤打卡
+    private int inWay;//上班打卡方式：1、WiFi、2、流量
+    private String lateRemark;//迟到备注
+    private String leaveRemark;//早退备注
+    private String outAddress;//下班打卡的地址
+    private String outLatitude;//下班打卡的纬度
+    private String outLongitude;//下班打卡的经度
+    private long outTime;//下班打卡的时间
+    private int outType;//下班打卡的类型：1、正常;2、早退；3、外勤打卡
+    private int outWay;//下班打卡方式：1、WiFi、2、流量
     private String remark;
     private String userId;
     private String userRealname;
@@ -58,11 +58,11 @@ public class DakaHistoryResult {
         this.clockId = clockId;
     }
 
-    public int getCtime() {
+    public long getCtime() {
         return ctime;
     }
 
-    public void setCtime(int ctime) {
+    public void setCtime(long ctime) {
         this.ctime = ctime;
     }
 
@@ -90,11 +90,11 @@ public class DakaHistoryResult {
         this.inLongitude = inLongitude;
     }
 
-    public int getInTime() {
+    public long getInTime() {
         return inTime;
     }
 
-    public void setInTime(int inTime) {
+    public void setInTime(long inTime) {
         this.inTime = inTime;
     }
 
@@ -154,11 +154,11 @@ public class DakaHistoryResult {
         this.outLongitude = outLongitude;
     }
 
-    public int getOutTime() {
+    public long getOutTime() {
         return outTime;
     }
 
-    public void setOutTime(int outTime) {
+    public void setOutTime(long outTime) {
         this.outTime = outTime;
     }
 
