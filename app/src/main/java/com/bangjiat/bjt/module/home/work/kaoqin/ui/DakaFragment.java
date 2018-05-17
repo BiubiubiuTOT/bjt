@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +20,17 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.common.WifiUtil;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaTotalResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
+import com.bangjiat.bjt.module.home.work.kaoqin.contract.ClockContract;
 import com.bangjiat.bjt.module.home.work.kaoqin.contract.DakaContract;
 import com.bangjiat.bjt.module.home.work.kaoqin.contract.RoleContract;
+import com.bangjiat.bjt.module.home.work.kaoqin.presenter.ClockPresenter;
 import com.bangjiat.bjt.module.home.work.kaoqin.presenter.DakaPresenter;
 import com.bangjiat.bjt.module.home.work.kaoqin.presenter.RolePresenter;
 import com.dou361.dialogui.DialogUIUtils;
@@ -44,7 +49,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class DakaFragment extends BaseFragment implements RoleContract.View, DistanceSearch.OnDistanceSearchListener, DakaContract.View {
+public class DakaFragment extends BaseFragment implements RoleContract.View, DistanceSearch.OnDistanceSearchListener,
+        DakaContract.View, ClockContract.View {
     @BindView(R.id.tv_in_time)
     TextView tv_in_time;
     @BindView(R.id.tv_in_remark)
@@ -59,9 +65,16 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
     TextView tv_out_text;
     @BindView(R.id.tv_in_status)
     TextView tv_in_status;
+    @BindView(R.id.tv_out_status)
+    TextView tv_out_status;
+    @BindView(R.id.tv_out_remark)
+    TextView tv_out_remark;
 
     @BindView(R.id.tv_time)
     TextView tv_time;
+    @BindView(R.id.ll_daka)
+    LinearLayout ll_daka;
+
     private Timer timer;
     private RuleInput input;
     private RoleContract.Presenter presenter;
@@ -78,8 +91,11 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
     private DistanceSearch distanceSearch;
     private DistanceSearch.DistanceQuery distanceQuery;
     private DakaContract.Presenter dakaPresenter;
+    private ClockContract.Presenter clockPresenter;
     private String address;
     private Dialog dialog;
+    private String token;
+    private int clockId;
 
     @OnClick(R.id.ll_daka)
     public void clickDaka(View view) {
@@ -94,8 +110,10 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
 
             String workDay = input.getWorkDay();
             int i = Constants.dayOfWeek();
+            int i1 = i - 1;
+            if (i1 == 0) i1 = 7;
             Logger.d("dayOfWeek:" + i);
-            if (!workDay.contains(String.valueOf(i))) {
+            if (!workDay.contains(String.valueOf(i1))) {
                 error("今天不上班");
                 return;
             }
@@ -130,8 +148,9 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
 
         presenter = new RolePresenter(this);
         dakaPresenter = new DakaPresenter(this);
-        String token = DataUtil.getToken(mContext);
-        dakaPresenter.getDaka(token, "", "");
+        clockPresenter = new ClockPresenter(this);
+        token = DataUtil.getToken(mContext);
+        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
         input = RuleInput.first(RuleInput.class);
         if (input == null)
             presenter.getRole(token);
@@ -288,7 +307,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
                     outDakaInput.setOutLongitude(String.valueOf(longitude));
                     outDakaInput.setOutType(getOutType());
                     outDakaInput.setOutWay("1");
-                    outDakaInput.setClockId("");
+                    outDakaInput.setClockId(clockId);
                     dakaPresenter.outDaka(token, outDakaInput);
                 }
             }
@@ -322,26 +341,90 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
 
     @Override
     public void error(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Logger.d(err);
+        Constants.showErrorDialog(mContext, err);
+    }
+
+    @Override
+    public void getAllClockListSuccess(List<DakaHistoryResult> results) {
+
+    }
+
+    @Override
+    public void getClockListSuccess(List<DakaHistoryResult> results) {
+        if (results != null) {
+            if (results.size() > 0) {
+                DakaHistoryResult bean = results.get(0);
+                clockId = bean.getClockId();
+                Logger.d(bean.toString());
+                int inType = bean.getInType();
+                int outType = bean.getOutType();
+                if (inType != 0) {
+                    tv_in_status.setVisibility(View.VISIBLE);
+                    if (inType == 1) {
+                        tv_in_status.setText("正常");
+                    } else if (inType == 2) {
+                        tv_in_status.setText("迟到");
+                        tv_in_remark.setText(bean.getLateRemark());
+                    }
+
+                    tv_in_text.setText("打卡时间" + TimeUtils.changeToHM(bean.getInTime()));
+                    tv_daka_text.setText("下班打卡");
+                    type = 1;
+                } else {
+                    if (Constants.isInDay("00:00", "12:00")) {
+                        tv_daka_text.setText("上班打卡");
+                        type = 0;
+                    } else {
+                        tv_daka_text.setText("下班打卡");
+                        type = 1;
+                    }
+                }
+
+                if (outType != 0) {
+                    tv_out_text.setText(TimeUtils.changeToHM(bean.getOutTime()));
+
+                    tv_out_status.setVisibility(View.VISIBLE);
+                    if (outType == 1) {
+                        tv_out_status.setText("正常");
+                    } else if (outType == 2) {
+                        tv_out_status.setText("早退");
+                        tv_out_remark.setText(bean.getLateRemark());
+                    }
+                    tv_out_text.setText("打卡时间" + TimeUtils.changeToHM(bean.getOutTime()));
+                    ll_daka.setVisibility(View.GONE);
+                }
+
+            }
+        }
+
+    }
+
+    @Override
+    public void getUserClockListSuccess(List<DakaHistoryResult> results) {
+
+    }
+
+    @Override
+    public void getClockTotalSuccess(DakaTotalResult result) {
+
+    }
+
+    @Override
+    public void getUserClockTotalSuccess(DakaTotalResult result) {
+
     }
 
     @Override
     public void inDakaSuccess() {
-        tv_in_text.setText("打卡时间： " + tv_time.getText().toString());
         error("打卡成功");
-    }
 
-    @Override
-    public void getDakaSuccess(List<DakaHistoryResult> result) {
-        if (result != null) {
-
-        }
+        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
     }
 
     @Override
     public void outDakaSuccess() {
-        tv_out_text.setText("打卡时间： " + tv_time.getText().toString());
-        error("打卡成功");
+        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
     }
 }
 

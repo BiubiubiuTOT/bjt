@@ -612,4 +612,15 @@ public interface ApiService {
                                                         @Query("beginTime") long bg, @Query("endTime") long end,
                                                         @Query("userId") String userId);
 
+    /**
+     * 员工申请退出公司
+     */
+    @DELETE("api/company/delete/CompanyUserSelf")
+    Call<BaseResult<String>> exitCompany(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 修改公司信息
+     */
+    @PUT("api/company/update/Company")
+    Call<BaseResult<String>> updateCpompany(@Header(Constants.TOKEN_NAME) String token, @Body CompanyDetailResult result);
 }

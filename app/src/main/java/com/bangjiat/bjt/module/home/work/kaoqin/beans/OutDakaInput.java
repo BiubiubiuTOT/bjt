@@ -12,7 +12,7 @@ public class OutDakaInput {
     private String outLatitude;
     private String outType;
     private String outWay;
-    private String clockId;
+    private int clockId;
 
     public String getOutAddress() {
         return outAddress;
@@ -54,11 +54,11 @@ public class OutDakaInput {
         this.outWay = outWay;
     }
 
-    public String getClockId() {
+    public int getClockId() {
         return clockId;
     }
 
-    public void setClockId(String clockId) {
+    public void setClockId(int clockId) {
         this.clockId = clockId;
     }
 }

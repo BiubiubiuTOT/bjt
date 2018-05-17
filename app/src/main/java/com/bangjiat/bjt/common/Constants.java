@@ -179,4 +179,10 @@ public class Constants {
         String[] formats = res.getStringArray(R.array.leave_type);
         return formats[type - 1];
     }
+
+    public static boolean hasPermission() {
+        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        int type = first.getType();
+        return type != 1;
+    }
 }

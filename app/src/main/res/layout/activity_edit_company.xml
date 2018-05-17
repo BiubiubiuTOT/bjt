@@ -48,7 +48,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="贵州邦佳大数据科技有限公司"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -73,11 +72,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:text="软件开发"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
 
                     <ImageView
+                        android:id="@+id/iv_industry"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@mipmap/iv_delete" />
@@ -109,11 +108,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:text="贵阳市观山湖区互联网金融特区大厦"
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
 
                     <ImageView
+                        android:id="@+id/iv_address"
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:src="@mipmap/iv_delete" />
@@ -132,7 +131,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:padding="15dp"
-        android:text="@string/delete_company"
-        android:textColor="@color/red"
+        android:text="@string/exit_company"
+        android:textColor="@color/mine_bg"
         android:textSize="15sp" />
 </RelativeLayout>

@@ -121,4 +121,40 @@ public class TimeUtils {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.DAY_OF_MONTH);
     }
+
+    public static int getMinutes(String startTime, long inTime) {
+        String inTime1 = changeToHM(inTime);
+
+        //开始时间
+        String[] start = startTime.split(":");
+        int sth = Integer.parseInt(start[0]);//小时
+        int stm = Integer.parseInt(start[1]);//秒
+        int start1 = sth * 60 + stm;
+
+        //结束时间
+        String[] end = inTime1.split(":");
+        int eth = Integer.parseInt(end[0]);//小时
+        int etm = Integer.parseInt(end[1]);//秒
+        int end1 = eth * 60 + etm;
+
+        return end1 - start1;
+    }
+
+    public static int getMinutes(long outTime, String endTime) {
+        String outTime1 = changeToHM(outTime);
+
+        //开始时间
+        String[] end = endTime.split(":");
+        int sth = Integer.parseInt(end[0]);//小时
+        int stm = Integer.parseInt(end[1]);//秒
+        int end1 = sth * 60 + stm;
+
+        //结束时间
+        String[] outTime2 = outTime1.split(":");
+        int eth = Integer.parseInt(outTime2[0]);//小时
+        int etm = Integer.parseInt(outTime2[1]);//秒
+        int outTime3 = eth * 60 + etm;
+
+        return end1 - outTime3;
+    }
 }

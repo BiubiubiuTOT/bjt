@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
@@ -44,6 +45,8 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
     private String token;
+    private UserInfo userInfo;
+    private TextView tv_done;
 
 
     @Override
@@ -57,10 +60,25 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
         token = DataUtil.getToken(mContext);
         presenter = new CompanyUserPresenter(this);
         bean = (WorkersResult.RecordsBean) getIntent().getSerializableExtra("data");
-        UserInfo userInfo = UserInfo.first(UserInfo.class);
+        userInfo = UserInfo.first(UserInfo.class);
         if (bean != null) {
-            if (!userInfo.getUserId().equals(bean.getUserId())) {
+            if (Constants.hasPermission() && !userInfo.getUserId().equals(bean.getUserId())) {//没有权限或者是本人信息则不能删除
                 rl_delete.setVisibility(View.VISIBLE);
+            }
+            if (!userInfo.getUserId().equals(bean.getUserId()) && !Constants.hasPermission()) {//不是本人或者没有权限的人不能编辑
+                et_name.setCompoundDrawables(null, null, null, null);
+                et_card.setCompoundDrawables(null, null, null, null);
+                et_phone.setCompoundDrawables(null, null, null, null);
+                et_department.setCompoundDrawables(null, null, null, null);
+                et_duty.setCompoundDrawables(null, null, null, null);
+                tv_done.setVisibility(View.GONE
+                );
+
+                et_name.setEnabled(false);
+                et_card.setEnabled(false);
+                et_phone.setEnabled(false);
+                et_department.setEnabled(false);
+                et_duty.setEnabled(false);
             }
 
             et_name.setText(bean.getRealname());
@@ -183,7 +201,7 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     @Override
     protected void initToolbar(Toolbar toolbar) {
         toolbar.setTitle("");
-        TextView tv_done = toolbar.findViewById(R.id.toolbar_other);
+        tv_done = toolbar.findViewById(R.id.toolbar_other);
         TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
         tv_done.setText("保存");
         tv_title.setText("编辑资料");

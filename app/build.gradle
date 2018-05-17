@@ -136,4 +136,6 @@ dependencies {
     compile 'com.amap.api:3dmap:latest.integration'
 
     compile 'com.xgr.easypay:EasyPay:1.0.2'//支付
+
+    compile 'com.github.jiang111:IndicatorDialog:2.0.1'//箭头指示
 }

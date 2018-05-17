@@ -1,10 +1,7 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.contract;
 
-import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
-
-import java.util.List;
 
 /**
  * @author ligh
@@ -18,7 +15,6 @@ public interface DakaContract {
 
         void outDaka(String token, OutDakaInput input);
 
-        void getDaka(String token, String begin, String end);
     }
 
     interface View {
@@ -29,8 +25,6 @@ public interface DakaContract {
         void error(String err);
 
         void inDakaSuccess();
-
-        void getDakaSuccess(List<DakaHistoryResult> result);
 
         void outDakaSuccess();
     }
@@ -45,9 +39,5 @@ public interface DakaContract {
         void inDakaSuccess();
 
         void outDakaSuccess();
-
-        void getDaka(String token, String begin, String end);
-
-        void getDakaSuccess(List<DakaHistoryResult> result);
     }
 }

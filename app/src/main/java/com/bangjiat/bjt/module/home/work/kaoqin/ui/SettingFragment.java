@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.contract.RoleContract;
@@ -22,6 +23,7 @@ import com.orm.SugarRecord;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -254,7 +256,14 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
         String outTime = role.getOutTime();
 
         if (workDay != null && !workDay.equals("null")) {
-            tv_work_day.setText(workDay);
+            String[] split = workDay.split(",");
+            String str = "";
+            List<String> list = Arrays.asList(split);
+            for (String s : list) {
+                str += Constants.WEEK[Integer.parseInt(s)] + ",";
+            }
+            str = str.substring(0, str.length() - 1);
+            tv_work_day.setText(str);
         }
         if (inTime != null && !inTime.equals("null")) {
             tv_start_time.setText(inTime);

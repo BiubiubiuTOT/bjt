@@ -201,4 +201,29 @@ public class DakaHistoryResult {
     public void setUserRealname(String userRealname) {
         this.userRealname = userRealname;
     }
+
+    @Override
+    public String toString() {
+        return "DakaHistoryResult{" +
+                "clockId=" + clockId +
+                ", ctime=" + ctime +
+                ", inAddress='" + inAddress + '\'' +
+                ", inLatitude='" + inLatitude + '\'' +
+                ", inLongitude='" + inLongitude + '\'' +
+                ", inTime=" + inTime +
+                ", inType=" + inType +
+                ", inWay=" + inWay +
+                ", lateRemark='" + lateRemark + '\'' +
+                ", leaveRemark='" + leaveRemark + '\'' +
+                ", outAddress='" + outAddress + '\'' +
+                ", outLatitude='" + outLatitude + '\'' +
+                ", outLongitude='" + outLongitude + '\'' +
+                ", outTime=" + outTime +
+                ", outType=" + outType +
+                ", outWay=" + outWay +
+                ", remark='" + remark + '\'' +
+                ", userId='" + userId + '\'' +
+                ", userRealname='" + userRealname + '\'' +
+                '}';
+    }
 }

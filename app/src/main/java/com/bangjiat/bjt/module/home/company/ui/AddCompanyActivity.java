@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
-import com.bangjiat.bjt.module.home.company.contract.AddCompanyContract;
-import com.bangjiat.bjt.module.home.company.presenter.AddCompanyPresenter;
+import com.bangjiat.bjt.module.home.company.contract.CompanyContract;
+import com.bangjiat.bjt.module.home.company.presenter.CompanyPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
@@ -22,7 +22,7 @@ import com.dou361.dialogui.DialogUIUtils;
 
 import butterknife.BindView;
 
-public class AddCompanyActivity extends BaseToolBarActivity implements AddCompanyContract.View, GetUserInfoContract.View {
+public class AddCompanyActivity extends BaseToolBarActivity implements CompanyContract.View, GetUserInfoContract.View {
     @BindView(R.id.et_name)
     EditText et_name;
     @BindView(R.id.et_address)
@@ -30,13 +30,13 @@ public class AddCompanyActivity extends BaseToolBarActivity implements AddCompan
     @BindView(R.id.et_trade)
     EditText et_trade;
     private Dialog dialog;
-    private AddCompanyContract.Presenter presenter;
+    private CompanyContract.Presenter presenter;
     private GetUserInfoContract.Presenter presenter1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new AddCompanyPresenter(this);
+        presenter = new CompanyPresenter(this);
         presenter1 = new GetUserInfoPresenter(this);
     }
 
@@ -89,6 +89,21 @@ public class AddCompanyActivity extends BaseToolBarActivity implements AddCompan
     @Override
     public void addCompanyFail(String err) {
         Toast.makeText(mContext, "新建公司失败：" + err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateCompanySuccess(String str) {
+
+    }
+
+    @Override
+    public void exitCompanySuccess(String token) {
+
+    }
+
+    @Override
+    public void error(String err) {
+
     }
 
     @Override

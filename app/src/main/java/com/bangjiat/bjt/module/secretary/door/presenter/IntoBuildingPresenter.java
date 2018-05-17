@@ -39,11 +39,13 @@ public class IntoBuildingPresenter implements IntoBuildingContract.Presenter {
 
     @Override
     public void success() {
+        view.dismissDialog();
         view.success();
     }
 
     @Override
     public void fail(String err) {
+        view.dismissDialog();
         view.fail(err);
     }
 }

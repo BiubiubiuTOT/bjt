@@ -5,282 +5,190 @@
     android:background="@color/mine_color"
     android:orientation="vertical">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/rl_1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="15dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="迟到"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/iv1"
-                android:text="2人"
-                android:textColor="@color/personal_message"
-                android:textSize="14sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="迟到"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="15sp" />
 
-            <ImageView
-                android:id="@+id/iv1"
-                android:layout_width="15dp"
-                android:layout_height="16dp"
-                android:layout_alignParentEnd="true"
-                android:src="@mipmap/down" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_late"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/iv1"
+                    android:text="2人"
+                    android:textColor="@color/personal_message"
+                    android:textSize="14sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:background="@color/personal_view" />
-
-        <LinearLayout
-            android:id="@+id/ll_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/letter"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="张三，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
+                <ImageView
+                    android:id="@+id/iv1"
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/down" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
                 android:background="@color/personal_view" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_late"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="李四，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-        </LinearLayout>
+                android:visibility="gone" />
 
-        <RelativeLayout
-            android:id="@+id/rl_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="早退"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="早退"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_leave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/iv2"
+                    android:text="2人"
+                    android:textColor="@color/personal_message"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv2"
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/down" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_leave"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/iv2"
-                android:text="2人"
-                android:textColor="@color/personal_message"
-                android:textSize="14sp" />
+                android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/iv2"
-                android:layout_width="15dp"
-                android:layout_height="16dp"
-                android:layout_alignParentEnd="true"
-                android:src="@mipmap/down" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/letter"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="张三，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="旷工"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_absence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/iv3"
+                    android:text="0人"
+                    android:textColor="@color/personal_message"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv3"
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/down" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
                 android:background="@color/personal_view" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="李四，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="旷工"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/iv3"
-                android:text="0人"
-                android:textColor="@color/personal_message"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/iv3"
-                android:layout_width="15dp"
-                android:layout_height="16dp"
-                android:layout_alignParentEnd="true"
-                android:src="@mipmap/down" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/letter"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="张三，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-
-            <View
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_absence"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/personal_view" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="李四，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-        </LinearLayout>
+                android:visibility="gone" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:background="@color/personal_view" />
-
-        <RelativeLayout
-            android:id="@+id/rl_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="外勤"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/iv4"
-                android:text="2人"
-                android:textColor="@color/personal_message"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/iv4"
-                android:layout_width="15dp"
-                android:layout_height="16dp"
-                android:layout_alignParentEnd="true"
-                android:src="@mipmap/down" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/letter"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="张三，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-
-            <View
+            <RelativeLayout
+                android:id="@+id/rl_4"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="15dp"
-                android:background="@color/personal_view" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="李四，2次，共20分钟"
-                android:textColor="@color/dialog_title"
-                android:textSize="15sp" />
-        </LinearLayout>
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="15dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="外勤"
+                    android:textColor="@color/dialog_title"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/iv4"
+                    android:text="2人"
+                    android:textColor="@color/personal_message"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv4"
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/down" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

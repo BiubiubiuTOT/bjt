@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.common.ValidationIdCard;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 
 import butterknife.BindView;
@@ -57,7 +59,9 @@ public class IdNumberInfoActivity extends BaseToolBarActivity {
         tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDia();
+                if (ValidationIdCard.verify(et_id_number.getText().toString()))
+                    showDia();
+                else Constants.showErrorDialog(mContext, "请输入正确的身份证号码");
             }
         });
     }

@@ -15,6 +15,8 @@ import butterknife.OnClick;
 
 public class WorkMainActivity extends BaseWhiteToolBarActivity {
 
+    private static final int DELETE = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,17 @@ public class WorkMainActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.tv_company_name)
     public void clickCompanyName(View view) {
-        startActivity(new Intent(mContext, EditCompanyActivity.class));
+        startActivityForResult(new Intent(mContext, EditCompanyActivity.class), DELETE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == DELETE) {
+                finish();
+            }
+        }
     }
 
     @Override

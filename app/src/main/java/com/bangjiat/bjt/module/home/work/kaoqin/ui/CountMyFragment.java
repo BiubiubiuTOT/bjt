@@ -113,7 +113,6 @@ public class CountMyFragment extends BaseFragment implements ClockContract.View 
             Logger.d("dayOfWeek: " + Constants.dayOfWeek());
 
             work = companyClockList.size();
-            absence = dayOfMonth - work;
 
             for (DakaHistoryResult b : companyClockList) {
                 int inType = b.getInType();
@@ -134,7 +133,6 @@ public class CountMyFragment extends BaseFragment implements ClockContract.View 
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), i, 0, 0, 0);
                 int i1 = calendar1.get(Calendar.DAY_OF_WEEK);
-                Logger.d("dayOfWeek: " + i1);
                 int i2 = i1 - 1;
                 if (i2 == 0) i2 = 7;
                 String s = String.valueOf(i2);
@@ -142,7 +140,7 @@ public class CountMyFragment extends BaseFragment implements ClockContract.View 
                     reset++;
                 }
             }
-
+            absence = dayOfMonth - work - reset;
             tv_work.setText(getString(R.string.day, work));
             tv_reset.setText(getString(R.string.day, reset));
             tv_absence.setText(getString(R.string.count, absence));

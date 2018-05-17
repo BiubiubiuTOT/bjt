@@ -3,12 +3,9 @@ package com.bangjiat.bjt.module.home.work.kaoqin.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
-import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.OutDakaInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.contract.DakaContract;
-
-import java.util.List;
 
 import retrofit2.Response;
 
@@ -63,23 +60,4 @@ public class DakaModel implements DakaContract.Model {
         });
     }
 
-    @Override
-    public void getDaka(String token, String begin, String end) {
-        ApiFactory.getService().getDaka(token, begin, end).enqueue(new MyCallBack<BaseResult<List<DakaHistoryResult>>>() {
-            @Override
-            public void onSuc(Response<BaseResult<List<DakaHistoryResult>>> response) {
-                BaseResult<List<DakaHistoryResult>> body = response.body();
-                if (body.getStatus() != 200) {
-                    presenter.error(body.getMessage());
-                } else {
-                    presenter.getDakaSuccess(body.getData());
-                }
-            }
-
-            @Override
-            public void onFail(String message) {
-                presenter.error(message);
-            }
-        });
-    }
 }

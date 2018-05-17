@@ -103,6 +103,7 @@
     <string name="work_permission">权限管理</string>
     <string name="work_workers">员工列表</string>
     <string name="delete_company">删除公司</string>
+    <string name="exit_company">退出公司</string>
     <string name="kaoqin_setting">考勤设置</string>
     <string name="kaoqin_count">统计</string>
     <string name="kaoqin_daka">打卡</string>
@@ -113,6 +114,7 @@
     <string name="count_day_progress_message">%1$d/%2$d</string>
     <string name="count">%1$d次</string>
     <string name="day">%1$d天</string>
+    <string name="person">%1$d人</string>
     <string name="personal_id_number">身份证信息</string>
     <string name="personal_id_number_default">未验证</string>
     <string name="invite">邀约</string>

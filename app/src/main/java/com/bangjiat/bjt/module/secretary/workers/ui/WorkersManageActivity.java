@@ -3,23 +3,29 @@ package com.bangjiat.bjt.module.secretary.workers.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
+import com.bangjiat.bjt.module.secretary.workers.adapter.TextAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.jiang.android.indicatordialog.IndicatorBuilder;
+import com.jiang.android.indicatordialog.IndicatorDialog;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,23 +49,25 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     RecyclerView recyclerView;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
-    @BindView(R.id.tv_delete_workers)
-    TextView tv_delete_workers;
-    @BindView(R.id.tv_add_workers)
-    TextView tv_add_workers;
     @BindView(R.id.tv_company_name)
     TextView tv_company_name;
+    @BindView(R.id.card_delete)
+    CardView card_delete;
 
     private Toolbar toolbar;
 
     private List<WorkersResult.RecordsBean> beans;
     private SelectPeopleAdapter adapter;
+    private TextAdapter textAdapter;
     private TextView tv_all;
     private TextView tv_done;
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
     private String token;
     private int size;
+    private ImageView img;
+    private List<String> texts;
+    private IndicatorDialog addDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +87,20 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         tv_all = toolbar.findViewById(R.id.toolbar_cancel);
         tv_done = toolbar.findViewById(R.id.toolbar_other);
         TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
+        img = toolbar.findViewById(R.id.toolbar_image);
+        img.setImageResource(R.mipmap.add);
 
         tv_done.setText("完成");
         tv_title.setText("员工管理");
         showCustom();
+        if (!Constants.hasPermission()) img.setVisibility(View.GONE);
+
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addDialog.show(img);
+            }
+        });
 
         tv_all.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,23 +118,13 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     }
 
     private void showCustom() {
+        card_delete.setVisibility(View.GONE);
         tv_all.setText("全选");
+        img.setVisibility(View.VISIBLE);
         toolbar.setNavigationIcon(R.mipmap.back_white);
-        tv_delete_workers.setVisibility(View.VISIBLE);
-        tv_add_workers.setVisibility(View.VISIBLE);
         tv_delete.setVisibility(View.GONE);
         tv_done.setVisibility(View.GONE);
         tv_all.setVisibility(View.GONE);
-    }
-
-    private void showDelete() {
-        tv_delete_workers.setVisibility(View.GONE);
-        tv_add_workers.setVisibility(View.GONE);
-        tv_delete.setVisibility(View.VISIBLE);
-        tv_all.setVisibility(View.VISIBLE);
-
-        toolbar.setNavigationIcon(null);
-        tv_done.setVisibility(View.VISIBLE);
     }
 
     private void initData() {
@@ -125,6 +133,50 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         presenter = new CompanyUserPresenter(this);
         token = DataUtil.getToken(mContext);
         presenter.getCompanyUser(token, 1, 10, 1);
+
+        texts = new ArrayList<>();
+        texts.add("添加人员");
+        texts.add("删除人员");
+        textAdapter = new TextAdapter(texts);
+        textAdapter.setOnItemClickListener(new TextAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                addDialog.dismiss();
+                if (position != 0) {
+                    card_delete.setVisibility(View.VISIBLE);
+                    adapter.setShowCheck(true);
+                    showDelete();
+                } else {
+                    startActivity(new Intent(mContext, AddWorkersActivity.class));
+                }
+            }
+        });
+
+        initDialog();
+    }
+
+    private void showDelete() {
+        img.setVisibility(View.GONE);
+        tv_delete.setVisibility(View.VISIBLE);
+        tv_all.setVisibility(View.VISIBLE);
+
+        toolbar.setNavigationIcon(null);
+        tv_done.setVisibility(View.VISIBLE);
+    }
+
+    private void initDialog() {
+        addDialog = new IndicatorBuilder(this)
+                .width(300)
+                .height(-1)
+                .ArrowDirection(IndicatorBuilder.TOP)
+                .bgColor(getResources().getColor(R.color.white))
+                .animator(R.style.dialog_exit)
+                .radius(8)
+                .gravity(IndicatorBuilder.GRAVITY_RIGHT)
+                .ArrowRectage(0.9f)
+                .layoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
+                .adapter(textAdapter).create();
+        addDialog.setCanceledOnTouchOutside(true);
     }
 
     private void setAdapter() {
@@ -141,6 +193,7 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
                 bundle.putSerializable("data", beans.get(position));
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
+
             }
         });
         adapter.setOnCheckChangedListener(new SelectPeopleAdapter.OnCheckListener() {
@@ -189,23 +242,16 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         return select;
     }
 
-    @OnClick(R.id.tv_delete_workers)
-    public void clickDeleteWorkers(View view) {
-        if (adapter != null) {
-            adapter.setShowCheck(true);
-            showDelete();
-        }
-    }
-
-    @OnClick(R.id.tv_add_workers)
-    public void addWorkers(View view) {
-        startActivity(new Intent(mContext, AddWorkersActivity.class));
-    }
 
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
         if (getSelectCount() != 0)
             showDeleteDialog();
+    }
+
+    @OnClick(R.id.card_company)
+    public void clickCompany(View view) {
+
     }
 
     private void showDeleteDialog() {
@@ -215,11 +261,11 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
                     @Override
                     public void onClick(View view) {
                         showCustom();
+                        adapter.setShowCheck(false);
                         List<String> selectItem = getSelectItem();
                         size = selectItem.size();
                         Logger.d(selectItem.toString());
                         for (String s : selectItem) {
-                            String token = DataUtil.getToken(mContext);
                             presenter.deleteCompanyUser(token, s);
                         }
                     }

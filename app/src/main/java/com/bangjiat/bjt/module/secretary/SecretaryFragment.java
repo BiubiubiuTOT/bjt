@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
@@ -39,6 +40,8 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     ImageView iv_message;
     @BindView(R.id.iv_people)
     ImageView iv_people;
+    @BindView(R.id.ll_admin)
+    LinearLayout ll_admin;
     private IntoBuildingContract.Presenter presenter;
     private String token;
     private boolean isApply;
@@ -50,6 +53,7 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
         presenter = new IntoBuildingPresenter(this);
         token = DataUtil.getToken(mContext);
         isInto = DataUtil.isIntoBuilding(mContext);
+        if (Constants.hasPermission()) ll_admin.setVisibility(View.VISIBLE);
 
         Glide.with(this).load(R.mipmap.door).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_door);
         Glide.with(this).load(R.mipmap.service).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_service);
