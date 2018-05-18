@@ -6,13 +6,17 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.TimeUtils;
+import com.bangjiat.bjt.common.WCBMenu;
+import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
@@ -53,6 +57,7 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
     private DealBoxContract.Presenter presenter;
     private String token;
     private UserInfo userInfo;
+    private List<WcbBean> mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +67,13 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
     }
 
     private void initData() {
+        mList = new ArrayList<>();
+        mList.add(new WcbBean("删除邮件", getResources().getColor(R.color.red)));
         userInfo = UserInfo.first(UserInfo.class);
         token = DataUtil.getToken(mContext);
         presenter = new DealBoxPresenter(this);
         bean = (EmailBean) getIntent().getSerializableExtra("data");
+        type = getIntent().getIntExtra("type", 0);
         if (bean != null) {
             photoList = new ArrayList<>();
             String resource = bean.getResource();
@@ -113,9 +121,7 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
 
     @OnClick(R.id.iv_delete)
     public void clickDelete(View view) {
-        String[] strings = new String[1];
-        strings[0] = String.valueOf(bean.getEmailId());
-        presenter.deleteInBox(token, strings);
+        showDeleteDialog();
     }
 
     @OnClick(R.id.iv_share)
@@ -160,12 +166,46 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
 
     @Override
     public void deleteOutBoxSuccess() {
+        showDia();
+    }
 
+    private void showDeleteDialog() {
+        final WCBMenu wcbMenu = new WCBMenu(mContext);
+        wcbMenu.setTitle("邮件删除后不可恢复？")
+                .setCancel("取消")
+                .setStringList(mList)
+                .setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        wcbMenu.dismiss();
+
+                        String[] strings = new String[1];
+                        strings[0] = String.valueOf(bean.getEmailId());
+
+                        if (type == 1) {
+                            presenter.deleteOutBox(token, strings);
+                        } else
+                            presenter.deleteInBox(token, strings);
+
+                    }
+                })
+                .show();
+    }
+
+    private void showDia() {
+        new AlertDialog(mContext).builder().setMsg("删除成功").setCancelable(false).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).show();
     }
 
     @Override
     public void deleteInBoxSuccess() {
-
+        showDia();
     }
 
     @Override

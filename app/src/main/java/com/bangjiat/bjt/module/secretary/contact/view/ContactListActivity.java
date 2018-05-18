@@ -27,6 +27,7 @@ import com.bangjiat.bjt.module.secretary.contact.presenter.ContactPresenter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactAdapter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactsUtils;
 import com.bangjiat.bjt.module.secretary.contact.util.SideLetterBar;
+import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,6 +66,7 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         initView();
         initData();
         initClick();

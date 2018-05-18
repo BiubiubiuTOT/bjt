@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.UpdateAppUtil;
 import com.bangjiat.bjt.module.main.ui.fragment.HomeFragment;
 import com.bangjiat.bjt.module.me.MineFragment;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
@@ -52,11 +53,14 @@ public class MainActivity extends BaseActivity implements GetUserInfoContract.Vi
 
     private long exitTime = 0;
     private GetUserInfoContract.Presenter presenter;
+    private UpdateAppUtil appUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         switchPage(0);
+        appUtil = new UpdateAppUtil(mContext);
+        appUtil.checkVersion();
 
         presenter = new GetUserInfoPresenter(this);
         UserInfo userInfo = UserInfo.first(UserInfo.class);

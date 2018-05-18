@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.park.apply.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
@@ -47,7 +48,7 @@ public class ParkApplyModel implements ParkApplyContract.Model {
 
     @Override
     public void getParkSpace(String token, int page, int size, String key) {
-        ApiFactory.getService().getParkSpace(token, page, size, key).enqueue(new MyCallBack<BaseResult<ParkingResult>>() {
+        ApiFactory.getService().getParkSpace(token, page,  Constants.SIZE, key).enqueue(new MyCallBack<BaseResult<ParkingResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ParkingResult>> response) {
                 BaseResult<ParkingResult> body = response.body();
@@ -101,7 +102,7 @@ public class ParkApplyModel implements ParkApplyContract.Model {
 
     @Override
     public void getParkApplyHistory(String token, int page, int size, int spaceId) {
-        ApiFactory.getService().getParkApplyHistory(token, page, size).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
+        ApiFactory.getService().getParkApplyHistory(token, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ParkApplyHistoryResult>> response) {
                 BaseResult<ParkApplyHistoryResult> body = response.body();

@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.home.work.worker.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
@@ -22,6 +24,7 @@ import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
 import com.bangjiat.bjt.module.secretary.workers.ui.AddWorkersActivity;
 import com.bangjiat.bjt.module.secretary.workers.ui.UpdateWorkerActivity;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,7 +40,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class WorkerListActivity extends BaseToolBarActivity implements CompanyUserContract.View{
+public class WorkerListActivity extends BaseToolBarActivity implements CompanyUserContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.tv_delete)
@@ -48,6 +51,8 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     TextView tv_add_workers;
     @BindView(R.id.tv_company_name)
     TextView tv_company_name;
+    @BindView(R.id.card)
+    CardView card;
 
     private Toolbar toolbar;
 
@@ -63,6 +68,7 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         initData();
     }
 
@@ -125,6 +131,8 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     }
 
     private void initData() {
+        if (Constants.hasPermission()) card.setVisibility(View.VISIBLE);
+
         EventBus.getDefault().register(this);
         beans = new ArrayList<>();
         presenter = new CompanyUserPresenter(this);

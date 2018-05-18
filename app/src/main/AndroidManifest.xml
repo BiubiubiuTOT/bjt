@@ -186,7 +186,7 @@
         <activity android:name=".module.home.work.leave.ui.LeaveDetailActivity" />
         <activity android:name=".module.home.work.permission.ui.AdminSettingActivity" />
         <activity android:name=".module.home.work.permission.ui.AddAdminActivity" />
-        <activity android:name=".module.home.work.permission.ui.DeleteAdminActivity"></activity>
+        <activity android:name=".module.home.work.permission.ui.DeleteAdminActivity" />
     </application>
 
 </manifest>

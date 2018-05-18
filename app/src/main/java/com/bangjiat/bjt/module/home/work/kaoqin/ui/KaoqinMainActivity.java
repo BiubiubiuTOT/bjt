@@ -36,13 +36,13 @@ public class KaoqinMainActivity extends BaseToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
-        switchPage(0);
 
         initView();
     }
 
     private void initView() {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
+        switchPage(0);
 
     }
 

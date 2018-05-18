@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.secretary.service.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 import com.bangjiat.bjt.module.secretary.service.contract.ServiceApplyHistoryContract;
 
@@ -23,7 +24,7 @@ public class ServiceApplyHistoryModel implements ServiceApplyHistoryContract.Mod
 
     @Override
     public void getHistory(String token, int page, int size) {
-        ApiFactory.getService().getServiceApplyHistory(token, page, size).enqueue(new MyCallBack<BaseResult<ServiceApplyHistoryResult>>() {
+        ApiFactory.getService().getServiceApplyHistory(token, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<ServiceApplyHistoryResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ServiceApplyHistoryResult>> response) {
                 BaseResult<ServiceApplyHistoryResult> body = response.body();

@@ -118,6 +118,7 @@
     <string name="personal_id_number">身份证信息</string>
     <string name="personal_id_number_default">未验证</string>
     <string name="invite">邀约</string>
+    <string name="custom_content_text">%d/100</string>
 
     <string-array name="leave_type">
         <item>事假</item>

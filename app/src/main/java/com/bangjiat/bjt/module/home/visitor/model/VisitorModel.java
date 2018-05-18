@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.home.visitor.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.visitor.contract.VisitorContract;
 import com.orhanobut.logger.Logger;
 
@@ -23,7 +24,7 @@ public class VisitorModel implements VisitorContract.Model {
 
     @Override
     public void getVisitorHistory(String token, int page, int size) {
-        ApiFactory.getService().getVisitorHistory(token, page, size).enqueue(new MyCallBack<BaseResult>() {
+        ApiFactory.getService().getVisitorHistory(token, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult>() {
             @Override
             public void onSuc(Response<BaseResult> response) {
                 BaseResult body = response.body();

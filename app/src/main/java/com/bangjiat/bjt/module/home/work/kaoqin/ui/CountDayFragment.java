@@ -70,7 +70,7 @@ public class CountDayFragment extends BaseFragment implements GetUserInfoContrac
     public void getUserInfoSuccess(UserInfoBean bean) {
         if (bean != null) {
             workersCount = bean.getCount();
-            if (workersCount != 0 && dakaCount != 0)
+            if (workersCount != 0)
                 setNumber();
         }
     }
@@ -102,7 +102,7 @@ public class CountDayFragment extends BaseFragment implements GetUserInfoContrac
     public void getAllClockListSuccess(List<DakaHistoryResult> results) {
         if (results != null && results.size() > 0) {
             dakaCount = results.size();
-            if (workersCount != 0 && dakaCount != 0)
+            if (dakaCount != 0)
                 setNumber();
             setAdapter(results);
         }

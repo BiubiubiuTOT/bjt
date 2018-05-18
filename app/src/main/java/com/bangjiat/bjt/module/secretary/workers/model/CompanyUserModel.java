@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.secretary.workers.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.orhanobut.logger.Logger;
@@ -24,7 +25,7 @@ public class CompanyUserModel implements CompanyUserContract.Model {
 
     @Override
     public void getCompanyUser(String token, int page, int size, int type) {
-        ApiFactory.getService().getCompanyUser(token, page, size, type).enqueue(new MyCallBack<BaseResult<WorkersResult>>() {
+        ApiFactory.getService().getCompanyUser(token, page,  Constants.SIZE, type).enqueue(new MyCallBack<BaseResult<WorkersResult>>() {
             @Override
             public void onSuc(Response<BaseResult<WorkersResult>> response) {
                 BaseResult<WorkersResult> body = response.body();

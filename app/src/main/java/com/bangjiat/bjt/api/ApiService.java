@@ -73,6 +73,7 @@ import retrofit2.http.Query;
 
 public interface ApiService {
     /**
+     * 1
      * 注册
      *
      * @param
@@ -82,6 +83,7 @@ public interface ApiService {
     Call<BaseResult<String>> register(@Body RegisterInput input);
 
     /**
+     * 2
      * 获取验证码
      *
      * @return
@@ -90,6 +92,7 @@ public interface ApiService {
     Call<BaseResult<String>> getRegisterCode(@Query("phone") String phone, @Query("codeType") int type);
 
     /**
+     * 3
      * 登录
      *
      * @param
@@ -99,6 +102,7 @@ public interface ApiService {
     Call<BaseResult<String>> login(@Body LoginInput loginInput);
 
     /**
+     * 4
      * 获取公告
      *
      * @param token
@@ -108,6 +112,7 @@ public interface ApiService {
     Call<BaseResult<NoticeBean>> getNotice(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 5
      * 保存反馈
      *
      * @return
@@ -117,6 +122,7 @@ public interface ApiService {
 
 
     /**
+     * 6
      * 新建公司
      *
      * @param token
@@ -127,6 +133,7 @@ public interface ApiService {
     Call<BaseResult<String>> addCompany(@Header(Constants.TOKEN_NAME) String token, @Body CompanyInput input);
 
     /**
+     * 7
      * 获取用户信息
      *
      * @param name
@@ -136,6 +143,7 @@ public interface ApiService {
     Call<BaseResult<UserInfoBean>> getUserInfo(@Header(Constants.TOKEN_NAME) String name);
 
     /**
+     * 8
      * 修改用户信息
      *
      * @param name
@@ -146,6 +154,7 @@ public interface ApiService {
     Call<BaseResult<UserInfo>> updateUserInfo(@Header(Constants.TOKEN_NAME) String name, @Body UserInfo bean);
 
     /**
+     * 9
      * 入驻楼宇
      *
      * @param token
@@ -156,6 +165,7 @@ public interface ApiService {
     Call<BaseResult<String>> intoBuilding(@Header(Constants.TOKEN_NAME) String token, @Body IntoBuildingInput input);
 
     /**
+     * 10
      * 修改密码
      *
      * @param token
@@ -167,6 +177,7 @@ public interface ApiService {
 
 
     /**
+     * 11
      * 用户查询账单
      *
      * @param token
@@ -179,6 +190,7 @@ public interface ApiService {
                                                @Query("page") int page, @Query("size") int size);
 
     /**
+     * 12
      * 用户获取通讯录列表
      *
      * @param token
@@ -189,6 +201,7 @@ public interface ApiService {
     Call<BaseResult<List<ContactBean>>> getAllAddressList(@Header(Constants.TOKEN_NAME) String token, @Query("key") String key);
 
     /**
+     * 13
      * 用户添加联系人到通讯录
      *
      * @param token
@@ -199,6 +212,7 @@ public interface ApiService {
     Call<BaseResult<String>> saveContact(@Header(Constants.TOKEN_NAME) String token, @Body SearchContactResult input);
 
     /**
+     * 14
      * 通过用户账号获取用户信息
      *
      * @param token
@@ -209,6 +223,7 @@ public interface ApiService {
     Call<BaseResult<SearchContactResult>> searchContact(@Header(Constants.TOKEN_NAME) String token, @Query("username") String key);
 
     /**
+     * 15
      * 用户删除联系人
      *
      * @param token
@@ -219,6 +234,7 @@ public interface ApiService {
     Call<BaseResult<String>> delelteContact(@Header(Constants.TOKEN_NAME) String token, @Query("addressListId") String addressListId);
 
     /**
+     * 16
      * 用户修改联系人
      *
      * @param name
@@ -229,30 +245,35 @@ public interface ApiService {
     Call<BaseResult<String>> updateContact(@Header(Constants.TOKEN_NAME) String name, @Body ContactBean bean);
 
     /**
+     * 17
      * 用户申请加入公司
      */
     @POST("api/company/save/CompanyUser")
     Call<BaseResult<String>> intoCompany(@Header(Constants.TOKEN_NAME) String token, @Body IntoCompanyInput input);
 
     /**
+     * 18
      * 添加打卡规则
      */
     @POST("api/companyClockRule/save/CompanyClockRule")
     Call<BaseResult<String>> saveCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token, @Body RuleInput input);
 
     /**
+     * 19
      * 修改打卡规则
      */
     @PUT("api/companyClockRule/update/CompanyClockRule")
     Call<BaseResult<String>> updateCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token, @Body RuleInput input);
 
     /**
+     * 20
      * 查询打卡规则
      */
     @GET("api/companyClockRule/select/CompanyClockRule")
     Call<BaseResult<RuleInput>> selectCompanyClockRule(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 21
      * 上班打卡
      */
     @POST("api/companyClock/save/CompanyClock")
@@ -260,12 +281,14 @@ public interface ApiService {
 
 
     /**
+     * 22
      * 下班打卡
      */
     @PUT("api/companyClock/update/CompanyClock")
     Call<BaseResult<String>> saveOutDaka(@Header(Constants.TOKEN_NAME) String token, @Body OutDakaInput input);
 
     /**
+     * 23
      * 获取个人打卡记录
      */
     @GET("api/companyClock/select/CompanyClockList")
@@ -273,6 +296,7 @@ public interface ApiService {
                                                       @Query("beginTime") String begin, @Query("endTime") String end);
 
     /**
+     * 24
      * 获取门禁申请记录
      */
     @GET("api/guard/select/GuardMainPage")
@@ -280,12 +304,14 @@ public interface ApiService {
                                                            @Query("page") int page, @Query("size") int size);
 
     /**
+     * 25
      * 公司管理员提交门禁申请
      */
     @POST("api/guard/save/GuardMain")
     Call<BaseResult<String>> addDoorApply(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
+     * 26
      * 查询员工列表
      * 查询类型：1表示查询所有员工、2表示没有开门权限的员工列表、3表示该公司的所有管理员、4、该公司所有非管理员
      */
@@ -294,6 +320,7 @@ public interface ApiService {
                                                    @Query("size") int size, @Query("type") int type);
 
     /**
+     * 27
      * 获取访客记录
      */
     @GET("api/visitor/select/BuildVisitorPage")
@@ -301,36 +328,42 @@ public interface ApiService {
                                        @Query("page") int page, @Query("size") int size);
 
     /**
+     * 28
      * 处理访客申请
      */
     @PUT("api/visitor/update/BuildVisitor")
     Call<BaseResult> dealVisitorApply(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 29
      * 删除公司员工
      */
     @DELETE("api/company/delete/CompanyUser")
     Call<BaseResult<String>> deleteCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Query("userId") String userId);
 
     /**
+     * 30
      * 修改员工信息
      */
     @PUT("api/company/update/CompanyUser")
     Call<BaseResult<String>> updateCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Body WorkersResult.RecordsBean bean);
 
     /**
+     * 31
      * 公司管理员添加员工
      */
     @POST("api/company/save/CompanyUserByAdmin")
     Call<BaseResult> addCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Body WorkersResult.RecordsBean bean);
 
     /**
+     * 32
      * 用户提交服务申请
      */
     @POST("api/buildApproval/save/BuildApproval")
     Call<BaseResult> addNewServiceApply(@Header(Constants.TOKEN_NAME) String token, @Body NewApplyInput input);
 
     /**
+     * 33
      * 获取服务申请记录
      */
     @GET("api/buildApproval/select/BuildApprovalPage")
@@ -339,18 +372,21 @@ public interface ApiService {
                                                                        @Query("size") int size);
 
     /**
+     * 34
      * 查询公司入驻楼宇信息
      */
     @GET("api/company/select/CompanyAdmission")
     Call<BaseResult<IsIntoBuildingResult>> isCompanyIntoBuilding(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 35
      * 获取楼宇管理员列表
      */
     @GET("api/buildApproval/select/BuildUserList")
     Call<BaseResult<List<BuildingAdminListResult>>> getBuildingAdminList(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 36
      * 上传头像
      *
      * @return
@@ -360,6 +396,7 @@ public interface ApiService {
     Call<BaseResult<String>> uploadImage(@Part MultipartBody.Part partList);
 
     /**
+     * 37
      * 获取门禁申请明细
      */
     @GET("api/guard/select/GuardList")
@@ -367,60 +404,49 @@ public interface ApiService {
                                                                      @Query("guardMainId") String guardMainId);
 
     /**
+     * 38
      * 找回密码验证
      */
     @POST("auth/validateCode")
     Call<BaseResult<String>> validateCode(@Body ValidateCodeInput input);
 
     /**
+     * 39
      * 找回密码
      */
     @POST("auth/getBackPassword")
     Call<BaseResult<String>> updatePassword(@Body RecoveredPasswordInput input);
 
     /**
+     * 40
      * 查询个人车辆信息列表
      */
     @GET("api/carparkCar/select/CarparkCarList")
     Call<BaseResult<List<CarBean>>> getCarList(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 41
      * 新增车辆
      */
     @POST("api/carparkCar/save/CarparkCar")
     Call<BaseResult> addCar(@Header(Constants.TOKEN_NAME) String token, @Body CarBean bean);
 
     /**
-     * 支付宝支付信息
-     *
-     * @param token
-     * @param money
-     * @param name
-     * @return
-     */
-    @GET("")
-    Call<BaseResult<String>> getAliPayInfo(@Header(Constants.TOKEN_NAME) String token,
-                                           @Query("money") String money, @Query("name") String name);
-
-    /**
-     * 微信支付信息
-     */
-    @GET("")
-    Call<BaseResult<String>> getWXPayInfo(@Header(Constants.TOKEN_NAME) String token);
-
-    /**
+     * 42
      * 查询员工车辆信息列表
      */
     @GET("api/carparkApply/select/CarparkCarList")
     Call<BaseResult<List<CarBean>>> getWorkersCarList(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 43
      * 公司管理员提交停车申请
      */
     @POST("api/carparkApply/save/CarparkApply")
     Call<BaseResult<String>> addParkApply(@Header(Constants.TOKEN_NAME) String token, @Body ParkApplyInput input);
 
     /**
+     * 44
      * 获取停车场列表(停车申请时调用)
      */
     @GET("api/carparkApply/select/CarparkSpacePage")
@@ -428,6 +454,7 @@ public interface ApiService {
                                                  @Query("size") int size, @Query("key") String key);
 
     /**
+     * 45
      * 根据ID查询公司信息
      */
     @GET("api/company/select/Company")
@@ -435,12 +462,14 @@ public interface ApiService {
                                                            @Query("companyId") String companyId);
 
     /**
+     * 46
      * 用户发邮件
      */
     @POST("api/emailBox/save/SendEmailBox")
     Call<BaseResult<String>> sendEmail(@Header(Constants.TOKEN_NAME) String token, @Body EmailBean bean);
 
     /**
+     * 47
      * 搜索发件箱邮件列表
      */
     @GET("api/emailBox/select/PageEmailBox")
@@ -448,6 +477,7 @@ public interface ApiService {
                                                 @Query("key") String key, @Query("page") int page, @Query("size") int size);
 
     /**
+     * 48
      * 搜索收件箱邮件列表
      */
     @GET("api/emailBox/select/PageEmailBoxRecord")
@@ -455,78 +485,91 @@ public interface ApiService {
                                                @Query("key") String key, @Query("page") int page, @Query("size") int size);
 
     /**
+     * 49
      * 删除发件箱邮件
      */
     @HTTP(method = "DELETE", path = "api/emailBox/delete/EmailBox", hasBody = true)
     Call<BaseResult<String>> deleteOutBox(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
+     * 50
      * 删除收件箱邮件
      */
     @HTTP(method = "DELETE", path = "api/emailBox/delete/EmailBoxRecord", hasBody = true)
     Call<BaseResult<String>> deleteInbox(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
+     * 51
      * 查看发件箱邮件详情
      */
     @GET("api/emailBox/select/EmailBox")
     Call<BaseResult<EmailBean>> getOutBoxDetail(@Header(Constants.TOKEN_NAME) String token, @Query("emailId") String id);
 
     /**
+     * 52
      * 查看收件箱邮件详情
      */
     @GET("api/emailBox/select/EmailBoxRecord")
     Call<BaseResult<EmailBean>> getInBoxDetail(@Header(Constants.TOKEN_NAME) String token, @Query("emailId") String id);
 
     /**
+     * 53
      * 标记邮件
      */
     @PUT("api/emailBox/update/EmailBoxRecordList")
     Call<BaseResult<String>> markEmails(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
+     * 54
      * 获取收件箱未读邮件数量
      */
     @GET("api/emailBox/select/EmailBoxRecordCount")
     Call<BaseResult<String>> getUnReadCount(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 55
      * 停车缴费信息添加
      */
     @POST("api/carparkPayment/save/CarparkPayment")
     Call<BaseResult<String>> addPayInfo(@Header(Constants.TOKEN_NAME) String token, @Body PayBean bean);
 
     /**
+     * 56
      * 停车缴费支付接口
      */
     @POST("api/carparkPayment/pay/CarparkPayment")
     Call<BaseResult<String>> pay(@Header(Constants.TOKEN_NAME) String token, @Body PayInput input);
 
     /**
+     * 57
      * 获取停车缴费列表
      */
     @GET("api/carparkApplyDetail/select/ApplyDetailList")
     Call<BaseResult<List<PayListResult>>> getPayList(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 58
      * 获取停车场详情
      */
     @GET("api/carparkPayment/carpark/select/CarparkSpace")
     Call<BaseResult<ParkingDetail>> getParkingDetail(@Header(Constants.TOKEN_NAME) String token, @Query("spaceId") int spaceId);
 
     /**
+     * 59
      * 停车场管理员审批停车申请
      */
     @PUT("api/carparkApply/update/CarparkApply")
     Call<BaseResult<String>> dealParkApply(@Header(Constants.TOKEN_NAME) String token, @Body DealParkApplyInput input);
 
     /**
+     * 60
      * 提交请假申请
      */
     @POST("api/companyLeave/save/CompanyLeave")
     Call<BaseResult> addCompanyLeave(@Header(Constants.TOKEN_NAME) String token, @Body LeaveBean bean);
 
     /**
+     * 61
      * 待审批事项和审批记录（status为1则是待审批事项，否则查询所有记录）
      */
     @GET("api/companyLeave/select/CompanyLeavePage")
@@ -535,6 +578,7 @@ public interface ApiService {
                                                          @Query("page") int page, @Query("size") int size);
 
     /**
+     * 62
      * 用户查询申请记录
      */
     @GET("api/companyLeave/select/LeaveSelfPage")
@@ -543,12 +587,14 @@ public interface ApiService {
                                                       @Query("page") int page, @Query("size") int size);
 
     /**
+     * 63
      * 申请审批:1表示同意，2表示拒绝，3表示转批
      */
     @PUT("api/companyLeave/update/CompanyLeave")
     Call<BaseResult<String>> dealLeave(@Header(Constants.TOKEN_NAME) String token, @Body DealLeaveInput input);
 
     /**
+     * 64
      * 查询停车申请记录列表
      * ,@Query("spaceId") int spaceId
      */
@@ -558,24 +604,28 @@ public interface ApiService {
                                                                  @Query("size") int size);
 
     /**
+     * 65
      * 给员工添加管理员权限
      */
     @POST("api/company/save/CompanyAdminUser")
     Call<BaseResult<String>> addAdmin(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
+     * 66
      * 删除公司管理员权限
      */
     @HTTP(method = "DELETE", path = "api/company/delete/CompanyAdminUser", hasBody = true)
     Call<BaseResult<String>> deleteAdmin(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 
     /**
+     * 67
      * 工作台管理员权限转交
      */
     @PUT("api/company/update/CompanyAdminUser")
     Call<BaseResult<String>> updateAdmin(@Header(Constants.TOKEN_NAME) String token, @Body UpdateAdminInput userId);
 
     /**
+     * 68
      * 获取所有员工打卡记录
      */
     @GET("api/companyClock/select/CompanyClockAllList")
@@ -583,6 +633,7 @@ public interface ApiService {
                                                               @Query("beginTime") long bg, @Query("endTime") long end);
 
     /**
+     * 69
      * 获取个人打卡记录
      */
     @GET("api/companyClock/select/CompanyClockList")
@@ -590,6 +641,7 @@ public interface ApiService {
                                                            @Query("beginTime") long bg, @Query("endTime") long end);
 
     /**
+     * 70
      * 获取单个员工的打卡记录
      */
     @GET("api/companyClock/select/CompanyUserClockList")
@@ -598,6 +650,7 @@ public interface ApiService {
                                                                @Query("userId") String userId);
 
     /**
+     * 71
      * 获取打卡记录统计信息
      */
     @GET("api/companyClock/select/selectCompanyClockTotal")
@@ -605,6 +658,7 @@ public interface ApiService {
                                                     @Query("beginTime") long bg, @Query("endTime") long end);
 
     /**
+     * 72
      * 获取员工自己的打卡统计信息
      */
     @GET("api/companyClock/select/UserClockTotalList")
@@ -613,12 +667,14 @@ public interface ApiService {
                                                         @Query("userId") String userId);
 
     /**
+     * 73
      * 员工申请退出公司
      */
     @DELETE("api/company/delete/CompanyUserSelf")
     Call<BaseResult<String>> exitCompany(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 74
      * 修改公司信息
      */
     @PUT("api/company/update/Company")

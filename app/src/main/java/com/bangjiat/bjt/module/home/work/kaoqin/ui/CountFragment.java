@@ -3,11 +3,13 @@ package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.MyAdapter;
 
 import java.util.ArrayList;
@@ -100,11 +102,14 @@ public class CountFragment extends BaseFragment {
         countDayFragment = new CountDayFragment();
         countMonthFragment = new CountMonthFragment();
         countMyFragment = new CountMyFragment();
-
         fragments = new ArrayList<>();
 
-        fragments.add(countDayFragment);
-        fragments.add(countMonthFragment);
+        if (Constants.hasPermission()) {
+            fragments.add(countDayFragment);
+            fragments.add(countMonthFragment);
+            rg.setVisibility(View.VISIBLE);
+        }
+
         fragments.add(countMyFragment);
 
 

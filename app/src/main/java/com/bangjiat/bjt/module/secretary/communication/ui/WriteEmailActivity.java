@@ -36,6 +36,7 @@ import com.bangjiat.bjt.module.secretary.communication.presenter.SendEmailPresen
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
 import com.yancy.gallerypick.config.GalleryConfig;
 import com.yancy.gallerypick.config.GalleryPick;
@@ -86,6 +87,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
 
         initView();
     }
@@ -407,7 +409,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
     }
 
     public void showSuccessExitDialog() {
-        new AlertDialog(mContext).builder().setMsg("邮件发送成功").
+        new AlertDialog(mContext).builder().setMsg("邮件发送成功").setCancelable(false).
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

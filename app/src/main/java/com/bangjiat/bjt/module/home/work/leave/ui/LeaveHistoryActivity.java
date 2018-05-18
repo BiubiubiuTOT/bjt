@@ -29,6 +29,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     RecyclerView recyclerView;
     private LeaveHistoryAdapter mAdapter;
     private List<CompanyLeaveResult.RecordsBean> list;
+    private String token;
 
 
     @Override
@@ -39,9 +40,14 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
 
     private void initView() {
         presenter = new LeavePresenter(this);
-        presenter.getSelfLeave(DataUtil.getToken(mContext), 1, 1, 10);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        token = DataUtil.getToken(mContext);
+        if (Constants.hasPermission()) {
+            presenter.getCompanyLeave(token, 2, 1, 10);
+        } else {
+            presenter.getSelfLeave(token, 1, 1, 10);
+        }
     }
 
     private void setAdapter() {

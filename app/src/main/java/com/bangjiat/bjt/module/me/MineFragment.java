@@ -67,8 +67,8 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
 
     private void showIcon(UserInfo userInfo) {
         if (userInfo.getAvatar() != null) {
-            Glide.with(mContext).load(userInfo.getAvatar()).centerCrop().
-                    transform(new GlideCircleTransform(mContext)).into(iv_icon);
+            Glide.with(mContext).load(userInfo.getAvatar()).centerCrop().placeholder(R.mipmap.my_head).
+            transform(new GlideCircleTransform(mContext)).into(iv_icon);
         }
     }
 

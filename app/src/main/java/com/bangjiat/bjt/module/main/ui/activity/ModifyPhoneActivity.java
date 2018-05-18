@@ -11,6 +11,7 @@ import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.module.main.account.contract.RecoveredPasswordContract;
 import com.bangjiat.bjt.module.main.account.presenter.RecoveredPasswordPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +31,7 @@ public class ModifyPhoneActivity extends BaseActivity implements RecoveredPasswo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         initData();
     }
 

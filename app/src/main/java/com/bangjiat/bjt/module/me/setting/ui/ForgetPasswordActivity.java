@@ -20,6 +20,7 @@ import com.bangjiat.bjt.module.main.account.presenter.RecoveredPasswordPresenter
 import com.bangjiat.bjt.module.main.account.presenter.ValidateCodePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
 
 import java.util.Timer;
@@ -52,6 +53,7 @@ public class ForgetPasswordActivity extends BaseToolBarActivity implements Valid
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         codePresenter = new ValidateCodePresenter(this);
         presenter = new RecoveredPasswordPresenter(this);
         phone = DataUtil.getPhone(mContext);

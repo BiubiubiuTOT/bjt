@@ -10,5 +10,13 @@
         <cache-path
             name="cache"
             path="" />
+
+        <external-path
+            name="files_root"
+            path="Android/data/com.bangjiat.bjt/" />
+        <external-path
+            name="external_storage_root"
+            path="." />
     </paths>
+
 </resources>

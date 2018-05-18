@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
@@ -57,6 +58,8 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
 
         if (type == 0) {
             tv_title.setText("管理员设置");
+            if (!Constants.hasPermission())
+                card.setVisibility(View.GONE);
         } else {
             tv_title.setText("选择审批人");
             card.setVisibility(View.GONE);
@@ -104,7 +107,7 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
                     WorkersResult.RecordsBean bean = beans.get(position);
                     Intent intent = new Intent();
                     intent.putExtra("data", bean);
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }

@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.secretary.door.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
 import com.bangjiat.bjt.module.secretary.door.contract.DoorApplyHistoryContract;
 
@@ -23,7 +24,7 @@ public class DoorApplyHistoryModel implements DoorApplyHistoryContract.Model {
 
     @Override
     public void getDoorApplyHistory(String token, int page, int size) {
-        ApiFactory.getService().getDoorApplyHistory(token, page, size).enqueue(new MyCallBack<BaseResult<ApplyHistoryBean>>() {
+        ApiFactory.getService().getDoorApplyHistory(token, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<ApplyHistoryBean>>() {
             @Override
             public void onSuc(Response<BaseResult<ApplyHistoryBean>> response) {
                 BaseResult<ApplyHistoryBean> body = response.body();

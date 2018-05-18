@@ -16,6 +16,7 @@ import com.bangjiat.bjt.module.main.account.beans.ValidateCodeInput;
 import com.bangjiat.bjt.module.main.account.contract.ValidateCodeContract;
 import com.bangjiat.bjt.module.main.account.presenter.ValidateCodePresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
 
 import java.util.Timer;
@@ -45,6 +46,7 @@ public class VerifyPhoneActivity extends BaseActivity implements ValidateCodeCon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         presenter = new ValidateCodePresenter(this);
     }
 

@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.me.bill.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
 import com.bangjiat.bjt.module.me.bill.contract.QueryBillContract;
 
@@ -23,7 +24,7 @@ public class QueryBillModel implements QueryBillContract.Model {
 
     @Override
     public void getPageBill(String token, final int page, int size) {
-        ApiFactory.getService().getPageBill(token, page, size).enqueue(new MyCallBack<BaseResult<PageBillBean>>() {
+        ApiFactory.getService().getPageBill(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<PageBillBean>>() {
             @Override
             public void onSuc(Response<BaseResult<PageBillBean>> response) {
                 BaseResult<PageBillBean> body = response.body();

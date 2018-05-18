@@ -15,6 +15,7 @@ import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.setting.contract.UpdatePasswordContract;
 import com.bangjiat.bjt.module.me.setting.presenter.UpdatePasswordPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,6 +35,7 @@ public class UpdatePasswordActivity extends BaseToolBarActivity implements Updat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         initView();
     }
 

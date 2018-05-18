@@ -130,7 +130,7 @@ public class PickActivity extends BaseToolBarActivity {
         tv_title.setText("所有相册");
         tv_done.setText("取消");
 
-        tv_back.setTextColor(getResources().getColor(R.color.mine_bg));
+        tv_back.setTextColor(getResources().getColor(R.color.black));
         tv_done.setTextColor(getResources().getColor(R.color.mine_bg));
         tv_title.setTextColor(getResources().getColor(R.color.black));
 

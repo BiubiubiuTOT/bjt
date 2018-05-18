@@ -65,9 +65,11 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
     private RuleInput role;
     private RuleInput input;
     private String token;
+    private boolean canEdit;
 
     @Override
     protected void initView() {
+        canEdit = Constants.hasPermission();
         token = DataUtil.getToken(mContext);
         presenter = new RolePresenter(this);
         role = RuleInput.first(RuleInput.class);
@@ -107,29 +109,36 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
 
     @OnClick(R.id.ll_days)
     public void clickDays(View view) {
-        startActivityForResult(new Intent(mContext, WorkDayActivity.class), SELECT_WORK_DAY);
+        if (canEdit)
+            startActivityForResult(new Intent(mContext, WorkDayActivity.class), SELECT_WORK_DAY);
     }
 
     @OnClick(R.id.ll_time_start)
     public void clickTimeStart(View v) {
-        isStart = true;
-        pvMonths.show();
+        if (canEdit) {
+            isStart = true;
+            pvMonths.show();
+        }
     }
 
     @OnClick(R.id.ll_time_end)
     public void clickTimeEnd(View view) {
-        isStart = false;
-        pvMonths.show();
+        if (canEdit) {
+            isStart = false;
+            pvMonths.show();
+        }
     }
 
     @OnClick(R.id.ll_address)
     public void clickAddress(View view) {
-        startActivityForResult(new Intent(mContext, LocationActivity.class), SELECT_LOCATION);
+        if (canEdit)
+            startActivityForResult(new Intent(mContext, LocationActivity.class), SELECT_LOCATION);
     }
 
     @OnClick(R.id.ll_range)
     public void clickRange(View view) {
-        startActivityForResult(new Intent(mContext, AddWifiActivity.class), SELECT_WIFI);
+        if (canEdit)
+            startActivityForResult(new Intent(mContext, AddWifiActivity.class), SELECT_WIFI);
     }
 
     @Override
@@ -260,7 +269,7 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
             String str = "";
             List<String> list = Arrays.asList(split);
             for (String s : list) {
-                str += Constants.WEEK[Integer.parseInt(s)] + ",";
+                str += Constants.WEEK[Integer.parseInt(s) - 1] + ",";
             }
             str = str.substring(0, str.length() - 1);
             tv_work_day.setText(str);
@@ -282,7 +291,7 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
 
 
     private void setWifi(String wifi) {
-        iv_wifi.setImageResource(R.mipmap.ic_location);
+        iv_wifi.setImageResource(R.mipmap.ic_wifi);
         iv_wifi_delete.setVisibility(View.VISIBLE);
         tv_wifi.setText(wifi);
     }

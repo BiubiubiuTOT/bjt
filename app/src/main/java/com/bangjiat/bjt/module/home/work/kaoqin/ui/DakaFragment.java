@@ -307,7 +307,8 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
                     outDakaInput.setOutLongitude(String.valueOf(longitude));
                     outDakaInput.setOutType(getOutType());
                     outDakaInput.setOutWay("1");
-                    outDakaInput.setClockId(clockId);
+                    if (clockId != 0)
+                        outDakaInput.setClockId(clockId);
                     dakaPresenter.outDaka(token, outDakaInput);
                 }
             }

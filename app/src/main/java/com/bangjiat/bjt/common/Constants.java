@@ -38,6 +38,9 @@ public class Constants {
     public static final String TOKEN_NAME = "j4sc-bjt-token";
     public static final String TOKEN_NAME_SPECIAL = "j4sc-b-token";
 
+
+    public static final int SIZE = 100;
+
     public static String[] WEEK = {"周一", "周二", "周三",
             "周四", "周五", "周六", "周日"};
     public static int[] WEEK_INDEX = {1, 2, 3, 4, 5, 6, 7};
@@ -47,6 +50,12 @@ public class Constants {
         return companyUserBean != null;
     }
 
+    /**
+     * 获取签名
+     *
+     * @param context
+     * @return
+     */
     public static String sHA1(Context context) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(
@@ -182,7 +191,47 @@ public class Constants {
 
     public static boolean hasPermission() {
         CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        if (first == null) return false;
         int type = first.getType();
         return type != 1;
+    }
+
+    /**
+     * +
+     * 公司管理员
+     *
+     * @return
+     */
+    public static boolean isCompanyAdmin() {
+        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        int type = first.getType();
+        return type == 3;
+    }
+
+    /**
+     * 楼宇管理员
+     *
+     * @return
+     */
+    public static boolean isBuildingAdmin() {
+        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        int type = first.getType();
+        return type == 2;
+    }
+
+    /**
+     * 2  * 获取版本号
+     * 3  * @return 当前应用的版本号
+     * 4
+     */
+    public static String getVersion(Context context) {
+        try {
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            return info.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "获取版本失败";
+        }
     }
 }

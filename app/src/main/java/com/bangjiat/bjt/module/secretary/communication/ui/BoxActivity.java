@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.WCBMenu;
+import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.communication.adpter.OutBoxAdapter;
 import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
@@ -25,11 +28,13 @@ import com.bangjiat.bjt.module.secretary.communication.contract.DealBoxContract;
 import com.bangjiat.bjt.module.secretary.communication.presenter.BoxPresenter;
 import com.bangjiat.bjt.module.secretary.communication.presenter.DealBoxPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +48,7 @@ import butterknife.OnClick;
  */
 public class BoxActivity extends BaseToolBarActivity implements BoxContract.View, DealBoxContract.View {
     public static final int WRITE_EMAIL = 2;
+    public static final int DELETE = 3;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.rl)
@@ -70,15 +76,19 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     private TextView tv_title;
     public static final int IN = 0;
     public static final int OUT = 1;
+    private List<WcbBean> mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
 
         initData();
     }
 
     private void initData() {
+        mList = new ArrayList<>();
+        mList.add(new WcbBean("删除邮件", getResources().getColor(R.color.red)));
         presenter = new BoxPresenter(this);
         dealPresenter = new DealBoxPresenter(this);
         token = DataUtil.getToken(mContext);
@@ -99,9 +109,11 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
                 return true;
             }
         });
+        setAdapter();
     }
 
     private void setAdapter() {
+        boxBeans = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
         mAdapter = new OutBoxAdapter(boxBeans, mContext, type);
@@ -186,6 +198,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         });
 
         mAdapter.setOnItemClickListener(new OutBoxAdapter.OnRecyclerViewItemClickListener() {
+
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(mContext, BoxDetailActivity.class);
@@ -194,7 +207,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
                 extras.putSerializable("data", value);
                 extras.putInt("type", type);
                 intent.putExtras(extras);
-                startActivity(intent);
+                startActivityForResult(intent, DELETE);
 
                 if (type == IN && value.getEmailStatus() == 0) {
                     value.setEmailStatus(1);
@@ -235,16 +248,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
         if (getSelectCount() > 0) {
-            String[] strings = getString();
-            Logger.d(strings);
-
-            if (type == OUT) {
-                dealPresenter.deleteOutBox(token, strings);
-            } else {
-                dealPresenter.deleteInBox(token, strings);
-            }
-
-            delete();
+            showDeleteDialog();
         }
     }
 
@@ -314,7 +318,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         rl.setVisibility(View.VISIBLE);
         tv_edit.setVisibility(View.GONE);
 
-        mAdapter.setShowCheck(true);
+        if (mAdapter != null)
+            mAdapter.setShowCheck(true);
     }
 
     private void showCustom() {
@@ -357,7 +362,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             @Override
             public void onClick(View view) {
                 tv_select.setText("全选");
-                mAdapter.setDone();
+                if (mAdapter != null)
+                    mAdapter.setDone();
                 showCustom();
             }
         });
@@ -369,17 +375,49 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         });
     }
 
+    private void showDeleteDialog() {
+        final WCBMenu wcbMenu = new WCBMenu(mContext);
+        wcbMenu.setTitle("邮件删除后不可恢复？")
+                .setCancel("取消")
+                .setStringList(mList)
+                .setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        wcbMenu.dismiss();
+
+                        String[] strings = getString();
+                        Logger.d(strings);
+
+                        if (type == OUT) {
+                            dealPresenter.deleteOutBox(token, strings);
+                        } else {
+                            dealPresenter.deleteInBox(token, strings);
+                        }
+
+                        delete();
+
+                    }
+                })
+                .show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == WRITE_EMAIL) {
-                if (type == 1) {
-                    presenter.getOutBoxList(token, "", 1, 10);
-                } else {
-                    presenter.getInBoxList(token, "", 1, 10);
-                }
+                getBox();
+            } else if (requestCode == DELETE) {
+                getBox();
             }
+        }
+    }
+
+    private void getBox() {
+        if (type == 1) {
+            presenter.getOutBoxList(token, "", 1, 10);
+        } else {
+            presenter.getInBoxList(token, "", 1, 10);
         }
     }
 
@@ -405,7 +443,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             if (records != null && records.size() > 0) {
                 boxBeans = records;
                 Logger.d(boxBeans.toString());
-                setAdapter();
+                mAdapter.setLists(boxBeans);
             }
         }
     }

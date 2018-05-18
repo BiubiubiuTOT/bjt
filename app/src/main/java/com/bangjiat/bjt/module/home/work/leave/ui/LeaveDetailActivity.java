@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
@@ -46,6 +47,8 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     TextView tv_reason;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
+    @BindView(R.id.rl_btn)
+    RelativeLayout rl_btn;
     private Dialog dialog;
     private int type;
     private WorkersResult.RecordsBean result;
@@ -59,6 +62,9 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     }
 
     private void initData() {
+        if (Constants.hasPermission()) {
+            rl_btn.setVisibility(View.VISIBLE);
+        }
         presenter = new LeavePresenter(this);
         recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
         recycler_view.setHasFixedSize(true);

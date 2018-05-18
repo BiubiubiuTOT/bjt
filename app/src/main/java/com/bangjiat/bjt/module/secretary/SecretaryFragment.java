@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
@@ -42,6 +43,11 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     ImageView iv_people;
     @BindView(R.id.ll_admin)
     LinearLayout ll_admin;
+    @BindView(R.id.tv_door)
+    TextView tv_door;
+    @BindView(R.id.tv_service)
+    TextView tv_service;
+
     private IntoBuildingContract.Presenter presenter;
     private String token;
     private boolean isApply;
@@ -53,13 +59,23 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
         presenter = new IntoBuildingPresenter(this);
         token = DataUtil.getToken(mContext);
         isInto = DataUtil.isIntoBuilding(mContext);
-        if (Constants.hasPermission()) ll_admin.setVisibility(View.VISIBLE);
+        if (Constants.hasPermission()) {
+            ll_admin.setVisibility(View.VISIBLE);
+            if (Constants.isCompanyAdmin()) {
+                tv_door.setText("·门禁申请·");
+                tv_service.setText("·服务申请·");
+            } else if (Constants.isBuildingAdmin()) {
+                tv_door.setText("·门禁审批·");
+                tv_service.setText("·服务审批·");
+            }
 
-        Glide.with(this).load(R.mipmap.door).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_door);
-        Glide.with(this).load(R.mipmap.service).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_service);
-        Glide.with(this).load(R.mipmap.message).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_message);
-        Glide.with(this).load(R.mipmap.contact_us).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_contact_us);
-        Glide.with(this).load(R.mipmap.pic_people).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).crossFade().into(iv_people);
+            Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
+            Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
+        }
+
+        Glide.with(this).load(R.mipmap.message).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_message);
+        Glide.with(this).load(R.mipmap.contact_us).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_contact_us);
+        Glide.with(this).load(R.mipmap.pic_people).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_people);
     }
 
     @Override

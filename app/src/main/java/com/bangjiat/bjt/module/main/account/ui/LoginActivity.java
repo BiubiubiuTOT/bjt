@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
         presenter = new LoginPresenter(this);
         Glide.with(LoginActivity.this).load(R.mipmap.login_bg)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade().dontAnimate()
                 .bitmapTransform(new BlurTransformation(this, 20, 2))
                 .into(iv_bg);
     }
@@ -111,7 +111,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void loginSuccess(BaseResult<String> result) {
         DataUtil.setToken(mContext, result.getData());
         DataUtil.setAccount(mContext, phone, password);
-        DataUtil.setLogin(mContext,true);
+        DataUtil.setLogin(mContext, true);
 
         startActivity(new Intent(mContext, MainActivity.class));
         finish();

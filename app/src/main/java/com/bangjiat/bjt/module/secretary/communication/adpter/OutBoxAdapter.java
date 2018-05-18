@@ -42,6 +42,12 @@ public class OutBoxAdapter extends RecyclerView.Adapter<OutBoxAdapter.ViewHolder
 
     private onSwipeListener mOnSwipeListener;
 
+    public void setLists(List<EmailBean> lists) {
+        this.lists = lists;
+        resetMap();
+        notifyDataSetChanged();
+    }
+
     public onSwipeListener getOnDelListener() {
         return mOnSwipeListener;
     }

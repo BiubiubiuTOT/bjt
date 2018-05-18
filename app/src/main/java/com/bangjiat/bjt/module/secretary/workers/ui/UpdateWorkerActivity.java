@@ -21,6 +21,7 @@ import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.githang.statusbar.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,6 +53,7 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
 
         initData();
     }
