@@ -1,5 +1,7 @@
 package com.bangjiat.bjt.module.me.personaldata.beans;
 
+import java.util.List;
+
 /**
  * @author ligh
  * @email 1256144200@qq.com
@@ -17,6 +19,24 @@ public class UserInfoBean {
     private UserInfo userInfo;
     private int count;
     private CompanyUserBean companyUser;
+    private List<BuildUser> buildUser;
+    private SpaceUser spaceUser;
+
+    public List<BuildUser> getBuildUser() {
+        return buildUser;
+    }
+
+    public void setBuildUser(List<BuildUser> buildUser) {
+        this.buildUser = buildUser;
+    }
+
+    public SpaceUser getSpaceUser() {
+        return spaceUser;
+    }
+
+    public void setSpaceUser(SpaceUser spaceUser) {
+        this.spaceUser = spaceUser;
+    }
 
     public UserInfo getUserInfo() {
         return userInfo;

@@ -28,7 +28,6 @@ import com.bangjiat.bjt.module.secretary.contact.util.ContactAdapter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactsUtils;
 import com.bangjiat.bjt.module.secretary.contact.util.SideLetterBar;
 import com.githang.statusbar.StatusBarCompat;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -248,7 +247,6 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
 
     @Override
     public void success(List<ContactBean> bean) {
-        Logger.d(bean.size());
         mContactList = ContactsUtils.getContactList(bean);
         handler.sendEmptyMessage(0);
     }

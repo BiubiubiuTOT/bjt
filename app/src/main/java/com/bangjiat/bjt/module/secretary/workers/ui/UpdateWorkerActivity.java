@@ -64,10 +64,10 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
         bean = (WorkersResult.RecordsBean) getIntent().getSerializableExtra("data");
         userInfo = UserInfo.first(UserInfo.class);
         if (bean != null) {
-            if (Constants.hasPermission() && !userInfo.getUserId().equals(bean.getUserId())) {//没有权限或者是本人信息则不能删除
+            if (Constants.isCompanyAdmin() && !userInfo.getUserId().equals(bean.getUserId())) {//没有公司管理员权限或者是本人信息则不能删除
                 rl_delete.setVisibility(View.VISIBLE);
             }
-            if (!userInfo.getUserId().equals(bean.getUserId()) && !Constants.hasPermission()) {//不是本人或者没有权限的人不能编辑
+            if (!userInfo.getUserId().equals(bean.getUserId()) && !Constants.isCompanyAdmin()) {//不是本人或者没有公司管理员权限的人不能编辑
                 et_name.setCompoundDrawables(null, null, null, null);
                 et_card.setCompoundDrawables(null, null, null, null);
                 et_phone.setCompoundDrawables(null, null, null, null);

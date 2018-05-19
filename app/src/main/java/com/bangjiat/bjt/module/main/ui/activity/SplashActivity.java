@@ -12,7 +12,11 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
+import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.main.account.beans.Account;
+import com.bangjiat.bjt.module.main.account.contract.LoginContract;
+import com.bangjiat.bjt.module.main.account.presenter.LoginPresenter;
 import com.bangjiat.bjt.module.main.account.ui.LoginActivity;
 
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ import java.util.List;
 /**
  * 引导页
  */
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements LoginContract.View {
     private static final String[] permissionsArray = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -31,6 +35,7 @@ public class SplashActivity extends BaseActivity {
     };
     private List<String> permissionsList;
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
+    private LoginContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,8 @@ public class SplashActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         checkRequiredPermission();
+
+        presenter = new LoginPresenter(this);
     }
 
     private void checkRequiredPermission() {
@@ -85,13 +92,45 @@ public class SplashActivity extends BaseActivity {
             public void run() {
                 try {
                     Thread.sleep(2000);
-                    startActivity(new Intent(mContext, DataUtil.isLogin(mContext) ? MainActivity.class : LoginActivity.class));
-                    finish();
+                    boolean login = DataUtil.isLogin(mContext);
+                    if (!login) {
+                        startActivity(new Intent(mContext, LoginActivity.class));
+                        finish();
+                    } else {
+                        Account account = DataUtil.getAccount(mContext);
+                        presenter.login(account.getPhone(), account.getPassword());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+    }
+
+    @Override
+    public void showDialog() {
+    }
+
+    @Override
+    public void dismissDialog() {
+    }
+
+    @Override
+    public void showError(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        DataUtil.setLogin(mContext, false);
+
+        startActivity(new Intent(mContext, LoginActivity.class));
+        finish();
+    }
+
+    @Override
+    public void loginSuccess(BaseResult<String> result) {
+        DataUtil.setToken(mContext, result.getData());
+        DataUtil.setLogin(mContext, true);
+
+        startActivity(new Intent(mContext, MainActivity.class));
+        finish();
     }
 
 }

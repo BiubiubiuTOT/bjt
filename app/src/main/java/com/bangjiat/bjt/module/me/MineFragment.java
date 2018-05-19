@@ -18,7 +18,9 @@ import com.bangjiat.bjt.module.main.ui.activity.AboutActivity;
 import com.bangjiat.bjt.module.main.ui.activity.ContactServiceActivity;
 import com.bangjiat.bjt.module.me.bill.ui.MyBillActivity;
 import com.bangjiat.bjt.module.me.feedback.ui.FeedBackActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
@@ -68,7 +70,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
     private void showIcon(UserInfo userInfo) {
         if (userInfo.getAvatar() != null) {
             Glide.with(mContext).load(userInfo.getAvatar()).centerCrop().placeholder(R.mipmap.my_head).
-            transform(new GlideCircleTransform(mContext)).into(iv_icon);
+                    transform(new GlideCircleTransform(mContext)).into(iv_icon);
         }
     }
 
@@ -130,6 +132,9 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
                         SugarRecord.deleteAll(UserInfo.class);
                         SugarRecord.deleteAll(CompanyUserBean.class);
                         SugarRecord.deleteAll(RuleInput.class);
+                        SugarRecord.deleteAll(SpaceUser.class);
+                        SugarRecord.deleteAll(BuildUser.class);
+
                         DataUtil.setLogin(mContext, false);
                         startActivity(new Intent(mContext, LoginActivity.class));
                         getActivity().finish();

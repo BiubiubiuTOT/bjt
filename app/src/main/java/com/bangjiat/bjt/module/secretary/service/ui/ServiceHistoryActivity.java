@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.service.adapter.HistoryAdapter;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 import com.bangjiat.bjt.module.secretary.service.contract.ServiceApplyHistoryContract;
@@ -23,13 +24,16 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class HistoryActivity extends BaseColorToolBarActivity implements ServiceApplyHistoryContract.View {
+public class ServiceHistoryActivity extends BaseColorToolBarActivity implements ServiceApplyHistoryContract.View {
+    private static final int DEAL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
 
     private List<ServiceApplyHistoryResult.RecordsBean> list;
     private Dialog dialog;
     private ServiceApplyHistoryContract.Presenter presenter;
+    private HistoryAdapter mAdapter;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +47,27 @@ public class HistoryActivity extends BaseColorToolBarActivity implements Service
     }
 
     private void initData() {
-        list = new ArrayList<>();
         presenter = new ServiceApplyHistoryPresenter(this);
-        presenter.getHistory(DataUtil.getToken(mContext), 1, 10);
-
+        token = DataUtil.getToken(mContext);
+        getData();
         setAdapter();
     }
 
+    private void getData() {
+        if (Constants.isCompanyAdmin()) {
+            presenter.getHistory(token, 1, 10);
+        } else if (Constants.isBuildingAdmin()) {
+            BuildUser first = BuildUser.first(BuildUser.class);
+            Logger.d(first.toString());
+            presenter.getAdminHistory(token, first.getBuildId(), 1, 10, 2);
+        }
+    }
+
     private void setAdapter() {
+        list = new ArrayList<>();
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
-        HistoryAdapter mAdapter = new HistoryAdapter(list, mContext);
+        mAdapter = new HistoryAdapter(list, mContext);
         recycler_view.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new HistoryAdapter.OnRecyclerViewItemClickListener() {
@@ -63,9 +77,17 @@ public class HistoryActivity extends BaseColorToolBarActivity implements Service
                 Bundle extras = new Bundle();
                 extras.putSerializable("data", list.get(position));
                 intent.putExtras(extras);
-                startActivity(intent);
+                startActivityForResult(intent, DEAL);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == DEAL) {
+            getData();
+        }
     }
 
     @Override
@@ -89,12 +111,26 @@ public class HistoryActivity extends BaseColorToolBarActivity implements Service
         if (result != null) {
             list = result.getRecords();
             Logger.d(list.toString());
-            setAdapter();
+            mAdapter.setLists(list);
         }
     }
 
     @Override
     public void error(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext, err);
+    }
+
+    @Override
+    public void approvalServiceSuccess() {
+
+    }
+
+    @Override
+    public void getAdminHistorySuccess(ServiceApplyHistoryResult result) {
+        if (result != null) {
+            list = result.getRecords();
+            Logger.d(list.toString());
+            mAdapter.setLists(list);
+        }
     }
 }

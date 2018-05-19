@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.service.presenter;
 
+import com.bangjiat.bjt.module.secretary.door.beans.ApprovalServiceInput;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 import com.bangjiat.bjt.module.secretary.service.contract.ServiceApplyHistoryContract;
 import com.bangjiat.bjt.module.secretary.service.model.ServiceApplyHistoryModel;
@@ -35,5 +36,29 @@ public class ServiceApplyHistoryPresenter implements ServiceApplyHistoryContract
     public void error(String err) {
         view.dismissDialog();
         view.error(err);
+    }
+
+    @Override
+    public void approvalService(String token,int id, ApprovalServiceInput input) {
+        view.showDialog();
+        model.approvalService(token,id, input);
+    }
+
+    @Override
+    public void approvalServiceSuccess() {
+        view.dismissDialog();
+        view.approvalServiceSuccess();
+    }
+
+    @Override
+    public void getAdminHistory(String token, int id, int page, int size, int status) {
+        view.showDialog();
+        model.getAdminHistory(token, id, page, size, status);
+    }
+
+    @Override
+    public void getAdminHistorySuccess(ServiceApplyHistoryResult result) {
+        view.dismissDialog();
+        view.getAdminHistorySuccess(result);
     }
 }

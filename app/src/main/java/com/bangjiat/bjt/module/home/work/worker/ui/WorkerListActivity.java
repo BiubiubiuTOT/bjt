@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
+import com.bangjiat.bjt.module.secretary.workers.adapter.TextAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
@@ -25,6 +27,8 @@ import com.bangjiat.bjt.module.secretary.workers.ui.AddWorkersActivity;
 import com.bangjiat.bjt.module.secretary.workers.ui.UpdateWorkerActivity;
 import com.dou361.dialogui.DialogUIUtils;
 import com.githang.statusbar.StatusBarCompat;
+import com.jiang.android.indicatordialog.IndicatorBuilder;
+import com.jiang.android.indicatordialog.IndicatorDialog;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,14 +49,8 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     RecyclerView recyclerView;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
-    @BindView(R.id.tv_delete_workers)
-    TextView tv_delete_workers;
-    @BindView(R.id.tv_add_workers)
-    TextView tv_add_workers;
     @BindView(R.id.tv_company_name)
     TextView tv_company_name;
-    @BindView(R.id.card)
-    CardView card;
 
     private Toolbar toolbar;
 
@@ -64,6 +62,12 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     private CompanyUserContract.Presenter presenter;
     private String token;
     private int size;
+    private ImageView img;
+    private IndicatorDialog addDialog;
+    private List<String> texts;
+    private TextAdapter textAdapter;
+    @BindView(R.id.card_delete)
+    CardView card_delete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,8 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
         tv_all = toolbar.findViewById(R.id.toolbar_cancel);
         tv_done = toolbar.findViewById(R.id.toolbar_other);
         TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
+        img = toolbar.findViewById(R.id.toolbar_image);
+        img.setImageResource(R.mipmap.add_black);
 
         tv_all.setText("全选");
         tv_done.setText("完成");
@@ -93,6 +99,17 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
         tv_done.setTextColor(getResources().getColor(R.color.black));
         tv_title.setTextColor(getResources().getColor(R.color.black));
         showCustom();
+
+        if (Constants.isCompanyAdmin()) {
+            img.setVisibility(View.VISIBLE);
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addDialog.show(img);
+                }
+            });
+        } else img.setVisibility(View.GONE);
+
 
         tv_all.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,31 +130,62 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     private void showCustom() {
         tv_all.setText("全选");
         toolbar.setNavigationIcon(R.mipmap.back_black);
-        tv_delete_workers.setVisibility(View.VISIBLE);
-        tv_add_workers.setVisibility(View.VISIBLE);
         tv_delete.setVisibility(View.GONE);
         tv_done.setVisibility(View.GONE);
         tv_all.setVisibility(View.GONE);
+        img.setVisibility(View.VISIBLE);
     }
 
     private void showDelete() {
-        tv_delete_workers.setVisibility(View.GONE);
-        tv_add_workers.setVisibility(View.GONE);
         tv_delete.setVisibility(View.VISIBLE);
         tv_all.setVisibility(View.VISIBLE);
 
         toolbar.setNavigationIcon(null);
         tv_done.setVisibility(View.VISIBLE);
+        img.setVisibility(View.GONE);
     }
 
     private void initData() {
-        if (Constants.hasPermission()) card.setVisibility(View.VISIBLE);
-
         EventBus.getDefault().register(this);
         beans = new ArrayList<>();
         presenter = new CompanyUserPresenter(this);
         token = DataUtil.getToken(mContext);
         presenter.getCompanyUser(token, 1, 10, 1);
+
+        texts = new ArrayList<>();
+        texts.add("添加人员");
+        texts.add("删除人员");
+        textAdapter = new TextAdapter(texts);
+        textAdapter.setOnItemClickListener(new TextAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                addDialog.dismiss();
+                if (position != 0) {
+                    if (adapter != null) {
+                        card_delete.setVisibility(View.VISIBLE);
+                        adapter.setShowCheck(true);
+                        showDelete();
+                    }
+                } else {
+                    startActivity(new Intent(mContext, AddWorkersActivity.class));
+                }
+            }
+        });
+        initDialog();
+    }
+
+    private void initDialog() {
+        addDialog = new IndicatorBuilder(this)
+                .width(300)
+                .height(-1)
+                .ArrowDirection(IndicatorBuilder.TOP)
+                .bgColor(getResources().getColor(R.color.white))
+                .radius(8)
+                .gravity(IndicatorBuilder.GRAVITY_RIGHT)
+                .ArrowRectage(0.9f)
+                .layoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
+                .adapter(textAdapter).create();
+        addDialog.setCanceledOnTouchOutside(true);
     }
 
     private void setAdapter() {
@@ -200,19 +248,6 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
             }
         }
         return select;
-    }
-
-    @OnClick(R.id.tv_delete_workers)
-    public void clickDeleteWorkers(View view) {
-        if (adapter != null) {
-            adapter.setShowCheck(true);
-            showDelete();
-        }
-    }
-
-    @OnClick(R.id.tv_add_workers)
-    public void addWorkers(View view) {
-        startActivity(new Intent(mContext, AddWorkersActivity.class));
     }
 
     @OnClick(R.id.tv_delete)

@@ -36,6 +36,6 @@ public class MainActivity extends BaseColorToolBarActivity {
 
     @OnClick(R.id.ll_apply_history)
     public void clickApplyHistory(View view) {
-        startActivity(new Intent(mContext, HistoryActivity.class));
+        startActivity(new Intent(mContext, ServiceHistoryActivity.class));
     }
 }

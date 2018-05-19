@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context=".module.secretary.service.ui.HistoryActivity">
+    tools:context=".module.secretary.service.ui.ServiceHistoryActivity">
 
     <include layout="@layout/toolbar" />
 

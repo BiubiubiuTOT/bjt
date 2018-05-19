@@ -7,10 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.adapter.SelectPeopleAdapter;
@@ -75,7 +75,8 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
         Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
         for (Map.Entry<Integer, Boolean> entry : entries) {
             if (entry.getValue()) {
-                list.add(beans.get(entry.getKey()).getUserId());
+                String userId = beans.get(entry.getKey()).getUserId();
+                list.add(userId);
             }
         }
         String[] strings = new String[list.size()];
@@ -102,8 +103,12 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
             public void onClick(View view) {
                 if (getSelectCount() > 0) {
                     String[] selectBeans = getSelectBeans();
-                    Logger.d(selectBeans);
-                    presenter.addApply(token, selectBeans);
+                    if (selectBeans.length > 0) {
+                        Logger.d(selectBeans);
+                        presenter.addApply(token, selectBeans);
+                    } else {
+                        error("请选择非管理人员进行申请");
+                    }
                 }
             }
         });
@@ -131,7 +136,7 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
     @Override
     public void error(String err) {
         Logger.d(err);
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override

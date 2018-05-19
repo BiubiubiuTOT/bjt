@@ -45,6 +45,7 @@ public class DoorApplyPresenter implements DoorApplyContract.Presenter {
 
     @Override
     public void addApplySuccess() {
-
+        view.dismissDialog();
+        view.addApplySuccess();
     }
 }

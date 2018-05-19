@@ -94,7 +94,7 @@
         <activity android:name=".module.secretary.service.ui.MainActivity" />
         <activity android:name=".module.secretary.service.ui.NewApplyActivity" />
         <activity android:name=".common.FullImageActivity" />
-        <activity android:name=".module.secretary.service.ui.HistoryActivity" />
+        <activity android:name=".module.secretary.service.ui.ServiceHistoryActivity" />
         <activity android:name=".module.secretary.service.ui.DetailActivity" />
         <activity android:name=".module.secretary.service.ui.ApprovalHistoryActivity" />
         <activity android:name=".module.secretary.service.ui.ApprovalDetailActivity" />

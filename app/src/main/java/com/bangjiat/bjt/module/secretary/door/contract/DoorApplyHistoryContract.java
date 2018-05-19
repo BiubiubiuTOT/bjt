@@ -11,6 +11,8 @@ import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
 public interface DoorApplyHistoryContract {
     interface Model {
         void getDoorApplyHistory(String token, int page, int size);
+
+        void getAdminDoorApplyHistory(String token, int id, int page, int size);
     }
 
     interface View {
@@ -21,6 +23,8 @@ public interface DoorApplyHistoryContract {
         void getDoorApplyHistorySuccess(ApplyHistoryBean bean);
 
         void error(String err);
+
+        void getAdminDoorApplyHistorySuccess(ApplyHistoryBean bean);
     }
 
     interface Presenter {
@@ -29,5 +33,9 @@ public interface DoorApplyHistoryContract {
         void getDoorApplyHistorySuccess(ApplyHistoryBean bean);
 
         void error(String err);
+
+        void getAdminDoorApplyHistory(String token, int id, int page, int size);
+
+        void getAdminDoorApplyHistorySuccess(ApplyHistoryBean bean);
     }
 }

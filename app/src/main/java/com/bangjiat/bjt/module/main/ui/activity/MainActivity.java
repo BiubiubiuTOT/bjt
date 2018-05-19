@@ -16,13 +16,19 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.UpdateAppUtil;
 import com.bangjiat.bjt.module.main.ui.fragment.HomeFragment;
 import com.bangjiat.bjt.module.me.MineFragment;
+import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
 import com.bangjiat.bjt.module.me.personaldata.presenter.GetUserInfoPresenter;
 import com.bangjiat.bjt.module.park.ParkFragment;
 import com.bangjiat.bjt.module.secretary.SecretaryFragment;
+import com.orhanobut.logger.Logger;
+import com.orm.SugarRecord;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -241,11 +247,24 @@ public class MainActivity extends BaseActivity implements GetUserInfoContract.Vi
     public void getUserInfoSuccess(UserInfoBean bean) {
         UserInfo userInfo = bean.getUserInfo();
         CompanyUserBean companyUser = bean.getCompanyUser();
+        List<BuildUser> buildUser = bean.getBuildUser();
+        SpaceUser spaceUser = bean.getSpaceUser();
+
         DataUtil.setPhone(mContext, userInfo.getPhone());
         DataUtil.setUserId(mContext, userInfo.getUserId());
 
         userInfo.save();
         if (companyUser != null)
             companyUser.save();
+
+        if (buildUser != null && buildUser.size() > 0) {
+            Logger.d(buildUser.toString());
+            SugarRecord.saveInTx(buildUser);
+        }
+
+        if (spaceUser != null) {
+            Logger.d(spaceUser.toString());
+            spaceUser.save();
+        }
     }
 }

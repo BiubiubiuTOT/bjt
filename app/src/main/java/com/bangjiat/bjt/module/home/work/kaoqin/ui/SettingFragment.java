@@ -69,7 +69,7 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
 
     @Override
     protected void initView() {
-        canEdit = Constants.hasPermission();
+        canEdit = Constants.isCompanyAdmin() || Constants.isWorkAdmin();//公司管理员、工作台管理员可以设置考勤
         token = DataUtil.getToken(mContext);
         presenter = new RolePresenter(this);
         role = RuleInput.first(RuleInput.class);

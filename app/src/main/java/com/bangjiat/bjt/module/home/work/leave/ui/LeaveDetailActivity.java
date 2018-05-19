@@ -62,7 +62,7 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     }
 
     private void initData() {
-        if (Constants.hasPermission()) {
+        if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) {//公司管理员或者工作台管理员可以审批请假信息
             rl_btn.setVisibility(View.VISIBLE);
         }
         presenter = new LeavePresenter(this);

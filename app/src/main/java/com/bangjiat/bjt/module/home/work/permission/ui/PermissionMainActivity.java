@@ -19,7 +19,7 @@ public class PermissionMainActivity extends BaseWhiteToolBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Constants.hasPermission())
+        if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) //公司管理员、工作台管理员才能转交权限
             btn_permission.setVisibility(View.VISIBLE);
     }
 

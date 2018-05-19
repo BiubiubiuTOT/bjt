@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.service.contract;
 
+import com.bangjiat.bjt.module.secretary.door.beans.ApprovalServiceInput;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 
 /**
@@ -11,6 +12,10 @@ import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult
 public interface ServiceApplyHistoryContract {
     interface Model {
         void getHistory(String token, int page, int size);
+
+        void getAdminHistory(String token, int id, int page, int size, int status);
+
+        void approvalService(String token,int id, ApprovalServiceInput input);
     }
 
     interface View {
@@ -21,6 +26,10 @@ public interface ServiceApplyHistoryContract {
         void success(ServiceApplyHistoryResult result);
 
         void error(String err);
+
+        void approvalServiceSuccess();
+
+        void getAdminHistorySuccess(ServiceApplyHistoryResult result);
     }
 
     interface Presenter {
@@ -29,5 +38,13 @@ public interface ServiceApplyHistoryContract {
         void success(ServiceApplyHistoryResult result);
 
         void error(String err);
+
+        void approvalService(String token,int id, ApprovalServiceInput input);
+
+        void approvalServiceSuccess();
+
+        void getAdminHistory(String token, int id, int page, int size, int status);
+
+        void getAdminHistorySuccess(ServiceApplyHistoryResult result);
     }
 }

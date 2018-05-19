@@ -111,7 +111,8 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
     public void getCompanyDetailSuccess(CompanyDetailResult result) {
         company = result;
         tv_name.setText(result.getName());
-
+        tv_address.setText(result.getAddress());
+        tv_trade.setText(result.getIndustry());
     }
 
     private void showDia() {

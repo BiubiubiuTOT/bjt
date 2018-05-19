@@ -43,7 +43,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         token = DataUtil.getToken(mContext);
-        if (Constants.hasPermission()) {
+        if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) {//公司管理员或者工作台管理员可以查看公司请假信息
             presenter.getCompanyLeave(token, 2, 1, 10);
         } else {
             presenter.getSelfLeave(token, 1, 1, 10);

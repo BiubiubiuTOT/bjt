@@ -36,4 +36,16 @@ public class DoorApplyHistoryPresenter implements DoorApplyHistoryContract.Prese
         view.dismissDialog();
         view.error(err);
     }
+
+    @Override
+    public void getAdminDoorApplyHistory(String token, int id, int page, int size) {
+        view.showDialog();
+        model.getAdminDoorApplyHistory(token, id, page, size);
+    }
+
+    @Override
+    public void getAdminDoorApplyHistorySuccess(ApplyHistoryBean bean) {
+        view.dismissDialog();
+        view.getAdminDoorApplyHistorySuccess(bean);
+    }
 }

@@ -38,9 +38,11 @@ import com.bangjiat.bjt.module.secretary.communication.beans.EmailResult;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
+import com.bangjiat.bjt.module.secretary.door.beans.ApprovalServiceInput;
 import com.bangjiat.bjt.module.secretary.door.beans.DoorApplyDetailResult;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
 import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
+import com.bangjiat.bjt.module.secretary.service.beans.ApprovalDoorInput;
 import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
 import com.bangjiat.bjt.module.secretary.service.beans.NewApplyInput;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
@@ -89,7 +91,8 @@ public interface ApiService {
      * @return
      */
     @GET("auth/getRegisterCode")
-    Call<BaseResult<String>> getRegisterCode(@Query("phone") String phone, @Query("codeType") int type);
+    Call<BaseResult<String>> getRegisterCode(@Query("phone") String phone,
+                                             @Query("codeType") int type);
 
     /**
      * 3
@@ -118,7 +121,8 @@ public interface ApiService {
      * @return
      */
     @POST("api/user/saveFeedBack")
-    Call<BaseResult<String>> saveFeedBack(@Header(Constants.TOKEN_NAME) String token, @Body FeedBackInput input);
+    Call<BaseResult<String>> saveFeedBack(@Header(Constants.TOKEN_NAME) String token,
+                                          @Body FeedBackInput input);
 
 
     /**
@@ -130,7 +134,8 @@ public interface ApiService {
      * @return
      */
     @POST("api/company/add/Company")
-    Call<BaseResult<String>> addCompany(@Header(Constants.TOKEN_NAME) String token, @Body CompanyInput input);
+    Call<BaseResult<String>> addCompany(@Header(Constants.TOKEN_NAME) String token,
+                                        @Body CompanyInput input);
 
     /**
      * 7
@@ -151,7 +156,8 @@ public interface ApiService {
      * @return
      */
     @PUT("api/user/updateUserInfo")
-    Call<BaseResult<UserInfo>> updateUserInfo(@Header(Constants.TOKEN_NAME) String name, @Body UserInfo bean);
+    Call<BaseResult<UserInfo>> updateUserInfo(@Header(Constants.TOKEN_NAME) String name,
+                                              @Body UserInfo bean);
 
     /**
      * 9
@@ -162,7 +168,8 @@ public interface ApiService {
      * @return
      */
     @POST("api/company/save/CompanyAdmission")
-    Call<BaseResult<String>> intoBuilding(@Header(Constants.TOKEN_NAME) String token, @Body IntoBuildingInput input);
+    Call<BaseResult<String>> intoBuilding(@Header(Constants.TOKEN_NAME) String token,
+                                          @Body IntoBuildingInput input);
 
     /**
      * 10
@@ -173,7 +180,8 @@ public interface ApiService {
      * @return
      */
     @POST("auth/updatePassword")
-    Call<BaseResult<String>> updatePassword(@Header(Constants.TOKEN_NAME) String token, @Body UpdatePasswordInput input);
+    Call<BaseResult<String>> updatePassword(@Header(Constants.TOKEN_NAME) String token,
+                                            @Body UpdatePasswordInput input);
 
 
     /**
@@ -187,7 +195,8 @@ public interface ApiService {
      */
     @GET("api/userBill/select/PageBill")
     Call<BaseResult<PageBillBean>> getPageBill(@Header(Constants.TOKEN_NAME) String token,
-                                               @Query("page") int page, @Query("size") int size);
+                                               @Query("page") int page,
+                                               @Query("size") int size);
 
     /**
      * 12
@@ -198,7 +207,8 @@ public interface ApiService {
      * @return
      */
     @GET("api/addressList/select/AllAddressList")
-    Call<BaseResult<List<ContactBean>>> getAllAddressList(@Header(Constants.TOKEN_NAME) String token, @Query("key") String key);
+    Call<BaseResult<List<ContactBean>>> getAllAddressList(@Header(Constants.TOKEN_NAME) String token,
+                                                          @Query("key") String key);
 
     /**
      * 13
@@ -209,7 +219,8 @@ public interface ApiService {
      * @return
      */
     @POST("api/addressList/save/AddressList")
-    Call<BaseResult<String>> saveContact(@Header(Constants.TOKEN_NAME) String token, @Body SearchContactResult input);
+    Call<BaseResult<String>> saveContact(@Header(Constants.TOKEN_NAME) String token,
+                                         @Body SearchContactResult input);
 
     /**
      * 14
@@ -220,7 +231,8 @@ public interface ApiService {
      * @return
      */
     @GET("api/addressList/select/AddressListUser")
-    Call<BaseResult<SearchContactResult>> searchContact(@Header(Constants.TOKEN_NAME) String token, @Query("username") String key);
+    Call<BaseResult<SearchContactResult>> searchContact(@Header(Constants.TOKEN_NAME) String token,
+                                                        @Query("username") String key);
 
     /**
      * 15
@@ -231,7 +243,8 @@ public interface ApiService {
      * @return
      */
     @DELETE("api/addressList/delete/AddressList")
-    Call<BaseResult<String>> delelteContact(@Header(Constants.TOKEN_NAME) String token, @Query("addressListId") String addressListId);
+    Call<BaseResult<String>> delelteContact(@Header(Constants.TOKEN_NAME) String token,
+                                            @Query("addressListId") String addressListId);
 
     /**
      * 16
@@ -242,28 +255,32 @@ public interface ApiService {
      * @return
      */
     @PUT("api/addressList/update/AddressList")
-    Call<BaseResult<String>> updateContact(@Header(Constants.TOKEN_NAME) String name, @Body ContactBean bean);
+    Call<BaseResult<String>> updateContact(@Header(Constants.TOKEN_NAME) String name,
+                                           @Body ContactBean bean);
 
     /**
      * 17
      * 用户申请加入公司
      */
     @POST("api/company/save/CompanyUser")
-    Call<BaseResult<String>> intoCompany(@Header(Constants.TOKEN_NAME) String token, @Body IntoCompanyInput input);
+    Call<BaseResult<String>> intoCompany(@Header(Constants.TOKEN_NAME) String token,
+                                         @Body IntoCompanyInput input);
 
     /**
      * 18
      * 添加打卡规则
      */
     @POST("api/companyClockRule/save/CompanyClockRule")
-    Call<BaseResult<String>> saveCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token, @Body RuleInput input);
+    Call<BaseResult<String>> saveCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token,
+                                                  @Body RuleInput input);
 
     /**
      * 19
      * 修改打卡规则
      */
     @PUT("api/companyClockRule/update/CompanyClockRule")
-    Call<BaseResult<String>> updateCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token, @Body RuleInput input);
+    Call<BaseResult<String>> updateCompanyCLockRule(@Header(Constants.TOKEN_NAME) String token,
+                                                    @Body RuleInput input);
 
     /**
      * 20
@@ -277,7 +294,8 @@ public interface ApiService {
      * 上班打卡
      */
     @POST("api/companyClock/save/CompanyClock")
-    Call<BaseResult<String>> saveInDaka(@Header(Constants.TOKEN_NAME) String token, @Body InDakaInput inDakaInput);
+    Call<BaseResult<String>> saveInDaka(@Header(Constants.TOKEN_NAME) String token,
+                                        @Body InDakaInput inDakaInput);
 
 
     /**
@@ -285,7 +303,8 @@ public interface ApiService {
      * 下班打卡
      */
     @PUT("api/companyClock/update/CompanyClock")
-    Call<BaseResult<String>> saveOutDaka(@Header(Constants.TOKEN_NAME) String token, @Body OutDakaInput input);
+    Call<BaseResult<String>> saveOutDaka(@Header(Constants.TOKEN_NAME) String token,
+                                         @Body OutDakaInput input);
 
     /**
      * 23
@@ -293,7 +312,8 @@ public interface ApiService {
      */
     @GET("api/companyClock/select/CompanyClockList")
     Call<BaseResult<List<DakaHistoryResult>>> getDaka(@Header(Constants.TOKEN_NAME) String token,
-                                                      @Query("beginTime") String begin, @Query("endTime") String end);
+                                                      @Query("beginTime") String begin,
+                                                      @Query("endTime") String end);
 
     /**
      * 24
@@ -301,14 +321,16 @@ public interface ApiService {
      */
     @GET("api/guard/select/GuardMainPage")
     Call<BaseResult<ApplyHistoryBean>> getDoorApplyHistory(@Header(Constants.TOKEN_NAME) String token,
-                                                           @Query("page") int page, @Query("size") int size);
+                                                           @Query("page") int page,
+                                                           @Query("size") int size);
 
     /**
      * 25
      * 公司管理员提交门禁申请
      */
     @POST("api/guard/save/GuardMain")
-    Call<BaseResult<String>> addDoorApply(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+    Call<BaseResult<String>> addDoorApply(@Header(Constants.TOKEN_NAME) String token,
+                                          @Body String[] strings);
 
     /**
      * 26
@@ -317,7 +339,8 @@ public interface ApiService {
      */
     @GET("api/company/select/PageCompanyUser")
     Call<BaseResult<WorkersResult>> getCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
-                                                   @Query("size") int size, @Query("type") int type);
+                                                   @Query("size") int size,
+                                                   @Query("type") int type);
 
     /**
      * 27
@@ -325,7 +348,8 @@ public interface ApiService {
      */
     @GET("api/visitor/select/BuildVisitorPage")
     Call<BaseResult> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
-                                       @Query("page") int page, @Query("size") int size);
+                                       @Query("page") int page,
+                                       @Query("size") int size);
 
     /**
      * 28
@@ -339,28 +363,32 @@ public interface ApiService {
      * 删除公司员工
      */
     @DELETE("api/company/delete/CompanyUser")
-    Call<BaseResult<String>> deleteCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Query("userId") String userId);
+    Call<BaseResult<String>> deleteCompanyUser(@Header(Constants.TOKEN_NAME) String token,
+                                               @Query("userId") String userId);
 
     /**
      * 30
      * 修改员工信息
      */
     @PUT("api/company/update/CompanyUser")
-    Call<BaseResult<String>> updateCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Body WorkersResult.RecordsBean bean);
+    Call<BaseResult<String>> updateCompanyUser(@Header(Constants.TOKEN_NAME) String token,
+                                               @Body WorkersResult.RecordsBean bean);
 
     /**
      * 31
      * 公司管理员添加员工
      */
     @POST("api/company/save/CompanyUserByAdmin")
-    Call<BaseResult> addCompanyUser(@Header(Constants.TOKEN_NAME) String token, @Body WorkersResult.RecordsBean bean);
+    Call<BaseResult> addCompanyUser(@Header(Constants.TOKEN_NAME) String token,
+                                    @Body WorkersResult.RecordsBean bean);
 
     /**
      * 32
      * 用户提交服务申请
      */
     @POST("api/buildApproval/save/BuildApproval")
-    Call<BaseResult> addNewServiceApply(@Header(Constants.TOKEN_NAME) String token, @Body NewApplyInput input);
+    Call<BaseResult> addNewServiceApply(@Header(Constants.TOKEN_NAME) String token,
+                                        @Body NewApplyInput input);
 
     /**
      * 33
@@ -443,14 +471,16 @@ public interface ApiService {
      * 公司管理员提交停车申请
      */
     @POST("api/carparkApply/save/CarparkApply")
-    Call<BaseResult<String>> addParkApply(@Header(Constants.TOKEN_NAME) String token, @Body ParkApplyInput input);
+    Call<BaseResult<String>> addParkApply(@Header(Constants.TOKEN_NAME) String token,
+                                          @Body ParkApplyInput input);
 
     /**
      * 44
      * 获取停车场列表(停车申请时调用)
      */
     @GET("api/carparkApply/select/CarparkSpacePage")
-    Call<BaseResult<ParkingResult>> getParkSpace(@Header(Constants.TOKEN_NAME) String token, @Query("page") int page,
+    Call<BaseResult<ParkingResult>> getParkSpace(@Header(Constants.TOKEN_NAME) String token,
+                                                 @Query("page") int page,
                                                  @Query("size") int size, @Query("key") String key);
 
     /**
@@ -496,28 +526,32 @@ public interface ApiService {
      * 删除收件箱邮件
      */
     @HTTP(method = "DELETE", path = "api/emailBox/delete/EmailBoxRecord", hasBody = true)
-    Call<BaseResult<String>> deleteInbox(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+    Call<BaseResult<String>> deleteInbox(@Header(Constants.TOKEN_NAME) String token,
+                                         @Body String[] strings);
 
     /**
      * 51
      * 查看发件箱邮件详情
      */
     @GET("api/emailBox/select/EmailBox")
-    Call<BaseResult<EmailBean>> getOutBoxDetail(@Header(Constants.TOKEN_NAME) String token, @Query("emailId") String id);
+    Call<BaseResult<EmailBean>> getOutBoxDetail(@Header(Constants.TOKEN_NAME) String token,
+                                                @Query("emailId") String id);
 
     /**
      * 52
      * 查看收件箱邮件详情
      */
     @GET("api/emailBox/select/EmailBoxRecord")
-    Call<BaseResult<EmailBean>> getInBoxDetail(@Header(Constants.TOKEN_NAME) String token, @Query("emailId") String id);
+    Call<BaseResult<EmailBean>> getInBoxDetail(@Header(Constants.TOKEN_NAME) String token,
+                                               @Query("emailId") String id);
 
     /**
      * 53
      * 标记邮件
      */
     @PUT("api/emailBox/update/EmailBoxRecordList")
-    Call<BaseResult<String>> markEmails(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+    Call<BaseResult<String>> markEmails(@Header(Constants.TOKEN_NAME) String token,
+                                        @Body String[] strings);
 
     /**
      * 54
@@ -531,7 +565,8 @@ public interface ApiService {
      * 停车缴费信息添加
      */
     @POST("api/carparkPayment/save/CarparkPayment")
-    Call<BaseResult<String>> addPayInfo(@Header(Constants.TOKEN_NAME) String token, @Body PayBean bean);
+    Call<BaseResult<String>> addPayInfo(@Header(Constants.TOKEN_NAME) String token,
+                                        @Body PayBean bean);
 
     /**
      * 56
@@ -552,21 +587,24 @@ public interface ApiService {
      * 获取停车场详情
      */
     @GET("api/carparkPayment/carpark/select/CarparkSpace")
-    Call<BaseResult<ParkingDetail>> getParkingDetail(@Header(Constants.TOKEN_NAME) String token, @Query("spaceId") int spaceId);
+    Call<BaseResult<ParkingDetail>> getParkingDetail(@Header(Constants.TOKEN_NAME) String token,
+                                                     @Query("spaceId") int spaceId);
 
     /**
      * 59
      * 停车场管理员审批停车申请
      */
     @PUT("api/carparkApply/update/CarparkApply")
-    Call<BaseResult<String>> dealParkApply(@Header(Constants.TOKEN_NAME) String token, @Body DealParkApplyInput input);
+    Call<BaseResult<String>> dealParkApply(@Header(Constants.TOKEN_NAME) String token,
+                                           @Body DealParkApplyInput input);
 
     /**
      * 60
      * 提交请假申请
      */
     @POST("api/companyLeave/save/CompanyLeave")
-    Call<BaseResult> addCompanyLeave(@Header(Constants.TOKEN_NAME) String token, @Body LeaveBean bean);
+    Call<BaseResult> addCompanyLeave(@Header(Constants.TOKEN_NAME) String token,
+                                     @Body LeaveBean bean);
 
     /**
      * 61
@@ -574,8 +612,10 @@ public interface ApiService {
      */
     @GET("api/companyLeave/select/CompanyLeavePage")
 //1、待审批事项 2、查询所有记录
-    Call<BaseResult<CompanyLeaveResult>> getCompanyLeave(@Header(Constants.TOKEN_NAME) String token, @Query("status") int status,
-                                                         @Query("page") int page, @Query("size") int size);
+    Call<BaseResult<CompanyLeaveResult>> getCompanyLeave(@Header(Constants.TOKEN_NAME) String token,
+                                                         @Query("status") int status,
+                                                         @Query("page") int page,
+                                                         @Query("size") int size);
 
     /**
      * 62
@@ -583,15 +623,18 @@ public interface ApiService {
      */
     @GET("api/companyLeave/select/LeaveSelfPage")
 //可不传：1、待审批、2、通过、3、未通过
-    Call<BaseResult<CompanyLeaveResult>> getSelefLeve(@Header(Constants.TOKEN_NAME) String token, @Query("status") int status,
-                                                      @Query("page") int page, @Query("size") int size);
+    Call<BaseResult<CompanyLeaveResult>> getSelefLeve(@Header(Constants.TOKEN_NAME) String token,
+                                                      @Query("status") int status,
+                                                      @Query("page") int page,
+                                                      @Query("size") int size);
 
     /**
      * 63
      * 申请审批:1表示同意，2表示拒绝，3表示转批
      */
     @PUT("api/companyLeave/update/CompanyLeave")
-    Call<BaseResult<String>> dealLeave(@Header(Constants.TOKEN_NAME) String token, @Body DealLeaveInput input);
+    Call<BaseResult<String>> dealLeave(@Header(Constants.TOKEN_NAME) String token,
+                                       @Body DealLeaveInput input);
 
     /**
      * 64
@@ -608,21 +651,24 @@ public interface ApiService {
      * 给员工添加管理员权限
      */
     @POST("api/company/save/CompanyAdminUser")
-    Call<BaseResult<String>> addAdmin(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+    Call<BaseResult<String>> addAdmin(@Header(Constants.TOKEN_NAME) String token,
+                                      @Body String[] strings);
 
     /**
      * 66
      * 删除公司管理员权限
      */
     @HTTP(method = "DELETE", path = "api/company/delete/CompanyAdminUser", hasBody = true)
-    Call<BaseResult<String>> deleteAdmin(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+    Call<BaseResult<String>> deleteAdmin(@Header(Constants.TOKEN_NAME) String token,
+                                         @Body String[] strings);
 
     /**
      * 67
      * 工作台管理员权限转交
      */
     @PUT("api/company/update/CompanyAdminUser")
-    Call<BaseResult<String>> updateAdmin(@Header(Constants.TOKEN_NAME) String token, @Body UpdateAdminInput userId);
+    Call<BaseResult<String>> updateAdmin(@Header(Constants.TOKEN_NAME) String token,
+                                         @Body UpdateAdminInput userId);
 
     /**
      * 68
@@ -630,7 +676,8 @@ public interface ApiService {
      */
     @GET("api/companyClock/select/CompanyClockAllList")
     Call<BaseResult<List<DakaHistoryResult>>> getAllColckList(@Header(Constants.TOKEN_NAME) String token,
-                                                              @Query("beginTime") long bg, @Query("endTime") long end);
+                                                              @Query("beginTime") long bg,
+                                                              @Query("endTime") long end);
 
     /**
      * 69
@@ -646,7 +693,8 @@ public interface ApiService {
      */
     @GET("api/companyClock/select/CompanyUserClockList")
     Call<BaseResult<List<DakaHistoryResult>>> getUserClockList(@Header(Constants.TOKEN_NAME) String token,
-                                                               @Query("beginTime") long bg, @Query("endTime") long end,
+                                                               @Query("beginTime") long bg,
+                                                               @Query("endTime") long end,
                                                                @Query("userId") String userId);
 
     /**
@@ -655,7 +703,8 @@ public interface ApiService {
      */
     @GET("api/companyClock/select/selectCompanyClockTotal")
     Call<BaseResult<DakaTotalResult>> getClockTotal(@Header(Constants.TOKEN_NAME) String token,
-                                                    @Query("beginTime") long bg, @Query("endTime") long end);
+                                                    @Query("beginTime") long bg,
+                                                    @Query("endTime") long end);
 
     /**
      * 72
@@ -663,7 +712,8 @@ public interface ApiService {
      */
     @GET("api/companyClock/select/UserClockTotalList")
     Call<BaseResult<DakaTotalResult>> getUserClockTotal(@Header(Constants.TOKEN_NAME) String token,
-                                                        @Query("beginTime") long bg, @Query("endTime") long end,
+                                                        @Query("beginTime") long bg,
+                                                        @Query("endTime") long end,
                                                         @Query("userId") String userId);
 
     /**
@@ -678,5 +728,63 @@ public interface ApiService {
      * 修改公司信息
      */
     @PUT("api/company/update/Company")
-    Call<BaseResult<String>> updateCpompany(@Header(Constants.TOKEN_NAME) String token, @Body CompanyDetailResult result);
+    Call<BaseResult<String>> updateCpompany(@Header(Constants.TOKEN_NAME) String token,
+                                            @Body CompanyDetailResult result);
+
+    /**
+     * 75
+     * <p>
+     * 服务申请审批
+     */
+    @PUT("admin/buildApproval/update/BuildApproval")
+    Call<BaseResult<String>> approvalService(@Header(Constants.TOKEN_NAME) String token,
+                                             @Header(Constants.TOKEN_NAME_SPECIAL) int id,
+                                             @Body ApprovalServiceInput input);
+
+    /**
+     * 76
+     * <p>
+     * 门禁申请审批
+     */
+    @PUT("admin/guard/update/GuardMain")
+    Call<BaseResult<String>> approvalDoor(@Header(Constants.TOKEN_NAME) String token,
+                                          @Header(Constants.TOKEN_NAME_SPECIAL) int id,
+                                          @Body ApprovalDoorInput bean);
+
+    /**
+     * 77
+     * <p>
+     * 楼宇管理员获取门禁申请记录
+     */
+    @GET("admin/guard/select/GuardMainPage")
+    Call<BaseResult<ApplyHistoryBean>> getAdminDoorApplyHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                                @Header(Constants.TOKEN_NAME_SPECIAL) int id,
+                                                                @Query("page") int page,
+                                                                @Query("size") int size);
+
+    /**
+     * 78
+     * <p>
+     * 楼宇管理员获取服务申请记录
+     */
+    @GET("admin/buildApproval/select/BuildApprovalPage")
+    Call<BaseResult<ServiceApplyHistoryResult>> getAdminServiceApplyHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                                            @Header(Constants.TOKEN_NAME_SPECIAL) int id,
+                                                                            @Query("page") int page,
+                                                                            @Query("size") int size,
+                                                                            @Query("status") int status);
+
+    /**
+     * 79
+     * <p>
+     * 楼宇管理员获取门禁申请明细
+     */
+    @GET("admin/guard/select/GuardList")
+    Call<BaseResult<List<DoorApplyDetailResult>>> getAdminDoorApplyDetail(@Header(Constants.TOKEN_NAME) String token,
+                                                                          @Header(Constants.TOKEN_NAME_SPECIAL) int id,
+                                                                          @Query("guardMainId") String guardMainId);
+
+    /**
+     * 80
+     */
 }

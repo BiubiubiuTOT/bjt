@@ -20,10 +20,10 @@ import com.bangjiat.bjt.module.secretary.door.ui.ApplyingActivity;
 import com.bangjiat.bjt.module.secretary.door.ui.FailActivity;
 import com.bangjiat.bjt.module.secretary.door.ui.IntoBuildingActivity;
 import com.bangjiat.bjt.module.secretary.service.ui.MainActivity;
+import com.bangjiat.bjt.module.secretary.service.ui.ServiceHistoryActivity;
 import com.bangjiat.bjt.module.secretary.workers.ui.WorkersManageActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
@@ -58,20 +58,6 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     protected void initView() {
         presenter = new IntoBuildingPresenter(this);
         token = DataUtil.getToken(mContext);
-        isInto = DataUtil.isIntoBuilding(mContext);
-        if (Constants.hasPermission()) {
-            ll_admin.setVisibility(View.VISIBLE);
-            if (Constants.isCompanyAdmin()) {
-                tv_door.setText("·门禁申请·");
-                tv_service.setText("·服务申请·");
-            } else if (Constants.isBuildingAdmin()) {
-                tv_door.setText("·门禁审批·");
-                tv_service.setText("·服务审批·");
-            }
-
-            Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
-            Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
-        }
 
         Glide.with(this).load(R.mipmap.message).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_message);
         Glide.with(this).load(R.mipmap.contact_us).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_contact_us);
@@ -81,10 +67,28 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     @Override
     public void onResume() {
         super.onResume();
-        if (!isInto) {
-            presenter.isIntoBuilding(token);
+        if (Constants.isCompanyAdmin()) {//公司管理员
+            ll_admin.setVisibility(View.VISIBLE);
+            Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
+            Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
+
+            tv_door.setText("·门禁申请·");
+            tv_service.setText("·服务申请·");
+
+            isInto = DataUtil.isIntoBuilding(mContext);//是否入驻楼宇
+            if (!isInto)
+                presenter.isIntoBuilding(token);
+        } else if (Constants.isBuildingAdmin()) {//楼宇管理员
+            ll_admin.setVisibility(View.VISIBLE);
+            Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
+            Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
+
+            tv_door.setText("·门禁审批·");
+            tv_service.setText("·服务审批·");
         }
+
     }
+
 
     @Override
     protected int getLayoutResId() {
@@ -93,6 +97,11 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
 
     @OnClick(R.id.card_door)
     public void clickDoor(View view) {
+        if (Constants.isBuildingAdmin()) {
+            startActivity(new Intent(mContext, com.bangjiat.bjt.module.secretary.door.ui.HistoryActivity.class));
+            return;
+        }
+
         if (isInto) {
             startActivity(new Intent(mContext, com.bangjiat.bjt.module.secretary.door.ui.MainActivity.class));
             return;
@@ -116,6 +125,10 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
 
     @OnClick(R.id.card_service)
     public void clickCardService(View view) {
+        if (Constants.isBuildingAdmin()) {
+            startActivity(new Intent(mContext, ServiceHistoryActivity.class));
+            return;
+        }
         if (isInto) {
             startActivity(new Intent(mContext, MainActivity.class));
             return;
@@ -155,14 +168,14 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
 
     @Override
     public void showDialog() {
-        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
-        dialog.setCancelable(false);
+//        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+//        dialog.setCancelable(false);
     }
 
     @Override
     public void dismissDialog() {
-        if (dialog != null)
-            dialog.dismiss();
+//        if (dialog != null)
+//            dialog.dismiss();
     }
 
     @Override

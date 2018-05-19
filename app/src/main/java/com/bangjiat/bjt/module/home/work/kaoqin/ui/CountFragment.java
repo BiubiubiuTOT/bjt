@@ -104,7 +104,7 @@ public class CountFragment extends BaseFragment {
         countMyFragment = new CountMyFragment();
         fragments = new ArrayList<>();
 
-        if (Constants.hasPermission()) {
+        if (Constants.isCompanyAdmin()) {//公司管理员才能查看日月统计
             fragments.add(countDayFragment);
             fragments.add(countMonthFragment);
             rg.setVisibility(View.VISIBLE);

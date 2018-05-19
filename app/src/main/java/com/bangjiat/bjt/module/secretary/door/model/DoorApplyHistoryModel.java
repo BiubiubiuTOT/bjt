@@ -24,7 +24,7 @@ public class DoorApplyHistoryModel implements DoorApplyHistoryContract.Model {
 
     @Override
     public void getDoorApplyHistory(String token, int page, int size) {
-        ApiFactory.getService().getDoorApplyHistory(token, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<ApplyHistoryBean>>() {
+        ApiFactory.getService().getDoorApplyHistory(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<ApplyHistoryBean>>() {
             @Override
             public void onSuc(Response<BaseResult<ApplyHistoryBean>> response) {
                 BaseResult<ApplyHistoryBean> body = response.body();
@@ -33,6 +33,24 @@ public class DoorApplyHistoryModel implements DoorApplyHistoryContract.Model {
                 } else {
                     presenter.error(body.getMessage());
                 }
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
+
+    @Override
+    public void getAdminDoorApplyHistory(String token, int id, int page, int size) {
+        ApiFactory.getService().getAdminDoorApplyHistory(token, id, page, size).enqueue(new MyCallBack<BaseResult<ApplyHistoryBean>>() {
+            @Override
+            public void onSuc(Response<BaseResult<ApplyHistoryBean>> response) {
+                BaseResult<ApplyHistoryBean> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.getAdminDoorApplyHistorySuccess(body.getData());
+                else presenter.error(body.getMessage());
             }
 
             @Override

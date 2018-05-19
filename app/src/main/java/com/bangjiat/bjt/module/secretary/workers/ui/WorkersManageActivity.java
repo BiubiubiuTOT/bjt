@@ -93,14 +93,16 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         tv_done.setText("完成");
         tv_title.setText("员工管理");
         showCustom();
-        if (!Constants.hasPermission()) img.setVisibility(View.GONE);
 
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addDialog.show(img);
-            }
-        });
+        if (Constants.isCompanyAdmin()) {
+            img.setVisibility(View.VISIBLE);
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addDialog.show(img);
+                }
+            });
+        } else img.setVisibility(View.GONE);
 
         tv_all.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +172,6 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
                 .height(-1)
                 .ArrowDirection(IndicatorBuilder.TOP)
                 .bgColor(getResources().getColor(R.color.white))
-                .animator(R.style.dialog_exit)
                 .radius(8)
                 .gravity(IndicatorBuilder.GRAVITY_RIGHT)
                 .ArrowRectage(0.9f)

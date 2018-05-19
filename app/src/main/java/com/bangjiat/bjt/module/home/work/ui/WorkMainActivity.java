@@ -3,23 +3,30 @@ package com.bangjiat.bjt.module.home.work.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.home.work.kaoqin.ui.KaoqinMainActivity;
+import com.bangjiat.bjt.module.home.work.leave.ui.LeaveMainActivity;
 import com.bangjiat.bjt.module.home.work.permission.ui.PermissionMainActivity;
 import com.bangjiat.bjt.module.home.work.worker.ui.WorkerListActivity;
-import com.bangjiat.bjt.module.home.work.leave.ui.LeaveMainActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class WorkMainActivity extends BaseWhiteToolBarActivity {
+    @BindView(R.id.tv_company_name)
+    TextView tv_company_name;
 
     private static final int DELETE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        tv_company_name.setText(first.getCompanyName());
     }
 
     @OnClick(R.id.tv_workers)

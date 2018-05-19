@@ -53,7 +53,7 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
     }
 
     private void initData() {
-        if (!Constants.hasPermission()) {
+        if (!Constants.isCompanyAdmin()) {//公司管理员才能修改公司信息
             iv_address.setVisibility(View.GONE);
             iv_industry.setVisibility(View.GONE);
             et_address.setEnabled(false);
@@ -91,8 +91,8 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (Constants.hasPermission()) {
-                            error("管理员不能退出公司");
+                        if (Constants.isCompanyAdmin()) {//公司管理员不能退出公司
+                            error("公司管理员不能退出公司");
                         } else
                             presenter.exitCompany(token);
                     }
@@ -177,7 +177,7 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
 
     @Override
     public void updateCompanySuccess(String str) {
-        Constants.showSuccessExitDialog(this, "公司修改成功");
+        Constants.showSuccessExitDialog(this, "公司信息修改成功");
     }
 
     @Override

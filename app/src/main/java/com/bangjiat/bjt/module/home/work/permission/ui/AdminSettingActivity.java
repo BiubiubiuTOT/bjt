@@ -3,11 +3,11 @@ package com.bangjiat.bjt.module.home.work.permission.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,16 +16,18 @@ import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
+import com.bangjiat.bjt.module.secretary.workers.adapter.TextAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.jiang.android.indicatordialog.IndicatorBuilder;
+import com.jiang.android.indicatordialog.IndicatorDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class AdminSettingActivity extends BaseToolBarActivity implements CompanyUserContract.View {
     private static final int UPDATE_ADMIN_SUCCESS = 1;
@@ -35,11 +37,13 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
     private List<WorkersResult.RecordsBean> beans;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.card)
-    CardView card;
     private SelectPeopleAdapter adapter;
     private int type;
     private TextView tv_title;
+    private ImageView img;
+    private IndicatorDialog addDialog;
+    private List<String> texts;
+    private TextAdapter textAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +62,41 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
 
         if (type == 0) {
             tv_title.setText("管理员设置");
-            if (!Constants.hasPermission())
-                card.setVisibility(View.GONE);
         } else {
             tv_title.setText("选择审批人");
-            card.setVisibility(View.GONE);
+            img.setVisibility(View.GONE);
         }
+
+        texts = new ArrayList<>();
+        texts.add("添加管理员");
+        texts.add("删除管理员");
+        textAdapter = new TextAdapter(texts);
+        textAdapter.setOnItemClickListener(new TextAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                addDialog.dismiss();
+                if (position != 0) {
+                    startActivityForResult(new Intent(mContext, DeleteAdminActivity.class), UPDATE_ADMIN_SUCCESS);
+                } else {
+                    startActivityForResult(new Intent(mContext, AddAdminActivity.class), UPDATE_ADMIN_SUCCESS);
+                }
+            }
+        });
+        initDialog();
+    }
+
+    private void initDialog() {
+        addDialog = new IndicatorBuilder(this)
+                .width(350)
+                .height(-1)
+                .ArrowDirection(IndicatorBuilder.TOP)
+                .bgColor(getResources().getColor(R.color.white))
+                .radius(8)
+                .gravity(IndicatorBuilder.GRAVITY_RIGHT)
+                .ArrowRectage(0.9f)
+                .layoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
+                .adapter(textAdapter).create();
+        addDialog.setCanceledOnTouchOutside(true);
     }
 
     @Override
@@ -128,15 +161,6 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
 
     }
 
-    @OnClick(R.id.tv_delete_admin)
-    public void clickDeleteAdmin(View view) {
-        startActivityForResult(new Intent(mContext, DeleteAdminActivity.class), UPDATE_ADMIN_SUCCESS);
-    }
-
-    @OnClick(R.id.tv_add_admin)
-    public void clickAddAdmin(View view) {
-        startActivityForResult(new Intent(mContext, AddAdminActivity.class), UPDATE_ADMIN_SUCCESS);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -158,6 +182,19 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
         toolbar.setTitle("");
         tv_title = findViewById(R.id.toolbar_title);
         toolbar.setNavigationIcon(R.mipmap.back_white);
+
+        img = toolbar.findViewById(R.id.toolbar_image);
+        img.setImageResource(R.mipmap.add);
+
+        if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) {//公司管理员、工作台管理员才能设置管理员
+            img.setVisibility(View.VISIBLE);
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addDialog.show(img);
+                }
+            });
+        }
     }
 
 }

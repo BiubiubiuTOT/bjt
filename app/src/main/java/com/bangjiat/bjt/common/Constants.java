@@ -9,7 +9,9 @@ import android.view.View;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -189,13 +191,6 @@ public class Constants {
         return formats[type - 1];
     }
 
-    public static boolean hasPermission() {
-        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
-        if (first == null) return false;
-        int type = first.getType();
-        return type != 1;
-    }
-
     /**
      * +
      * 公司管理员
@@ -204,8 +199,21 @@ public class Constants {
      */
     public static boolean isCompanyAdmin() {
         CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        if (first == null) return false;
+
         int type = first.getType();
         return type == 3;
+    }
+
+    /**
+     * 工作台管理员
+     */
+    public static boolean isWorkAdmin() {
+        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
+        if (first == null) return false;
+        int type = first.getType();
+
+        return type == 2;
     }
 
     /**
@@ -214,9 +222,16 @@ public class Constants {
      * @return
      */
     public static boolean isBuildingAdmin() {
-        CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
-        int type = first.getType();
-        return type == 2;
+        BuildUser first = BuildUser.first(BuildUser.class);
+        return first != null;
+    }
+
+    /**
+     * 停车场管理员
+     */
+    public static boolean isParkAdmin() {
+        SpaceUser user = SpaceUser.first(SpaceUser.class);
+        return user != null;
     }
 
     /**
