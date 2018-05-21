@@ -64,6 +64,8 @@ public class ScanActivity extends BaseToolBarActivity {
 
         if (type == 2)
             tv_des.setText("扫描对方公司二维码\n加入该公司");
+        else if (type == 3)
+            tv_des.setText("扫描对方二维码\n邀请加入公司");
     }
 
     /**

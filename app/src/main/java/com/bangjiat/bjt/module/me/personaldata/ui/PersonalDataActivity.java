@@ -57,7 +57,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     private Dialog dialog;
 
     private boolean isEdit;
-    private UserInfo data;
+    private UserInfo datas;
     private String realName;
     private String idNumber;
     private String icon;
@@ -93,7 +93,7 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
 
     @OnClick(R.id.ll_phone)
     public void clickPhone(View view) {
-        editData("手机号", 2, tv_phone.getText().toString());
+//        editData("手机号", 2, tv_phone.getText().toString());
     }
 
     @OnClick(R.id.ll_sex)
@@ -109,9 +109,9 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     @OnClick(R.id.ll_id_number)
     public void clickIdNumber(View view) {
         Intent intent = new Intent(mContext, IdNumberInfoActivity.class);
-        if (data.getIdNumber() != null && !data.getIdNumber().isEmpty()) {
-            intent.putExtra("name", data.getRealname());
-            intent.putExtra("idNumber", data.getIdNumber());
+        if (datas.getIdNumber() != null && !datas.getIdNumber().isEmpty()) {
+            intent.putExtra("name", datas.getRealname());
+            intent.putExtra("idNumber", datas.getIdNumber());
         } else {
             intent.putExtra(TYPE, 1);
         }
@@ -119,14 +119,14 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     }
 
     private void initDate() {
-        data = UserInfo.first(UserInfo.class);
-        if (data != null) {
-            icon = data.getAvatar();
-            tv_nickname.setText(data.getNickname());
-            tv_phone.setText(data.getPhone());
-            tv_sex.setText(data.getSex() == 0 ? "男" : "女");
-            tv_date.setText(data.getBirthday());
-            if (data.getIdNumber() != null && !data.getIdNumber().isEmpty()) {
+        datas = UserInfo.first(UserInfo.class);
+        if (datas != null) {
+            icon = datas.getAvatar();
+            tv_nickname.setText(datas.getNickname());
+            tv_phone.setText(datas.getPhone());
+            tv_sex.setText(datas.getSex() == 0 ? "男" : "女");
+            tv_date.setText(datas.getBirthday());
+            if (datas.getIdNumber() != null && !datas.getIdNumber().isEmpty()) {
                 tv_id_number.setText("已验证");
             }
         }
@@ -135,9 +135,9 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
         presenter = new UpdateUserInfoPresenter(this);
 
         Calendar selectedDate = Calendar.getInstance();
-        selectedDate.set(1900, 0, 1);
+        selectedDate.set(1970, 0, 1);
         Calendar startDate = Calendar.getInstance();
-        startDate.set(1987, 0, 30);
+        startDate.set(1950, 0, 1);
         Calendar endDate = Calendar.getInstance();
 
         pvTime = new TimePickerBuilder(mContext, new OnTimeSelectListener() {
@@ -167,22 +167,27 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            isEdit = true;
             String message = data.getStringExtra(MESSAGE);
             switch (requestCode) {
                 case TYPE_NICKNAME:
+                    isEdit = true;
                     tv_nickname.setText(message);
                     break;
                 case TYPE_PHONE:
+                    isEdit = true;
                     tv_phone.setText(message);
                     break;
                 case TYPE_SEX:
+                    isEdit = true;
                     tv_sex.setText(message);
                     break;
                 case TYPE_ID_NUMBER:
                     realName = data.getStringExtra("name");
                     idNumber = data.getStringExtra("idNumber");
                     tv_id_number.setText("已验证");
+
+                    datas.setRealname(realName);
+                    datas.setIdNumber(idNumber);
                     break;
             }
         }
@@ -259,8 +264,8 @@ public class PersonalDataActivity extends BaseColorToolBarActivity implements Up
             userInfoBean.setIdNumber(idNumber);
             userInfoBean.setRealname(realName);
         } else {
-            userInfoBean.setRealname(data.getRealname());
-            userInfoBean.setIdNumber(data.getIdNumber());
+            userInfoBean.setRealname(datas.getRealname());
+            userInfoBean.setIdNumber(datas.getIdNumber());
         }
         presenter.updateUserInfo(DataUtil.getToken(mContext), userInfoBean);
     }

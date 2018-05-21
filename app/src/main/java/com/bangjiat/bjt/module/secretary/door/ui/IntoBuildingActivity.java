@@ -4,9 +4,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.door.beans.IntoBuildingInput;
@@ -57,12 +58,18 @@ public class IntoBuildingActivity extends BaseColorToolBarActivity implements In
 
     @Override
     public void success() {
-        Toast.makeText(mContext, "申请提交成功", Toast.LENGTH_SHORT).show();
+        new AlertDialog(mContext).builder().setMsg("提交成功，请等待审核！").setCancelable(false).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                }).show();
     }
 
     @Override
     public void fail(String err) {
-        Toast.makeText(mContext, "申请失败：" + err, Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override

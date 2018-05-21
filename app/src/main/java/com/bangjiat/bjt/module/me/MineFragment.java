@@ -9,18 +9,16 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
-import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.main.account.ui.LoginActivity;
 import com.bangjiat.bjt.module.main.ui.activity.AboutActivity;
 import com.bangjiat.bjt.module.main.ui.activity.ContactServiceActivity;
 import com.bangjiat.bjt.module.me.bill.ui.MyBillActivity;
 import com.bangjiat.bjt.module.me.feedback.ui.FeedBackActivity;
-import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
-import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
@@ -31,7 +29,6 @@ import com.bangjiat.bjt.module.me.setting.ui.SettingActivity;
 import com.bangjiat.bjt.module.secretary.contact.util.GlideCircleTransform;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
-import com.orm.SugarRecord;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -129,11 +126,8 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         wcbMenu.dismiss();
-                        SugarRecord.deleteAll(UserInfo.class);
-                        SugarRecord.deleteAll(CompanyUserBean.class);
-                        SugarRecord.deleteAll(RuleInput.class);
-                        SugarRecord.deleteAll(SpaceUser.class);
-                        SugarRecord.deleteAll(BuildUser.class);
+                        Constants.deleteDb();
+                        DataUtil.clearOtherSetting(mContext);
 
                         DataUtil.setLogin(mContext, false);
                         startActivity(new Intent(mContext, LoginActivity.class));

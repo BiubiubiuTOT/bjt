@@ -104,6 +104,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void showError(String err) {
         DialogPopup popup = new DialogPopup(this, err, R.mipmap.popup_error);
         popup.setBlurBackgroundEnable(true);
+        popup.setShowAnimation(null);
         popup.showPopupWindow();
     }
 

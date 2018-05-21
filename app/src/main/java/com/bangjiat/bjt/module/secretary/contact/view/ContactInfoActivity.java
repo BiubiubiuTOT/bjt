@@ -48,7 +48,7 @@ public class ContactInfoActivity extends BaseWhiteToolBarActivity implements Sav
         if (result != null) {
             tv_phone.setText(result.getSlaveUsername());
             et_name.setText(result.getSlaveNickname());
-            Glide.with(mContext).load("http://img5.duitang.com/uploads/item/201611/18/20161118090311_Cw2dU.jpeg")
+            Glide.with(mContext).load(R.mipmap.my_head)
                     .centerCrop().
                     transform(new GlideCircleTransform(this))
                     .into(iv_head);

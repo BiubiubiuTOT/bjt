@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.me.personaldata.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +11,18 @@ import android.widget.TextView;
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
+import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.ValidationIdCard;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.bangjiat.bjt.module.me.personaldata.contract.UpdateUserInfoContract;
+import com.bangjiat.bjt.module.me.personaldata.presenter.UpdateUserInfoPresenter;
+import com.dou361.dialogui.DialogUIUtils;
+import com.orm.SugarRecord;
 
 import butterknife.BindView;
 
-public class IdNumberInfoActivity extends BaseToolBarActivity {
+public class IdNumberInfoActivity extends BaseToolBarActivity implements UpdateUserInfoContract.View {
     @BindView(R.id.et_name)
     EditText et_name;
     @BindView(R.id.et_id_number)
@@ -23,11 +30,16 @@ public class IdNumberInfoActivity extends BaseToolBarActivity {
 
     private int type;
     private TextView tv_done;
+    private UpdateUserInfoContract.Presenter presenter;
+    private UserInfo data;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getIntent().getIntExtra("type", 0);
+        presenter = new UpdateUserInfoPresenter(this);
+        data = UserInfo.first(UserInfo.class);
 
         if (type != 1) {
             et_name.setFocusable(false);
@@ -59,9 +71,19 @@ public class IdNumberInfoActivity extends BaseToolBarActivity {
         tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String string = et_name.getText().toString();
+                if (string.isEmpty()) {
+                    Constants.showErrorDialog(mContext, "姓名为空");
+                    return;
+                }
+                if (string.length() > 16) {
+                    Constants.showErrorDialog(mContext, "姓名错误");
+                    return;
+                }
+
                 if (ValidationIdCard.verify(et_id_number.getText().toString()))
                     showDia();
-                else Constants.showErrorDialog(mContext, "请输入正确的身份证号码");
+                else Constants.showErrorDialog(mContext, "身份证号码错误");
             }
         });
     }
@@ -72,11 +94,15 @@ public class IdNumberInfoActivity extends BaseToolBarActivity {
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent();
-                        intent.putExtra("name", et_name.getText().toString());
-                        intent.putExtra("idNumber", et_id_number.getText().toString());
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        UserInfo userInfoBean = new UserInfo(data.getNickname(),
+                                data.getSex(), data.getBirthday(), data.getPhone());
+                        userInfoBean.setUsername(DataUtil.getAccount(mContext).getPhone());
+                        userInfoBean.setAvatar(data.getAvatar());
+
+                        userInfoBean.setRealname(et_name.getText().toString());
+                        userInfoBean.setIdNumber(et_id_number.getText().toString());
+                        presenter.updateUserInfo(DataUtil.getToken(mContext), userInfoBean);
+
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
@@ -84,5 +110,43 @@ public class IdNumberInfoActivity extends BaseToolBarActivity {
 
             }
         }).show();
+    }
+
+    @Override
+    public void showDialog() {
+        dialog = DialogUIUtils.showLoadingVertical(this, "加载中...").show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        if (dialog != null)
+            dialog.dismiss();
+    }
+
+    @Override
+    public void updateUserInfoSuccess(UserInfo info) {
+        SugarRecord.deleteAll(UserInfo.class);
+        SugarRecord.save(info);
+
+        Intent intent = new Intent();
+        intent.putExtra("name", et_name.getText().toString());
+        intent.putExtra("idNumber", et_id_number.getText().toString());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void updateUserInfoFail(String err) {
+
+    }
+
+    @Override
+    public void uploadUserHeadSuccess(String url) {
+
+    }
+
+    @Override
+    public void uploadUserHeadFail(String err) {
+
     }
 }

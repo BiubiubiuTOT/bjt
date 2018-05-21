@@ -53,7 +53,8 @@ public class DakaDetailAdapter extends RecyclerView.Adapter<DakaDetailAdapter.Vi
         DakaHistoryResult bean = lists.get(position);
         viewHolder.tv_name.setText(bean.getUserRealname());
         viewHolder.tv_in_time.setText(TimeUtils.changeToHM(bean.getInTime()));
-        viewHolder.tv_out_time.setText(TimeUtils.changeToHM(bean.getOutTime()));
+        if (bean.getOutType() != 0)
+            viewHolder.tv_out_time.setText(TimeUtils.changeToHM(bean.getOutTime()));
 
         viewHolder.itemView.setTag(position);
     }

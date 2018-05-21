@@ -35,7 +35,9 @@ import com.bangjiat.bjt.module.park.pay.beans.PayInput;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
 import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
 import com.bangjiat.bjt.module.secretary.communication.beans.EmailResult;
+import com.bangjiat.bjt.module.secretary.contact.beans.BuildUserInfo;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
+import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
 import com.bangjiat.bjt.module.secretary.door.beans.ApprovalServiceInput;
@@ -786,5 +788,17 @@ public interface ApiService {
 
     /**
      * 80
+     * <p>
+     * 公司管理员获取楼宇管理者联系方式
      */
+    @GET("api/company/select/BuildUserInfo")
+    Call<BaseResult<BuildUserInfo>> getBuildUserInfo(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 81
+     * <p>
+     * 扫码添加员工时获取用户信息
+     */
+    @GET("api/company/select/UserUser")
+    Call<BaseResult<ScanUser>> getContactByScan(@Header(Constants.TOKEN_NAME) String token, @Query("username") String username);
 }

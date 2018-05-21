@@ -58,6 +58,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
     private int type;
     private AlertDialog alertDialog;
     private BuildUser first;
+    private int status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,9 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         id = intent.getStringExtra("id");
+        status = intent.getIntExtra("status", 0);
         token = DataUtil.getToken(mContext);
+        first = BuildUser.first(BuildUser.class);
 
         if (name != null) {
             tv_company_name.setText(name);
@@ -79,13 +82,13 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
             if (Constants.isCompanyAdmin())
                 presenter.getDetail(token, id);
             else {
-                first = BuildUser.first(BuildUser.class);
                 presenter.getAdminDetail(token, first.getBuildId(), id);
             }
         }
 
         if (Constants.isBuildingAdmin()) {
-            rl_btn.setVisibility(View.VISIBLE);
+            if (status == 1)
+                rl_btn.setVisibility(View.VISIBLE);
 
             Calendar startDate = Calendar.getInstance();
             Calendar endDate = Calendar.getInstance();

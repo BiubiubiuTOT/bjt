@@ -150,4 +150,24 @@ public class CompanyDetailResult {
     public void setUtime(int utime) {
         this.utime = utime;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyDetailResult{" +
+                "address='" + address + '\'' +
+                ", buildId='" + buildId + '\'' +
+                ", buildName='" + buildName + '\'' +
+                ", code='" + code + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", contact='" + contact + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", ctime=" + ctime +
+                ", doorPlate='" + doorPlate + '\'' +
+                ", industry='" + industry + '\'' +
+                ", name='" + name + '\'' +
+                ", remark='" + remark + '\'' +
+                ", simple='" + simple + '\'' +
+                ", utime=" + utime +
+                '}';
+    }
 }

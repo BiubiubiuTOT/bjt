@@ -94,7 +94,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
 
     private void initView() {
         mList = new ArrayList<>();
-        mList.add(new WcbBean("删除联系人", getResources().getColor(R.color.red)));
+        mList.add(new WcbBean("确定", getResources().getColor(R.color.red)));
         info = UserInfo.first(UserInfo.class);
         tv_send_name.setText(info.getNickname());
         upImgPresenter = new UploadImagePresenter(this);
@@ -363,7 +363,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
 
     private void showCancelSendDialog() {
         final WCBMenu wcbMenu = new WCBMenu(mContext);
-        wcbMenu.setTitle("确定要退出登录吗？")
+        wcbMenu.setTitle("您确定取消发送么？")
                 .setCancel("取消")
                 .setStringList(mList)
                 .setItemClickListener(new AdapterView.OnItemClickListener() {

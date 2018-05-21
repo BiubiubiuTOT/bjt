@@ -31,6 +31,7 @@ public class SplashActivity extends BaseActivity implements LoginContract.View {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CAMERA,
+            Manifest.permission.CALL_PHONE,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
     private List<String> permissionsList;

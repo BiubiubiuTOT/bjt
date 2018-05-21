@@ -107,4 +107,8 @@ public class DataUtil {
         return spUtil.getBoolean(SPUtil.OtherSetting.IS_INTO_BUILDING, false);
     }
 
+    public static void clearOtherSetting(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        spUtil.clear();
+    }
 }

@@ -1,9 +1,7 @@
 package com.bangjiat.bjt.module.main.ui.fragment;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,15 +22,22 @@ import com.bangjiat.bjt.module.home.scan.ui.OpenDoorCodeActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.home.visitor.ui.VisitorActivity;
 import com.bangjiat.bjt.module.home.work.ui.WorkMainActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
+import com.bangjiat.bjt.module.me.personaldata.presenter.GetUserInfoPresenter;
+import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
 import com.bangjiat.bjt.module.secretary.contact.view.ContactInfoActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.joker.api.Permissions4M;
-import com.joker.api.wrapper.Wrapper;
 import com.orhanobut.logger.Logger;
+import com.orm.SugarRecord;
 
 import java.util.List;
 
@@ -42,26 +47,38 @@ import cn.bertsir.zbar.QrConfig;
 import cn.bertsir.zbar.QrManager;
 import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.bingoogolapple.bgabanner.BGALocalImageSize;
+import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 
-public class HomeFragment extends BaseFragment implements NoticeContract.View, SearchContactContract.View {
+public class HomeFragment extends BaseFragment implements NoticeContract.View, SearchContactContract.View,
+        BGARefreshLayout.BGARefreshLayoutDelegate, GetUserInfoContract.View {
     @BindView(R.id.banner_guide_content)
     BGABanner mContentBanner;
     @BindView(R.id.tv_content)
     TextView tv_content;
     @BindView(R.id.tv_title)
     TextView tv_title;
-    private static final int READ_CODE = 2;
-    private static final int CAMERA_CODE = 3;
-    private boolean isOpenRead, isOpenCamera;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
+    private GetUserInfoContract.Presenter userPresenter;
+
     private NoticeBean.SysNoticeListBean sysNoticeListBean;
     private NoticeContract.Presenter presenter;
     private SearchContactContract.Presenter searchPresenter;
+    private String token;
 
     protected void initView() {
         presenter = new NoticePresenter(this);
         searchPresenter = new SearchContactPresenter(this);
-        presenter.getAllNotice(DataUtil.getToken(mContext));
+        token = DataUtil.getToken(mContext);
+        presenter.getAllNotice(token);
+
+        userPresenter = new GetUserInfoPresenter(this);
+        UserInfo userInfo = UserInfo.first(UserInfo.class);
+        if (userInfo == null)
+            userPresenter.getUserInfo(token);
+
         BGALocalImageSize localImageSize = new BGALocalImageSize(720, 1280, 320, 640);
         mContentBanner.setData(localImageSize, ImageView.ScaleType.CENTER_CROP,
                 R.drawable.banner1,
@@ -75,6 +92,8 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
             }
         });
 
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new BGANormalRefreshViewHolder(mContext, false));
     }
 
     @Override
@@ -105,7 +124,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @OnClick(R.id.iv_scan)
     public void clickScan(View view) {
-        checkPermission();
+        startScan();
     }
 
     @OnClick(R.id.tv_open_door)
@@ -119,99 +138,32 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         startActivity(new Intent(mContext, Constants.isIntoCompany() ? WorkMainActivity.class : AddOrSelectCompanyActivity.class));
     }
 
-    private void checkPermission() {
-        Permissions4M.get(this)
-                .requestPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .requestCodes(READ_CODE, CAMERA_CODE)
-                .requestListener(new Wrapper.PermissionRequestListener() {
-                    @Override
-                    public void permissionGranted(int code) {
-                        switch (code) {
-                            case READ_CODE:
-//                                Toast.makeText(mContext, "读权限授权成功", Toast.LENGTH_SHORT).show();
-                                isOpenRead = true;
-                                startScan();
-                                break;
-                            case CAMERA_CODE:
-                                isOpenCamera = true;
-//                                Toast.makeText(mContext, "摄像头授权成功", Toast.LENGTH_SHORT).show();
-                                startScan();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void permissionDenied(int code) {
-                        switch (code) {
-                            case READ_CODE:
-                                isOpenRead = false;
-                                Toast.makeText(mContext, "存储权限授权失败", Toast.LENGTH_SHORT).show();
-                                break;
-                            case CAMERA_CODE:
-                                isOpenCamera = false;
-                                Toast.makeText(mContext, "摄像头权限授权失败", Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void permissionRationale(int code) {
-                        switch (code) {
-                            case READ_CODE:
-//                                Toast.makeText(mContext, "请开启读权限", Toast.LENGTH_SHORT).show();
-                                break;
-                            case CAMERA_CODE:
-//                                Toast.makeText(mContext, "请开启摄像头权限", Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                })
-                .request();
-    }
 
     private void startScan() {
-        if (isOpenCamera && isOpenRead) {
-            Logger.d("startScan");
-            isOpenRead = false;
-            isOpenCamera = false;
+        Logger.d("startScan");
 
-            QrConfig options = new QrConfig.Builder().create();
-            QrManager.getInstance().init(options).startScan(new QrManager.OnScanResultCallback() {
-                @Override
-                public void onScanSuccess(String result) {
-                    try {
-                        QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                        if (user != null)
-                            searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
-                        else {
-                            fail("");
-                        }
-                    } catch (JsonSyntaxException e) {
-                        e.printStackTrace();
+        QrConfig options = new QrConfig.Builder().create();
+        QrManager.getInstance().init(options).startScan(new QrManager.OnScanResultCallback() {
+            @Override
+            public void onScanSuccess(String result) {
+                try {
+                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
+                    if (user != null)
+                        searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
+                    else {
                         fail("");
                     }
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                    fail("");
                 }
-            });
+            }
+        });
 
-            Intent intent = new Intent(mContext, ScanActivity.class);
-            intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(mContext, ScanActivity.class);
+        intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
+        startActivity(intent);
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Permissions4M.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
-
 
     @Override
     public void showDialog() {
@@ -225,6 +177,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @Override
     public void getAllNoticeResult(NoticeBean bean) {
+        mRefreshLayout.endRefreshing();
         if (bean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = bean.getSysNoticeList();
             if (sysNoticeList != null) {
@@ -237,7 +190,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @Override
     public void showError(String err) {
-
+        mRefreshLayout.endRefreshing();
     }
 
     @Override
@@ -252,6 +205,57 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         bundle.putSerializable("data", bean);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void getContactByScanSuccess(ScanUser user) {
+
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        Constants.deleteDb();
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getAllNotice(token);
+        userPresenter.getUserInfo(token);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
+    }
+
+    @Override
+    public void getUserInfoFail(String err) {
+        Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    public void getUserInfoSuccess(UserInfoBean bean) {
+        Logger.d(bean);
+
+        UserInfo userInfo = bean.getUserInfo();
+        CompanyUserBean companyUser = bean.getCompanyUser();
+        List<BuildUser> buildUser = bean.getBuildUser();
+        List<SpaceUser> spaceUser = bean.getSpaceUser();
+
+        DataUtil.setPhone(mContext, userInfo.getPhone());
+        DataUtil.setUserId(mContext, userInfo.getUserId());
+
+        userInfo.save();
+        if (companyUser != null)
+            companyUser.save();
+
+        if (buildUser != null && buildUser.size() > 0) {
+            Logger.d(buildUser.toString());
+            SugarRecord.saveInTx(buildUser);
+        }
+
+        if (spaceUser != null && spaceUser.size() > 0) {
+            Logger.d(spaceUser.toString());
+            SugarRecord.saveInTx(spaceUser);
+        }
     }
 }
 

@@ -20,7 +20,7 @@ public class UserInfoBean {
     private int count;
     private CompanyUserBean companyUser;
     private List<BuildUser> buildUser;
-    private SpaceUser spaceUser;
+    private List<SpaceUser> spaceUser;
 
     public List<BuildUser> getBuildUser() {
         return buildUser;
@@ -30,11 +30,11 @@ public class UserInfoBean {
         this.buildUser = buildUser;
     }
 
-    public SpaceUser getSpaceUser() {
+    public List<SpaceUser> getSpaceUser() {
         return spaceUser;
     }
 
-    public void setSpaceUser(SpaceUser spaceUser) {
+    public void setSpaceUser(List<SpaceUser> spaceUser) {
         this.spaceUser = spaceUser;
     }
 
@@ -62,4 +62,14 @@ public class UserInfoBean {
         this.companyUser = companyUser;
     }
 
+    @Override
+    public String toString() {
+        return "UserInfoBean{" +
+                "userInfo=" + userInfo +
+                ", count=" + count +
+                ", companyUser=" + companyUser +
+                ", buildUser=" + buildUser +
+                ", spaceUser=" + spaceUser +
+                '}';
+    }
 }

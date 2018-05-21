@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:background="@null"
-            android:text="黎强"
             android:textColor="@color/dialog_title"
             android:textSize="15sp" />
     </LinearLayout>
@@ -61,7 +60,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:text="13984485646"
             android:textColor="@color/dialog_title"
             android:textSize="15sp" />
     </LinearLayout>

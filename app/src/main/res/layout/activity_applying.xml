@@ -29,12 +29,22 @@
             android:textColor="@color/dialog_title"
             android:textSize="@dimen/applying_message_size" />
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/applying_margin_top"
             android:text="@string/applying_message"
             android:textColor="@color/personal_message"
+            android:textSize="@dimen/dialog_message_text_size" />
+
+        <TextView
+            android:id="@+id/tv_contact_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/apply_contact_admin"
+            android:textColor="@color/mine_bg"
             android:textSize="@dimen/dialog_message_text_size" />
 
         <Button

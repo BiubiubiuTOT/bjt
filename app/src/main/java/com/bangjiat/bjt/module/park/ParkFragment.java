@@ -2,17 +2,32 @@ package com.bangjiat.bjt.module.park;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.park.apply.ui.ApplyMainActivity;
 import com.bangjiat.bjt.module.park.car.ui.MyCarActivity;
 import com.bangjiat.bjt.module.park.pay.ui.PayMainActivity;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ParkFragment extends BaseFragment {
+    @BindView(R.id.tv_apply_name)
+    TextView tv_apply_name;
+    @BindView(R.id.ll_apply)
+    LinearLayout ll_apply;
+
     protected void initView() {
+        if (Constants.isParkAdmin()) {
+            tv_apply_name.setText("停车申请/审批");
+            ll_apply.setVisibility(View.VISIBLE);
+        } else if (Constants.isCompanyAdmin()) {
+            ll_apply.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.ll_my_car)

@@ -9,11 +9,15 @@ import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
+import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,9 +55,17 @@ public class AddContactActivity extends BaseColorToolBarActivity implements Sear
         QrManager.getInstance().init(options).startScan(new QrManager.OnScanResultCallback() {
             @Override
             public void onScanSuccess(String result) {
-                Intent intent = new Intent(mContext, ContactInfoActivity.class);
-                intent.putExtra("data", new SearchContactResult("哈哈", "", "17685302678"));
-                startActivity(intent);
+                try {
+                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
+                    if (user != null)
+                        presenter.searchContact(DataUtil.getToken(mContext), user.getUn());
+                    else {
+                        fail("");
+                    }
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                    fail("");
+                }
             }
         });
 
@@ -87,5 +99,10 @@ public class AddContactActivity extends BaseColorToolBarActivity implements Sear
         startActivity(intent);
 
         finish();
+    }
+
+    @Override
+    public void getContactByScanSuccess(ScanUser user) {
+
     }
 }

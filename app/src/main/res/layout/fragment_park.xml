@@ -62,7 +62,8 @@
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/mine_item_margin_top">
+            android:paddingLeft="@dimen/mine_item_margin_top"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/park_item_icon"
@@ -70,6 +71,7 @@
                 android:src="@mipmap/park_apply" />
 
             <TextView
+                android:id="@+id/tv_apply_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/mine_item_margin"

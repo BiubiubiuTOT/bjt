@@ -9,9 +9,12 @@ import android.view.View;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
+import com.orm.SugarRecord;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,14 +31,14 @@ public class Constants {
     /**
      * 本地服务器地址
      */
-    public static final String BASE_IP = "http://192.168.0.112:80/app/";
-    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
+//    public static final String BASE_IP = "http://192.168.0.112:80/app/";
+//    public static final String UPLOAD_IMAGE_IP = "http://192.168.0.112:8887/";
 
     /**
      * 外网服务器地址
      */
-//    public static final String BASE_IP = "http://www.bangjiat.com/app/";
-//    public static final String UPLOAD_IMAGE_IP = "http://www.bangjiat.com/";
+    public static final String BASE_IP = "http://api.bangjiat.com/app/";
+    public static final String UPLOAD_IMAGE_IP = "http://www.bangjiat.com/";
 
     public static final String TOKEN_NAME = "j4sc-bjt-token";
     public static final String TOKEN_NAME_SPECIAL = "j4sc-b-token";
@@ -222,16 +225,26 @@ public class Constants {
      * @return
      */
     public static boolean isBuildingAdmin() {
-        BuildUser first = BuildUser.first(BuildUser.class);
-        return first != null;
+        try {
+            BuildUser first = BuildUser.first(BuildUser.class);
+            return first != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
      * 停车场管理员
      */
     public static boolean isParkAdmin() {
-        SpaceUser user = SpaceUser.first(SpaceUser.class);
-        return user != null;
+        try {
+            SpaceUser user = SpaceUser.first(SpaceUser.class);
+            return user != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -248,5 +261,13 @@ public class Constants {
             e.printStackTrace();
             return "获取版本失败";
         }
+    }
+
+    public static void deleteDb() {
+        SugarRecord.deleteAll(UserInfo.class);
+        SugarRecord.deleteAll(CompanyUserBean.class);
+        SugarRecord.deleteAll(RuleInput.class);
+        SugarRecord.deleteAll(SpaceUser.class);
+        SugarRecord.deleteAll(BuildUser.class);
     }
 }

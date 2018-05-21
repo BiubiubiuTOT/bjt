@@ -73,6 +73,7 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
                 Intent intent = new Intent(mContext, DetailActivity.class);
                 intent.putExtra("name", recordsBean.getCompanyName());
                 intent.putExtra("id", recordsBean.getGuardMainId());
+                intent.putExtra("status", recordsBean.getType());
                 startActivityForResult(intent, DEAL);
             }
         });

@@ -54,6 +54,7 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     private boolean isInto;
     private Dialog dialog;
     private int status;
+    private String phone;
 
     protected void initView() {
         presenter = new IntoBuildingPresenter(this);
@@ -68,9 +69,7 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     public void onResume() {
         super.onResume();
         if (Constants.isCompanyAdmin()) {//公司管理员
-            ll_admin.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
-            Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
+            show();
 
             tv_door.setText("·门禁申请·");
             tv_service.setText("·服务申请·");
@@ -79,14 +78,18 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
             if (!isInto)
                 presenter.isIntoBuilding(token);
         } else if (Constants.isBuildingAdmin()) {//楼宇管理员
-            ll_admin.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
-            Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
+            show();
 
             tv_door.setText("·门禁审批·");
             tv_service.setText("·服务审批·");
         }
 
+    }
+
+    private void show() {
+        ll_admin.setVisibility(View.VISIBLE);
+        Glide.with(this).load(R.mipmap.door).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_door);
+        Glide.with(this).load(R.mipmap.service).centerCrop().dontAnimate().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_service);
     }
 
 
@@ -192,6 +195,9 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     public void getIsIntoBuildingSuccess(IsIntoBuildingResult result) {
         isApply = result != null;
         if (result != null) {
+            phone=result.getApplyer();
+            Logger.d(result.toString());
+
             status = result.getStatus();
             Logger.d(result.toString());
             if (status == 2) {

@@ -48,7 +48,7 @@ public class ServiceApplyHistoryModel implements ServiceApplyHistoryContract.Mod
             public void onSuc(Response<BaseResult<ServiceApplyHistoryResult>> response) {
                 BaseResult<ServiceApplyHistoryResult> body = response.body();
                 if (body.getStatus() == 200) {
-                    presenter.success(body.getData());
+                    presenter.getAdminHistorySuccess(body.getData());
                 } else presenter.error(body.getMessage());
             }
 

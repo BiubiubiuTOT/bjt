@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:hint="请输入职务(普通员工可不填)"
+                    android:hint="请输入职务(选填)"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
                     android:textSize="14sp" />

@@ -16,6 +16,7 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.work.permission.contract.PermissionContract;
 import com.bangjiat.bjt.module.home.work.permission.presenter.PermissionPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
@@ -43,6 +44,7 @@ public class DeleteAdminActivity extends BaseToolBarActivity implements CompanyU
     private CompanyUserContract.Presenter presenter;
     private String token;
     private PermissionContract.Presenter permissionPresenter;
+    private UserInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class DeleteAdminActivity extends BaseToolBarActivity implements CompanyU
 
 
     private void initData() {
+        info = UserInfo.first(UserInfo.class);
         beans = new ArrayList<>();
         presenter = new CompanyUserPresenter(this);
         permissionPresenter = new PermissionPresenter(this);
@@ -147,9 +150,13 @@ public class DeleteAdminActivity extends BaseToolBarActivity implements CompanyU
                     public void onClick(View view) {
                         String[] selectItem = getSelectItem();
                         Logger.d(selectItem);
-
+                        if (adapter.getItemCount() == 1) {
+                            if (DataUtil.isIntoBuilding(mContext)) {
+                                error("请联系楼宇管理员");
+                                return;
+                            }
+                        }
                         permissionPresenter.deleteAdmin(token, selectItem);
-
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override

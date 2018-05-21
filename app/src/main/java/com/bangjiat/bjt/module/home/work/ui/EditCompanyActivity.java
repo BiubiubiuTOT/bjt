@@ -92,7 +92,7 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
                     @Override
                     public void onClick(View view) {
                         if (Constants.isCompanyAdmin()) {//公司管理员不能退出公司
-                            error("公司管理员不能退出公司");
+                            error("请先移交管理员权限");
                         } else
                             presenter.exitCompany(token);
                     }

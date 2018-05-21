@@ -15,7 +15,7 @@ public interface ServiceApplyHistoryContract {
 
         void getAdminHistory(String token, int id, int page, int size, int status);
 
-        void approvalService(String token,int id, ApprovalServiceInput input);
+        void approvalService(String token, int id, ApprovalServiceInput input);
     }
 
     interface View {
@@ -39,7 +39,7 @@ public interface ServiceApplyHistoryContract {
 
         void error(String err);
 
-        void approvalService(String token,int id, ApprovalServiceInput input);
+        void approvalService(String token, int id, ApprovalServiceInput input);
 
         void approvalServiceSuccess();
 

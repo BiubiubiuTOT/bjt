@@ -28,6 +28,11 @@ public class AddWorkersAdapter extends RecyclerView.Adapter<AddWorkersAdapter.Vi
         this.mOnItemClickListener = listener;
     }
 
+    public void setLists(List<WorkersResult.RecordsBean> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
+    }
+
     public List<WorkersResult.RecordsBean> getLists() {
         return lists;
     }
@@ -47,6 +52,11 @@ public class AddWorkersAdapter extends RecyclerView.Adapter<AddWorkersAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         final WorkersResult.RecordsBean bean = lists.get(position);
+        if (bean.getPhone()!=null){
+            viewHolder.et_card.setText(bean.getIdNumber());
+            viewHolder.et_phone.setText(bean.getPhone());
+            viewHolder.et_name.setText(bean.getRealname());
+        }
 
         viewHolder.rl_delete.setOnClickListener(new View.OnClickListener() {
             @Override

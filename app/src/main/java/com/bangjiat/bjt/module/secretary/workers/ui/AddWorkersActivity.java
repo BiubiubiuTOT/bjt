@@ -16,10 +16,10 @@ import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.CompanyCodeActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
-import com.bangjiat.bjt.module.secretary.contact.view.ContactInfoActivity;
 import com.bangjiat.bjt.module.secretary.workers.adapter.AddWorkersAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
@@ -122,7 +122,7 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
             public void onScanSuccess(String result) {
                 try {
                     QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                    searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
+                    searchPresenter.getContactByScan(DataUtil.getToken(mContext), user.getUn());
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                     Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
@@ -132,6 +132,7 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
 
         Intent intent = new Intent(mContext, ScanActivity.class);
         intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
+        intent.putExtra(ScanActivity.SCAN_TYPE, 3);
         startActivity(intent);
     }
 
@@ -187,10 +188,20 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
 
     @Override
     public void success(SearchContactResult bean) {
-        Intent intent = new Intent(mContext, ContactInfoActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("data", bean);
-        intent.putExtras(bundle);
-        startActivity(intent);
+
+    }
+
+    @Override
+    public void getContactByScanSuccess(ScanUser user) {
+        if (user != null) {
+            Logger.d(user.toString());
+            List<WorkersResult.RecordsBean> lists = new ArrayList<>();
+            WorkersResult.RecordsBean bean1 = new WorkersResult.RecordsBean();
+            bean1.setPhone(user.getUsername());
+            bean1.setRealname(user.getRealname());
+            bean1.setIdNumber(user.getIdNumber());
+            lists.add(bean1);
+            mAdapter.setLists(lists);
+        }
     }
 }

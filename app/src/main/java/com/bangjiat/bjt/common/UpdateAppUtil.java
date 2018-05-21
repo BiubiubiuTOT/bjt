@@ -57,14 +57,12 @@ public class UpdateAppUtil {
                             if (beanBaseResult.getStatus() == 200) {
                                 KeyValueBean data = beanBaseResult.getData();
                                 String version = data.getValue();
-                                Logger.d(version);
                                 if (!version.contains("V"))
                                     return null;
 
                                 int i = version.lastIndexOf("V");
                                 int j = version.lastIndexOf(".");
-                                String s = version.substring(i, j);
-                                Logger.d(s);
+                                String s = version.substring(i+1, j);
 
                                 String localVersion = Constants.getVersion(mContext);
                                 if (!s.equals(localVersion))

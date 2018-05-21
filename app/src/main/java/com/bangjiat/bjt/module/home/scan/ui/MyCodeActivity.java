@@ -42,7 +42,7 @@ public class MyCodeActivity extends BaseColorToolBarActivity {
 
             tv_name.setText(userInfo.getNickname());
             Glide.with(mContext).load(userInfo.getAvatar()).centerCrop().
-                    transform(new GlideCircleTransform(this)).into(iv_icon);
+                    transform(new GlideCircleTransform(this)).placeholder(R.mipmap.my_head).into(iv_icon);
         }
     }
 

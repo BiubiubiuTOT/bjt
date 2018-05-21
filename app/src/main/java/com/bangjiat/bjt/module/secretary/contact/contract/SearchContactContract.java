@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.contact.contract;
 
+import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 
 /**
@@ -11,12 +12,16 @@ import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 public interface SearchContactContract {
     interface Model {
         void searchContact(String token, String key);
+
+        void getContactByScan(String token,String username);
     }
 
     interface View {
         void fail(String err);
 
         void success(SearchContactResult bean);
+
+        void getContactByScanSuccess(ScanUser user);
     }
 
     interface Presenter {
@@ -25,6 +30,10 @@ public interface SearchContactContract {
         void fail(String err);
 
         void success(SearchContactResult bean);
+
+        void getContactByScan(String token,String username);
+
+        void getContactByScanSuccess(ScanUser user);
 
     }
 }

@@ -2,6 +2,7 @@ package com.bangjiat.bjt.module.secretary.contact.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.bangjiat.bjt.module.secretary.communication.ui.WriteEmailActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.contract.UpdateContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.UpdateContactPresenter;
+import com.bangjiat.bjt.module.secretary.contact.util.GlideCircleTransform;
+import com.bumptech.glide.Glide;
 import com.dou361.dialogui.DialogUIUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,6 +59,8 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     TextView tv_send;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
+    @BindView(R.id.iv_head)
+    ImageView iv_head;
     private List<WcbBean> mList;
     private ContactBean bean;
     private Dialog dialog;
@@ -78,6 +83,12 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
             tv_phone.setText(bean.getSlaveUsername());
             tv_name.setText(bean.getSlaveNickname());
             et_remark.setText(bean.getRemark());
+            //加载联系人头像
+            Glide.with(mContext)
+                    .load(bean.getAvatar())
+                    .transform(new GlideCircleTransform(mContext))
+                    .placeholder(R.mipmap.my_head)
+                    .into(iv_head);
         }
     }
 
@@ -193,6 +204,25 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     @OnClick(R.id.tv_send)
     public void clickSend(View view) {
         Intent intent = new Intent(mContext, WriteEmailActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.ll_phone)
+    public void clickPhone(View view) {
+        if (bean != null) {
+            dialPhone(bean.getSlaveUsername());
+        }
+    }
+
+    /**
+     * 拨打电话（跳转到拨号界面，用户手动点击拨打）
+     *
+     * @param phoneNum 电话号码
+     */
+    public void dialPhone(String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
         startActivity(intent);
     }
 

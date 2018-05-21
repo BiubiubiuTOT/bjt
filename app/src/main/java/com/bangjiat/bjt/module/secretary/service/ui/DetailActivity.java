@@ -88,7 +88,8 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
             setPhotoAdapter();
         }
         if (Constants.isBuildingAdmin()) {
-            rl_btn.setVisibility(View.VISIBLE);
+            if (data.getStatus() == 1)
+                rl_btn.setVisibility(View.VISIBLE);
             initDia();
         }
     }
@@ -186,6 +187,12 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
 
     @Override
     public void success(ServiceApplyHistoryResult result) {
+
+    }
+
+
+    @Override
+    public void approvalServiceSuccess() {
         new com.adorkable.iosdialog.AlertDialog(mContext).builder().setMsg("审批成功").setCancelable(false).
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override
@@ -194,12 +201,6 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
                         finish();
                     }
                 }).show();
-    }
-
-
-    @Override
-    public void approvalServiceSuccess() {
-
     }
 
     @Override

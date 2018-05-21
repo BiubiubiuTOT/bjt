@@ -292,13 +292,15 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
 
     private void setWifi(String wifi) {
         iv_wifi.setImageResource(R.mipmap.ic_wifi);
-        iv_wifi_delete.setVisibility(View.VISIBLE);
+        if (Constants.isCompanyAdmin())
+            iv_wifi_delete.setVisibility(View.VISIBLE);
         tv_wifi.setText(wifi);
     }
 
     private void setAddress(String address) {
         iv_location.setImageResource(R.mipmap.ic_location);
-        iv_location_delete.setVisibility(View.VISIBLE);
+        if (Constants.isCompanyAdmin())
+            iv_location_delete.setVisibility(View.VISIBLE);
         tv_location.setText(address);
     }
 

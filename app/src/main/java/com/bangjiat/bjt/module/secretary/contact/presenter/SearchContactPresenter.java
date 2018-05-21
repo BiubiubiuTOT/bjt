@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.secretary.contact.presenter;
 
+import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
 import com.bangjiat.bjt.module.secretary.contact.model.SearchContactModel;
@@ -33,5 +34,15 @@ public class SearchContactPresenter implements SearchContactContract.Presenter {
     @Override
     public void success(SearchContactResult bean) {
         view.success(bean);
+    }
+
+    @Override
+    public void getContactByScan(String token,String id) {
+        model.getContactByScan(token,id);
+    }
+
+    @Override
+    public void getContactByScanSuccess(ScanUser user) {
+        view.getContactByScanSuccess(user);
     }
 }
