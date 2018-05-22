@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.park.pay.ui;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -317,7 +318,6 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
         if (payMode == -1) {
             fail("请选择支付方式");
             return;
-
         }
 
         PayBean bean = new PayBean();
@@ -367,7 +367,10 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     }
 
     private void toast(String s) {
-        Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getApplicationContext(),
+                s, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
     /**
@@ -479,5 +482,10 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
     public void fail(String err) {
         Logger.e(err);
         Constants.showErrorDialog(mContext, err);
+    }
+
+    @Override
+    public void payBillSuccess(String string) {
+
     }
 }

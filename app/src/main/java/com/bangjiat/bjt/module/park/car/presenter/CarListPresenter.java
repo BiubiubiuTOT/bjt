@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.park.car.presenter;
 
+import com.bangjiat.bjt.common.ValidationIdCard;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
 import com.bangjiat.bjt.module.park.car.contract.CarListContract;
 import com.bangjiat.bjt.module.park.car.model.CarListModel;
@@ -81,6 +82,10 @@ public class CarListPresenter implements CarListContract.Presenter {
         }
         if (bean.getModel().isEmpty()) {
             view.error("请填写车辆型号");
+            return;
+        }
+        if (!ValidationIdCard.verify(bean.getIdNumber())) {
+            view.error("身份证号错误");
             return;
         }
 

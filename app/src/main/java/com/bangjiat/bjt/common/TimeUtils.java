@@ -34,7 +34,7 @@ public class TimeUtils {
     }
 
     public static long changeToLong(String s) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
         try {
             Date date = format.parse(s);
             return date.getTime();

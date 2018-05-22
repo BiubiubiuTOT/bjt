@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.park.pay.contract;
 
+import com.bangjiat.bjt.module.me.bill.beans.PayBillBean;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
@@ -22,6 +23,8 @@ public interface PayContract {
         void getPayList(String token);
 
         void getParkingDetail(String token, int spaceId);
+
+        void payBill(String token, PayBillBean bean);
     }
 
     interface View {
@@ -38,6 +41,8 @@ public interface PayContract {
         void getParkingDetailSuccess(ParkingDetail detail);
 
         void fail(String err);
+
+        void payBillSuccess(String string);
     }
 
     interface Presenter {
@@ -58,5 +63,9 @@ public interface PayContract {
         void getParkingDetailSuccess(ParkingDetail detail);
 
         void fail(String err);
+
+        void payBill(String token, PayBillBean bean);
+
+        void payBillSuccess(String string);
     }
 }

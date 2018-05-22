@@ -79,11 +79,10 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
     private void initData() {
         input = new RuleInput();
         ampm = new ArrayList<>();
-        ampm.add("上午");
-        ampm.add("下午");
+        ampm.add("");
 
         hours = new ArrayList<>();
-        for (int i = 1; i < 13; i++) {
+        for (int i = 0; i < 24; i++) {
             hours.add(String.valueOf(i));
         }
 
@@ -206,13 +205,6 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
             @Override
             public void onOptionsSelect(int i, int i1, int i2, View view) {
                 String h = hours.get(i1);
-                if (i == 1) {
-                    if (i1 < 12) {
-                        h = String.valueOf(Integer.parseInt(h) + 12);
-                    } else {
-                        h = "00";
-                    }
-                }
 
                 String mi = minutes.get(i2);
                 String str = h + ":" + mi;

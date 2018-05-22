@@ -49,13 +49,23 @@ public class DakaDetailAdapter extends RecyclerView.Adapter<DakaDetailAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         DakaHistoryResult bean = lists.get(position);
         viewHolder.tv_name.setText(bean.getUserRealname());
         viewHolder.tv_in_time.setText(TimeUtils.changeToHM(bean.getInTime()));
         if (bean.getOutType() != 0)
             viewHolder.tv_out_time.setText(TimeUtils.changeToHM(bean.getOutTime()));
 
+        if (bean.getOutType() == 1 && bean.getInType() == 1) {
+            viewHolder.btn_update.setVisibility(View.GONE);
+        }
+        viewHolder.btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onBtnClick(view, viewHolder.getAdapterPosition());
+            }
+        });
         viewHolder.itemView.setTag(position);
     }
 
@@ -87,5 +97,7 @@ public class DakaDetailAdapter extends RecyclerView.Adapter<DakaDetailAdapter.Vi
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
+
+        void onBtnClick(View view, int position);
     }
 }

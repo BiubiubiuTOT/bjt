@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.scan.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class MyCodeActivity extends BaseColorToolBarActivity {
             QrCodeDataUser user = new QrCodeDataUser(userInfo.getUsername(), 2);
 
             String json = new Gson().toJson(user);
-            mBitmap = QRUtils.getInstance().createQRCode(json);
+            mBitmap = QRUtils.getInstance().createQRCodeAddLogo(json, BitmapFactory.decodeResource(getResources(), R.mipmap.bjt));
             iv_code.setImageBitmap(mBitmap);
 
             tv_name.setText(userInfo.getNickname());

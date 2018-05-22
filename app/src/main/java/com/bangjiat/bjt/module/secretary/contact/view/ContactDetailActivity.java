@@ -73,7 +73,6 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     }
 
     private void initView() {
-
         presenter = new UpdateContactPresenter(this);
         mList = new ArrayList<>();
         mList.add(new WcbBean("删除联系人", getResources().getColor(R.color.red)));
@@ -204,6 +203,7 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     @OnClick(R.id.tv_send)
     public void clickSend(View view) {
         Intent intent = new Intent(mContext, WriteEmailActivity.class);
+        intent.putExtra("data", bean);
         startActivity(intent);
     }
 

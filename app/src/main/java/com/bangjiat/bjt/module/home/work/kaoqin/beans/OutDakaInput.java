@@ -12,7 +12,16 @@ public class OutDakaInput {
     private String outLatitude;
     private String outType;
     private String outWay;
+    private String leaveRemark;
     private int clockId;
+
+    public String getLeaveRemark() {
+        return leaveRemark;
+    }
+
+    public void setLeaveRemark(String leaveRemark) {
+        this.leaveRemark = leaveRemark;
+    }
 
     public String getOutAddress() {
         return outAddress;

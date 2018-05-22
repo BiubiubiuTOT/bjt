@@ -23,8 +23,8 @@ public class QueryBillModel implements QueryBillContract.Model {
     }
 
     @Override
-    public void getPageBill(String token, final int page, int size) {
-        ApiFactory.getService().getPageBill(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<PageBillBean>>() {
+    public void getPageBill(String token, final int page, int size, long start, long end) {
+        ApiFactory.getService().getPageBill(token, page, Constants.SIZE, start, end).enqueue(new MyCallBack<BaseResult<PageBillBean>>() {
             @Override
             public void onSuc(Response<BaseResult<PageBillBean>> response) {
                 BaseResult<PageBillBean> body = response.body();

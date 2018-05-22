@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.GlideImageLoader;
@@ -83,6 +84,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
     private String strImage = "";
     private UserInfo info;
     private List<WcbBean> mList;
+    private ContactBean bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,12 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
     }
 
     private void initView() {
+        bean = (ContactBean) getIntent().getSerializableExtra("data");
+        if (bean != null) {
+            receiverId = bean.getSlaveUserId();
+            receiver=bean.getSlaveNickname();
+            tv_receive_name.setText(receiver);
+        }
         mList = new ArrayList<>();
         mList.add(new WcbBean("确定", getResources().getColor(R.color.red)));
         info = UserInfo.first(UserInfo.class);
@@ -423,5 +431,6 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
     public void fail(String err) {
         dismissDialog();
         Logger.e(err);
+        Constants.showErrorDialog(mContext, err);
     }
 }

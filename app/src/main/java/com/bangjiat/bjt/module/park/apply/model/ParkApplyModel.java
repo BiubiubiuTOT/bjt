@@ -48,7 +48,7 @@ public class ParkApplyModel implements ParkApplyContract.Model {
 
     @Override
     public void getParkSpace(String token, int page, int size, String key) {
-        ApiFactory.getService().getParkSpace(token, page,  Constants.SIZE, key).enqueue(new MyCallBack<BaseResult<ParkingResult>>() {
+        ApiFactory.getService().getParkSpace(token, page, Constants.SIZE, key).enqueue(new MyCallBack<BaseResult<ParkingResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ParkingResult>> response) {
                 BaseResult<ParkingResult> body = response.body();
@@ -90,7 +90,7 @@ public class ParkApplyModel implements ParkApplyContract.Model {
                 BaseResult<String> body = response.body();
                 if (body.getStatus() == 200)
                     presenter.dealParkApplySuccess();
-                presenter.error(body.getMessage());
+                else presenter.error(body.getMessage());
             }
 
             @Override
@@ -102,7 +102,7 @@ public class ParkApplyModel implements ParkApplyContract.Model {
 
     @Override
     public void getParkApplyHistory(String token, int page, int size, int spaceId) {
-        ApiFactory.getService().getParkApplyHistory(token, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
+        ApiFactory.getService().getParkApplyHistory(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ParkApplyHistoryResult>> response) {
                 BaseResult<ParkApplyHistoryResult> body = response.body();

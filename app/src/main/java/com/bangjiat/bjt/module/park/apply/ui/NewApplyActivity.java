@@ -3,13 +3,13 @@ package com.bangjiat.bjt.module.park.apply.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.AutoLinearLayoutManager;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
@@ -58,7 +58,7 @@ public class NewApplyActivity extends BaseWhiteToolBarActivity implements ParkAp
         presenter = new ParkApplyPresenter(this);
         list = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setLayoutManager(new AutoLinearLayoutManager(mContext));
 
         adapter = new CarAdapter(list, mContext);
         recyclerView.setAdapter(adapter);

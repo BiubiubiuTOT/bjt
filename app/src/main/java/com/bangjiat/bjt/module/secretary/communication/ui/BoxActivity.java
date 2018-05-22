@@ -442,7 +442,6 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             List<EmailBean> records = list.getRecords();
             if (records != null && records.size() > 0) {
                 boxBeans = records;
-                Logger.d(boxBeans.toString());
                 mAdapter.setLists(boxBeans);
             }
         }

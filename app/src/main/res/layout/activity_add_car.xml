@@ -327,7 +327,7 @@
                 android:layout_marginLeft="@dimen/apply_into_building_margin"
                 android:layout_marginRight="@dimen/apply_into_building_margin"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/new_apply_service_bg"
+                android:background="@drawable/apply_into_building_bg"
                 android:text="@string/submit"
                 android:textColor="@color/white"
                 android:textSize="@dimen/mine_exit_text_size" />

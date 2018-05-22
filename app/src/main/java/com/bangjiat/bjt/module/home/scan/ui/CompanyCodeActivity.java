@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.scan.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class CompanyCodeActivity extends BaseColorToolBarActivity {
             QrCodeDataCompany company = new QrCodeDataCompany(companyUserBean.getCompanyId(), 1);
 
             String json = new Gson().toJson(company);
-            mBitmap = QRUtils.getInstance().createQRCode(json);
+            mBitmap = QRUtils.getInstance().createQRCodeAddLogo(json, BitmapFactory.decodeResource(getResources(), R.mipmap.bjt));
             iv_code.setImageBitmap(mBitmap);
             tv_name.setText(companyUserBean.getCompanyName());
         }

@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.scan.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -22,7 +23,7 @@ public class OpenDoorCodeActivity extends BaseWhiteToolBarActivity {
     }
 
     private void initView() {
-        mBitmap = QRUtils.getInstance().createQRCode("测试二维码");
+        mBitmap = QRUtils.getInstance().createQRCodeAddLogo("aa", BitmapFactory.decodeResource(getResources(), R.mipmap.bjt));
         iv_code.setImageBitmap(mBitmap);
     }
 

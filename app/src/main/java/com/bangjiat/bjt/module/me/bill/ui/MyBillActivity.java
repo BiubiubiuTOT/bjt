@@ -2,18 +2,23 @@ package com.bangjiat.bjt.module.me.bill.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.bill.adapter.BillAdapter;
 import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
 import com.bangjiat.bjt.module.me.bill.contract.QueryBillContract;
 import com.bangjiat.bjt.module.me.bill.presenter.QueryBillPresenter;
@@ -21,15 +26,26 @@ import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 import com.squareup.timessquare.CalendarPickerView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-import butterknife.OnClick;
+import butterknife.BindView;
 
 public class MyBillActivity extends BaseToolBarActivity implements QueryBillContract.View {
+    private static final int PAY_SUCCESS = 2;
     private Dialog dialog;
     private QueryBillContract.Presenter presenter;
     private AlertDialog alertDialog;
+    private List<PageBillBean.RecordsBean> list;
+    private BillAdapter mAdapter;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
+    private String start;
+    private String end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +55,7 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
 
     private void initView() {
         presenter = new QueryBillPresenter(this);
-        presenter.getPageBill(DataUtil.getToken(mContext), 1, 10);
         initDia();
-    }
-
-    @OnClick(R.id.ll_wuye)
-    public void clickWuye(View view) {
-        startActivity(new Intent(mContext, PayBillActivity.class));
     }
 
     @Override
@@ -75,6 +85,8 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     }
 
     private void initDia() {
+        setAdapter();
+
         Calendar lastYear = Calendar.getInstance();
         lastYear.add(Calendar.YEAR, -1);
         Date today = new Date();
@@ -93,7 +105,7 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
             public void onDateSelected(final Date date) {
                 final int size = calendar.getSelectedDates().size();
                 String formatDate = TimeUtils.formatDate(date);
-                Logger.d("size: " + size + " onDateSelected = " + formatDate);
+                Logger.d("size: " + size + " onDateSelected = " + formatDate + " time: " + date.getTime());
 
                 if (size > 1) {
                     tv_end.setText(formatDate);
@@ -112,7 +124,50 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         alertDialog = builder.setView(view)
                 .setNegativeButton("取消", null)
-                .setPositiveButton("确定", null).create();
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        start = tv_start.getText().toString();
+                        end = tv_end.getText().toString();
+                        if (!start.isEmpty() && !end.isEmpty()) {
+
+                            Logger.d("start: " + start + " end: " + end);
+                            presenter.getPageBill(DataUtil.getToken(mContext), 1, 10,
+                                    TimeUtils.changeToLong(start),
+                                    TimeUtils.changeToLong(end));
+                        }
+                    }
+                }).create();
+    }
+
+    private void setAdapter() {
+        list = new ArrayList<>();
+        mAdapter = new BillAdapter(mContext, list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new BillAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                PageBillBean.RecordsBean bean = list.get(position);
+                if (bean.getStatus() != 1) {
+                    Intent intent = new Intent(mContext, PayBillActivity.class);
+                    intent.putExtra("data", bean);
+                    startActivityForResult(intent, PAY_SUCCESS);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == PAY_SUCCESS) {
+            presenter.getPageBill(DataUtil.getToken(mContext), 1, 10,
+                    TimeUtils.changeToLong(start),
+                    TimeUtils.changeToLong(end));
+        }
     }
 
     @Override
@@ -128,11 +183,24 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
 
     @Override
     public void getPageBillSuccess(PageBillBean billBean) {
+        if (billBean != null) {
+            List<PageBillBean.RecordsBean> records = billBean.getRecords();
+            if (records != null && records.size() > 0) {
+                Logger.d(records.toString());
 
+                list = records;
+                mAdapter.setLists(list);
+
+                ll_none.setVisibility(View.GONE);
+                return;
+            }
+        }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void getPageBillFail(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Logger.e(err);
+        Constants.showErrorDialog(mContext, err);
     }
 }

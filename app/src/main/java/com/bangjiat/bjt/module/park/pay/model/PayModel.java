@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.park.pay.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.module.me.bill.beans.PayBillBean;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
@@ -89,6 +90,24 @@ public class PayModel implements PayContract.Model {
                 BaseResult<ParkingDetail> body = response.body();
                 if (body.getStatus() == 200)
                     presenter.getParkingDetailSuccess(body.getData());
+                else presenter.fail(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.fail(message);
+            }
+        });
+    }
+
+    @Override
+    public void payBill(String token, final PayBillBean bean) {
+        ApiFactory.getService().payBill(token, bean).enqueue(new MyCallBack<BaseResult<String>>() {
+            @Override
+            public void onSuc(Response<BaseResult<String>> response) {
+                BaseResult<String> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.payBillSuccess(body.getData());
                 else presenter.fail(body.getMessage());
             }
 

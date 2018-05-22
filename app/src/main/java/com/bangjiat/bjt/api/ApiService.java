@@ -20,6 +20,7 @@ import com.bangjiat.bjt.module.main.account.beans.RecoveredPasswordInput;
 import com.bangjiat.bjt.module.main.account.beans.RegisterInput;
 import com.bangjiat.bjt.module.main.account.beans.ValidateCodeInput;
 import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
+import com.bangjiat.bjt.module.me.bill.beans.PayBillBean;
 import com.bangjiat.bjt.module.me.feedback.beans.FeedBackInput;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
@@ -198,7 +199,9 @@ public interface ApiService {
     @GET("api/userBill/select/PageBill")
     Call<BaseResult<PageBillBean>> getPageBill(@Header(Constants.TOKEN_NAME) String token,
                                                @Query("page") int page,
-                                               @Query("size") int size);
+                                               @Query("size") int size,
+                                               @Query("beginTime") long begin,
+                                               @Query("endTime") long end);
 
     /**
      * 12
@@ -801,4 +804,12 @@ public interface ApiService {
      */
     @GET("api/company/select/UserUser")
     Call<BaseResult<ScanUser>> getContactByScan(@Header(Constants.TOKEN_NAME) String token, @Query("username") String username);
+
+    /**
+     * 82
+     * <p>
+     * 用户账单缴费
+     */
+    @POST("api/userBill/pay/BjtUserBill")
+    Call<BaseResult<String>> payBill(@Header(Constants.TOKEN_NAME) String token, @Body PayBillBean input);
 }

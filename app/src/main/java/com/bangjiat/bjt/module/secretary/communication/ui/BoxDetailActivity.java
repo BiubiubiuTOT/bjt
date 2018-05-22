@@ -97,8 +97,10 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
                 iv_response.setVisibility(View.VISIBLE);
                 String[] strings = new String[1];
                 strings[0] = String.valueOf(bean.getEmailId());
-                presenter.markBox(DataUtil.getToken(mContext), strings);
                 tv_receiver_name.setText(userInfo.getNickname());
+
+                if (bean.getEmailStatus() == 0)
+                    presenter.markBox(DataUtil.getToken(mContext), strings);
             }
         }
     }

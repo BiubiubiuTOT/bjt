@@ -1,9 +1,15 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -150,13 +156,13 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
         dakaPresenter = new DakaPresenter(this);
         clockPresenter = new ClockPresenter(this);
         token = DataUtil.getToken(mContext);
-        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
         input = RuleInput.first(RuleInput.class);
-        if (input == null)
+        if (input == null) {
             presenter.getRole(token);
-        else {
+        } else {
             setText();
         }
+        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -288,28 +294,39 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
             float distance = distanceResults.get(0).getDistance();
             Logger.d(distance);
             if (distance > 200) {
-                error("当前位置与设置位置超过200米距离，打卡失败");
+                error("当前位置不在打卡范围内，打卡失败");
             } else {
                 String token = DataUtil.getToken(mContext);
                 if (type == 0) {
-                    InDakaInput inDakaInput = new InDakaInput();
-                    inDakaInput.setInAddress(address);
-                    inDakaInput.setInLatitude(String.valueOf(latitude));
-                    inDakaInput.setInLongitude(String.valueOf(longitude));
-                    inDakaInput.setInType(getInType());
-                    inDakaInput.setInWay("1");
-                    dakaPresenter.inDaka(token, inDakaInput);
+                    String inType = getInType();
+                    if (inType.equals("2")) {
+                        showLateDia();
+                    } else {
+                        InDakaInput inDakaInput = new InDakaInput();
+                        inDakaInput.setInAddress(address);
+                        inDakaInput.setInLatitude(String.valueOf(latitude));
+                        inDakaInput.setInLongitude(String.valueOf(longitude));
+                        inDakaInput.setInType(inType);
+                        inDakaInput.setInWay("1");
+                        dakaPresenter.inDaka(token, inDakaInput);
 
+                    }
                 } else {
-                    OutDakaInput outDakaInput = new OutDakaInput();
-                    outDakaInput.setOutAddress(address);
-                    outDakaInput.setOutLatitude(String.valueOf(latitude));
-                    outDakaInput.setOutLongitude(String.valueOf(longitude));
-                    outDakaInput.setOutType(getOutType());
-                    outDakaInput.setOutWay("1");
-                    if (clockId != 0)
-                        outDakaInput.setClockId(clockId);
-                    dakaPresenter.outDaka(token, outDakaInput);
+                    String outType = getOutType();
+                    if (outType.equals("2")) {
+                        showLeaveDia();
+                    } else {
+                        OutDakaInput outDakaInput = new OutDakaInput();
+                        outDakaInput.setOutAddress(address);
+                        outDakaInput.setOutLatitude(String.valueOf(latitude));
+                        outDakaInput.setOutLongitude(String.valueOf(longitude));
+                        outDakaInput.setOutType(outType);
+                        outDakaInput.setOutWay("1");
+                        if (clockId != 0) {
+                            outDakaInput.setClockId(clockId);
+                        }
+                        dakaPresenter.outDaka(token, outDakaInput);
+                    }
                 }
             }
         }
@@ -390,7 +407,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
                         tv_out_status.setText("正常");
                     } else if (outType == 2) {
                         tv_out_status.setText("早退");
-                        tv_out_remark.setText(bean.getLateRemark());
+                        tv_out_remark.setText(bean.getLeaveRemark());
                     }
                     tv_out_text.setText("打卡时间" + TimeUtils.changeToHM(bean.getOutTime()));
                     ll_daka.setVisibility(View.GONE);
@@ -418,14 +435,133 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
 
     @Override
     public void inDakaSuccess() {
-        error("打卡成功");
+        showDia();
+    }
 
-        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
+    private void showDia() {
+        new com.adorkable.iosdialog.AlertDialog(mContext).builder().setMsg("打卡成功").setCancelable(false).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
+                    }
+                }).show();
     }
 
     @Override
     public void outDakaSuccess() {
-        clockPresenter.getClockList(token, TimeUtils.getBeginOfDay(), System.currentTimeMillis());
+        showDia();
+    }
+
+
+    private void showLeaveDia() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.leave_layout, null);
+        Button btn_cancel = view.findViewById(R.id.btn_cancel);
+        Button btn_submit = view.findViewById(R.id.btn_submit);
+        final EditText et_msg = view.findViewById(R.id.et_msg);
+        TextView tv_time = view.findViewById(R.id.tv_time);
+        TextView tv_address = view.findViewById(R.id.tv_address);
+        tv_time.setText("打卡时间：" + Constants.getTime());
+        tv_address.setText("打卡地点：" + wifiName);
+
+
+        builder.setCancelable(false)
+                .setView(view);
+        final AlertDialog alertDialog = builder.create();
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+            }
+        });
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String string = et_msg.getText().toString();
+
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+
+                OutDakaInput outDakaInput = new OutDakaInput();
+                outDakaInput.setOutAddress(address);
+                outDakaInput.setOutLatitude(String.valueOf(latitude));
+                outDakaInput.setOutLongitude(String.valueOf(longitude));
+                outDakaInput.setOutType("2");
+                outDakaInput.setOutWay("1");
+                outDakaInput.setLeaveRemark(string);
+                if (clockId != 0) {
+                    outDakaInput.setClockId(clockId);
+                }
+                dakaPresenter.outDaka(token, outDakaInput);
+            }
+        });
+
+        alertDialog.show();
+
+        //设置大小
+        WindowManager.LayoutParams layoutParams = alertDialog.getWindow().getAttributes();
+        WindowManager m = getActivity().getWindowManager();
+        Display d = m.getDefaultDisplay();
+        layoutParams.width = (int) (d.getWidth() * 0.8);
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        alertDialog.getWindow().setAttributes(layoutParams);
+    }
+
+    private void showLateDia() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.leave_layout, null);
+        Button btn_cancel = view.findViewById(R.id.btn_cancel);
+        Button btn_submit = view.findViewById(R.id.btn_submit);
+        final EditText et_msg = view.findViewById(R.id.et_msg);
+        TextView tv_title = view.findViewById(R.id.tv_title);
+        TextView tv_time = view.findViewById(R.id.tv_time);
+        TextView tv_address = view.findViewById(R.id.tv_address);
+        tv_time.setText("打卡时间：" + Constants.getTime());
+        tv_address.setText("打卡地点：" + wifiName);
+        tv_title.setText("确定要打迟到卡吗？");
+
+
+        builder.setCancelable(false)
+                .setView(view);
+        final AlertDialog alertDialog = builder.create();
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+            }
+        });
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String string = et_msg.getText().toString();
+
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+
+                InDakaInput inDakaInput = new InDakaInput();
+                inDakaInput.setInAddress(address);
+                inDakaInput.setInLatitude(String.valueOf(latitude));
+                inDakaInput.setInLongitude(String.valueOf(longitude));
+                inDakaInput.setInType("2");
+                inDakaInput.setLateRemark(string);
+                inDakaInput.setInWay("1");
+                dakaPresenter.inDaka(token, inDakaInput);
+            }
+        });
+
+        alertDialog.show();
+        //设置大小
+        WindowManager.LayoutParams layoutParams = alertDialog.getWindow().getAttributes();
+        WindowManager m = getActivity().getWindowManager();
+        Display d = m.getDefaultDisplay();
+        layoutParams.width = (int) (d.getWidth() * 0.8);
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        alertDialog.getWindow().setAttributes(layoutParams);
     }
 }
 

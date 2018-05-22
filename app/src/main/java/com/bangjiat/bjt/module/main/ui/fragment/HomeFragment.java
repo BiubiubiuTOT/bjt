@@ -11,6 +11,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
@@ -47,7 +48,6 @@ import cn.bertsir.zbar.QrConfig;
 import cn.bertsir.zbar.QrManager;
 import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.bingoogolapple.bgabanner.BGALocalImageSize;
-import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 
@@ -93,7 +93,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         });
 
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new BGANormalRefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         mRefreshLayout.endRefreshing();
         if (bean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = bean.getSysNoticeList();
-            if (sysNoticeList != null) {
+            if (sysNoticeList != null && sysNoticeList.size() > 0) {
                 sysNoticeListBean = sysNoticeList.get(0);
                 tv_title.setText(sysNoticeListBean.getName());
                 tv_content.setText(sysNoticeListBean.getContent());
@@ -216,8 +216,23 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
         Constants.deleteDb();
         bgaRefreshLayout.beginRefreshing();
-        presenter.getAllNotice(token);
-        userPresenter.getUserInfo(token);
+        getData();
+    }
+
+    private void getData() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    sleep(1500);
+                    presenter.getAllNotice(token);
+                    userPresenter.getUserInfo(token);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override

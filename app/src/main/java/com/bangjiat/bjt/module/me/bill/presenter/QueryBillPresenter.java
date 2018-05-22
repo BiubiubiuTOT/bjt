@@ -20,10 +20,11 @@ public class QueryBillPresenter implements QueryBillContract.Presenter {
     }
 
     @Override
-    public void getPageBill(String token, int page, int size) {
+    public void getPageBill(String token, int page, int size, long start, long end) {
         view.showDialog();
-        model.getPageBill(token, page, size);
+        model.getPageBill(token, page, size, start, end);
     }
+
 
     @Override
     public void getPageBillSuccess(PageBillBean billBean) {

@@ -15,6 +15,7 @@ import com.bangjiat.bjt.module.secretary.communication.contract.DealBoxContract;
 import com.bangjiat.bjt.module.secretary.communication.presenter.DealBoxPresenter;
 import com.bangjiat.bjt.module.secretary.contact.view.ContactListActivity;
 import com.dou361.dialogui.DialogUIUtils;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -112,7 +113,7 @@ public class MainActivity extends BaseToolBarActivity implements DealBoxContract
 
     @Override
     public void fail(String err) {
-
+        Logger.e(err);
     }
 
     @Override

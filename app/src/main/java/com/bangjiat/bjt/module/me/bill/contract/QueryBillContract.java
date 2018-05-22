@@ -10,7 +10,7 @@ import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
 
 public interface QueryBillContract {
     interface Model {
-        void getPageBill(String token, int page, int size);
+        void getPageBill(String token, int page, int size, long begin, long end);
     }
 
     interface View {
@@ -24,7 +24,7 @@ public interface QueryBillContract {
     }
 
     interface Presenter {
-        void getPageBill(String token, int page, int size);
+        void getPageBill(String token, int page, int size, long begin, long end);
 
         void getPageBillSuccess(PageBillBean billBean);
 

@@ -143,7 +143,7 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
     public void getCompanyUserSuccess(WorkersResult result) {
         if (result != null) {
             List<WorkersResult.RecordsBean> records = result.getRecords();
-            if (records != null) {
+            if (records != null&&records.size()>0) {
                 tv_company_name.setText(records.get(0).getCompanyName());
                 beans = records;
                 if (adapter != null) {

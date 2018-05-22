@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.module.me.bill.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class PageBillBean {
         this.records = records;
     }
 
-    public static class RecordsBean {
+    public static class RecordsBean implements Serializable{
         /**
          * billId : 0 账单编号
          * ctime : 0 创建时间
@@ -73,20 +74,25 @@ public class PageBillBean {
          * payType : 0 支付方式（0支付宝、1微信、3银行卡）
          * remark : string 备注
          * status : 0 状态（0逾期、1已缴纳、2未缴纳等）
-         * type : 0 账单类型（1租金、2停车、3物业费等）
+         * type : 0 账单类型（1房租、2物业费）
          * userId : string
          */
 
         private int billId;
-        private int ctime;
-        private int cutOffTime;
-        private int money;
-        private int payTime;
-        private int payType;
+        private long ctime;
+        private long cutOffTime;
+        private String money;
+        private long payTime;
+        private int payWay;
         private String remark;
         private int status;
         private int type;
         private String userId;
+        private String username;
+        private String houseNumber;//门牌号
+        private String companyName;//公司名称
+        private int companyId;//公司编号
+        private int buildId;//楼宇编号
 
         public int getBillId() {
             return billId;
@@ -96,44 +102,44 @@ public class PageBillBean {
             this.billId = billId;
         }
 
-        public int getCtime() {
+        public long getCtime() {
             return ctime;
         }
 
-        public void setCtime(int ctime) {
+        public void setCtime(long ctime) {
             this.ctime = ctime;
         }
 
-        public int getCutOffTime() {
+        public long getCutOffTime() {
             return cutOffTime;
         }
 
-        public void setCutOffTime(int cutOffTime) {
+        public void setCutOffTime(long cutOffTime) {
             this.cutOffTime = cutOffTime;
         }
 
-        public int getMoney() {
+        public String getMoney() {
             return money;
         }
 
-        public void setMoney(int money) {
+        public void setMoney(String money) {
             this.money = money;
         }
 
-        public int getPayTime() {
+        public long getPayTime() {
             return payTime;
         }
 
-        public void setPayTime(int payTime) {
+        public void setPayTime(long payTime) {
             this.payTime = payTime;
         }
 
-        public int getPayType() {
-            return payType;
+        public int getPayWay() {
+            return payWay;
         }
 
-        public void setPayType(int payType) {
-            this.payType = payType;
+        public void setPayWay(int payWay) {
+            this.payWay = payWay;
         }
 
         public String getRemark() {
@@ -166,6 +172,67 @@ public class PageBillBean {
 
         public void setUserId(String userId) {
             this.userId = userId;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getHouseNumber() {
+            return houseNumber;
+        }
+
+        public void setHouseNumber(String houseNumber) {
+            this.houseNumber = houseNumber;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public int getCompanyId() {
+            return companyId;
+        }
+
+        public void setCompanyId(int companyId) {
+            this.companyId = companyId;
+        }
+
+        public int getBuildId() {
+            return buildId;
+        }
+
+        public void setBuildId(int buildId) {
+            this.buildId = buildId;
+        }
+
+        @Override
+        public String toString() {
+            return "RecordsBean{" +
+                    "billId=" + billId +
+                    ", ctime=" + ctime +
+                    ", cutOffTime=" + cutOffTime +
+                    ", money='" + money + '\'' +
+                    ", payTime=" + payTime +
+                    ", payWay=" + payWay +
+                    ", remark='" + remark + '\'' +
+                    ", status=" + status +
+                    ", type=" + type +
+                    ", userId='" + userId + '\'' +
+                    ", username='" + username + '\'' +
+                    ", houseNumber='" + houseNumber + '\'' +
+                    ", companyName='" + companyName + '\'' +
+                    ", companyId=" + companyId +
+                    ", buildId=" + buildId +
+                    '}';
         }
     }
 }

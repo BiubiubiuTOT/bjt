@@ -12,6 +12,15 @@ public class InDakaInput {
     private String inLatitude;
     private String inType;//上班打卡类型：1、正常；2、迟到；3、外勤打卡
     private String inWay;//上班打卡方式：1、WiFi、2、流量
+    private String lateRemark;
+
+    public String getLateRemark() {
+        return lateRemark;
+    }
+
+    public void setLateRemark(String lateRemark) {
+        this.lateRemark = lateRemark;
+    }
 
     public String getInAddress() {
         return inAddress;

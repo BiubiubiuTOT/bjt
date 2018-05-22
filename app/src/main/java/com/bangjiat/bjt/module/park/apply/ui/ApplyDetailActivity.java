@@ -66,7 +66,7 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
             if (details != null && details.size() > 0) {
                 setAdapter();
             }
-            if (bean.getStatus() == 1) {
+            if (Constants.isParkAdmin() && bean.getStatus() == 1) {
                 rl_btn.setVisibility(View.VISIBLE);
             }
         }

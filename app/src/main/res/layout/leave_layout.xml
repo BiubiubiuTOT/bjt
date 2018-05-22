@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lLayout_bg"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,23 +16,50 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="审批意见"
+            android:text="确定要打早退卡吗？"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@color/mine_color"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打卡时间：17:45"
+                android:textColor="@color/dialog_title"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="办公Wi-Fi D-Link_DIR-605L"
+                android:textColor="@color/dialog_title"
+                android:textSize="15sp" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/et_msg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
             android:background="@null"
-            android:hint="请填写审批意见"
+            android:gravity="start"
+            android:hint="请填写打卡备注（选填）"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -54,7 +80,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/alertdialog_left_selector"
                 android:gravity="center"
-                android:text="取消"
+                android:text="不打卡"
                 android:textColor="@color/actionsheet_blue"
                 android:textSize="16sp" />
 

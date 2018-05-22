@@ -11,6 +11,7 @@
     <include layout="@layout/toolbar" />
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -39,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:text="建设银行（0528）"
+            android:hint="请选择缴费方式"
             android:textColor="@color/mine_bg"
             android:textSize="14sp" />
     </LinearLayout>
@@ -59,10 +60,10 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/tv_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:text="¥ 268.78"
             android:textColor="@color/dialog_title"
             android:textSize="15sp" />
     </LinearLayout>

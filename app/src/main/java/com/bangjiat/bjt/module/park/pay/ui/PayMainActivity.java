@@ -134,4 +134,9 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
         Logger.e(err);
         Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void payBillSuccess(String string) {
+
+    }
 }

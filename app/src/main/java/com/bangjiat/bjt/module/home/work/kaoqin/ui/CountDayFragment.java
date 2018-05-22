@@ -1,8 +1,15 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,10 +49,12 @@ public class CountDayFragment extends BaseFragment implements GetUserInfoContrac
     private int dakaCount;
     private DakaDetailAdapter mAdapter;
     private Dialog dialog;
+    private AlertDialog alertDialog;
 
 
     @Override
     protected void initView() {
+        initDia();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         presenter = new GetUserInfoPresenter(this);
@@ -111,6 +120,53 @@ public class CountDayFragment extends BaseFragment implements GetUserInfoContrac
     private void setAdapter(List<DakaHistoryResult> results) {
         mAdapter = new DakaDetailAdapter(results, mContext);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new DakaDetailAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onBtnClick(View view, int position) {
+                alertDialog.show();
+                //设置大小
+                WindowManager.LayoutParams layoutParams = alertDialog.getWindow().getAttributes();
+                WindowManager m = getActivity().getWindowManager();
+                Display d = m.getDefaultDisplay();
+                layoutParams.width = (int) (d.getWidth() * 0.8);
+                layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                alertDialog.getWindow().setAttributes(layoutParams);
+            }
+        });
+    }
+
+    private void initDia() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.leave_layout, null);
+        Button btn_cancel = view.findViewById(R.id.btn_cancel);
+        Button btn_submit = view.findViewById(R.id.btn_submit);
+        final EditText et_msg = view.findViewById(R.id.et_msg);
+
+
+        builder.setCancelable(false)
+                .setView(view);
+        alertDialog = builder.create();
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+            }
+        });
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                error("修改成功");
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+            }
+        });
     }
 
     @Override
