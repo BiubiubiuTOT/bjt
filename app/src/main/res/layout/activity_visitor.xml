@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".module.home.visitor.ui.VisitorActivity">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar_1" />
 
     <RadioGroup
         android:id="@+id/rg"

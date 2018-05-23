@@ -15,8 +15,8 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.bill.beans.PageBillBean;
 import com.bangjiat.bjt.module.me.bill.beans.PayBillBean;
+import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
-import com.bangjiat.bjt.module.park.pay.beans.PayInput;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
 import com.bangjiat.bjt.module.park.pay.contract.PayContract;
 import com.bangjiat.bjt.module.park.pay.presenter.PayPresenter;
@@ -153,9 +153,7 @@ public class PayBillActivity extends BaseColorToolBarActivity implements PayCont
 
     @Override
     public void paySuccess(String str) {
-        if (type == 1) {
-            alipay(str);
-        } else wxpay(parseJson(str));
+
     }
 
     @Override
@@ -178,8 +176,14 @@ public class PayBillActivity extends BaseColorToolBarActivity implements PayCont
     public void payBillSuccess(String str) {
         Logger.d(str);
 
-        PayInput input = new PayInput(str, bean.getMoney());
-        presenter.pay(DataUtil.getToken(mContext), input);
+        if (type == 1) {
+            alipay(str);
+        } else wxpay(parseJson(str));
+    }
+
+    @Override
+    public void getParkPayHistorySuccess(ParkPayHistory history) {
+
     }
 
     private WXPayInfoImpli parseJson(String str) {

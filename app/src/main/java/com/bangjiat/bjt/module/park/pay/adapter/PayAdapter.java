@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.park.pay.beans.PayListResult;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
         viewHolder.tv_number.setText("车牌号：" + historyBean.getPlateNumber());
         viewHolder.tv_parking.setText("停车场：" + historyBean.getSpaceName());
         viewHolder.tv_time.setText("到期日：" + TimeUtils.changeToYMD(historyBean.getEndTime()));
+        Glide.with(mContext).load(historyBean.getResource()).centerCrop().error(R.mipmap.my_head).into(viewHolder.iv_car);
 
         viewHolder.itemView.setTag(position);
     }

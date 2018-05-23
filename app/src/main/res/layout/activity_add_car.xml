@@ -41,7 +41,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_id_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_licenceNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_driveNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_plateNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -240,7 +240,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_brand"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -271,7 +271,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_model"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -302,7 +302,7 @@
                     android:textColor="@color/dialog_title"
                     android:textSize="15sp" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_color"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

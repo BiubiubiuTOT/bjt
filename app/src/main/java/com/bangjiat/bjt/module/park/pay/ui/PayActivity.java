@@ -15,6 +15,7 @@ import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
@@ -486,6 +487,11 @@ public class PayActivity extends BaseWhiteToolBarActivity implements PayContract
 
     @Override
     public void payBillSuccess(String string) {
+
+    }
+
+    @Override
+    public void getParkPayHistorySuccess(ParkPayHistory history) {
 
     }
 }

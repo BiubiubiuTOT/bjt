@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
@@ -62,9 +63,6 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     }
 
     private void initData() {
-        if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) {//公司管理员或者工作台管理员可以审批请假信息
-            rl_btn.setVisibility(View.VISIBLE);
-        }
         presenter = new LeavePresenter(this);
         recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
         recycler_view.setHasFixedSize(true);
@@ -79,9 +77,21 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
             String approver = bean.getApprover();
             List<ApproverBean> list = new Gson().fromJson(approver, new TypeToken<List<ApproverBean>>() {
             }.getType());
+            list.add(0, new ApproverBean(bean.getBeginTime(), 4, bean.getApplyer()));
             HistoryDetailAdapter mAdapter = new HistoryDetailAdapter(list, mContext);
             recycler_view.setAdapter(mAdapter);
             Logger.d(list.toString());
+
+            if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) {//公司管理员或者工作台管理员可以审批请假信息
+                ApproverBean bean = list.get(list.size() - 1);
+                int status = bean.getStatus();
+                if (status != 1 && status != 2) {
+                    if (bean.getUserId().equals(DataUtil.getUserId(mContext))) {
+                        rl_btn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
         }
     }
 
@@ -161,7 +171,14 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
 
     @Override
     public void dealLeaveSuccess() {
-        Constants.showSuccessExitDialog(this, "审批成功");
+        new AlertDialog(mContext).builder().setMsg("处理成功").setCancelable(false).
+                setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).show();
     }
 
     @Override

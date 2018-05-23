@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.KeyboardUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 
@@ -30,7 +30,7 @@ public class EditDataActivity extends BaseToolBarActivity {
     @BindView(R.id.iv_woman)
     ImageView iv_woman;
     @BindView(R.id.et_input)
-    EditText et_input;
+    ClearEditText et_input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

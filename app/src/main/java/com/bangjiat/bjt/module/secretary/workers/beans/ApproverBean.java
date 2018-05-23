@@ -18,6 +18,12 @@ public class ApproverBean {
     private String userRealname;
     private String username;
 
+    public ApproverBean(long lastTime, int status, String userRealname) {
+        this.lastTime = lastTime;
+        this.status = status;
+        this.userRealname = userRealname;
+    }
+
     public long getCtime() {
         return ctime;
     }

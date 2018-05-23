@@ -23,8 +23,7 @@ import java.util.List;
  * Created by yunzhao.liu on 2017/11/11
  */
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> implements View.OnClickListener {
-
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
     private Context context;
     private List<ContactBean> mContactList;
     private int type;
@@ -61,7 +60,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_contacts_layout, parent, false);
-        view.setOnClickListener(this);
         return new MyViewHolder(view);
     }
 
@@ -72,6 +70,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         ContactBean contactInfo = mContactList.get(position);
         holder.name.setText(contactInfo.getSlaveNickname());
         holder.phone.setText(contactInfo.getSlaveUsername());
+        holder.checkbox.setChecked(map.get(position));
 
         holder.checkbox.setOnClickListener(new View.OnClickListener() {
 
@@ -81,6 +80,22 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
                 notifyDataSetChanged();
 
                 onCheckListener.onCheckChanged();
+            }
+        });
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int adapterPosition = holder.getAdapterPosition();
+                mOnItemClickListener.onItemClick(view, adapterPosition);
+                if (type == 1) {
+                    boolean checked = !map.get(adapterPosition);
+                    holder.checkbox.setChecked(checked);
+
+                    map.put(adapterPosition, checked);
+                    notifyDataSetChanged();
+
+                    onCheckListener.onCheckChanged();
+                }
             }
         });
 
@@ -123,11 +138,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         notifyDataSetChanged();
     }
 
-    @Override
-    public void onClick(View view) {
-        if (mOnItemClickListener != null) {
-            mOnItemClickListener.onItemClick(view, (int) view.getTag());
-        }
+    public void setCheck(int position) {
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

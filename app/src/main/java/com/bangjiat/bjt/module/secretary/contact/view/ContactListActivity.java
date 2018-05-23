@@ -12,13 +12,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
@@ -48,7 +48,7 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
     private ContactAdapter mContactAdapter;
 
     @BindView(R.id.et_search)
-    EditText mSearchBox;
+    ClearEditText mSearchBox;
     @BindView(R.id.iv_search_clear)
     ImageView mClearBtn;
     @BindView(R.id.recycler_view)

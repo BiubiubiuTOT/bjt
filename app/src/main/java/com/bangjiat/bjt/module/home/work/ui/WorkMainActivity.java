@@ -2,10 +2,12 @@ package com.bangjiat.bjt.module.home.work.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.work.kaoqin.ui.KaoqinMainActivity;
 import com.bangjiat.bjt.module.home.work.leave.ui.LeaveMainActivity;
 import com.bangjiat.bjt.module.home.work.permission.ui.PermissionMainActivity;
@@ -19,6 +21,8 @@ import butterknife.OnClick;
 public class WorkMainActivity extends BaseWhiteToolBarActivity {
     @BindView(R.id.tv_company_name)
     TextView tv_company_name;
+    @BindView(R.id.card_permission)
+    CardView card_permission;
 
     private static final int DELETE = 2;
 
@@ -27,6 +31,9 @@ public class WorkMainActivity extends BaseWhiteToolBarActivity {
         super.onCreate(savedInstanceState);
         CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
         tv_company_name.setText(first.getCompanyName());
+
+        if (Constants.isCompanyAdmin())
+            card_permission.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.tv_workers)

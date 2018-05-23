@@ -49,6 +49,7 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
+
         <EditText
             android:id="@+id/et_msg"
             android:layout_width="match_parent"

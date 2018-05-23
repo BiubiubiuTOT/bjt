@@ -6,10 +6,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.orhanobut.logger.Logger;
 
@@ -177,7 +177,7 @@ public class AddWorkersAdapter extends RecyclerView.Adapter<AddWorkersAdapter.Vi
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        EditText et_name, et_phone, et_duty, et_department, et_card;
+        ClearEditText et_name, et_phone, et_duty, et_department, et_card;
         RelativeLayout rl_delete;
 
         public ViewHolder(View view) {

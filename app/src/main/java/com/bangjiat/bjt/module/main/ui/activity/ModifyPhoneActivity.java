@@ -3,11 +3,11 @@ package com.bangjiat.bjt.module.main.ui.activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.module.main.account.contract.RecoveredPasswordContract;
 import com.bangjiat.bjt.module.main.account.presenter.RecoveredPasswordPresenter;
 import com.dou361.dialogui.DialogUIUtils;
@@ -21,9 +21,9 @@ import butterknife.OnClick;
  */
 public class ModifyPhoneActivity extends BaseActivity implements RecoveredPasswordContract.View {
     @BindView(R.id.et_new_password)
-    EditText et_password;
+    ClearEditText et_password;
     @BindView(R.id.et_new_password_2)
-    EditText et_new_password_2;
+    ClearEditText et_new_password_2;
     private String phone;
     private Dialog dialog;
     private RecoveredPasswordContract.Presenter presenter;

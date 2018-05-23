@@ -69,8 +69,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="13dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -81,10 +84,10 @@
                 android:textColor="@color/dialog_title"
                 android:textSize="14sp" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="（10个字以内）"
                 android:maxLength="10"
@@ -114,7 +117,7 @@
                 android:textColor="@color/dialog_title"
                 android:textSize="14sp" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

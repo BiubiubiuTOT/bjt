@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
@@ -46,21 +46,21 @@ public class AddCarActivity extends BaseWhiteToolBarActivity implements UploadIm
     @BindView(R.id.ll_add_photo)
     LinearLayout ll_add_photo;
     @BindView(R.id.et_name)
-    EditText et_name;
+    ClearEditText et_name;
     @BindView(R.id.et_id_number)
-    EditText et_id_number;
+    ClearEditText et_id_number;
     @BindView(R.id.et_driveNumber)
-    EditText et_driveNumber;
+    ClearEditText et_driveNumber;
     @BindView(R.id.et_plateNumber)
-    EditText et_plateNumber;
+    ClearEditText et_plateNumber;
     @BindView(R.id.et_brand)
-    EditText et_brand;
+    ClearEditText et_brand;
     @BindView(R.id.et_color)
-    EditText et_color;
+    ClearEditText et_color;
     @BindView(R.id.et_model)
-    EditText et_model;
+    ClearEditText et_model;
     @BindView(R.id.et_licenceNumber)
-    EditText er_licenceNumber;
+    ClearEditText er_licenceNumber;
 
     private List<WcbBean> mList1;
     private UploadImageContract.Presenter uploadImagePresenter;

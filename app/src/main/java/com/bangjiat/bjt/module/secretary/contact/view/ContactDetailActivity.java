@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
@@ -48,13 +48,11 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     @BindView(R.id.ll_phone)
     LinearLayout ll_phone;
     @BindView(R.id.et_remark)
-    EditText et_remark;
+    ClearEditText et_remark;
     @BindView(R.id.view_phone)
     View view_phone;
     @BindView(R.id.view_remark)
     View view_remark;
-    @BindView(R.id.iv_clear)
-    ImageView iv_clear;
     @BindView(R.id.tv_send)
     TextView tv_send;
     @BindView(R.id.tv_delete)
@@ -99,11 +97,6 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
         showDeleteDialog();
-    }
-
-    @OnClick(R.id.iv_clear)
-    public void clickClear(View view) {
-        et_remark.setText("");
     }
 
     private void showDeleteDialog() {
@@ -161,7 +154,6 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
 
         view_phone.setVisibility(View.GONE);
         view_remark.setVisibility(View.VISIBLE);
-        iv_clear.setVisibility(View.GONE);
         tv_name.setTextColor(getResources().getColor(R.color.dialog_title));
         et_remark.setTextColor(getResources().getColor(R.color.dialog_title));
         tv_phone.setTextColor(getResources().getColor(R.color.dialog_title));
@@ -181,7 +173,6 @@ public class ContactDetailActivity extends BaseToolBarActivity implements Update
 
         view_phone.setVisibility(View.VISIBLE);
         view_remark.setVisibility(View.GONE);
-        iv_clear.setVisibility(View.VISIBLE);
         tv_name.setTextColor(getResources().getColor(R.color.personal_message));
         tv_phone.setTextColor(getResources().getColor(R.color.personal_message));
         et_remark.setEnabled(true);

@@ -188,6 +188,7 @@
         <activity android:name=".module.home.work.permission.ui.AdminSettingActivity" />
         <activity android:name=".module.home.work.permission.ui.AddAdminActivity" />
         <activity android:name=".module.home.work.permission.ui.DeleteAdminActivity" />
+        <activity android:name=".module.home.visitor.ui.InviteActivity"></activity>
     </application>
 
 </manifest>

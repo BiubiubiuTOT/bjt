@@ -35,7 +35,8 @@
                 android:layout_margin="10dp"
                 android:src="@mipmap/search" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
+                android:layout_marginEnd="10dp"
                 android:id="@+id/et_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

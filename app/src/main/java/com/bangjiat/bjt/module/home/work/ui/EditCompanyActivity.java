@@ -4,12 +4,11 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
@@ -29,13 +28,9 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
     @BindView(R.id.tv_company_name)
     TextView tv_company;
     @BindView(R.id.et_industry)
-    EditText et_industry;
+    ClearEditText et_industry;
     @BindView(R.id.et_address)
-    EditText et_address;
-    @BindView(R.id.iv_industry)
-    ImageView iv_industry;
-    @BindView(R.id.iv_address)
-    ImageView iv_address;
+    ClearEditText et_address;
 
     private Dialog dialog;
     private CompanyContract.Presenter presenter;
@@ -54,8 +49,6 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
 
     private void initData() {
         if (!Constants.isCompanyAdmin()) {//公司管理员才能修改公司信息
-            iv_address.setVisibility(View.GONE);
-            iv_industry.setVisibility(View.GONE);
             et_address.setEnabled(false);
             et_industry.setEnabled(false);
             tv_done.setVisibility(View.GONE);
@@ -76,23 +69,13 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
         showDia();
     }
 
-    @OnClick(R.id.iv_industry)
-    public void clickIndustry(View view) {
-        et_industry.setText("");
-    }
-
-    @OnClick(R.id.iv_address)
-    public void clickAddress(View view) {
-        et_address.setText("");
-    }
-
     private void showDia() {
         new AlertDialog(mContext).builder().setMsg("确认退出公司吗?").
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (Constants.isCompanyAdmin()) {//公司管理员不能退出公司
-                            error("请先移交管理员权限");
+                            error("请联系物业管理员删除公司");
                         } else
                             presenter.exitCompany(token);
                     }

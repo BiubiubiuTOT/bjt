@@ -40,6 +40,15 @@ public class PayListResult implements Serializable {
     private int status;
     private int type;
     private String userId;
+    private String resource;
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
 
     public int getApplyId() {
         return applyId;

@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.DialogPopup;
 import com.bangjiat.bjt.module.main.account.contract.RegisterContract;
@@ -34,11 +34,11 @@ import butterknife.OnClick;
  */
 public class RegisterActivity extends BaseActivity implements RegisterContract.View {
     @BindView(R.id.et_code)
-    EditText et_code;
+    ClearEditText et_code;
     @BindView(R.id.et_password)
-    EditText et_password;
+    ClearEditText et_password;
     @BindView(R.id.et_phone)
-    EditText et_phone;
+    ClearEditText et_phone;
     @BindView(R.id.tv_getCode)
     TextView tv_getCode;
 
@@ -101,8 +101,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     public void showError(String err) {
         Logger.e(err);
 
-        DialogPopup popup = new DialogPopup(this, err, R.mipmap.popup_error);
+        DialogPopup popup = new DialogPopup(this, "网络错误", R.mipmap.popup_error);
         popup.setBlurBackgroundEnable(true);
+        popup.setShowAnimation(null);
         popup.showPopupWindow();
     }
 

@@ -38,7 +38,6 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/company_title_default"
                     android:textColor="@color/dialog_title"
                     android:textSize="@dimen/dialog_message_text_size" />
             </LinearLayout>
@@ -60,7 +59,6 @@
                     android:id="@+id/tv_trade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/company_trade_default"
                     android:textColor="@color/dialog_title"
                     android:textSize="@dimen/dialog_message_text_size" />
             </LinearLayout>
@@ -89,7 +87,6 @@
                     android:id="@+id/tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/company_address_default"
                     android:textColor="@color/dialog_title"
                     android:textSize="@dimen/dialog_message_text_size" />
             </LinearLayout>

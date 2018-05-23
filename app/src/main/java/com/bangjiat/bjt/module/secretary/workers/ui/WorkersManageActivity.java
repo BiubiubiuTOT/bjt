@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
@@ -49,8 +48,6 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     RecyclerView recyclerView;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
-    @BindView(R.id.tv_company_name)
-    TextView tv_company_name;
     @BindView(R.id.card_delete)
     CardView card_delete;
 
@@ -236,8 +233,7 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         for (Map.Entry<Integer, Boolean> entry : entries) {
             if (entry.getValue()) {
                 String userId = beans.get(entry.getKey()).getUserId();
-                if (!userInfo.getUserId().equals(userId))
-                    select.add(userId);
+                select.add(userId);
             }
         }
         return select;
@@ -246,14 +242,14 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
 
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
-        if (getSelectCount() != 0)
-            showDeleteDialog();
+        if (getSelectCount() != 0) {
+            if (getSelectItem().size() == 0) {
+                error("删除失败,请先进行权限转交");
+            } else
+                showDeleteDialog();
+        }
     }
 
-    @OnClick(R.id.card_company)
-    public void clickCompany(View view) {
-
-    }
 
     private void showDeleteDialog() {
         new AlertDialog(this).builder()
@@ -306,7 +302,7 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
 
     @Override
     public void error(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext,err);
     }
 
     @Override
@@ -316,8 +312,6 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
             if (records != null) {
                 beans = records;
                 setAdapter();
-                if (beans.size() > 0)
-                    tv_company_name.setText(beans.get(0).getCompanyName());
             }
         }
     }

@@ -1,14 +1,17 @@
 package com.bangjiat.bjt.module.home.company.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.CompanyContract;
@@ -18,17 +21,18 @@ import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
 import com.bangjiat.bjt.module.me.personaldata.presenter.GetUserInfoPresenter;
+import com.bangjiat.bjt.module.me.personaldata.ui.PersonalDataActivity;
 import com.dou361.dialogui.DialogUIUtils;
 
 import butterknife.BindView;
 
 public class AddCompanyActivity extends BaseToolBarActivity implements CompanyContract.View, GetUserInfoContract.View {
     @BindView(R.id.et_name)
-    EditText et_name;
+    ClearEditText et_name;
     @BindView(R.id.et_address)
-    EditText et_address;
+    ClearEditText et_address;
     @BindView(R.id.et_trade)
-    EditText et_trade;
+    ClearEditText et_trade;
     private Dialog dialog;
     private CompanyContract.Presenter presenter;
     private GetUserInfoContract.Presenter presenter1;
@@ -88,7 +92,21 @@ public class AddCompanyActivity extends BaseToolBarActivity implements CompanyCo
 
     @Override
     public void addCompanyFail(String err) {
-        Toast.makeText(mContext, "新建公司失败：" + err, Toast.LENGTH_SHORT).show();
+        if (err.equals("用户姓名为空")) {
+            showDia();
+        } else {
+            Constants.showErrorDialog(mContext, err);
+        }
+    }
+
+    private void showDia() {
+        new AlertDialog(mContext).builder().setMsg("请先完善个人资料")
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(mContext, PersonalDataActivity.class));
+                    }
+                }).show();
     }
 
     @Override

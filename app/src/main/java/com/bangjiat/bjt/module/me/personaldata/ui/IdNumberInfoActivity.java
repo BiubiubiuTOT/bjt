@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.ValidationIdCard;
@@ -24,9 +24,9 @@ import butterknife.BindView;
 
 public class IdNumberInfoActivity extends BaseToolBarActivity implements UpdateUserInfoContract.View {
     @BindView(R.id.et_name)
-    EditText et_name;
+    ClearEditText et_name;
     @BindView(R.id.et_id_number)
-    EditText et_id_number;
+    ClearEditText et_id_number;
 
     private int type;
     private TextView tv_done;

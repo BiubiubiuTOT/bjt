@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -52,8 +51,6 @@ public class LocationActivity extends BaseToolBarActivity implements GeocodeSear
     MapView mMapView;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.et_search)
-    EditText et_search;
 
     private AMap aMap;
     private static final int SEARCH = 1;

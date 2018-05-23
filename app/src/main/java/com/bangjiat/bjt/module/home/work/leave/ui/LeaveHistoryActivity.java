@@ -23,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 
 public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements LeaveContract.View {
+    private static final int DEAL_SUCCESS = 2;
     private Dialog dialog;
     private LeaveContract.Presenter presenter;
     @BindView(R.id.recycler_view)
@@ -43,6 +44,10 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         token = DataUtil.getToken(mContext);
+        getData();
+    }
+
+    private void getData() {
         if (Constants.isCompanyAdmin() || Constants.isWorkAdmin()) {//公司管理员或者工作台管理员可以查看公司请假信息
             presenter.getCompanyLeave(token, 2, 1, 10);
         } else {
@@ -59,9 +64,17 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
                 CompanyLeaveResult.RecordsBean recordsBean = list.get(position);
                 Intent intent = new Intent(mContext, LeaveDetailActivity.class);
                 intent.putExtra("data", recordsBean);
-                startActivity(intent);
+                startActivityForResult(intent, DEAL_SUCCESS);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == DEAL_SUCCESS) {
+            getData();
+        }
     }
 
     @Override

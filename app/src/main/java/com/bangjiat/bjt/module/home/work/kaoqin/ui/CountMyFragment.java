@@ -102,6 +102,8 @@ public class CountMyFragment extends BaseFragment implements ClockContract.View 
     public void getUserClockTotalSuccess(DakaTotalResult result) {
         if (result != null) {
             RuleInput companyClockRule = result.getCompanyClockRule();
+            if (companyClockRule == null) return;
+
             String workDay = companyClockRule.getWorkDay();
             String[] workDays = workDay.split(",");
             List<String> list = Arrays.asList(workDays);

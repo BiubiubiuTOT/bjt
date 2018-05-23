@@ -19,15 +19,20 @@ import java.util.List;
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
 public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHolder> implements View.OnClickListener {
-    private List<VisitorBean> lists;
+    private List<VisitorBean.RecordsBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
-    public VisitorAdapter(List<VisitorBean> lists) {
+    public VisitorAdapter(List<VisitorBean.RecordsBean> lists) {
         this.lists = lists;
+    }
+
+    public void setLists(List<VisitorBean.RecordsBean> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -39,16 +44,24 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        final VisitorBean visitorBean = lists.get(position);
-        viewHolder.tv_name.setText(visitorBean.getName());
-        viewHolder.tv_reason.setText(visitorBean.getReason());
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        final VisitorBean.RecordsBean visitorBean = lists.get(position);
+        viewHolder.tv_name.setText(visitorBean.getVisitorName());
+        viewHolder.tv_reason.setText(visitorBean.getVisitMatter());
+        int status = visitorBean.getStatus();
 
-        if (visitorBean.isRead()) {
+        String des = "";
+        if (status != 1) {
             viewHolder.tv_message.setVisibility(View.VISIBLE);
-            viewHolder.tv_message.setText(visitorBean.getMessage());
             viewHolder.btn_refuse.setVisibility(View.GONE);
             viewHolder.btn_agree.setVisibility(View.GONE);
+            if (status == 2) {
+                des = "已通过";
+            } else if (status == 3) {
+                des = "未通过";
+            }
+            viewHolder.tv_message.setText(des);
+
         } else {
             viewHolder.tv_message.setVisibility(View.GONE);
             viewHolder.btn_refuse.setVisibility(View.VISIBLE);
@@ -58,19 +71,21 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
         viewHolder.btn_refuse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                visitorBean.setMessage("已拒绝");
-                visitorBean.setRead(true);
-                notifyDataSetChanged();
+                mOnItemClickListener.onRefuseClick(view, position);
             }
         });
         viewHolder.btn_agree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                visitorBean.setMessage("已同意");
-                visitorBean.setRead(true);
-                notifyDataSetChanged();
+                mOnItemClickListener.onAgreeClick(view, position);
             }
         });
+
+        if (visitorBean.getType() == 2) {
+            viewHolder.btn_refuse.setVisibility(View.GONE);
+            viewHolder.btn_agree.setVisibility(View.GONE);
+            viewHolder.tv_message.setVisibility(View.GONE);
+        }
 
         viewHolder.itemView.setTag(position);
     }
@@ -106,5 +121,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
+
+        void onAgreeClick(View view, int position);
+
+        void onRefuseClick(View view, int position);
     }
 }

@@ -10,12 +10,12 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
@@ -60,7 +60,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     @BindView(R.id.tv_edit)
     TextView tv_edit;
     @BindView(R.id.et_search)
-    EditText et_search;
+    ClearEditText et_search;
 
     private TextView tv_select;
     private TextView tv_done;

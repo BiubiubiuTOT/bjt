@@ -29,13 +29,12 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:drawableRight="@mipmap/iv_delete"
                     android:hint="请输入姓名"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
@@ -48,13 +47,12 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/mine_color" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_duty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:drawableRight="@mipmap/iv_delete"
                     android:hint="请输入职务(普通员工可不填)"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
@@ -67,13 +65,12 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/mine_color" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_department"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:drawableRight="@mipmap/iv_delete"
                     android:hint="请输入部门"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
@@ -86,13 +83,12 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/mine_color" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:drawableRight="@mipmap/iv_delete"
                     android:hint="请输入手机号码"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
@@ -105,13 +101,12 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/mine_color" />
 
-                <EditText
+                <com.bangjiat.bjt.common.ClearEditText
                     android:id="@+id/et_id_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:drawableRight="@mipmap/iv_delete"
                     android:hint="请输入身份证号"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"

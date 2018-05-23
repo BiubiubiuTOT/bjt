@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.GlideImageLoader;
@@ -51,9 +51,9 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
     @BindView(R.id.tv_company_name)
     TextView tv_company_name;
     @BindView(R.id.et_content)
-    EditText et_content;
+    ClearEditText et_content;
     @BindView(R.id.et_title)
-    EditText et_title;
+    ClearEditText et_title;
     @BindView(R.id.tv_person)
     TextView tv_person;
 

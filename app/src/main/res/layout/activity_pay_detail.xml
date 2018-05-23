@@ -89,10 +89,10 @@
             android:padding="15dp">
 
             <TextView
+                android:id="@+id/tv_txt_1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="每月费用"
                 android:textColor="@color/dialog_title"
                 android:textSize="15sp" />
 
@@ -115,10 +115,10 @@
             android:padding="15dp">
 
             <TextView
+                android:id="@+id/tv_txt_2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="交纳月数"
                 android:textColor="@color/dialog_title"
                 android:textSize="15sp" />
 

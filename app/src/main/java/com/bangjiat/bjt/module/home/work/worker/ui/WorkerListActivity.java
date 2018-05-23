@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
@@ -49,8 +48,6 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     RecyclerView recyclerView;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
-    @BindView(R.id.tv_company_name)
-    TextView tv_company_name;
 
     private Toolbar toolbar;
 
@@ -252,8 +249,12 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
 
     @OnClick(R.id.tv_delete)
     public void clickDelete(View view) {
-        if (getSelectCount() != 0)
-            showDeleteDialog();
+        if (getSelectCount() != 0) {
+            if (getSelectItem().size() == 0) {
+                error("删除失败,请先进行权限转交");
+            } else
+                showDeleteDialog();
+        }
     }
 
     private void showDeleteDialog() {
@@ -307,7 +308,7 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
 
     @Override
     public void error(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override
@@ -317,8 +318,6 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
             if (records != null) {
                 beans = records;
                 setAdapter();
-                if (beans.size() > 0)
-                    tv_company_name.setText(beans.get(0).getCompanyName());
             }
         }
     }

@@ -3,12 +3,12 @@ package com.bangjiat.bjt.module.secretary.contact.view;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.KeyboardUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
@@ -26,7 +26,7 @@ import butterknife.OnClick;
 
 public class ContactInfoActivity extends BaseWhiteToolBarActivity implements SaveContactContract.View {
     @BindView(R.id.et_name)
-    EditText et_name;
+    ClearEditText et_name;
     @BindView(R.id.tv_phone)
     TextView tv_phone;
     @BindView(R.id.iv_head)

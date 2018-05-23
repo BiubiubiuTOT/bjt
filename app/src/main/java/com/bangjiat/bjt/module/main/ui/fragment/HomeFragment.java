@@ -195,7 +195,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @Override
     public void fail(String err) {
-        Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext, "二维码识别失败");
     }
 
     @Override

@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
@@ -26,7 +26,7 @@ import cn.bertsir.zbar.QrManager;
 
 public class AddContactActivity extends BaseColorToolBarActivity implements SearchContactContract.View {
     @BindView(R.id.et_phone)
-    EditText et_phone;
+    ClearEditText et_phone;
     @BindView(R.id.tv_hint)
     TextView tv_hint;
     private SearchContactContract.Presenter presenter;

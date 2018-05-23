@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
@@ -52,7 +53,7 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
     @BindView(R.id.tv_person)
     TextView tv_person;
     @BindView(R.id.et_reason)
-    EditText et_reason;
+    ClearEditText et_reason;
 
     private TimePickerView pvStartTime;
     private TimePickerView pvEndTime;
@@ -118,10 +119,12 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
             @Override
             public void onTimeSelect(Date date, View v) {
                 start = date.getTime();
-                et_start_time.setText(TimeUtils.changeToYMD(start));
+                et_start_time.setText(TimeUtils.changeToTime(start));
             }
         }).setSubmitColor(Color.BLACK)
                 .setCancelColor(Color.BLACK)
+                .setType(new boolean[]{true, true, true, true, true, false})
+                .setLabel("年", "月", "日", "时", "分", "")
                 .build();
     }
 
@@ -131,11 +134,14 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
             @Override
             public void onTimeSelect(Date date, View v) {
                 end = date.getTime();
-                et_end_time.setText(TimeUtils.changeToYMD(end));
+                et_end_time.setText(TimeUtils.changeToTime(end));
             }
         }).setSubmitColor(Color.BLACK)
                 .setCancelColor(Color.BLACK)
+                .setType(new boolean[]{true, true, true, true, true, false})
+                .setLabel("年", "月", "日", "时", "分", "")
                 .build();
+
     }
 
     @Override

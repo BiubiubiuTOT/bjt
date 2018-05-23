@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
@@ -60,7 +61,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
     @BindView(R.id.tv_send_name)
     TextView tv_send_name;
     @BindView(R.id.et_title)
-    TextView et_title;
+    ClearEditText et_title;
     @BindView(R.id.tv_select_accessory)
     TextView tv_select_accessory;
     @BindView(R.id.scrollView)
@@ -98,7 +99,7 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
         bean = (ContactBean) getIntent().getSerializableExtra("data");
         if (bean != null) {
             receiverId = bean.getSlaveUserId();
-            receiver=bean.getSlaveNickname();
+            receiver = bean.getSlaveNickname();
             tv_receive_name.setText(receiver);
         }
         mList = new ArrayList<>();

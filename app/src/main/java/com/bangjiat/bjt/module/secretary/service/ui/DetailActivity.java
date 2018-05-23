@@ -9,11 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
@@ -111,7 +111,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
         View view = LayoutInflater.from(mContext).inflate(R.layout.refluse_message_layout, null);
         Button btn_cancel = view.findViewById(R.id.btn_cancel);
         Button btn_submit = view.findViewById(R.id.btn_submit);
-        final EditText et_msg = view.findViewById(R.id.et_msg);
+        final ClearEditText et_msg = view.findViewById(R.id.et_msg);
 
 
         builder.setCancelable(false)

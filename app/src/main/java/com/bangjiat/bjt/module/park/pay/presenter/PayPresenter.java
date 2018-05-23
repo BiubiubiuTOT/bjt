@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.park.pay.presenter;
 
 import com.bangjiat.bjt.module.me.bill.beans.PayBillBean;
+import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
@@ -90,5 +91,17 @@ public class PayPresenter implements PayContract.Presenter {
     public void payBillSuccess(String string) {
         view.dismissDialog();
         view.payBillSuccess(string);
+    }
+
+    @Override
+    public void getParkPayHistory(String token, String key, int page, int size) {
+        view.showDialog();
+        model.getParkPayHistory(token, key, page, size);
+    }
+
+    @Override
+    public void getParkPayHistorySuccess(ParkPayHistory history) {
+        view.dismissDialog();
+        view.getParkPayHistorySuccess(history);
     }
 }

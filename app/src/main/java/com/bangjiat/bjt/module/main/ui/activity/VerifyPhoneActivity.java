@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.module.main.account.beans.ValidateCodeInput;
 import com.bangjiat.bjt.module.main.account.contract.ValidateCodeContract;
 import com.bangjiat.bjt.module.main.account.presenter.ValidateCodePresenter;
@@ -30,9 +30,9 @@ import butterknife.OnClick;
  */
 public class VerifyPhoneActivity extends BaseActivity implements ValidateCodeContract.View {
     @BindView(R.id.et_code)
-    EditText et_code;
+    ClearEditText et_code;
     @BindView(R.id.et_phone)
-    EditText et_phone;
+    ClearEditText et_phone;
     @BindView(R.id.tv_getCode)
     TextView tv_getCode;
     private Dialog dialog;

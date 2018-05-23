@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
@@ -21,6 +22,7 @@ import com.bangjiat.bjt.module.me.personaldata.ui.PersonalDataActivity;
 import com.dou361.dialogui.DialogUIUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -100,10 +102,11 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
 
     @Override
     public void fail(String err) {
+        Logger.e(err);
         if (err.equals("用户姓名为空")) {
             showDia();
         } else
-            Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+            Constants.showSuccessExitDialog(this, "二维码识别失败");
 
     }
 

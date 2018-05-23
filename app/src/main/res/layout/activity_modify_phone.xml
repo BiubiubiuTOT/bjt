@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.main.account.ui.LoginActivity">
+    tools:context=".module.main.ui.activity.ModifyPhoneActivity">
 
     <ImageView
         android:id="@+id/iv_back"
@@ -56,10 +56,11 @@
                 android:layout_margin="15dp"
                 android:src="@mipmap/ic_pass" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_new_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:background="@null"
                 android:hint="@string/tv_modify_password_hint_1"
                 android:inputType="textPassword"
@@ -84,10 +85,11 @@
                 android:layout_margin="15dp"
                 android:src="@mipmap/ic_pass" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_new_password_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:background="@null"
                 android:hint="@string/tv_modify_password_hint_2"
                 android:inputType="textPassword"

@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amap.api.services.core.AMapException;
@@ -17,6 +16,7 @@ import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.module.home.work.kaoqin.adapter.TipsAdapter;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.PoiAddressBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
@@ -30,7 +30,7 @@ public class SearchLocationActivity extends BaseWhiteToolBarActivity implements 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.et_search)
-    EditText et_search;
+    ClearEditText et_search;
     private TipsAdapter mAdapter;
     private PoiSearch.Query query;
     private PoiSearch poiSearch;

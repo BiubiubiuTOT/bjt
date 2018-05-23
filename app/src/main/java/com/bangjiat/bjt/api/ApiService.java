@@ -6,6 +6,9 @@ import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
+import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.InviteBean;
+import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaTotalResult;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.InDakaInput;
@@ -30,6 +33,7 @@ import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
@@ -352,16 +356,17 @@ public interface ApiService {
      * 获取访客记录
      */
     @GET("api/visitor/select/BuildVisitorPage")
-    Call<BaseResult> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
-                                       @Query("page") int page,
-                                       @Query("size") int size);
+    Call<BaseResult<VisitorBean>> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                    @Query("page") int page,
+                                                    @Query("size") int size,
+                                                    @Query("type") int type);//类型：1、访客记录；2、邀请记录
 
     /**
      * 28
      * 处理访客申请
      */
     @PUT("api/visitor/update/BuildVisitor")
-    Call<BaseResult> dealVisitorApply(@Header(Constants.TOKEN_NAME) String token);
+    Call<BaseResult<String>> dealVisitorApply(@Header(Constants.TOKEN_NAME) String token, @Body DealVisitorInput input);
 
     /**
      * 29
@@ -812,4 +817,30 @@ public interface ApiService {
      */
     @POST("api/userBill/pay/BjtUserBill")
     Call<BaseResult<String>> payBill(@Header(Constants.TOKEN_NAME) String token, @Body PayBillBean input);
+
+    /**
+     * 83
+     * <p>
+     * 获取二维码信息
+     */
+    @GET("api/buildGate/select/BuildGuardCode")
+    Call<BaseResult<String>> getDoorMessage(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 94
+     * <p>
+     * 获取停车缴费记录列表
+     */
+    @GET("api/carparkPayment/select/CarparkPaymentPage")
+    Call<BaseResult<ParkPayHistory>> getParkPayHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                       @Query("page") int page,
+                                                       @Query("size") int size);
+
+    /**
+     * 95
+     * <p>
+     * 新增邀请
+     */
+    @POST("api/visitor/add/BuildVisitor")
+    Call<BaseResult<String>> addInvite(@Header(Constants.TOKEN_NAME) String token, @Body InviteBean bean);
 }

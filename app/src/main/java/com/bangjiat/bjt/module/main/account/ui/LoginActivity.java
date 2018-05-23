@@ -4,13 +4,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.BlurTransformation;
+import com.bangjiat.bjt.common.ClearEditText1;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.DialogPopup;
 import com.bangjiat.bjt.module.main.account.beans.Account;
@@ -34,9 +34,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R.id.iv_bg)
     ImageView iv_bg;
     @BindView(R.id.et_phone)
-    EditText et_phone;
+    ClearEditText1 et_phone;
     @BindView(R.id.et_password)
-    EditText et_password;
+    ClearEditText1 et_password;
 
     private LoginContract.Presenter presenter;
     private String password, phone;

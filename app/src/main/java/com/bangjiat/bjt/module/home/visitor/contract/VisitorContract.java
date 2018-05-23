@@ -1,5 +1,9 @@
 package com.bangjiat.bjt.module.home.visitor.contract;
 
+import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.InviteBean;
+import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
+
 /**
  * @author ligh
  * @email 1256144200@qq.com
@@ -8,7 +12,11 @@ package com.bangjiat.bjt.module.home.visitor.contract;
 
 public interface VisitorContract {
     interface Model {
-        void getVisitorHistory(String token, int page, int size);
+        void getVisitorHistory(String token, int page, int size, int type);
+
+        void dealVisitor(String token, DealVisitorInput input);
+
+        void addInvite(String token, InviteBean bean);
     }
 
     interface View {
@@ -18,14 +26,25 @@ public interface VisitorContract {
 
         void error(String err);
 
-        void success();
+        void success(VisitorBean bean);
+
+        void dealSuccess(String str);
+        void addInviteSuccess(String str);
     }
 
     interface Presenter {
-        void getVisitorHistory(String token, int page, int size);
+        void getVisitorHistory(String token, int page, int size, int type);
 
         void error(String err);
 
-        void success();
+        void success(VisitorBean bean);
+
+        void dealVisitor(String token, DealVisitorInput input);
+
+        void dealSuccess(String str);
+
+        void addInvite(String token, InviteBean bean);
+
+        void addInviteSuccess(String str);
     }
 }

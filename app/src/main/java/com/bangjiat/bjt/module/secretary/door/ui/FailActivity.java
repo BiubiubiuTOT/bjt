@@ -9,8 +9,11 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.BuildUserInfo;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
 import com.bangjiat.bjt.module.secretary.door.contract.BuildUserInfoContract;
+import com.bangjiat.bjt.module.secretary.door.contract.IntoBuildingContract;
 import com.bangjiat.bjt.module.secretary.door.presenter.BuildUserInfoPresenter;
+import com.bangjiat.bjt.module.secretary.door.presenter.IntoBuildingPresenter;
 import com.orhanobut.logger.Logger;
 
 import butterknife.OnClick;
@@ -18,16 +21,21 @@ import butterknife.OnClick;
 /**
  * 入驻申请 审核未通过
  */
-public class FailActivity extends BaseColorToolBarActivity implements BuildUserInfoContract.View  {
+public class FailActivity extends BaseColorToolBarActivity implements BuildUserInfoContract.View, IntoBuildingContract.View {
     private String phone;
     private boolean isCall;
     private BuildUserInfoContract.Presenter presenter;
+    private IntoBuildingContract.Presenter isIntoPresenter;
+    private String code;
+    private boolean isCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isIntoPresenter = new IntoBuildingPresenter(this);
         presenter = new BuildUserInfoPresenter(this);
         presenter.getInfo(DataUtil.getToken(mContext));
+        isIntoPresenter.isIntoBuilding(DataUtil.getToken(mContext));
     }
 
     @OnClick(R.id.tv_contact_admin)
@@ -54,7 +62,19 @@ public class FailActivity extends BaseColorToolBarActivity implements BuildUserI
 
     @OnClick(R.id.btn_reapply)
     public void clickReApply(View view) {
-        startActivity(new Intent(mContext, IntoBuildingActivity.class));
+        if (code != null) {
+            start();
+        } else {
+            presenter.getInfo(DataUtil.getToken(mContext));
+            isCode = true;
+        }
+
+    }
+
+    private void start() {
+        Intent intent = new Intent(mContext, IntoBuildingActivity.class);
+        intent.putExtra("data", code);
+        startActivity(intent);
     }
 
 
@@ -81,6 +101,35 @@ public class FailActivity extends BaseColorToolBarActivity implements BuildUserI
             if (isCall) {
                 dialPhone(phone);
             }
+        }
+    }
+
+    @Override
+    public void showDialog() {
+
+    }
+
+    @Override
+    public void dismissDialog() {
+
+    }
+
+    @Override
+    public void success() {
+
+    }
+
+    @Override
+    public void fail(String err) {
+
+    }
+
+    @Override
+    public void getIsIntoBuildingSuccess(IsIntoBuildingResult result) {
+        if (result != null) {
+            this.code = result.getCode();
+            if (isCode)
+                start();
         }
     }
 }

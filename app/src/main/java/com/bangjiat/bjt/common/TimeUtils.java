@@ -23,13 +23,13 @@ public class TimeUtils {
 
     public static String changeToTime(Long l) {
         Date date = new Date(l);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         return format.format(date);
     }
 
     public static String changeToHM(Long l) {
         Date date = new Date(l);
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(date);
     }
 

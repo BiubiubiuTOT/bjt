@@ -29,7 +29,7 @@
                 android:textColor="@color/dialog_title"
                 android:textSize="@dimen/dialog_message_text_size" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:textColor="@color/dialog_title"
                 android:textSize="@dimen/dialog_message_text_size" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_trade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                 android:textColor="@color/dialog_title"
                 android:textSize="@dimen/dialog_message_text_size" />
 
-            <EditText
+            <com.bangjiat.bjt.common.ClearEditText
                 android:id="@+id/et_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

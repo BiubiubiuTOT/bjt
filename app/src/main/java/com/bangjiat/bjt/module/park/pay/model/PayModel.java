@@ -3,7 +3,9 @@ package com.bangjiat.bjt.module.park.pay.model;
 import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.me.bill.beans.PayBillBean;
+import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
 import com.bangjiat.bjt.module.park.pay.beans.ParkingDetail;
 import com.bangjiat.bjt.module.park.pay.beans.PayBean;
 import com.bangjiat.bjt.module.park.pay.beans.PayInput;
@@ -109,6 +111,24 @@ public class PayModel implements PayContract.Model {
                 if (body.getStatus() == 200)
                     presenter.payBillSuccess(body.getData());
                 else presenter.fail(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.fail(message);
+            }
+        });
+    }
+
+    @Override
+    public void getParkPayHistory(String token, String key, int page, int size) {
+        ApiFactory.getService().getParkPayHistory(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<ParkPayHistory>>() {
+            @Override
+            public void onSuc(Response<BaseResult<ParkPayHistory>> response) {
+                BaseResult<ParkPayHistory> body = response.body();
+                if (body.getStatus() == 200) {
+                    presenter.getParkPayHistorySuccess(body.getData());
+                } else presenter.fail(body.getMessage());
             }
 
             @Override

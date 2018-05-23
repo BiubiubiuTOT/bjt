@@ -1,18 +1,16 @@
 package com.bangjiat.bjt.module.secretary.workers.ui;
 
 import android.app.Dialog;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
@@ -30,15 +28,15 @@ import butterknife.OnClick;
 
 public class UpdateWorkerActivity extends BaseToolBarActivity implements CompanyUserContract.View {
     @BindView(R.id.et_name)
-    EditText et_name;
+    ClearEditText et_name;
     @BindView(R.id.et_phone)
-    EditText et_phone;
+    ClearEditText et_phone;
     @BindView(R.id.et_id_card)
-    EditText et_card;
+    ClearEditText et_card;
     @BindView(R.id.et_duty)
-    EditText et_duty;
+    ClearEditText et_duty;
     @BindView(R.id.et_department)
-    EditText et_department;
+    ClearEditText et_department;
     @BindView(R.id.ll_delete)
     RelativeLayout rl_delete;
 
@@ -68,19 +66,19 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
                 rl_delete.setVisibility(View.VISIBLE);
             }
             if (!userInfo.getUserId().equals(bean.getUserId()) && !Constants.isCompanyAdmin()) {//不是本人或者没有公司管理员权限的人不能编辑
-                et_name.setCompoundDrawables(null, null, null, null);
-                et_card.setCompoundDrawables(null, null, null, null);
-                et_phone.setCompoundDrawables(null, null, null, null);
-                et_department.setCompoundDrawables(null, null, null, null);
-                et_duty.setCompoundDrawables(null, null, null, null);
-                tv_done.setVisibility(View.GONE
-                );
+                tv_done.setVisibility(View.GONE);
 
                 et_name.setEnabled(false);
                 et_card.setEnabled(false);
                 et_phone.setEnabled(false);
                 et_department.setEnabled(false);
                 et_duty.setEnabled(false);
+
+                et_name.setFocusable(false);
+                et_card.setFocusable(false);
+                et_phone.setFocusable(false);
+                et_department.setFocusable(false);
+                et_duty.setFocusable(false);
             }
 
             et_name.setText(bean.getRealname());
@@ -89,108 +87,6 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
             et_department.setText(bean.getDepartment());
             et_duty.setText(bean.getJob());
         }
-
-
-        et_name.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Drawable drawable = et_name.getCompoundDrawables()[2];
-                if (drawable == null)
-                    return false;
-                if (event.getAction() != MotionEvent.ACTION_UP)
-                    return false;
-                if (event.getX() > et_name.getWidth()
-                        - et_name.getPaddingRight()
-                        - drawable.getIntrinsicWidth()) {
-                    et_name.setText("");
-                }
-                return false;
-            }
-        });
-
-        et_card.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // et.getCompoundDrawables()得到一个长度为4的数组，分别表示左右上下四张图片
-                Drawable drawable = et_card.getCompoundDrawables()[2];
-                //如果右边没有图片，不再处理
-                if (drawable == null)
-                    return false;
-                //如果不是按下事件，不再处理
-                if (event.getAction() != MotionEvent.ACTION_UP)
-                    return false;
-                if (event.getX() > et_card.getWidth()
-                        - et_card.getPaddingRight()
-                        - drawable.getIntrinsicWidth()) {
-                    et_card.setText("");
-                }
-                return false;
-            }
-        });
-
-        et_department.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // et.getCompoundDrawables()得到一个长度为4的数组，分别表示左右上下四张图片
-                Drawable drawable = et_department.getCompoundDrawables()[2];
-                //如果右边没有图片，不再处理
-                if (drawable == null)
-                    return false;
-                //如果不是按下事件，不再处理
-                if (event.getAction() != MotionEvent.ACTION_UP)
-                    return false;
-                if (event.getX() > et_department.getWidth()
-                        - et_department.getPaddingRight()
-                        - drawable.getIntrinsicWidth()) {
-                    et_department.setText("");
-                }
-                return false;
-            }
-        });
-        et_duty.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // et.getCompoundDrawables()得到一个长度为4的数组，分别表示左右上下四张图片
-                Drawable drawable = et_duty.getCompoundDrawables()[2];
-                //如果右边没有图片，不再处理
-                if (drawable == null)
-                    return false;
-                //如果不是按下事件，不再处理
-                if (event.getAction() != MotionEvent.ACTION_UP)
-                    return false;
-                if (event.getX() > et_duty.getWidth()
-                        - et_duty.getPaddingRight()
-                        - drawable.getIntrinsicWidth()) {
-                    et_duty.setText("");
-                }
-                return false;
-            }
-        });
-
-        et_phone.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // et.getCompoundDrawables()得到一个长度为4的数组，分别表示左右上下四张图片
-                Drawable drawable = et_phone.getCompoundDrawables()[2];
-                //如果右边没有图片，不再处理
-                if (drawable == null)
-                    return false;
-                //如果不是按下事件，不再处理
-                if (event.getAction() != MotionEvent.ACTION_UP)
-                    return false;
-                if (event.getX() > et_phone.getWidth()
-                        - et_phone.getPaddingRight()
-                        - drawable.getIntrinsicWidth()) {
-                    et_phone.setText("");
-                }
-                return false;
-            }
-        });
 
 
     }

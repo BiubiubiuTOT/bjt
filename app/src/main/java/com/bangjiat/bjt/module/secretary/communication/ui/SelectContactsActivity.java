@@ -11,13 +11,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
@@ -26,7 +25,6 @@ import com.bangjiat.bjt.module.secretary.contact.presenter.ContactPresenter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactAdapter;
 import com.bangjiat.bjt.module.secretary.contact.util.ContactsUtils;
 import com.bangjiat.bjt.module.secretary.contact.util.SideLetterBar;
-import com.bangjiat.bjt.module.secretary.contact.view.ContactDetailActivity;
 import com.orhanobut.logger.Logger;
 
 import java.io.Serializable;
@@ -44,9 +42,7 @@ public class SelectContactsActivity extends BaseToolBarActivity implements Conta
     private ContactAdapter mContactAdapter;
 
     @BindView(R.id.et_search)
-    EditText mSearchBox;
-    @BindView(R.id.iv_search_clear)
-    ImageView mClearBtn;
+    ClearEditText mSearchBox;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.side_bar)
@@ -126,14 +122,6 @@ public class SelectContactsActivity extends BaseToolBarActivity implements Conta
             }
         });
 
-        mClearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSearchBox.setText("");
-                mClearBtn.setVisibility(View.GONE);
-            }
-        });
-
         mSearchBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -151,12 +139,10 @@ public class SelectContactsActivity extends BaseToolBarActivity implements Conta
                 mSearchList.clear();
                 searchContacts(searchKey);
                 if (TextUtils.isEmpty(searchKey)) {
-                    mClearBtn.setVisibility(View.GONE);
                     mSideLetterBar.setVisibility(View.VISIBLE);
                     mSearchList.clear();
                     mContactAdapter.setContactList(mContactList);
                 } else {
-                    mClearBtn.setVisibility(View.VISIBLE);
                     mContactAdapter.setContactList(mSearchList);
                     if (mSearchList == null || mSearchList.size() <= 0) {
                         mSideLetterBar.setVisibility(View.GONE);
@@ -173,11 +159,7 @@ public class SelectContactsActivity extends BaseToolBarActivity implements Conta
         mContactAdapter.setOnItemClickListener(new ContactAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(mContext, ContactDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("data", mContactAdapter.getmContactList().get(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                mContactAdapter.setCheck(position);
             }
         });
 

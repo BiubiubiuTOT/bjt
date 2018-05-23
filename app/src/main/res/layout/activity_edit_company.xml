@@ -66,7 +66,7 @@
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
 
-                    <EditText
+                    <com.bangjiat.bjt.common.ClearEditText
                         android:id="@+id/et_industry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -75,11 +75,7 @@
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
 
-                    <ImageView
-                        android:id="@+id/iv_industry"
-                        android:layout_width="17dp"
-                        android:layout_height="17dp"
-                        android:src="@mipmap/iv_delete" />
+
                 </LinearLayout>
 
                 <View
@@ -102,7 +98,7 @@
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
 
-                    <EditText
+                    <com.bangjiat.bjt.common.ClearEditText
                         android:id="@+id/et_address"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -111,11 +107,6 @@
                         android:textColor="@color/dialog_title"
                         android:textSize="14sp" />
 
-                    <ImageView
-                        android:id="@+id/iv_address"
-                        android:layout_width="17dp"
-                        android:layout_height="17dp"
-                        android:src="@mipmap/iv_delete" />
                 </LinearLayout>
             </LinearLayout>
 

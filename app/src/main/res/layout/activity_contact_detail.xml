@@ -59,23 +59,18 @@
             android:layout_marginTop="5dp"
             android:background="@color/personal_view" />
 
-        <EditText
+        <com.bangjiat.bjt.common.ClearEditText
             android:id="@+id/et_remark"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
             android:layout_weight="1"
+            android:layout_marginEnd="10dp"
             android:background="@null"
             android:gravity="center_vertical"
             android:textColor="@color/dialog_title"
             android:textSize="15sp" />
 
-        <ImageView
-            android:id="@+id/iv_clear"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:layout_marginRight="10dp"
-            android:src="@mipmap/iv_delete" />
     </LinearLayout>
 
     <LinearLayout

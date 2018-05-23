@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.account.beans.ValidateCodeInput;
 import com.bangjiat.bjt.module.main.account.contract.RecoveredPasswordContract;
@@ -31,15 +31,15 @@ import butterknife.OnClick;
 
 public class ForgetPasswordActivity extends BaseToolBarActivity implements ValidateCodeContract.View, RecoveredPasswordContract.View {
     @BindView(R.id.et_new_password)
-    EditText et_new_password;
+    ClearEditText et_new_password;
     @BindView(R.id.et_new_password_2)
-    EditText et_new_password_2;
+    ClearEditText et_new_password_2;
     @BindView(R.id.tv_getCode)
     TextView tv_getCode;
     @BindView(R.id.tv_phone)
     TextView tv_phone;
     @BindView(R.id.et_code)
-    EditText et_code;
+    ClearEditText et_code;
     private Dialog dialog;
     private ValidateCodeContract.Presenter codePresenter;
     private RecoveredPasswordContract.Presenter presenter;

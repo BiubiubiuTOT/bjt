@@ -1,22 +1,26 @@
 package com.bangjiat.bjt.module.home.visitor.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.MyAdapter;
-import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class VisitorActivity extends BaseWhiteToolBarActivity {
+public class VisitorActivity extends BaseToolBarActivity {
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     @BindView(R.id.rg)
@@ -43,8 +47,23 @@ public class VisitorActivity extends BaseWhiteToolBarActivity {
     }
 
     @Override
-    protected String getTitleStr() {
-        return "访客";
+    protected void initToolbar(Toolbar toolbar) {
+        toolbar.setTitle("");
+        TextView textView = toolbar.findViewById(R.id.toolbar_title);
+        textView.setText("访客");
+        textView.setTextColor(getResources().getColor(R.color.black));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        toolbar.setNavigationIcon(R.mipmap.back_black);
+        TextView other = toolbar.findViewById(R.id.toolbar_other);
+
+        other.setText("邀请");
+        other.setTextColor(getResources().getColor(R.color.black));
+        other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, InviteActivity.class));
+            }
+        });
     }
 
 
