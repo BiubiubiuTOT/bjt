@@ -9,10 +9,12 @@ package com.bangjiat.bjt.module.home.company.beans;
 public class CompanyInput {
     private String name;
     private String address;
+    private String industry;
 
-    public CompanyInput(String name, String address) {
+    public CompanyInput(String name, String address,String industry) {
         this.name = name;
         this.address = address;
+        this.industry = industry;
     }
 
     public String getName() {

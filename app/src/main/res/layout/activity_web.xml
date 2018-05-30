@@ -6,14 +6,23 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bjt.module.home.work.leave.ui.LeaveHistoryActivity">
+    tools:context="com.bangjiat.bjt.module.home.work.kaoqin.ui.WebActivity">
 
     <include layout="@layout/toolbar" />
 
-    <include layout="@layout/no_data_page" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <ProgressBar
+        android:id="@+id/pb_web_base"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <WebView
+        android:id="@+id/web_base"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 </LinearLayout>

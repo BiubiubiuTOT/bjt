@@ -11,19 +11,21 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.home.work.kaoqin.contract.RoleContract;
 import com.bangjiat.bjt.module.home.work.kaoqin.presenter.RolePresenter;
-import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
-import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.orhanobut.logger.Logger;
 import com.orm.SugarRecord;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,15 +59,12 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
     ImageView iv_location_delete;
     private RoleContract.Presenter presenter;
 
-    private OptionsPickerView<String> pvMonths;
-    private List<String> ampm;
-    private List<String> hours;
-    private List<String> minutes;
     private boolean isStart;
     private RuleInput role;
     private RuleInput input;
     private String token;
     private boolean canEdit;
+    private TimePickerView pvTime;
 
     @Override
     protected void initView() {
@@ -74,27 +73,54 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
         presenter = new RolePresenter(this);
         role = RuleInput.first(RuleInput.class);
         initData();
+        initTimePicker();
+    }
+
+    private void initTimePicker() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                9, 0, 0);
+
+        pvTime = new TimePickerBuilder(mContext, new OnTimeSelectListener() {
+
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                long time = date.getTime();
+                String str = TimeUtils.changeToHM(time);
+                Logger.d(str);
+
+                if (isStart) {
+                    tv_start_time.setText(str);
+                    if (role != null) {
+                        role.setInTime(str);
+                        updateRole();
+                    } else {
+                        input.setInTime(str);
+                        saveRole();
+                    }
+                } else {
+                    tv_end_time.setText(str);
+                    if (role != null) {
+                        role.setOutTime(str);
+                        updateRole();
+                    } else {
+                        input.setOutTime(str);
+                        saveRole();
+                    }
+                }
+            }
+        }).setSubmitColor(Color.BLACK)
+                .setCancelColor(Color.BLACK)
+                .setType(new boolean[]{false, false, false, true, true, false})
+                .setLabel("年", "月", "日", "时", "分", "")
+                .setDate(calendar)
+                .build();
+
     }
 
     private void initData() {
         input = new RuleInput();
-        ampm = new ArrayList<>();
-        ampm.add("");
-
-        hours = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            hours.add(String.valueOf(i));
-        }
-
-        minutes = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            minutes.add("0" + i);
-        }
-        for (int i = 10; i < 60; i++) {
-            minutes.add(String.valueOf(i));
-        }
-
-        initMothPicker();
+        initTimePicker();
 
         if (role != null) {
             set();
@@ -116,7 +142,7 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
     public void clickTimeStart(View v) {
         if (canEdit) {
             isStart = true;
-            pvMonths.show();
+            pvTime.show();
         }
     }
 
@@ -124,7 +150,7 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
     public void clickTimeEnd(View view) {
         if (canEdit) {
             isStart = false;
-            pvMonths.show();
+            pvTime.show();
         }
     }
 
@@ -136,8 +162,13 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
 
     @OnClick(R.id.ll_range)
     public void clickRange(View view) {
-        if (canEdit)
-            startActivityForResult(new Intent(mContext, AddWifiActivity.class), SELECT_WIFI);
+        if (canEdit) {
+            Intent intent = new Intent(mContext, AddWifiActivity.class);
+            String value = tv_wifi.getText().toString();
+            if (value.isEmpty()) value = "";
+            intent.putExtra("data", value);
+            startActivityForResult(intent, SELECT_WIFI);
+        }
     }
 
     @Override
@@ -200,40 +231,6 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
         presenter.saveRole(token, input);
     }
 
-    private void initMothPicker() {
-        pvMonths = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int i, int i1, int i2, View view) {
-                String h = hours.get(i1);
-
-                String mi = minutes.get(i2);
-                String str = h + ":" + mi;
-                if (isStart) {
-                    tv_start_time.setText(str);
-                    if (role != null) {
-                        role.setInTime(str);
-                        updateRole();
-                    } else {
-                        input.setInTime(str);
-                        saveRole();
-                    }
-                } else {
-                    tv_end_time.setText(str);
-                    if (role != null) {
-                        role.setOutTime(str);
-                        updateRole();
-                    } else {
-                        input.setOutTime(str);
-                        saveRole();
-                    }
-                }
-            }
-        })
-                .setSubmitColor(Color.BLACK)
-                .setCancelColor(Color.BLACK).build();
-        pvMonths.setNPicker(ampm, hours, minutes);
-    }
-
 
     @Override
     public void showErr(String err) {
@@ -257,6 +254,7 @@ public class SettingFragment extends BaseFragment implements RoleContract.View {
         String outTime = role.getOutTime();
 
         if (workDay != null && !workDay.equals("null")) {
+            Logger.d(workDay);
             String[] split = workDay.split(",");
             String str = "";
             List<String> list = Arrays.asList(split);

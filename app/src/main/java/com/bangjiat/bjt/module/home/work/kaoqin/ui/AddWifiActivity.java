@@ -31,6 +31,7 @@ public class AddWifiActivity extends BaseToolBarActivity {
     private WifiAdapter adapter;
     private List<WifiBean> wifiList;
     private Timer timer;
+    private String wifiName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +40,20 @@ public class AddWifiActivity extends BaseToolBarActivity {
     }
 
     private void initView() {
+        wifiName = getIntent().getStringExtra("data");
+
         wifiUtil = new WifiUtil(mContext);
         wifiList = wifiUtil.getWifiList();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
         setAdapter();
-        startTimer();
+        if (wifiList.size() == 0)
+            startTimer();
     }
 
     private void setAdapter() {
-        adapter = new WifiAdapter(wifiList, mContext);
+        adapter = new WifiAdapter(wifiList, mContext, wifiName);
         recyclerView.setAdapter(adapter);
     }
 
@@ -116,8 +120,10 @@ public class AddWifiActivity extends BaseToolBarActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1)
+            if (msg.what == 1) {
                 adapter.setLists(wifiList);
+                timer.cancel();
+            }
         }
     };
 

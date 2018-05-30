@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Ligh on 2016/9/9 15:33
@@ -37,7 +37,7 @@ public class WorkDayAdapter extends RecyclerView.Adapter<WorkDayAdapter.ViewHold
         this.lists = lists;
         this.mContext = context;
 
-        map = new HashMap<>();
+        map = new TreeMap<>();
         for (int i = 0; i < lists.size(); i++) {
             map.put(i, false);
         }

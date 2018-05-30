@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,8 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
     TextView mOverlay;
     @BindView(R.id.pb)
     ProgressBar mProgressBar;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
     private Dialog dialog;
     private ContactContract.Presenter presenter;
 
@@ -247,7 +250,15 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
 
     @Override
     public void success(List<ContactBean> bean) {
-        mContactList = ContactsUtils.getContactList(bean);
-        handler.sendEmptyMessage(0);
+        if (bean != null && bean.size() > 0) {
+            mContactList = ContactsUtils.getContactList(bean);
+            handler.sendEmptyMessage(0);
+            ll_none.setVisibility(View.GONE);
+            return;
+        }
+
+        mSideLetterBar.setVisibility(View.GONE);
+        ll_none.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 }

@@ -13,7 +13,7 @@ public class OutDakaInput {
     private String outType;
     private String outWay;
     private String leaveRemark;
-    private int clockId;
+    private String clockId;
 
     public String getLeaveRemark() {
         return leaveRemark;
@@ -63,11 +63,24 @@ public class OutDakaInput {
         this.outWay = outWay;
     }
 
-    public int getClockId() {
+    public String getClockId() {
         return clockId;
     }
 
-    public void setClockId(int clockId) {
+    public void setClockId(String clockId) {
         this.clockId = clockId;
+    }
+
+    @Override
+    public String toString() {
+        return "OutDakaInput{" +
+                "outAddress='" + outAddress + '\'' +
+                ", outLongitude='" + outLongitude + '\'' +
+                ", outLatitude='" + outLatitude + '\'' +
+                ", outType='" + outType + '\'' +
+                ", outWay='" + outWay + '\'' +
+                ", leaveRemark='" + leaveRemark + '\'' +
+                ", clockId=" + clockId +
+                '}';
     }
 }

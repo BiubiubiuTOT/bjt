@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.common.BaseResult;
@@ -18,6 +20,7 @@ import com.bangjiat.bjt.module.main.account.beans.Account;
 import com.bangjiat.bjt.module.main.account.contract.LoginContract;
 import com.bangjiat.bjt.module.main.account.presenter.LoginPresenter;
 import com.bangjiat.bjt.module.main.account.ui.LoginActivity;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,7 @@ public class SplashActivity extends BaseActivity implements LoginContract.View {
     private List<String> permissionsList;
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private LoginContract.Presenter presenter;
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,7 @@ public class SplashActivity extends BaseActivity implements LoginContract.View {
                         startActivity(new Intent(mContext, LoginActivity.class));
                         finish();
                     } else {
-                        Account account = DataUtil.getAccount(mContext);
+                        account = DataUtil.getAccount(mContext);
                         presenter.login(account.getPhone(), account.getPassword());
                     }
                 } catch (Exception e) {
@@ -120,9 +124,25 @@ public class SplashActivity extends BaseActivity implements LoginContract.View {
     public void showError(String err) {
         Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
         DataUtil.setLogin(mContext, false);
+        initPush(account.getPhone());
 
         startActivity(new Intent(mContext, LoginActivity.class));
         finish();
+    }
+
+    private void initPush(String phone) {
+        PushServiceFactory.getCloudPushService().
+                bindAccount(phone, new CommonCallback() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Logger.d("阿里推送绑定成功 " + s + " ");
+                    }
+
+                    @Override
+                    public void onFailed(String s, String s1) {
+                        Logger.d("阿里推送绑定失败 " + s + " " + s1);
+                    }
+                });
     }
 
     @Override

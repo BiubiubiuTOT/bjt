@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
@@ -28,6 +29,8 @@ import butterknife.BindView;
 public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
     private Dialog dialog;
     private PayContract.Presenter presenter;
     private PayHistoryAdapter mAdapter;
@@ -120,7 +123,10 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
             if (records != null && records.size() > 0) {
                 list = records;
                 mAdapter.setLists(list);
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 }

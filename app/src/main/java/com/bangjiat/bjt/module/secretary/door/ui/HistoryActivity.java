@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
@@ -28,6 +29,8 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
     private static final int DEAL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
 
     private List<ApplyHistoryBean.RecordsBean> list;
     private Dialog dialog;
@@ -115,8 +118,11 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
             if (records != null) {
                 list = records;
                 mAdapter.setLists(list);
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -132,7 +138,11 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
             if (records != null) {
                 list = records;
                 mAdapter.setLists(list);
+
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 }

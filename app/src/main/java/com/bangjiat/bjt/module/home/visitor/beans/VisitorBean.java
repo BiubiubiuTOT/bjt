@@ -96,7 +96,7 @@ public class VisitorBean {
         private int type;//类型：1、访客记录；2、邀请记录
         private int useCount;//使用次数
         private String visitMatter;//访问事宜
-        private int visitTime;//访问时间
+        private long visitTime;//访问时间
         private String visitorFront;//访客正面照
         private int visitorId;//访客编号
         private String visitorName;//访客姓名
@@ -198,11 +198,11 @@ public class VisitorBean {
             this.visitMatter = visitMatter;
         }
 
-        public int getVisitTime() {
+        public long getVisitTime() {
             return visitTime;
         }
 
-        public void setVisitTime(int visitTime) {
+        public void setVisitTime(long visitTime) {
             this.visitTime = visitTime;
         }
 

@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,6 +62,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     TextView tv_edit;
     @BindView(R.id.et_search)
     ClearEditText et_search;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
 
     private TextView tv_select;
     private TextView tv_done;
@@ -443,8 +446,12 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             if (records != null && records.size() > 0) {
                 boxBeans = records;
                 mAdapter.setLists(boxBeans);
+
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -10,8 +10,6 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,10 +25,30 @@
 
     <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
+    <!-- 阿里移动推送相关权限 -->
+    <!-- Android 6.0版本可去除，用于选举信息（通道复用）的同步 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 网络库使用，当网络操作时需要确保事务完成不被杀掉 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 用于读取手机硬件信息等，用于机型过滤 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 选举使用，当应用有删除或者更新时需要重新选举，复用推送通道 -->
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_CHANGED" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <!-- 补偿通道小米PUSH使用，不用可去除 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- 补偿通道GCM使用，不使用可去除 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- 允许监听启动完成事件 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 允许访问震动器 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 允许task重排序 -->
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application
         android:name=".common.BjtApplication"
@@ -40,35 +58,88 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme1">
-        <activity android:name=".module.main.ui.activity.MainActivity" />
-        <activity android:name=".module.main.ui.activity.SplashActivity">
+        <activity
+            android:name=".module.main.ui.activity.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.ui.activity.SplashActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.main.account.ui.LoginActivity" />
-        <activity android:name=".module.main.account.ui.RegisterActivity" />
-        <activity android:name=".module.main.ui.activity.AgreementActivity" />
-        <activity android:name=".module.main.ui.activity.VerifyPhoneActivity" />
-        <activity android:name=".module.main.ui.activity.ModifyPhoneActivity" />
-        <activity android:name=".module.main.ui.activity.ContactServiceActivity" />
-        <activity android:name=".module.me.feedback.ui.FeedBackActivity" />
-        <activity android:name=".module.me.personaldata.ui.PersonalHeadActivity" />
-        <activity android:name=".module.main.ui.activity.AboutActivity" />
-        <activity android:name=".module.home.notice.ui.AllNoticeActivity" />
-        <activity android:name=".module.home.visitor.ui.VisitorActivity" />
-        <activity android:name=".module.home.notice.ui.NoticeItemActivity" />
+        <activity
+            android:name=".module.main.account.ui.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.account.ui.RegisterActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.ui.activity.AgreementActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.ui.activity.VerifyPhoneActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.ui.activity.ModifyPhoneActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.ui.activity.ContactServiceActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.feedback.ui.FeedBackActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.personaldata.ui.PersonalHeadActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.ui.activity.AboutActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.notice.ui.AllNoticeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.visitor.ui.VisitorActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.notice.ui.NoticeItemActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.home.scan.ui.ScanActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".module.home.scan.ui.MyCodeActivity" />
-        <activity android:name=".module.home.scan.ui.OpenDoorCodeActivity" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.scan.ui.MyCodeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.scan.ui.OpenDoorCodeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.me.personaldata.ui.PersonalDataActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".module.me.personaldata.ui.EditDataActivity" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.personaldata.ui.EditDataActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -84,57 +155,351 @@
             android:name=".module.home.company.ui.AddOrSelectCompanyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/edit_AlertDialog_style" />
-        <activity android:name=".module.home.company.ui.CompanyInfoActivity" />
-        <activity android:name=".module.home.company.ui.AddCompanyActivity" />
-        <activity android:name=".module.secretary.door.ui.MainActivity" />
-        <activity android:name=".module.secretary.door.ui.HistoryActivity" />
-        <activity android:name=".module.secretary.door.ui.DetailActivity" />
-        <activity android:name=".module.secretary.door.ui.IntoBuildingActivity" />
-        <activity android:name=".module.secretary.door.ui.ApplyingActivity" />
-        <activity android:name=".module.secretary.door.ui.FailActivity" />
-        <activity android:name=".module.secretary.service.ui.MainActivity" />
-        <activity android:name=".module.secretary.service.ui.NewApplyActivity" />
-        <activity android:name=".common.FullImageActivity" />
-        <activity android:name=".module.secretary.service.ui.ServiceHistoryActivity" />
-        <activity android:name=".module.secretary.service.ui.DetailActivity" />
-        <activity android:name=".module.secretary.service.ui.ApprovalHistoryActivity" />
-        <activity android:name=".module.secretary.service.ui.ApprovalDetailActivity" />
-        <activity android:name=".module.secretary.door.ui.AddPeopleActivity" />
-        <activity android:name=".module.secretary.workers.ui.WorkersManageActivity" />
-        <activity android:name=".module.secretary.workers.ui.AddWorkersActivity" />
-        <activity android:name=".module.secretary.workers.ui.UpdateWorkerActivity" />
-        <activity android:name=".module.secretary.communication.ui.MainActivity" />
-        <activity android:name=".module.secretary.communication.ui.BoxActivity" />
-        <activity android:name=".module.secretary.communication.ui.BoxDetailActivity" />
-        <activity android:name=".module.secretary.contact.view.ContactListActivity" />
+        <activity
+            android:name=".module.home.company.ui.CompanyInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.company.ui.AddCompanyActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.HistoryActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.DetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.IntoBuildingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.ApplyingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.FailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.service.ui.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.service.ui.NewApplyActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".common.FullImageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.service.ui.ServiceHistoryActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.service.ui.DetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.door.ui.AddPeopleActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.workers.ui.WorkersManageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.workers.ui.AddWorkersActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.workers.ui.UpdateWorkerActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.communication.ui.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.communication.ui.BoxActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.communication.ui.BoxDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.contact.view.ContactListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.secretary.contact.view.ContactDetailActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".module.park.car.ui.MyCarActivity" />
-        <activity android:name=".module.park.car.ui.MyCarDetailActivity" />
-        <activity android:name=".module.park.car.ui.AddCarActivity" />
-        <activity android:name=".module.park.apply.ui.ApplyMainActivity" />
-        <activity android:name=".module.park.apply.ui.ApplyHistoryActivity" />
-        <activity android:name=".module.park.apply.ui.NewApplyActivity" />
-        <activity android:name=".module.park.apply.ui.ChooseParkingActivity" />
-        <activity android:name=".module.park.apply.ui.ChooseCarActivity" />
-        <activity android:name=".module.park.pay.ui.PayMainActivity" />
-        <activity android:name=".module.park.pay.ui.PayHistoryActivity" />
-        <activity android:name=".module.park.pay.ui.PayActivity" />
-        <activity android:name=".module.park.pay.ui.PayDetailActivity" />
-        <activity android:name=".module.park.apply.ui.ApplyDetailActivity" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.car.ui.MyCarActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.car.ui.MyCarDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.car.ui.AddCarActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.ApplyMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.ApplyHistoryActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.NewApplyActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.ChooseParkingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.ChooseCarActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.pay.ui.PayMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.pay.ui.PayHistoryActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.pay.ui.PayActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.pay.ui.PayDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.ApplyDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.secretary.communication.ui.WriteEmailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".common.PickActivity" />
-        <activity android:name=".module.home.work.ui.WorkMainActivity" />
-        <activity android:name=".module.home.work.ui.EditCompanyActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.KaoqinMainActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.WorkDayActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.AddWifiActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.LocationActivity" />
+        <activity
+            android:name=".common.PickActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.ui.WorkMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.ui.EditCompanyActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.kaoqin.ui.KaoqinMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.kaoqin.ui.WorkDayActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.kaoqin.ui.AddWifiActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.kaoqin.ui.LocationActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.leave.ui.LeaveMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.leave.ui.LeaveHistoryActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.leave.ui.LeaveNewApplyActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.worker.ui.WorkerListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.PermissionMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.PermissionTransferActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.setting.ui.SettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.setting.ui.UpdatePasswordActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.setting.ui.ForgetPasswordActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.bill.ui.MyBillActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.bill.ui.PayBillActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.bill.ui.PayResultActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.contact.view.AddContactActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.secretary.contact.view.ContactInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.scan.ui.CompanyCodeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.me.personaldata.ui.IdNumberInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.kaoqin.ui.SearchLocationActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
-        <!-- 公司 -->
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity
+            android:name=".module.secretary.service.ui.BuildingAdminListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".module.secretary.communication.ui.SelectContactsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.leave.ui.LeaveDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.AdminSettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.AddAdminActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.DeleteAdminActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.visitor.ui.InviteActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <!-- 阿里云推送 通道保持服务 -->
+        <service
+            android:name="com.alibaba.sdk.android.push.ChannelService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.SERVICE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.agoo.android.intent.action.PING_V4" />
+
+                <category android:name="taobao" />
+            </intent-filter>
+        </service>
+        <!-- 消息接收服务 -->
+        <service
+            android:name="com.alibaba.sdk.android.push.MsgService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.RECEIVE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.alibaba.sdk.android.push.NOTIFY_ACTION" />
+            </intent-filter>
+        </service>
+        <!-- 消息接收增强服务（可提高通知/消息达到率） -->
+        <service
+            android:name="com.alibaba.sdk.android.push.channel.TaobaoRecvService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.android.agoo.client.MessageReceiverService" />
+            </intent-filter>
+        </service>
+        <!-- 消息接收监听器 -->
+        <receiver android:name=".common.MyPushReceiver">
+            <intent-filter>
+                <action android:name="com.alibaba.push2.action.NOTIFICATION_OPENED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.alibaba.push2.action.NOTIFICATION_REMOVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.taobao.taobao.intent.action.COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.agoo.android.intent.action.RECEIVE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 公司 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="82592fabbcb044677ceb29bf19f8fa65" />
@@ -143,22 +508,8 @@
         <!-- android:name="com.amap.api.v2.apikey" -->
         <!-- android:value="720bdd152c36c3dcf6fc8810d76dc78b" /> -->
 
-        <activity android:name=".module.home.work.leave.ui.LeaveMainActivity" />
-        <activity android:name=".module.home.work.leave.ui.LeaveHistoryActivity" />
-        <activity android:name=".module.home.work.leave.ui.LeaveNewApplyActivity" />
-        <activity android:name=".module.home.work.worker.ui.WorkerListActivity" />
-        <activity android:name=".module.home.work.permission.ui.PermissionMainActivity" />
-        <activity android:name=".module.home.work.permission.ui.PermissionTransferActivity" />
-        <activity android:name=".module.me.setting.ui.SettingActivity" />
-        <activity android:name=".module.me.setting.ui.UpdatePasswordActivity" />
-        <activity android:name=".module.me.setting.ui.ForgetPasswordActivity" />
-        <activity android:name=".module.me.bill.ui.MyBillActivity" />
-        <activity android:name=".module.me.bill.ui.PayBillActivity" />
-        <activity android:name=".module.me.bill.ui.PayResultActivity" />
-        <activity android:name=".module.secretary.contact.view.AddContactActivity" />
-        <activity android:name=".module.secretary.contact.view.ContactInfoActivity" />
-        <activity android:name=".module.home.scan.ui.CompanyCodeActivity" />
 
+        <!-- 数据库 -->
         <meta-data
             android:name="DATABASE"
             android:value="bjt.db" />
@@ -172,23 +523,15 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.bangjiat.bjt" />
 
-        <activity android:name=".module.me.personaldata.ui.IdNumberInfoActivity" />
-        <activity android:name=".module.home.work.kaoqin.ui.SearchLocationActivity" />
+        <!-- 阿里云推送 -->
+        <meta-data
+            android:name="com.alibaba.app.appkey"
+            android:value="24904157" /> <!-- 请填写你自己的- appKey -->
+        <meta-data
+            android:name="com.alibaba.app.appsecret"
+            android:value="07f657160af41163c1bf09bdf617b797" /> <!-- 请填写你自己的appSecret -->
 
-        <service android:name="com.amap.api.location.APSService" />
-
-        <activity android:name=".module.secretary.service.ui.BuildingAdminListActivity" />
-        <activity
-            android:name=".wxapi.WXPayEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".module.secretary.communication.ui.SelectContactsActivity" />
-        <activity android:name=".module.home.work.leave.ui.LeaveDetailActivity" />
-        <activity android:name=".module.home.work.permission.ui.AdminSettingActivity" />
-        <activity android:name=".module.home.work.permission.ui.AddAdminActivity" />
-        <activity android:name=".module.home.work.permission.ui.DeleteAdminActivity" />
-        <activity android:name=".module.home.visitor.ui.InviteActivity"></activity>
+        <activity android:name=".module.home.work.kaoqin.ui.WebActivity"></activity>
     </application>
 
 </manifest>

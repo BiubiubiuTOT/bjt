@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
@@ -22,6 +23,8 @@ import butterknife.BindView;
 public class AllNoticeActivity extends BaseWhiteToolBarActivity implements NoticeContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
 
     private NoticeContract.Presenter presenter;
     private List<NoticeBean.SysNoticeListBean> list;
@@ -67,11 +70,14 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
     public void getAllNoticeResult(NoticeBean noticeBean) {
         if (noticeBean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = noticeBean.getSysNoticeList();
-            if (sysNoticeList != null) {
+            if (sysNoticeList != null && sysNoticeList.size() > 0) {
                 list = sysNoticeList;
                 setAdapter();
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
 
     }
 

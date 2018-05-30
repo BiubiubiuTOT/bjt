@@ -4,6 +4,7 @@ import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
+import com.bangjiat.bjt.module.home.company.beans.DeleteCompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
@@ -206,6 +207,20 @@ public interface ApiService {
                                                @Query("size") int size,
                                                @Query("beginTime") long begin,
                                                @Query("endTime") long end);
+
+    /**
+     * 11
+     * 用户查询账单
+     *
+     * @param token
+     * @param page
+     * @param size
+     * @return
+     */
+    @GET("api/userBill/select/PageBill")
+    Call<BaseResult<PageBillBean>> getPageBill(@Header(Constants.TOKEN_NAME) String token,
+                                               @Query("page") int page,
+                                               @Query("size") int size);
 
     /**
      * 12
@@ -843,4 +858,12 @@ public interface ApiService {
      */
     @POST("api/visitor/add/BuildVisitor")
     Call<BaseResult<String>> addInvite(@Header(Constants.TOKEN_NAME) String token, @Body InviteBean bean);
+
+    /**
+     * 96
+     * <p>
+     * 删除公司信息
+     */
+    @HTTP(method = "DELETE", path = "api/company/delete/Company", hasBody = true)
+    Call<BaseResult<String>> deleteCompany(@Header(Constants.TOKEN_NAME) String token, @Body DeleteCompanyInput input);
 }

@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,8 @@ import butterknife.BindView;
 public class PayMainActivity extends BaseToolBarActivity implements PayContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
     private Dialog dialog;
     private PayContract.Presenter presenter;
     List<PayListResult> beans;
@@ -107,12 +110,13 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
 
     @Override
     public void getPayListSuccess(List<PayListResult> str) {
-        if (str != null) {
-            if (str != null) {
-                beans = str;
-                setAdapter(beans);
-            }
+        if (str != null && str.size() > 0) {
+            beans = str;
+            setAdapter(beans);
+            ll_none.setVisibility(View.GONE);
+            return;
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override

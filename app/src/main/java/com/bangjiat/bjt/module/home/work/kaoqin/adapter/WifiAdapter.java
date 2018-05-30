@@ -26,6 +26,8 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
     private Map<Integer, Boolean> map;
+    private boolean isFirst = true;
+    private String wifiName;
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
@@ -41,23 +43,19 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
         notifyDataSetChanged();
     }
 
-    public WifiAdapter(List<WifiBean> lists, Context context) {
+    public WifiAdapter(List<WifiBean> lists, Context context, String wifiName) {
         this.lists = lists;
         this.mContext = context;
+        this.wifiName = wifiName;
 
         initCheck(lists.size());
     }
 
     private void initCheck(int size) {
         map = new HashMap<>();
-        Boolean isCheck = false;
-        if (map.get(0) != null) {
-            isCheck = map.get(0);
-        }
         for (int i = 0; i < size; i++) {
             map.put(i, false);
         }
-        map.put(0, true);
     }
 
     @Override
@@ -74,10 +72,13 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
         WifiBean bean = lists.get(position);
         viewHolder.tv_name.setText(bean.getName());
         viewHolder.tv_maybe.setVisibility(bean.isConnected() ? View.VISIBLE : View.GONE);
+        if (isFirst)
+            viewHolder.checkBox.setChecked(bean.getName().equals(wifiName));
 
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isFirst = false;
                 setCheck(position);
             }
         });

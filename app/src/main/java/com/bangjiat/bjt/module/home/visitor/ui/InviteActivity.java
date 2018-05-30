@@ -11,6 +11,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.KeyboardUtil;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.home.visitor.beans.InviteBean;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
@@ -118,6 +119,7 @@ public class InviteActivity extends BaseToolBarActivity implements VisitorContra
     @OnClick(R.id.tv_time)
     public void clickTime(View view) {
         if (!pvTime.isShowing()) {
+            KeyboardUtil.HideKeyboard(et_phone);
             pvTime.show();
         }
     }

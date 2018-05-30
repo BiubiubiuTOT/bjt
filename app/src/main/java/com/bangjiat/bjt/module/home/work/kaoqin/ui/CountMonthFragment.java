@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -103,6 +104,11 @@ public class CountMonthFragment extends BaseFragment implements ClockContract.Vi
         recycler_view_leave.setVisibility(View.GONE);
         recycler_view_absence.setVisibility(View.GONE);
         recycler_view_field.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.iv_excel)
+    public void clickExcel(View view) {
+        startActivity(new Intent(mContext, WebActivity.class));
     }
 
     @OnClick(R.id.rl_2)

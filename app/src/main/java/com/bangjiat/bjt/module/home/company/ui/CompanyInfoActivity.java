@@ -112,10 +112,14 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
 
     @Override
     public void getCompanyDetailSuccess(CompanyDetailResult result) {
-        company = result;
-        tv_name.setText(result.getName());
-        tv_address.setText(result.getAddress());
-        tv_trade.setText(result.getIndustry());
+        if (result!=null){
+            company = result;
+            tv_name.setText(result.getName());
+            tv_address.setText(result.getAddress());
+            tv_trade.setText(result.getIndustry());
+        }else {
+            fail("公司不存在");
+        }
     }
 
     private void showDia() {

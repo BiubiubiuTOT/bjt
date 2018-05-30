@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
-import com.bangjiat.bjt.common.UpdateAppUtil;
 import com.bangjiat.bjt.module.main.ui.fragment.HomeFragment;
 import com.bangjiat.bjt.module.me.MineFragment;
 import com.bangjiat.bjt.module.park.ParkFragment;
@@ -24,7 +23,7 @@ import butterknife.OnClick;
 /**
  * 首页
  */
-public class MainActivity extends BaseActivity  {
+public class MainActivity extends BaseActivity {
     private Fragment fragment_home, fragment_secretary, fragment_park, fragment_mine;
 
     @BindView(R.id.tv_home)
@@ -47,16 +46,14 @@ public class MainActivity extends BaseActivity  {
 
     private long exitTime = 0;
 
-    private UpdateAppUtil appUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         switchPage(0);
-        appUtil = new UpdateAppUtil(mContext);
-        appUtil.checkVersion();
 
     }
+
 
     @Override
     protected int getLayoutResId() {

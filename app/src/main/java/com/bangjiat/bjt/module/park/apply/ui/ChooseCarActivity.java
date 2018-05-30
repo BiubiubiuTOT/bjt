@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ import butterknife.BindView;
 public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
 
     private List<CarBean> list;
     private ChooseCarAdapter mAdapter;
@@ -129,7 +132,11 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
             this.list = list;
             Logger.d(list.toString());
             setAdapter();
+
+            ll_none.setVisibility(View.GONE);
+            return;
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override

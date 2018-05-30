@@ -146,6 +146,9 @@ public class CountDayFragment extends BaseFragment implements GetUserInfoContrac
         Button btn_cancel = view.findViewById(R.id.btn_cancel);
         Button btn_submit = view.findViewById(R.id.btn_submit);
         final EditText et_msg = view.findViewById(R.id.et_msg);
+        TextView txt_title = view.findViewById(R.id.txt_title);
+        txt_title.setText("修改备注");
+        btn_cancel.setText("取消");
 
 
         builder.setCancelable(false)

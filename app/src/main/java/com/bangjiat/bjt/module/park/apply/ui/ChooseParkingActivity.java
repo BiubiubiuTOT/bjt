@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
@@ -25,6 +26,8 @@ import butterknife.BindView;
 public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements ParkApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
     private List<ParkingResult.PageDataBean.RecordsBean> list;
@@ -94,12 +97,17 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
     public void getParkSpaceSuccess(ParkingResult s) {
         if (s != null) {
             ParkingResult.PageDataBean pageData = s.getPageData();
-            if (pageData != null ) {
+            if (pageData != null) {
                 List<ParkingResult.PageDataBean.RecordsBean> records = pageData.getRecords();
-                list = records;
-                setAdapter();
+                if (records != null && records.size() > 0) {
+                    list = records;
+                    setAdapter();
+                    ll_none.setVisibility(View.GONE);
+                    return;
+                }
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override

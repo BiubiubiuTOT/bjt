@@ -96,13 +96,13 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
 
     @OnClick(R.id.btn_agree)
     public void clickAgree(View view) {
-        type = 2;
+        type = 1;
         alertDialog.show();
     }
 
     @OnClick(R.id.btn_refuse)
     public void clickRefuse(View view) {
-        type = 1;
+        type = 2;
         alertDialog.show();
     }
 

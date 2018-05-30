@@ -12,19 +12,27 @@ import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
+import com.bangjiat.bjt.module.home.company.beans.DeleteCompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.CompanyContract;
 import com.bangjiat.bjt.module.home.company.contract.IntoCompanyContract;
 import com.bangjiat.bjt.module.home.company.presenter.CompanyPresenter;
 import com.bangjiat.bjt.module.home.company.presenter.IntoCompanyPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
+import com.bangjiat.bjt.module.me.personaldata.contract.GetUserInfoContract;
+import com.bangjiat.bjt.module.me.personaldata.presenter.GetUserInfoPresenter;
+import com.bangjiat.bjt.module.secretary.door.beans.IsIntoBuildingResult;
+import com.bangjiat.bjt.module.secretary.door.contract.IntoBuildingContract;
+import com.bangjiat.bjt.module.secretary.door.presenter.IntoBuildingPresenter;
 import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class EditCompanyActivity extends BaseToolBarActivity implements CompanyContract.View, IntoCompanyContract.View {
+public class EditCompanyActivity extends BaseToolBarActivity implements
+        CompanyContract.View, IntoCompanyContract.View, GetUserInfoContract.View, IntoBuildingContract.View {
     @BindView(R.id.tv_company_name)
     TextView tv_company;
     @BindView(R.id.et_industry)
@@ -35,11 +43,16 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
     private Dialog dialog;
     private CompanyContract.Presenter presenter;
     private IntoCompanyContract.Presenter intoPresenter;
+    private IntoBuildingContract.Presenter buildPresenter;
+
     private String token;
     private CompanyDetailResult result;
     private CompanyUserBean first;
     private TextView tv_title;
     private TextView tv_done;
+    private GetUserInfoContract.Presenter userPresenter;
+    int count;
+    private boolean isInto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +61,9 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
     }
 
     private void initData() {
+        userPresenter = new GetUserInfoPresenter(this);
+        userPresenter.getUserInfo(DataUtil.getToken(mContext));
+        buildPresenter = new IntoBuildingPresenter(this);
         if (!Constants.isCompanyAdmin()) {//公司管理员才能修改公司信息
             et_address.setEnabled(false);
             et_industry.setEnabled(false);
@@ -59,6 +75,7 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
         intoPresenter = new IntoCompanyPresenter(this);
         token = DataUtil.getToken(mContext);
         presenter = new CompanyPresenter(this);
+        buildPresenter.isIntoBuilding(token);
         if (first != null) {
             intoPresenter.getCompanyDetail(token, first.getCompanyId());
         }
@@ -75,7 +92,14 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
                     @Override
                     public void onClick(View view) {
                         if (Constants.isCompanyAdmin()) {//公司管理员不能退出公司
-                            error("请联系物业管理员删除公司");
+                            if (count == 1) {//剩下最后一个人
+                                if (isInto)
+                                    error("请联系物业管理员删除公司");
+                                else
+                                    presenter.deleteCompany(token, new DeleteCompanyInput(first.getCompanyId()));
+                            } else {
+                                error("请先转交管理员权限");
+                            }
                         } else
                             presenter.exitCompany(token);
                     }
@@ -119,7 +143,11 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
 
     @Override
     public void showDialog() {
-        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
     }
 
     @Override
@@ -135,7 +163,18 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
 
     @Override
     public void fail(String err) {
+        Logger.e(err);
+    }
 
+    @Override
+    public void getIsIntoBuildingSuccess(IsIntoBuildingResult result) {
+        if (result != null) {
+            int status = result.getStatus();
+            if (status == 2) {
+                Logger.d("isInto: " + true);
+                isInto = true;
+            }
+        }
     }
 
     @Override
@@ -184,5 +223,22 @@ public class EditCompanyActivity extends BaseToolBarActivity implements CompanyC
     public void error(String err) {
         Logger.e(err);
         Constants.showErrorDialog(this, err);
+    }
+
+    @Override
+    public void deleteCompanySuccess() {
+        first.delete();
+        show();
+    }
+
+    @Override
+    public void getUserInfoFail(String err) {
+
+    }
+
+    @Override
+    public void getUserInfoSuccess(UserInfoBean bean) {
+        if (bean != null)
+            count = bean.getCount();
     }
 }

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -246,6 +247,15 @@ public class WriteEmailActivity extends BaseToolBarActivity implements UploadIma
             showView(view);
         }
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showCancelSendDialog();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void showView(View view) {

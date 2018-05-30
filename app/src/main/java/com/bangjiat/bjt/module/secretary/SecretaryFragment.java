@@ -82,6 +82,8 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
 
             tv_door.setText("·门禁审批·");
             tv_service.setText("·服务审批·");
+        } else {
+            ll_admin.setVisibility(View.GONE);
         }
 
     }

@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -101,7 +100,8 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
     private String address;
     private Dialog dialog;
     private String token;
-    private int clockId;
+    private String clockId;
+    private DakaHistoryResult bean;
 
     @OnClick(R.id.ll_daka)
     public void clickDaka(View view) {
@@ -109,22 +109,12 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
             WifiUtil util = new WifiUtil(mContext);
             wifiName = util.getWifiName();
 
-            if (!wifiName.equals(input.getWifiName())) {
-                error("当前连接wifi与设置wifi不符，打卡失败");
-                return;
+            if (!wifiName.equals(input.getWifiName())) {//连接wifi为配置wifi则直接打卡，否则判断距离
+                distance();
+            } else {
+                daka();
             }
 
-            String workDay = input.getWorkDay();
-            int i = Constants.dayOfWeek();
-            int i1 = i - 1;
-            if (i1 == 0) i1 = 7;
-            Logger.d("dayOfWeek:" + i);
-            if (!workDay.contains(String.valueOf(i1))) {
-                error("今天不上班");
-                return;
-            }
-
-            distance();
         } else {
             error("请先设置考勤");
         }
@@ -132,6 +122,10 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
 
     private void distance() {
         Logger.d(input.toString());
+        if (input.getLatitude() == null) {
+            error("请先设置办公地点");
+            return;
+        }
         LatLonPoint start = new LatLonPoint(Double.parseDouble(input.getLatitude()), Double.parseDouble(input.getLongitude()));
         LatLonPoint end = new LatLonPoint(latitude, longitude);
 
@@ -252,7 +246,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
             setText();
 
         } else {
-            Toast.makeText(mContext, "请先设置考勤规则", Toast.LENGTH_SHORT).show();
+            error("请先设置考勤规则");
         }
     }
 
@@ -279,7 +273,19 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSettingEvent(String s) {
         input = RuleInput.first(RuleInput.class);
-        Logger.d("onSettingEvent: " + input.toString());
+
+        tv_in_time.setText("上班时间" + input.getInTime());
+        tv_out_time.setText("下班时间" + input.getOutTime());
+
+        if (bean == null) {
+            if (Constants.isInDay("00:00", "12:00")) {
+                tv_daka_text.setText("上班打卡");
+                type = 0;
+            } else {
+                tv_daka_text.setText("下班打卡");
+                type = 1;
+            }
+        }
     }
 
     @Override
@@ -296,38 +302,43 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
             if (distance > 200) {
                 error("当前位置不在打卡范围内，打卡失败");
             } else {
-                String token = DataUtil.getToken(mContext);
-                if (type == 0) {
-                    String inType = getInType();
-                    if (inType.equals("2")) {
-                        showLateDia();
-                    } else {
-                        InDakaInput inDakaInput = new InDakaInput();
-                        inDakaInput.setInAddress(address);
-                        inDakaInput.setInLatitude(String.valueOf(latitude));
-                        inDakaInput.setInLongitude(String.valueOf(longitude));
-                        inDakaInput.setInType(inType);
-                        inDakaInput.setInWay("1");
-                        dakaPresenter.inDaka(token, inDakaInput);
+                daka();
+            }
+        }
+    }
 
-                    }
-                } else {
-                    String outType = getOutType();
-                    if (outType.equals("2")) {
-                        showLeaveDia();
-                    } else {
-                        OutDakaInput outDakaInput = new OutDakaInput();
-                        outDakaInput.setOutAddress(address);
-                        outDakaInput.setOutLatitude(String.valueOf(latitude));
-                        outDakaInput.setOutLongitude(String.valueOf(longitude));
-                        outDakaInput.setOutType(outType);
-                        outDakaInput.setOutWay("1");
-                        if (clockId != 0) {
-                            outDakaInput.setClockId(clockId);
-                        }
-                        dakaPresenter.outDaka(token, outDakaInput);
-                    }
-                }
+    private void daka() {
+        String token = DataUtil.getToken(mContext);
+        if (type == 0) {
+            String inType = getInType();
+            if (inType.equals("2")) {
+                showLateDia();
+            } else {
+                InDakaInput inDakaInput = new InDakaInput();
+                inDakaInput.setInAddress(address);
+                inDakaInput.setInLatitude(String.valueOf(latitude));
+                inDakaInput.setInLongitude(String.valueOf(longitude));
+                inDakaInput.setInType(inType);
+                inDakaInput.setInWay("1");
+                dakaPresenter.inDaka(token, inDakaInput);
+            }
+        } else {
+            String outType = getOutType();
+            if (outType.equals("2")) {
+                showLeaveDia();
+            } else {
+                OutDakaInput outDakaInput = new OutDakaInput();
+                outDakaInput.setOutAddress(address);
+                outDakaInput.setOutLatitude(String.valueOf(latitude));
+                outDakaInput.setOutLongitude(String.valueOf(longitude));
+                outDakaInput.setOutType(outType);
+                outDakaInput.setOutWay("1");
+                if (!clockId.isEmpty()) {
+                    outDakaInput.setClockId(clockId);
+                } else outDakaInput.setClockId("");
+
+                Logger.d(outDakaInput.toString());
+                dakaPresenter.outDaka(token, outDakaInput);
             }
         }
     }
@@ -372,7 +383,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
     public void getClockListSuccess(List<DakaHistoryResult> results) {
         if (results != null) {
             if (results.size() > 0) {
-                DakaHistoryResult bean = results.get(0);
+                bean = results.get(0);
                 clockId = bean.getClockId();
                 Logger.d(bean.toString());
                 int inType = bean.getInType();
@@ -492,9 +503,12 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
                 outDakaInput.setOutType("2");
                 outDakaInput.setOutWay("1");
                 outDakaInput.setLeaveRemark(string);
-                if (clockId != 0) {
+                if (clockId != null) {
                     outDakaInput.setClockId(clockId);
-                }
+                } else outDakaInput.setClockId("");
+
+
+                Logger.d(outDakaInput.toString());
                 dakaPresenter.outDaka(token, outDakaInput);
             }
         });
@@ -505,7 +519,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
         WindowManager.LayoutParams layoutParams = alertDialog.getWindow().getAttributes();
         WindowManager m = getActivity().getWindowManager();
         Display d = m.getDefaultDisplay();
-        layoutParams.width = (int) (d.getWidth() * 0.8);
+        layoutParams.width = (int) (d.getWidth() * 0.85);
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         alertDialog.getWindow().setAttributes(layoutParams);
     }
@@ -516,7 +530,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
         Button btn_cancel = view.findViewById(R.id.btn_cancel);
         Button btn_submit = view.findViewById(R.id.btn_submit);
         final EditText et_msg = view.findViewById(R.id.et_msg);
-        TextView tv_title = view.findViewById(R.id.tv_title);
+        TextView tv_title = view.findViewById(R.id.txt_title);
         TextView tv_time = view.findViewById(R.id.tv_time);
         TextView tv_address = view.findViewById(R.id.tv_address);
         tv_time.setText("打卡时间：" + Constants.getTime());
@@ -559,7 +573,7 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
         WindowManager.LayoutParams layoutParams = alertDialog.getWindow().getAttributes();
         WindowManager m = getActivity().getWindowManager();
         Display d = m.getDefaultDisplay();
-        layoutParams.width = (int) (d.getWidth() * 0.8);
+        layoutParams.width = (int) (d.getWidth() * 0.85);
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         alertDialog.getWindow().setAttributes(layoutParams);
     }

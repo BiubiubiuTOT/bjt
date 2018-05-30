@@ -5,6 +5,7 @@ import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
+import com.bangjiat.bjt.module.home.company.beans.DeleteCompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.CompanyContract;
 
 import retrofit2.Response;
@@ -66,6 +67,24 @@ public class CompanyModel implements CompanyContract.Model {
                 BaseResult<String> body = response.body();
                 if (body.getStatus() == 200)
                     presenter.updateCompanySuccess(body.getData());
+                else presenter.error(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
+
+    @Override
+    public void deleteCompany(String token, DeleteCompanyInput input) {
+        ApiFactory.getService().deleteCompany(token, input).enqueue(new MyCallBack<BaseResult<String>>() {
+            @Override
+            public void onSuc(Response<BaseResult<String>> response) {
+                BaseResult<String> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.deleteCompanySuccess();
                 else presenter.error(body.getMessage());
             }
 

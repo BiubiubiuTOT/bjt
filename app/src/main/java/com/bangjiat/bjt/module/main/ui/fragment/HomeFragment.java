@@ -12,6 +12,7 @@ import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.UpdateAppUtil;
 import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
@@ -106,6 +107,11 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         startActivity(new Intent(mContext, AllNoticeActivity.class));
     }
 
+    private void update() {
+        UpdateAppUtil appUtil = new UpdateAppUtil(mContext);
+        appUtil.checkVersion();
+    }
+
     @OnClick(R.id.tv_content)
     public void clickContent(View view) {
         if (sysNoticeListBean != null) {
@@ -178,6 +184,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     @Override
     public void getAllNoticeResult(NoticeBean bean) {
         mRefreshLayout.endRefreshing();
+        update();
         if (bean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = bean.getSysNoticeList();
             if (sysNoticeList != null && sysNoticeList.size() > 0) {

@@ -2,6 +2,7 @@ package com.bangjiat.bjt.module.home.company.presenter;
 
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
+import com.bangjiat.bjt.module.home.company.beans.DeleteCompanyInput;
 import com.bangjiat.bjt.module.home.company.contract.CompanyContract;
 import com.bangjiat.bjt.module.home.company.model.CompanyModel;
 
@@ -72,6 +73,19 @@ public class CompanyPresenter implements CompanyContract.Presenter {
 
     @Override
     public void error(String err) {
+        view.dismissDialog();
+        view.error(err);
+    }
 
+    @Override
+    public void deleteCompany(String token, DeleteCompanyInput input) {
+        view.showDialog();
+        model.deleteCompany(token, input);
+    }
+
+    @Override
+    public void deleteCompanySuccess() {
+        view.dismissDialog();
+        view.deleteCompanySuccess();
     }
 }

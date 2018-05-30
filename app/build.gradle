@@ -16,7 +16,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.1.4"
+        versionName "1.1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -142,5 +142,10 @@ dependencies {
     compile 'com.allenliu.versionchecklib:library:2.0.5'//更新app
 
     compile 'cn.bingoogolapple:bga-refreshlayout:1.1.8@aar'//下拉刷新 上拉加载
+
+    compile('com.aliyun.ams:alicloud-android-push:2.3.7') {
+        exclude(module: 'alicloud-android-utdid')
+    }//阿里云推送
+
 
 }

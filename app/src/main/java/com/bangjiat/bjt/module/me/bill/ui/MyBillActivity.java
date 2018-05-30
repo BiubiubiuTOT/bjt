@@ -56,6 +56,7 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     private void initView() {
         presenter = new QueryBillPresenter(this);
         initDia();
+        presenter.getPageBill(DataUtil.getToken(mContext), 1, 10);
     }
 
     @Override

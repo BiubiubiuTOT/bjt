@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 注册页面
+ * 验证手机号
  */
 public class VerifyPhoneActivity extends BaseActivity implements ValidateCodeContract.View {
     @BindView(R.id.et_code)

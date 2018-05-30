@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 
 import java.util.List;
@@ -46,8 +47,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         final VisitorBean.RecordsBean visitorBean = lists.get(position);
-        viewHolder.tv_name.setText(visitorBean.getVisitorName());
-        viewHolder.tv_reason.setText(visitorBean.getVisitMatter());
+        viewHolder.tv_name.setText("拜访人姓名：" + visitorBean.getVisitorName());
+        viewHolder.tv_reason.setText("访问事宜：" + visitorBean.getVisitMatter());
+        viewHolder.tv_time.setText("拜访时间" + TimeUtils.changeToTime(visitorBean.getVisitTime()));
         int status = visitorBean.getStatus();
 
         String des = "";
@@ -56,9 +58,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
             viewHolder.btn_refuse.setVisibility(View.GONE);
             viewHolder.btn_agree.setVisibility(View.GONE);
             if (status == 2) {
-                des = "已通过";
+                des = "已同意";
             } else if (status == 3) {
-                des = "未通过";
+                des = "已拒绝";
             }
             viewHolder.tv_message.setText(des);
 
@@ -104,7 +106,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_icon;
-        TextView tv_name, tv_message, tv_reason;
+        TextView tv_name, tv_message, tv_reason, tv_time;
         Button btn_agree, btn_refuse;
 
         public ViewHolder(View view) {
@@ -112,6 +114,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.ViewHold
             iv_icon = view.findViewById(R.id.iv_icon);
             tv_name = view.findViewById(R.id.tv_name);
             tv_message = view.findViewById(R.id.tv_message);
+            tv_time = view.findViewById(R.id.tv_time);
             tv_reason = view.findViewById(R.id.tv_reason);
 
             btn_agree = view.findViewById(R.id.btn_agree);

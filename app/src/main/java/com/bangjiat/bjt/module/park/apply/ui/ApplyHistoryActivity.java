@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
@@ -27,6 +28,8 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
     private static final int DEAL_SUCCESS = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
     private List<ParkApplyHistoryResult.RecordsBean> list;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
@@ -122,7 +125,10 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
             if (records != null && records.size() > 0) {
                 list = records;
                 setAdapter();
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 }

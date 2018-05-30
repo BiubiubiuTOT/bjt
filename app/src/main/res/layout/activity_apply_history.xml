@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/mine_color"
+    android:orientation="vertical"
     tools:context=".module.secretary.door.ui.HistoryActivity">
 
     <include layout="@layout/toolbar" />
+
+    <include layout="@layout/no_data_page" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

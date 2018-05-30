@@ -65,7 +65,8 @@ public class AddCompanyActivity extends BaseToolBarActivity implements CompanyCo
         textView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CompanyInput input = new CompanyInput(et_name.getText().toString(), et_address.getText().toString());
+                CompanyInput input = new CompanyInput(et_name.getText().toString(),
+                        et_address.getText().toString(), et_trade.getText().toString());
                 presenter.addCompany(DataUtil.getToken(mContext), input);
             }
         });
@@ -121,6 +122,11 @@ public class AddCompanyActivity extends BaseToolBarActivity implements CompanyCo
 
     @Override
     public void error(String err) {
+
+    }
+
+    @Override
+    public void deleteCompanySuccess() {
 
     }
 

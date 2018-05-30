@@ -2,6 +2,7 @@ package com.bangjiat.bjt.module.home.company.contract;
 
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
 import com.bangjiat.bjt.module.home.company.beans.CompanyInput;
+import com.bangjiat.bjt.module.home.company.beans.DeleteCompanyInput;
 
 /**
  * @author ligh
@@ -16,6 +17,8 @@ public interface CompanyContract {
         void exitCompany(String token);
 
         void updateCompany(String token, CompanyDetailResult result);
+
+        void deleteCompany(String token, DeleteCompanyInput input);
 
     }
 
@@ -33,6 +36,8 @@ public interface CompanyContract {
         void exitCompanySuccess(String token);
 
         void error(String err);
+
+        void deleteCompanySuccess();
     }
 
     interface Presenter {
@@ -51,6 +56,10 @@ public interface CompanyContract {
         void updateCompany(String token, CompanyDetailResult result);
 
         void error(String err);
+
+        void deleteCompany(String token, DeleteCompanyInput input);
+
+        void deleteCompanySuccess();
 
     }
 }

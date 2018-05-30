@@ -13,7 +13,6 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.scan.contract.OpenDoorContract;
 import com.bangjiat.bjt.module.home.scan.presenter.OpenDoorPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
-import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 
@@ -84,8 +83,7 @@ public class OpenDoorCodeActivity extends BaseWhiteToolBarActivity implements Op
     @Override
     public void success(String str) {
         Logger.d(str);
-        UserInfo first = UserInfo.first(UserInfo.class);
-        mBitmap = QRUtils.getInstance().createQRCodeAddLogo(first.getUserId(), BitmapFactory.decodeResource(getResources(), R.mipmap.bjt));
+        mBitmap = QRUtils.getInstance().createQRCodeAddLogo(str, BitmapFactory.decodeResource(getResources(), R.mipmap.bjt));
         iv_code.setImageBitmap(mBitmap);
     }
 }

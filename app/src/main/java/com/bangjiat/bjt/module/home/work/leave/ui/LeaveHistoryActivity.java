@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
@@ -28,6 +29,8 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     private LeaveContract.Presenter presenter;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
     private LeaveHistoryAdapter mAdapter;
     private List<CompanyLeaveResult.RecordsBean> list;
     private String token;
@@ -116,8 +119,11 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
             if (records != null && records.size() > 0) {
                 list = records;
                 setAdapter();
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.GONE);
     }
 
     @Override

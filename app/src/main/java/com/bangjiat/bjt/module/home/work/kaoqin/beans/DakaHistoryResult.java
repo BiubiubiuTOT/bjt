@@ -30,7 +30,7 @@ public class DakaHistoryResult {
      * userRealname : string
      */
 
-    private int clockId;//打卡编号
+    private String clockId;//打卡编号
     private long ctime;
     private String inAddress;//上班打卡的地址
     private String inLatitude;//上班打卡的纬度
@@ -50,11 +50,11 @@ public class DakaHistoryResult {
     private String userId;
     private String userRealname;
 
-    public int getClockId() {
+    public String getClockId() {
         return clockId;
     }
 
-    public void setClockId(int clockId) {
+    public void setClockId(String clockId) {
         this.clockId = clockId;
     }
 

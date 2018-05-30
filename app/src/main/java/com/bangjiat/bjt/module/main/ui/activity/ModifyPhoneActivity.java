@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 注册页面
+ * 修改手机号
  */
 public class ModifyPhoneActivity extends BaseActivity implements RecoveredPasswordContract.View {
     @BindView(R.id.et_new_password)

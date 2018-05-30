@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.common.BaseResult;
@@ -23,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dou361.dialogui.DialogUIUtils;
 import com.githang.statusbar.StatusBarCompat;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -113,8 +116,23 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         DataUtil.setToken(mContext, result.getData());
         DataUtil.setAccount(mContext, phone, password);
         DataUtil.setLogin(mContext, true);
+        initPush(phone);
 
         startActivity(new Intent(mContext, MainActivity.class));
         finish();
+    }
+    private void initPush(String phone) {
+        PushServiceFactory.getCloudPushService().
+                bindAccount(phone, new CommonCallback() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Logger.d("阿里推送绑定成功 " + s + " ");
+                    }
+
+                    @Override
+                    public void onFailed(String s, String s1) {
+                        Logger.d("阿里推送绑定失败 " + s + " " + s1);
+                    }
+                });
     }
 }
