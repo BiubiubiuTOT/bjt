@@ -108,7 +108,7 @@ public class CountMonthFragment extends BaseFragment implements ClockContract.Vi
 
     @OnClick(R.id.iv_excel)
     public void clickExcel(View view) {
-        startActivity(new Intent(mContext, WebActivity.class));
+        startActivity(new Intent(mContext, ExcelActivity.class));
     }
 
     @OnClick(R.id.rl_2)
@@ -340,8 +340,11 @@ public class CountMonthFragment extends BaseFragment implements ClockContract.Vi
                 for (String s : stringsAbsence) {
                     CountBean e = mapAbsence.get(s);
                     int counts = e.getCounts();
-                    e.setCounts(dayOfMonth - reset - counts);
-                    absence.add(e);
+                    int counts1 = dayOfMonth - reset - counts;
+                    e.setCounts(counts1);
+                    if (counts1 != 0) {
+                        absence.add(e);
+                    }
 
                     list1.add(s);
                 }

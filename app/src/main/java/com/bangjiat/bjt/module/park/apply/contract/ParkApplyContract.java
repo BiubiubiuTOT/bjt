@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.park.apply.contract;
 
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
@@ -25,6 +26,8 @@ public interface ParkApplyContract {
         void dealParkApply(String token, DealParkApplyInput input);
 
         void getParkApplyHistory(String token, int page, int size, int spaceId);
+
+        void getLotList(String token, int spaceId);
     }
 
     interface View {
@@ -43,6 +46,8 @@ public interface ParkApplyContract {
         void dealParkApplySuccess();
 
         void getParkApplyHistorySuccess(ParkApplyHistoryResult result);
+
+        void getLotListSuccess(List<LotResult> results);
     }
 
     interface Presenter {
@@ -67,5 +72,9 @@ public interface ParkApplyContract {
         void getParkApplyHistory(String token, int page, int size, int spaceId);
 
         void getParkApplyHistorySuccess(ParkApplyHistoryResult result);
+
+        void getLotList(String token, int spaceId);
+
+        void getLotListSuccess(List<LotResult> results);
     }
 }

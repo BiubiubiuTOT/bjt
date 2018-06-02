@@ -15,6 +15,8 @@ public interface CarListContract {
         void getCarList(String token);
 
         void addCar(String token, CarBean bean);
+
+        void deleteCar(String token, String[] arr);
     }
 
     interface View {
@@ -27,6 +29,8 @@ public interface CarListContract {
         void getCarListSuccess(List<CarBean> bean);
 
         void addCarSuccess();
+
+        void deleteCarSuccess(String str);
     }
 
     interface Presenter {
@@ -39,6 +43,10 @@ public interface CarListContract {
         void getCarList(String token);
 
         void addCar(String token, CarBean bean);
+
+        void deleteCar(String token, String[] arr);
+
+        void deleteCarSuccess(String str);
 
     }
 }

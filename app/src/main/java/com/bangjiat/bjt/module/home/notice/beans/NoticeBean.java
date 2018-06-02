@@ -1,5 +1,7 @@
 package com.bangjiat.bjt.module.home.notice.beans;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,7 +12,16 @@ import java.util.List;
  */
 
 public class NoticeBean implements Serializable {
+    private List<SysNoticeListBean> buildNoticeList;
     private List<SysNoticeListBean> sysNoticeList;
+
+    public List<SysNoticeListBean> getBuildNoticeList() {
+        return buildNoticeList;
+    }
+
+    public void setBuildNoticeList(List<SysNoticeListBean> buildNoticeList) {
+        this.buildNoticeList = buildNoticeList;
+    }
 
     public List<SysNoticeListBean> getSysNoticeList() {
         return sysNoticeList;
@@ -20,24 +31,40 @@ public class NoticeBean implements Serializable {
         this.sysNoticeList = sysNoticeList;
     }
 
-    public static class SysNoticeListBean implements Serializable {
-        /**
-         * sNoticeId : 35
-         * userId : 1
-         * name : gfhfh
-         * content : fghd
-         * ctime : 1524903088634
-         * source : fhgdf
-         * type : 1
-         */
 
+    public static class SysNoticeListBean implements Serializable{
+        /**
+         * sNoticeId : 1
+         * userId : 3
+         * name : 多写点字
+         * content : 多写点字多写点
+         * ctime : 1527851342452
+         * source : fgh
+         */
+        @SerializedName("bNoticeId")
         private int sNoticeId;
         private String userId;
+        private int buildId;
         private String name;
         private String content;
         private long ctime;
         private String source;
-        private int type;
+
+        public int getsNoticeId() {
+            return sNoticeId;
+        }
+
+        public void setsNoticeId(int sNoticeId) {
+            this.sNoticeId = sNoticeId;
+        }
+
+        public int getBuildId() {
+            return buildId;
+        }
+
+        public void setBuildId(int buildId) {
+            this.buildId = buildId;
+        }
 
         public int getSNoticeId() {
             return sNoticeId;
@@ -87,12 +114,25 @@ public class NoticeBean implements Serializable {
             this.source = source;
         }
 
-        public int getType() {
-            return type;
+        @Override
+        public String toString() {
+            return "SysNoticeListBean{" +
+                    "sNoticeId=" + sNoticeId +
+                    ", userId='" + userId + '\'' +
+                    ", buildId=" + buildId +
+                    ", name='" + name + '\'' +
+                    ", content='" + content + '\'' +
+                    ", ctime=" + ctime +
+                    ", source='" + source + '\'' +
+                    '}';
         }
+    }
 
-        public void setType(int type) {
-            this.type = type;
-        }
+    @Override
+    public String toString() {
+        return "NoticeBean{" +
+                "buildNoticeList=" + buildNoticeList +
+                ", sysNoticeList=" + sysNoticeList +
+                '}';
     }
 }

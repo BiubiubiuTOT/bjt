@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,9 +19,11 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.door.adapter.DoorApplyUserAdapter;
+import com.bangjiat.bjt.module.secretary.door.beans.ApplyHistoryBean;
 import com.bangjiat.bjt.module.secretary.door.beans.DoorApplyDetailResult;
 import com.bangjiat.bjt.module.secretary.door.contract.DoorApplyDetailContract;
 import com.bangjiat.bjt.module.secretary.door.presenter.DoorApplyDetailPresenter;
@@ -28,6 +32,8 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.dou361.dialogui.DialogUIUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 
 import java.util.Calendar;
@@ -47,10 +53,16 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
     TextView tv_company_name;
     @BindView(R.id.rl_btn)
     RelativeLayout rl_btn;
+    @BindView(R.id.ll_reason)
+    LinearLayout ll_reason;
+    @BindView(R.id.card_time)
+    CardView card_time;
+    @BindView(R.id.tv_time)
+    TextView tv_time;
+    @BindView(R.id.tv_reason)
+    TextView tv_reason;
 
     private List<DoorApplyDetailResult> list;
-    private String name;
-    private String id;
     private Dialog dialog;
     private DoorApplyDetailContract.Presenter presenter;
     private String token;
@@ -58,6 +70,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
     private int type;
     private AlertDialog alertDialog;
     private BuildUser first;
+    ApplyHistoryBean.RecordsBean recordsBean;
     private int status;
 
     @Override
@@ -69,21 +82,26 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
     private void initData() {
         presenter = new DoorApplyDetailPresenter(this);
         Intent intent = getIntent();
-        name = intent.getStringExtra("name");
-        id = intent.getStringExtra("id");
-        status = intent.getIntExtra("status", 0);
+        recordsBean = (ApplyHistoryBean.RecordsBean) intent.getSerializableExtra("data");
+        status = recordsBean.getType();
+        String detail = recordsBean.getDetail();
+        if (detail != null) {
+            list = new Gson().fromJson(detail, new TypeToken<List<DoorApplyDetailResult>>() {
+            }.getType());
+            if (list != null && list.size() > 0)
+                setAdapter();
+        }
         token = DataUtil.getToken(mContext);
         first = BuildUser.first(BuildUser.class);
 
-        if (name != null) {
-            tv_company_name.setText(name);
-        }
-        if (id != null) {
-            if (Constants.isCompanyAdmin())
-                presenter.getDetail(token, id);
-            else {
-                presenter.getAdminDetail(token, first.getBuildId(), id);
-            }
+        tv_company_name.setText(recordsBean.getCompanyName());
+
+        if (status == 2) {
+            card_time.setVisibility(View.VISIBLE);
+            tv_time.setText(TimeUtils.changeToTime(recordsBean.getEndTime()));
+        } else if (status == 3) {
+            ll_reason.setVisibility(View.VISIBLE);
+            tv_reason.setText(recordsBean.getOpinion());
         }
 
         if (Constants.isBuildingAdmin()) {
@@ -98,7 +116,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     long time = date.getTime();
-                    ApprovalDoorInput input = new ApprovalDoorInput(id, time, type);
+                    ApprovalDoorInput input = new ApprovalDoorInput(recordsBean.getGuardMainId(), time, type);
                     presenter.approvalDoor(token, first.getBuildId(), input);
                 }
             }).setSubmitColor(Color.BLACK)//确定按钮文字颜色
@@ -131,11 +149,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
 
     @Override
     public void success(List<DoorApplyDetailResult> results) {
-        if (results != null) {
-            list = results;
-            Logger.d(results.toString());
-            setAdapter();
-        }
+
     }
 
     @Override
@@ -218,7 +232,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
                 if (alertDialog.isShowing())
                     alertDialog.dismiss();
 
-                ApprovalDoorInput input = new ApprovalDoorInput(id, string, type);
+                ApprovalDoorInput input = new ApprovalDoorInput(recordsBean.getGuardMainId(), string, type);
                 presenter.approvalDoor(token, first.getBuildId(), input);
             }
         });

@@ -1,15 +1,16 @@
-package com.bangjiat.bjt.module.park.apply.adapter;
+package com.bangjiat.bjt.module.park.car.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * 邮箱:1256144200@qq.com
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
-public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> implements View.OnClickListener {
+public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> implements View.OnClickListener {
     private List<CarBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
@@ -27,7 +28,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
         this.mOnItemClickListener = listener;
     }
 
-    public CarAdapter(List<CarBean> lists, Context context) {
+    public MyCarAdapter(List<CarBean> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
@@ -43,7 +44,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_car, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_mycar, viewGroup, false);
         view.setOnClickListener(this);
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -52,32 +53,15 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         final CarBean bean = lists.get(position);
-        int type = bean.getType();
-        if (type == 1) {
-            viewHolder.cb_2.setChecked(true);
-            viewHolder.cb_1.setChecked(false);
-        } else {
-            viewHolder.cb_2.setChecked(false);
-            viewHolder.cb_1.setChecked(true);
-        }
 
         viewHolder.tv_number.setText("车牌：" + bean.getPlateNumber());
-        viewHolder.tv_name.setText("姓名：" + bean.getName());
-        viewHolder.tv_type.setText("车型：" + bean.getModel());
+        viewHolder.tv_model.setText("车型：" + bean.getModel());
         viewHolder.tv_color.setText("颜色：" + bean.getColor());
-
-        viewHolder.cb_1.setOnClickListener(new View.OnClickListener() {
+        Glide.with(mContext).load(bean.getResource()).centerCrop().into(viewHolder.iv_car);
+        viewHolder.tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bean.setType(2);
-                notifyDataSetChanged();
-            }
-        });
-        viewHolder.cb_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bean.setType(1);
-                notifyDataSetChanged();
+                mOnItemClickListener.onDelete(view, viewHolder.getAdapterPosition());
             }
         });
 
@@ -97,21 +81,22 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> impl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_number, tv_type, tv_color;
-        CheckBox cb_1, cb_2;
+        TextView tv_number, tv_model, tv_color, tv_delete;
+        ImageView iv_car;
 
         public ViewHolder(View view) {
             super(view);
-            tv_name = view.findViewById(R.id.tv_name);
-            tv_type = view.findViewById(R.id.tv_type);
             tv_color = view.findViewById(R.id.tv_color);
+            tv_model = view.findViewById(R.id.tv_model);
+            tv_delete = view.findViewById(R.id.tv_delete);
             tv_number = view.findViewById(R.id.tv_number);
-            cb_1 = view.findViewById(R.id.checkbox_1);
-            cb_2 = view.findViewById(R.id.checkbox_2);
+            iv_car = view.findViewById(R.id.iv_car);
         }
     }
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
+
+        void onDelete(View view, int pos);
     }
 }

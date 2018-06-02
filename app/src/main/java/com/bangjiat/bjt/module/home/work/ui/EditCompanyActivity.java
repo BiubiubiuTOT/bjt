@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
@@ -39,6 +40,10 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
     ClearEditText et_industry;
     @BindView(R.id.et_address)
     ClearEditText et_address;
+    @BindView(R.id.ll_build)
+    LinearLayout ll_build;
+    @BindView(R.id.tv_build)
+    TextView tv_build;
 
     private Dialog dialog;
     private CompanyContract.Presenter presenter;
@@ -184,6 +189,10 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
             tv_company.setText(result.getName());
             et_industry.setText(result.getIndustry());
             et_address.setText(result.getAddress());
+            if (DataUtil.isIntoBuilding(mContext)) {
+                ll_build.setVisibility(View.VISIBLE);
+                tv_build.setText(result.getBuildName());
+            }
         }
     }
 

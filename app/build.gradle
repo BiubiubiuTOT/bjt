@@ -16,7 +16,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.1.6"
+        versionName "1.1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -131,9 +131,9 @@ dependencies {
     compile 'com.github.satyan:sugar:1.5'
 
     //数据库
-    compile 'com.amap.api:location:latest.integration'
-    compile 'com.amap.api:search:latest.integration'
-    compile 'com.amap.api:3dmap:latest.integration'
+    compile 'com.amap.api:location:4.0.1'
+    compile 'com.amap.api:search:6.1.0'
+    compile 'com.amap.api:3dmap:6.2.0'
 
     compile 'com.xgr.easypay:EasyPay:1.0.2'//支付
 
@@ -146,6 +146,7 @@ dependencies {
     compile('com.aliyun.ams:alicloud-android-push:2.3.7') {
         exclude(module: 'alicloud-android-utdid')
     }//阿里云推送
-
+    compile files('libs/jxl.jar') //excel
+    compile 'com.github.huangyanbin:SmartTable:2.2.0'
 
 }

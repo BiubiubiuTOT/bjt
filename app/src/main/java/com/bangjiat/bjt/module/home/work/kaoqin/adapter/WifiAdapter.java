@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
@@ -67,7 +68,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         viewHolder.checkBox.setChecked(map.get(position));
         WifiBean bean = lists.get(position);
         viewHolder.tv_name.setText(bean.getName());
@@ -80,6 +81,15 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
             public void onClick(View view) {
                 isFirst = false;
                 setCheck(position);
+            }
+        });
+        viewHolder.ll_wifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                int adapterPosition = viewHolder.getAdapterPosition();
+//                boolean checked = !map.get(adapterPosition);
+//                viewHolder.checkBox.setChecked(checked);
+//                setCheck(adapterPosition);
             }
         });
 
@@ -115,12 +125,14 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> im
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_maybe;
         CheckBox checkBox;
+        LinearLayout ll_wifi;
 
         public ViewHolder(View view) {
             super(view);
             tv_name = view.findViewById(R.id.tv_name);
             tv_maybe = view.findViewById(R.id.tv_maybe);
             checkBox = view.findViewById(R.id.checkBox);
+            ll_wifi = view.findViewById(R.id.ll_wifi);
         }
     }
 

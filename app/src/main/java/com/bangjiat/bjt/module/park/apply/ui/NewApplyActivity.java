@@ -14,6 +14,7 @@ import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.CarAdapter;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
@@ -145,6 +146,11 @@ public class NewApplyActivity extends BaseWhiteToolBarActivity implements ParkAp
 
     @Override
     public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
+
+    }
+
+    @Override
+    public void getLotListSuccess(List<LotResult> results) {
 
     }
 

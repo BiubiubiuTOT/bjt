@@ -92,4 +92,16 @@ public class CarListPresenter implements CarListContract.Presenter {
         view.showDialog();
         model.addCar(token, bean);
     }
+
+    @Override
+    public void deleteCar(String token, String[] arr) {
+        view.showDialog();
+        model.deleteCar(token, arr);
+    }
+
+    @Override
+    public void deleteCarSuccess(String str) {
+        view.dismissDialog();
+        view.deleteCarSuccess(str);
+    }
 }

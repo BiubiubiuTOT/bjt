@@ -20,6 +20,7 @@ import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.contract.UploadImageContract;
 import com.bangjiat.bjt.module.main.presenter.UploadImagePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
 import com.bangjiat.bjt.module.park.car.contract.CarListContract;
 import com.bangjiat.bjt.module.park.car.presenter.CarListPresenter;
@@ -107,6 +108,13 @@ public class AddCarActivity extends BaseWhiteToolBarActivity implements UploadIm
     }
 
     private void initData() {
+        UserInfo first = UserInfo.first(UserInfo.class);
+        String realname = first.getRealname();
+        if (!realname.isEmpty()) {
+            et_name.setText(realname);
+        }
+        et_id_number.setText(first.getIdNumber());
+
         uploadImagePresenter = new UploadImagePresenter(this);
         addCarPresenter = new CarListPresenter(this);
         path = new ArrayList<>();
@@ -255,6 +263,11 @@ public class AddCarActivity extends BaseWhiteToolBarActivity implements UploadIm
     @Override
     public void addCarSuccess() {
         showSuccessExitDialog("添加成功");
+    }
+
+    @Override
+    public void deleteCarSuccess(String str) {
+
     }
 
     public void showSuccessExitDialog(String msg) {

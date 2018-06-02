@@ -44,6 +44,8 @@ public class DoorApplyUserAdapter extends RecyclerView.Adapter<DoorApplyUserAdap
         viewHolder.tv_name.setText(historyBean.getUserRealname());
         viewHolder.tv_id_number.setText(historyBean.getIdNumber());
         viewHolder.tv_phone.setText(historyBean.getUsername());
+        viewHolder.tv_build.setText(historyBean.getBuildName());
+        viewHolder.tv_room.setText(historyBean.getDoorPlate());
 
         viewHolder.itemView.setTag(position);
     }
@@ -61,13 +63,15 @@ public class DoorApplyUserAdapter extends RecyclerView.Adapter<DoorApplyUserAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_phone, tv_id_number;
+        TextView tv_name, tv_phone, tv_id_number, tv_build, tv_room;
 
         public ViewHolder(View view) {
             super(view);
             tv_name = view.findViewById(R.id.tv_name);
             tv_phone = view.findViewById(R.id.tv_phone);
             tv_id_number = view.findViewById(R.id.tv_id_number);
+            tv_build = view.findViewById(R.id.tv_build);
+            tv_room = view.findViewById(R.id.tv_room);
         }
     }
 

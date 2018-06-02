@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class PermissionMainActivity extends BaseWhiteToolBarActivity {
+    private static final int OK = 2;
     @BindView(R.id.btn_permission)
     Button btn_permission;
 
@@ -33,9 +34,18 @@ public class PermissionMainActivity extends BaseWhiteToolBarActivity {
         return "权限管理";
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == OK) {
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
+
     @OnClick(R.id.btn_permission)
     public void clickPermission(View view) {
-        startActivity(new Intent(mContext, PermissionTransferActivity.class));
+        startActivityForResult(new Intent(mContext, PermissionTransferActivity.class), OK);
     }
 
     @OnClick(R.id.btn_setting)

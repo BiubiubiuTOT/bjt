@@ -102,7 +102,11 @@ public class MainActivity extends BaseToolBarActivity implements DealBoxContract
 
     @Override
     public void showDialog() {
-        dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
+        if (dialog != null) {
+            if (!dialog.isShowing())
+                dialog.show();
+        } else
+            dialog = DialogUIUtils.showLoadingVertical(mContext, "加载中").show();
     }
 
     @Override

@@ -47,6 +47,15 @@ public class DealParkApplyInput {
             this.type = type;
             this.lotNumber = lotNumber;
         }
+
+        @Override
+        public String toString() {
+            return "Detail{" +
+                    "userId='" + userId + '\'' +
+                    ", type=" + type +
+                    ", lotNumber='" + lotNumber + '\'' +
+                    '}';
+        }
     }
 
     public int getApplyId() {
@@ -71,5 +80,14 @@ public class DealParkApplyInput {
 
     public void setDetailList(List<Detail> detailList) {
         this.detailList = detailList;
+    }
+
+    @Override
+    public String toString() {
+        return "DealParkApplyInput{" +
+                "applyId=" + applyId +
+                ", type=" + type +
+                ", detailList=" + detailList +
+                '}';
     }
 }

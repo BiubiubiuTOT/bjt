@@ -84,8 +84,13 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
             et_name.setText(bean.getRealname());
             et_card.setText(bean.getIdNumber());
             et_phone.setText(bean.getPhone());
-            et_department.setText(bean.getDepartment());
-            et_duty.setText(bean.getJob());
+            String department = bean.getDepartment();
+            if (department != null && !department.equals("null"))
+                et_department.setText(department);
+
+            String job = bean.getJob();
+            if (job != null && !job.equals("null"))
+                et_duty.setText(job);
         }
 
 

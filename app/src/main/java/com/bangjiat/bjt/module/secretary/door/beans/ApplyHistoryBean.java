@@ -77,29 +77,38 @@ public class ApplyHistoryBean {
          * type : 0 类型:1、待审批，2、已通过，3、未通过
          */
 
-        private String applyTime;
+        private long applyTime;
         private String applyUserId;
         private String applyUserRealname;
         private String applyUsername;
-        private String approvalTime;
+        private long approvalTime;
         private String approvalUserId;
         private String approvalUserRealname;
         private String approvalUsername;
         private String buildId;
         private String companyId;
         private String companyName;
-        private String ctime;
+        private long ctime;
+        private long endTime;
         private String detail;
         private String guardMainId;
         private String opinion;
         private String remark;
         private int type;
 
-        public String getApplyTime() {
+        public long getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(long endTime) {
+            this.endTime = endTime;
+        }
+
+        public long getApplyTime() {
             return applyTime;
         }
 
-        public void setApplyTime(String applyTime) {
+        public void setApplyTime(long applyTime) {
             this.applyTime = applyTime;
         }
 
@@ -127,11 +136,11 @@ public class ApplyHistoryBean {
             this.applyUsername = applyUsername;
         }
 
-        public String getApprovalTime() {
+        public long getApprovalTime() {
             return approvalTime;
         }
 
-        public void setApprovalTime(String approvalTime) {
+        public void setApprovalTime(long approvalTime) {
             this.approvalTime = approvalTime;
         }
 
@@ -183,11 +192,11 @@ public class ApplyHistoryBean {
             this.companyName = companyName;
         }
 
-        public String getCtime() {
+        public long getCtime() {
             return ctime;
         }
 
-        public void setCtime(String ctime) {
+        public void setCtime(long ctime) {
             this.ctime = ctime;
         }
 

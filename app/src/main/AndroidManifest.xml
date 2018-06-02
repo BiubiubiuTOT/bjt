@@ -531,7 +531,8 @@
             android:name="com.alibaba.app.appsecret"
             android:value="07f657160af41163c1bf09bdf617b797" /> <!-- 请填写你自己的appSecret -->
 
-        <activity android:name=".module.home.work.kaoqin.ui.WebActivity"></activity>
+        <activity android:name=".module.home.work.kaoqin.ui.ExcelActivity" />
+        <activity android:name=".module.park.apply.ui.ChooseLotActivity"></activity>
     </application>
 
 </manifest>

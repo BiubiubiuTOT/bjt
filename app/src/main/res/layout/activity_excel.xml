@@ -6,15 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/mine_color"
     android:orientation="vertical"
-    tools:context="com.bangjiat.bjt.module.park.apply.ui.ChooseParkingActivity">
+    tools:context="com.bangjiat.bjt.module.home.work.kaoqin.ui.ExcelActivity">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar_4" />
 
-    <include layout="@layout/no_data_page" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <com.bin.david.form.core.SmartTable
+        android:id="@+id/table"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_height="match_parent" />
 </LinearLayout>

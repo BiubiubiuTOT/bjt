@@ -10,9 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 import com.bangjiat.bjt.module.park.apply.adapter.ApplyHistoryAdapter;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
@@ -43,9 +46,19 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
 
     private void initData() {
         presenter = new ParkApplyPresenter(this);
-        presenter.getParkApplyHistory(DataUtil.getToken(mContext), 1, 10, 0);
+
+        getData();
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
+    }
+
+    private void getData() {
+        boolean parkAdmin = Constants.isParkAdmin();
+        SpaceUser user = SpaceUser.first(SpaceUser.class);
+        if (!parkAdmin)
+            presenter.getParkApplyHistory(DataUtil.getToken(mContext), 1, 10, 0);
+        else
+            presenter.getParkApplyHistory(DataUtil.getToken(mContext), 1, 10, user.getSpaceId());
     }
 
     private void setAdapter() {
@@ -67,7 +80,7 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == DEAL_SUCCESS) {
-                presenter.getParkApplyHistory(DataUtil.getToken(mContext), 1, 10, 0);
+                getData();
             }
         }
     }
@@ -130,5 +143,10 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
             }
         }
         ll_none.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void getLotListSuccess(List<LotResult> results) {
+
     }
 }

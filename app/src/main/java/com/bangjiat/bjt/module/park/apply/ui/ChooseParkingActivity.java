@@ -9,15 +9,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.ParkingAdapter;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
 import com.bangjiat.bjt.module.park.apply.presenter.ParkApplyPresenter;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
 import com.dou361.dialogui.DialogUIUtils;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -44,7 +47,6 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
-
     }
 
     private void setAdapter() {
@@ -85,7 +87,8 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
 
     @Override
     public void error(String err) {
-
+        Logger.d(err);
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override
@@ -122,6 +125,11 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
 
     @Override
     public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
+
+    }
+
+    @Override
+    public void getLotListSuccess(List<LotResult> results) {
 
     }
 }

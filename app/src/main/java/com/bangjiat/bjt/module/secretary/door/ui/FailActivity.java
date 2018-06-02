@@ -75,6 +75,7 @@ public class FailActivity extends BaseColorToolBarActivity implements BuildUserI
         Intent intent = new Intent(mContext, IntoBuildingActivity.class);
         intent.putExtra("data", code);
         startActivity(intent);
+        finish();
     }
 
 

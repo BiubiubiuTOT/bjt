@@ -15,7 +15,9 @@ import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
 import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,20 +70,29 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     @Override
     public void getAllNoticeResult(NoticeBean noticeBean) {
+        list = new ArrayList<>();
         if (noticeBean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = noticeBean.getSysNoticeList();
             if (sysNoticeList != null && sysNoticeList.size() > 0) {
-                list = sysNoticeList;
-                setAdapter();
-                ll_none.setVisibility(View.GONE);
-                return;
+                list.addAll(sysNoticeList);
             }
+            List<NoticeBean.SysNoticeListBean> buildNoticeList = noticeBean.getBuildNoticeList();
+            if (buildNoticeList != null && buildNoticeList.size() > 0) {
+                list.addAll(buildNoticeList);
+            }
+        }
+
+        if (list.size() > 0) {
+            setAdapter();
+            ll_none.setVisibility(View.GONE);
+            return;
         }
         ll_none.setVisibility(View.VISIBLE);
 
     }
 
     private void setAdapter() {
+        Logger.d(list.toString());
         NoticeAdapter mAdapter = new NoticeAdapter(list);
         recycler_view.setAdapter(mAdapter);
 

@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
-import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
-import com.bangjiat.bjt.module.park.apply.adapter.ChooseCarAdapter;
+import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.bangjiat.bjt.module.park.apply.adapter.LotAdapter;
 import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
@@ -24,36 +22,33 @@ import com.bangjiat.bjt.module.park.car.beans.CarBean;
 import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 
-public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyContract.View {
+/**
+ * 选择车位
+ */
+public class ChooseLotActivity extends BaseWhiteToolBarActivity implements ParkApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
-
-    private List<CarBean> list;
-    private ChooseCarAdapter mAdapter;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
+    private List<LotResult> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initData();
     }
 
     private void initData() {
         presenter = new ParkApplyPresenter(this);
-        presenter.getWorkersCar(DataUtil.getToken(mContext));
+        int spaceId = getIntent().getIntExtra("data", 0);
+        if (spaceId != 0)
+            presenter.getLotList(DataUtil.getToken(mContext), spaceId);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
@@ -61,53 +56,28 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
     }
 
     private void setAdapter() {
-        mAdapter = new ChooseCarAdapter(list, mContext);
+        LotAdapter mAdapter = new LotAdapter(list, mContext);
         recyclerView.setAdapter(mAdapter);
-    }
 
-    @Override
-    protected int getLayoutResId() {
-        return R.layout.activity_choose_car;
-    }
-
-    @Override
-    protected void initToolbar(Toolbar toolbar) {
-        toolbar.setTitle("");
-        TextView tv_done = toolbar.findViewById(R.id.toolbar_other);
-        tv_done.setText("完成");
-        tv_done.setVisibility(View.VISIBLE);
-        TextView tv_title = toolbar.findViewById(R.id.toolbar_title);
-        tv_title.setText("选择车辆");
-        toolbar.setNavigationIcon(R.mipmap.back_black);
-
-        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
-        tv_title.setTextColor(getResources().getColor(R.color.black));
-        tv_done.setTextColor(getResources().getColor(R.color.black));
-
-        tv_done.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setOnItemClickListener(new LotAdapter.OnRecyclerViewItemClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("data", (Serializable) getData());
-                intent.putExtras(bundle);
-
+                intent.putExtra("data", list.get(position));
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
 
-    private List<CarBean> getData() {
-        List<CarBean> beans = new ArrayList<>();
-        HashMap<Integer, Boolean> map = mAdapter.getMap();
-        Set<Map.Entry<Integer, Boolean>> entries = map.entrySet();
-        for (Map.Entry<Integer, Boolean> entry : entries) {
-            if (entry.getValue()) {
-                beans.add(list.get(entry.getKey()));
-            }
-        }
-        return beans;
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_choose_lot;
+    }
+
+    @Override
+    protected String getTitleStr() {
+        return "选择车位";
     }
 
     @Override
@@ -124,20 +94,12 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
     @Override
     public void error(String err) {
         Logger.e(err);
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override
     public void getWorkersCarSuccess(List<CarBean> list) {
-        if (list != null && list.size() > 0) {
-            this.list = list;
-            Logger.d(list.toString());
-            setAdapter();
 
-            ll_none.setVisibility(View.GONE);
-            return;
-        }
-        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -162,6 +124,12 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
 
     @Override
     public void getLotListSuccess(List<LotResult> results) {
-
+        if (results != null && results.size() > 0) {
+            list = results;
+            setAdapter();
+            ll_none.setVisibility(View.GONE);
+            return;
+        }
+        ll_none.setVisibility(View.VISIBLE);
     }
 }

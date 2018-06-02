@@ -124,7 +124,7 @@ public class UpdateAppUtil {
                 NotificationBuilder.create()
                         .setRingtone(true)
                         .setIcon(R.mipmap.ic_launcher)
-                        .setTicker("下载")
+                        .setTicker("更新版本")
                         .setContentTitle("正在下载新版本")
                         .setContentText(mContext.getString(R.string.custom_content_text))
         );

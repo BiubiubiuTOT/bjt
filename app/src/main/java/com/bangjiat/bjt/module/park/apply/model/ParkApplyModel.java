@@ -5,6 +5,7 @@ import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
@@ -102,13 +103,48 @@ public class ParkApplyModel implements ParkApplyContract.Model {
 
     @Override
     public void getParkApplyHistory(String token, int page, int size, int spaceId) {
-        ApiFactory.getService().getParkApplyHistory(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
+        if (spaceId == 0) {
+            ApiFactory.getService().getParkApplyHistory(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
+                @Override
+                public void onSuc(Response<BaseResult<ParkApplyHistoryResult>> response) {
+                    BaseResult<ParkApplyHistoryResult> body = response.body();
+                    if (body.getStatus() == 200) {
+                        presenter.getParkApplyHistorySuccess(body.getData());
+                    } else presenter.error(body.getMessage());
+                }
+
+                @Override
+                public void onFail(String message) {
+                    presenter.error(message);
+                }
+            });
+        } else {
+            ApiFactory.getService().getParkApplyHistory(token, page, Constants.SIZE, spaceId).enqueue(new MyCallBack<BaseResult<ParkApplyHistoryResult>>() {
+                @Override
+                public void onSuc(Response<BaseResult<ParkApplyHistoryResult>> response) {
+                    BaseResult<ParkApplyHistoryResult> body = response.body();
+                    if (body.getStatus() == 200) {
+                        presenter.getParkApplyHistorySuccess(body.getData());
+                    } else presenter.error(body.getMessage());
+                }
+
+                @Override
+                public void onFail(String message) {
+                    presenter.error(message);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void getLotList(String token, int spaceId) {
+        ApiFactory.getService().getLotList(token, spaceId).enqueue(new MyCallBack<BaseResult<List<LotResult>>>() {
             @Override
-            public void onSuc(Response<BaseResult<ParkApplyHistoryResult>> response) {
-                BaseResult<ParkApplyHistoryResult> body = response.body();
-                if (body.getStatus() == 200) {
-                    presenter.getParkApplyHistorySuccess(body.getData());
-                } else presenter.error(body.getMessage());
+            public void onSuc(Response<BaseResult<List<LotResult>>> response) {
+                BaseResult<List<LotResult>> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.getLotListSuccess(body.getData());
+                else presenter.error(body.getMessage());
             }
 
             @Override

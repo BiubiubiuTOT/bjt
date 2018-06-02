@@ -58,4 +58,22 @@ public class CarListModel implements CarListContract.Model {
             }
         });
     }
+
+    @Override
+    public void deleteCar(String token, String[] arr) {
+        ApiFactory.getService().deleteCar(token, arr).enqueue(new MyCallBack<BaseResult<String>>() {
+            @Override
+            public void onSuc(Response<BaseResult<String>> response) {
+                BaseResult<String> body = response.body();
+                if (body.getStatus() == 200) {
+                    presenter.deleteCarSuccess(body.getData());
+                } else presenter.error(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
 }

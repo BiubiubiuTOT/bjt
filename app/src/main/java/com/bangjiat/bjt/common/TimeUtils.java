@@ -157,4 +157,15 @@ public class TimeUtils {
 
         return end1 - outTime3;
     }
+
+    public static int getDay(long ctime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(ctime));
+        Date date = new Date(ctime);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        String format1 = format.format(date);
+
+        int i = calendar.get(Calendar.DAY_OF_MONTH);
+        return i;
+    }
 }

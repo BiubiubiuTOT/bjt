@@ -48,7 +48,7 @@ public class WorkMainActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.tv_permission)
     public void clickPermission(View view) {
-        startActivity(new Intent(mContext, PermissionMainActivity.class));
+        startActivityForResult(new Intent(mContext, PermissionMainActivity.class), DELETE);
     }
 
     @OnClick(R.id.tv_kaoqin)

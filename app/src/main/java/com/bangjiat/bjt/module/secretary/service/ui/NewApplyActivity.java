@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -94,6 +95,7 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
                 .iHandlerCallBack(iHandlerCallBack)
                 .provider("com.bangjiat.bjt.fileprovider")
                 .pathList(path)
+                .multiSelect(true, 9)
                 .filePath("/Gallery/Pictures")
                 .build();
 
@@ -127,7 +129,7 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
                             mAdapter.setLists(path);
                             mAdapter.notifyDataSetChanged();
 
-                            if (path.size() < 4)
+                            if (path.size() < 9)
                                 ll_add_photo.setVisibility(View.VISIBLE);
                         }
                     }
@@ -144,13 +146,14 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
         @Override
         public void onSuccess(List<String> photoList) {
             Logger.d("onSuccess: 返回数据");
+            path.clear();
             path.addAll(photoList);
             if (path.size() == 0) {
                 recyclerView.setVisibility(View.GONE);
                 ll_add_photo.setVisibility(View.VISIBLE);
             } else {
                 recyclerView.setVisibility(View.VISIBLE);
-                if (path.size() == 4) {
+                if (path.size() == 9) {
                     ll_add_photo.setVisibility(View.GONE);
                 } else ll_add_photo.setVisibility(View.VISIBLE);
             }
@@ -231,6 +234,15 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
         });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showMessageDialog();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @OnClick(R.id.tv_person)
     public void clickPerson(View view) {
         startActivityForResult(new Intent(mContext, BuildingAdminListActivity.class), GET_PERSON);
@@ -242,8 +254,8 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
         if (resultCode == RESULT_OK) {
             if (requestCode == GET_PERSON) {
                 result = (BuildingAdminListResult) data.getSerializableExtra("data");
-                tv_person.setText(result.getRealname());
-
+                String realname = result.getRealname();
+                tv_person.setText(realname == null ? result.getUsername() : realname);
             }
         }
     }

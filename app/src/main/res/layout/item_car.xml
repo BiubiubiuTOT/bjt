@@ -38,7 +38,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:text="姓名：张飞"
+                    android:text="姓名："
                     android:textColor="@color/outbox_title"
                     android:textSize="14sp" />
 
@@ -47,7 +47,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="车型：达瑞-A7562"
+                    android:text="车型："
                     android:textColor="@color/outbox_title"
                     android:textSize="14sp" />
 
@@ -65,7 +65,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:text="车牌：贵A521"
+                    android:text="车牌："
                     android:textColor="@color/outbox_title"
                     android:textSize="14sp" />
 
@@ -74,7 +74,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="颜色：银色"
+                    android:text="颜色："
                     android:textColor="@color/outbox_title"
                     android:textSize="14sp" />
 

@@ -65,10 +65,19 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
         final WorkersResult.RecordsBean bean = lists.get(position);
         String realname = bean.getRealname();
         String job = bean.getJob();
+
+        if (realname != null && realname.equals("null")) {
+            realname = "无";
+        }
         if (realname == null)
             realname = "无";
+
+        if (job != null && job.equals("null")) {
+            job = "无";
+        }
         if (job == null)
             job = "无";
+
         viewHolder.tv_name.setText(realname + "(" + job + ")");
         viewHolder.tv_phone.setText("电话：" + bean.getPhone());
 

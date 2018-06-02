@@ -1,6 +1,8 @@
 package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +41,16 @@ public class AddWifiActivity extends BaseToolBarActivity {
         initView();
     }
 
+    private boolean isWifiOpened() {
+        WifiManager wifiManager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.isWifiEnabled();
+    }
+
+    private void toggleWiFi(boolean enabled) {
+        WifiManager wifiManager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(enabled);
+    }
+
     private void initView() {
         wifiName = getIntent().getStringExtra("data");
 
@@ -48,8 +60,12 @@ public class AddWifiActivity extends BaseToolBarActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
         setAdapter();
-        if (wifiList.size() == 0)
+        if (wifiList.size() == 0) {
+            if (!isWifiOpened()) {
+                toggleWiFi(true);
+            }
             startTimer();
+        }
     }
 
     private void setAdapter() {

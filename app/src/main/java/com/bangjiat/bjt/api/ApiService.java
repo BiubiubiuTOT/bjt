@@ -30,6 +30,7 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
 import com.bangjiat.bjt.module.me.setting.beans.UpdatePasswordInput;
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
@@ -506,7 +507,8 @@ public interface ApiService {
     @GET("api/carparkApply/select/CarparkSpacePage")
     Call<BaseResult<ParkingResult>> getParkSpace(@Header(Constants.TOKEN_NAME) String token,
                                                  @Query("page") int page,
-                                                 @Query("size") int size, @Query("key") String key);
+                                                 @Query("size") int size,
+                                                 @Query("key") String key);
 
     /**
      * 45
@@ -664,12 +666,21 @@ public interface ApiService {
     /**
      * 64
      * 查询停车申请记录列表
-     * ,@Query("spaceId") int spaceId
      */
     @GET("api/carparkApply/select/CarparkApplyPage")
     Call<BaseResult<ParkApplyHistoryResult>> getParkApplyHistory(@Header(Constants.TOKEN_NAME) String token,
                                                                  @Query("page") int page,
                                                                  @Query("size") int size);
+
+    /**
+     * 64
+     * 查询停车申请记录列表
+     */
+    @GET("api/carparkApply/select/CarparkApplyPage")
+    Call<BaseResult<ParkApplyHistoryResult>> getParkApplyHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                                 @Query("page") int page,
+                                                                 @Query("size") int size,
+                                                                 @Query("spaceId") int spaceId);
 
     /**
      * 65
@@ -866,4 +877,20 @@ public interface ApiService {
      */
     @HTTP(method = "DELETE", path = "api/company/delete/Company", hasBody = true)
     Call<BaseResult<String>> deleteCompany(@Header(Constants.TOKEN_NAME) String token, @Body DeleteCompanyInput input);
+
+    /**
+     * 97
+     * 查询停车场车位列表
+     */
+    @GET("api/carparkApply/select/ParkingLotList")
+    Call<BaseResult<List<LotResult>>> getLotList(@Header(Constants.TOKEN_NAME) String token,
+                                                 @Query("spaceId") int spaceId);
+
+    /**
+     * 98
+     * <p>
+     * 删除车辆信息列表
+     */
+    @HTTP(method = "DELETE", path = "api/carparkCar/delete/CarparkCarList", hasBody = true)
+    Call<BaseResult<String>> deleteCar(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
 }

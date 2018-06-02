@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="邦佳停车场"
         android:textColor="@color/dialog_title"
         android:textSize="14sp" />
 

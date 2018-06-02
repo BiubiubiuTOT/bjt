@@ -19,6 +19,15 @@ public class ParkApplyDetail {
     private int detailId;
     private String resource;
     private int status;
+    private String lotNumber;
+
+    public String getLotNumber() {
+        return lotNumber;
+    }
+
+    public void setLotNumber(String lotNumber) {
+        this.lotNumber = lotNumber;
+    }
 
     public String getCarName() {
         return carName;

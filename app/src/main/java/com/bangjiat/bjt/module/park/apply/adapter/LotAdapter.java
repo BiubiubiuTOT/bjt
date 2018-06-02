@@ -1,4 +1,4 @@
-package com.bangjiat.bjt.module.secretary.service.adapter;
+package com.bangjiat.bjt.module.park.apply.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import java.util.List;
  * 邮箱:1256144200@qq.com
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
-public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.ViewHolder> implements View.OnClickListener {
-    private List<BuildingAdminListResult> lists;
+public class LotAdapter extends RecyclerView.Adapter<LotAdapter.ViewHolder> implements View.OnClickListener {
+    private List<LotResult> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
 
@@ -26,18 +26,14 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
         this.mOnItemClickListener = listener;
     }
 
-    public AdminListAdapter(List<BuildingAdminListResult> lists, Context context) {
+    public LotAdapter(List<LotResult> lists, Context context) {
         this.lists = lists;
         this.mContext = context;
     }
 
-    public void setLists(List<BuildingAdminListResult> lists) {
-        this.lists = lists;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_admin_list, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_parking, viewGroup, false);
         view.setOnClickListener(this);
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -45,11 +41,8 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        BuildingAdminListResult s = lists.get(position);
-        String username = s.getUsername();
-        String realname = s.getRealname();
-        viewHolder.tv_name.setText(realname == null ? username : realname);
-        viewHolder.tv_phone.setText(username);
+        LotResult s = lists.get(position);
+        viewHolder.tv_name.setText(s.getNumber());
 
         viewHolder.itemView.setTag(position);
     }
@@ -67,11 +60,10 @@ public class AdminListAdapter extends RecyclerView.Adapter<AdminListAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_phone, tv_name;
+        TextView tv_name;
 
         public ViewHolder(View view) {
             super(view);
-            tv_phone = view.findViewById(R.id.tv_phone);
             tv_name = view.findViewById(R.id.tv_name);
         }
     }

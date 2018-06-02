@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.park.apply.presenter;
 
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
+import com.bangjiat.bjt.module.park.apply.beans.LotResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyHistoryResult;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyInput;
 import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
@@ -103,5 +104,17 @@ public class ParkApplyPresenter implements ParkApplyContract.Presenter {
     public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
         view.dismissDialog();
         view.getParkApplyHistorySuccess(result);
+    }
+
+    @Override
+    public void getLotList(String token, int spaceId) {
+        view.showDialog();
+        model.getLotList(token, spaceId);
+    }
+
+    @Override
+    public void getLotListSuccess(List<LotResult> results) {
+        view.dismissDialog();
+        view.getLotListSuccess(results);
     }
 }

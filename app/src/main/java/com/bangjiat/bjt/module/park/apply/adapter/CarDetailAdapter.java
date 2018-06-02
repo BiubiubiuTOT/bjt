@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.park.apply.beans.ParkApplyDetail;
 
 import java.util.List;
@@ -22,13 +23,15 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
     private List<ParkApplyDetail> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
+    private int status;
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
-    public CarDetailAdapter(List<ParkApplyDetail> lists, Context context) {
+    public CarDetailAdapter(List<ParkApplyDetail> lists, Context context, int status) {
         this.lists = lists;
+        this.status = status;
         this.mContext = context;
     }
 
@@ -50,19 +53,53 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         final ParkApplyDetail bean = lists.get(position);
         viewHolder.tv_name.setText(bean.getCarName());
         viewHolder.tv_car_number.setText(bean.getPlateNumber());
         int type = bean.getType();
         if (type == 1) {
-            viewHolder.ll_number.setVisibility(View.VISIBLE);
+            String lotNumber = bean.getLotNumber();
+            if (Constants.isParkAdmin()) {//停车场管理员才能看见车位
+                switch (status) {
+                    case 1://待审核 显示 可以点击
+                        if (lotNumber == null)
+                            viewHolder.tv_number.setHint("请选择");
+                        else
+                            viewHolder.tv_number.setText(lotNumber);
+
+                        viewHolder.ll_number.setVisibility(View.VISIBLE);
+                        viewHolder.tv_number.setEnabled(true);
+                        break;
+                    case 2://已同意 不能点击 需要显示
+                        viewHolder.tv_number.setText(lotNumber);
+                        viewHolder.tv_number.setEnabled(false);
+                        viewHolder.ll_number.setVisibility(View.VISIBLE);
+                        break;
+                    case 3://已拒绝 不显示
+                        viewHolder.ll_number.setVisibility(View.GONE);
+                        viewHolder.tv_number.setEnabled(false);
+                        break;
+                }
+
+            }
+            if (Constants.isWorkAdmin() && status == 2) {
+                viewHolder.tv_number.setText(lotNumber);
+                viewHolder.tv_number.setEnabled(false);
+                viewHolder.ll_number.setVisibility(View.VISIBLE);
+            }
+
             viewHolder.tv_type.setText("固定车位");
-            viewHolder.tv_number.setText("");
         } else {
             viewHolder.ll_number.setVisibility(View.GONE);
             viewHolder.tv_type.setText("临停车位");
         }
+        viewHolder.tv_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListener.onLotClick(view, viewHolder.getAdapterPosition());
+            }
+        });
 
         viewHolder.itemView.setTag(position);
     }
@@ -95,5 +132,7 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
+
+        void onLotClick(View view, int position);
     }
 }
