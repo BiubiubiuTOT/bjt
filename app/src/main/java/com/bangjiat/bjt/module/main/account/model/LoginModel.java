@@ -33,7 +33,7 @@ public class LoginModel implements LoginContract.Model {
 
             @Override
             public void onFail(String message) {
-                presenter.loginFail("网络出错");
+                presenter.loginFail(message);
                 Logger.e(message);
             }
         });

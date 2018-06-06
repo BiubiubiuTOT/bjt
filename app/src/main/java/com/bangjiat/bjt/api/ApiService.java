@@ -1,5 +1,6 @@
 package com.bangjiat.bjt.api;
 
+import com.bangjiat.bjt.common.BannerBean;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.company.beans.CompanyDetailResult;
@@ -893,4 +894,12 @@ public interface ApiService {
      */
     @HTTP(method = "DELETE", path = "api/carparkCar/delete/CarparkCarList", hasBody = true)
     Call<BaseResult<String>> deleteCar(@Header(Constants.TOKEN_NAME) String token, @Body String[] strings);
+
+    /**
+     * 99
+     *
+     获取轮播图列表
+     */
+    @GET("api/carousel/select/AppCarouselList")
+    Call<BaseResult<List<BannerBean>>> getBannerList(@Header(Constants.TOKEN_NAME)String token);
 }

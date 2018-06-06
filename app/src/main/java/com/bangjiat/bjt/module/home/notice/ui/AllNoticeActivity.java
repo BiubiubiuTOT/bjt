@@ -15,9 +15,10 @@ import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
 import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,7 +44,6 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
-
     }
 
 
@@ -83,16 +83,27 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
         }
 
         if (list.size() > 0) {
+            Collections.sort(list, new Comparator<NoticeBean.SysNoticeListBean>() {//按时间排序
+
+                @Override
+                public int compare(NoticeBean.SysNoticeListBean o1, NoticeBean.SysNoticeListBean o2) {
+                    if (o1.getCtime() < o2.getCtime()) {
+                        return 1;
+                    } else if (o1.getCtime() == o2.getCtime()) {
+                        return 0;
+                    }
+                    return -1;
+                }
+            });
+
             setAdapter();
             ll_none.setVisibility(View.GONE);
             return;
         }
         ll_none.setVisibility(View.VISIBLE);
-
     }
 
     private void setAdapter() {
-        Logger.d(list.toString());
         NoticeAdapter mAdapter = new NoticeAdapter(list);
         recycler_view.setAdapter(mAdapter);
 

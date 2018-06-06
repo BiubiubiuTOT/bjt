@@ -148,5 +148,4 @@ dependencies {
     }//阿里云推送
     compile files('libs/jxl.jar') //excel
     compile 'com.github.huangyanbin:SmartTable:2.2.0'
-
 }

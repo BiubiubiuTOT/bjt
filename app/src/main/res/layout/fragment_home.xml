@@ -148,6 +148,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="26dp"
                         android:layout_marginTop="10dp"
+                        android:text="暂无公告信息"
                         android:textColor="#282828"
                         android:textSize="@dimen/mine_exit_text_size" />
 

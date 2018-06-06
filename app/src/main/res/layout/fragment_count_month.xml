@@ -39,7 +39,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/iv1"
-                    android:text="2人"
                     android:textColor="@color/personal_message"
                     android:textSize="14sp" />
 
@@ -85,7 +84,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/iv2"
-                    android:text="2人"
                     android:textColor="@color/personal_message"
                     android:textSize="14sp" />
 
@@ -125,7 +123,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/iv3"
-                    android:text="0人"
                     android:textColor="@color/personal_message"
                     android:textSize="14sp" />
 
@@ -171,7 +168,6 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@+id/iv4"
-                    android:text="2人"
                     android:textColor="@color/personal_message"
                     android:textSize="14sp" />
 

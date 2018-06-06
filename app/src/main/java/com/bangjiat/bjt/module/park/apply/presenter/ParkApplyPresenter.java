@@ -71,7 +71,8 @@ public class ParkApplyPresenter implements ParkApplyContract.Presenter {
 
     @Override
     public void parkApply(String token, ParkApplyInput input) {
-        if (input.getSpaceName().isEmpty()) {
+
+        if (input.getSpaceName() == null) {
             view.error("请选择停车场");
             return;
         }

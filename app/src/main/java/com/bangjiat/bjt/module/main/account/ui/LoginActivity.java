@@ -11,7 +11,6 @@ import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseActivity;
 import com.bangjiat.bjt.common.BaseResult;
-import com.bangjiat.bjt.common.BlurTransformation;
 import com.bangjiat.bjt.common.ClearEditText1;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.DialogPopup;
@@ -21,8 +20,6 @@ import com.bangjiat.bjt.module.main.account.presenter.LoginPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.AgreementActivity;
 import com.bangjiat.bjt.module.main.ui.activity.MainActivity;
 import com.bangjiat.bjt.module.main.ui.activity.VerifyPhoneActivity;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dou361.dialogui.DialogUIUtils;
 import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
@@ -80,10 +77,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         et_password.setText(account.getPassword());
 
         presenter = new LoginPresenter(this);
-        Glide.with(LoginActivity.this).load(R.mipmap.login_bg)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade().dontAnimate()
-                .bitmapTransform(new BlurTransformation(this, 20, 2))
-                .into(iv_bg);
+//        Glide.with(LoginActivity.this).load(R.mipmap.login_bg)
+//               .dontAnimate()
+//                .into(iv_bg);
     }
 
     @Override
@@ -121,6 +117,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         startActivity(new Intent(mContext, MainActivity.class));
         finish();
     }
+
     private void initPush(String phone) {
         PushServiceFactory.getCloudPushService().
                 bindAccount(phone, new CommonCallback() {

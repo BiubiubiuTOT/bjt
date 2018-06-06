@@ -124,7 +124,6 @@ public class SplashActivity extends BaseActivity implements LoginContract.View {
     public void showError(String err) {
         Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
         DataUtil.setLogin(mContext, false);
-        initPush(account.getPhone());
 
         startActivity(new Intent(mContext, LoginActivity.class));
         finish();
@@ -149,6 +148,7 @@ public class SplashActivity extends BaseActivity implements LoginContract.View {
     public void loginSuccess(BaseResult<String> result) {
         DataUtil.setToken(mContext, result.getData());
         DataUtil.setLogin(mContext, true);
+        initPush(account.getPhone());
 
         startActivity(new Intent(mContext, MainActivity.class));
         finish();

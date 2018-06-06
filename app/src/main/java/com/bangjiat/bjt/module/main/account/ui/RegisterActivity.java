@@ -101,7 +101,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     public void showError(String err) {
         Logger.e(err);
 
-        DialogPopup popup = new DialogPopup(this, "网络错误", R.mipmap.popup_error);
+        DialogPopup popup = new DialogPopup(this, err, R.mipmap.popup_error);
         popup.setBlurBackgroundEnable(true);
         popup.setShowAnimation(null);
         popup.showPopupWindow();

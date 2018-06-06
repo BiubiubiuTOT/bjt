@@ -49,6 +49,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 允许task重排序 -->
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
     <application
         android:name=".common.BjtApplication"
@@ -526,13 +527,13 @@
         <!-- 阿里云推送 -->
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24904157" /> <!-- 请填写你自己的- appKey -->
+            android:value="24869572" /> <!-- 请填写你自己的- appKey -->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="07f657160af41163c1bf09bdf617b797" /> <!-- 请填写你自己的appSecret -->
+            android:value="165b4a555141dcf0c23f98ea8eae8c94" /> <!-- 请填写你自己的appSecret -->
 
         <activity android:name=".module.home.work.kaoqin.ui.ExcelActivity" />
-        <activity android:name=".module.park.apply.ui.ChooseLotActivity"></activity>
+        <activity android:name=".module.park.apply.ui.ChooseLotActivity"/>
     </application>
 
 </manifest>

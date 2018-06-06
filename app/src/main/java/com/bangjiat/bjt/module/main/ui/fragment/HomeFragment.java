@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.BannerBean;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
@@ -15,7 +16,9 @@ import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.common.UpdateAppUtil;
 import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
+import com.bangjiat.bjt.module.home.notice.contract.BannerContract;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
+import com.bangjiat.bjt.module.home.notice.presenter.BannerPresenter;
 import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
 import com.bangjiat.bjt.module.home.notice.ui.AllNoticeActivity;
 import com.bangjiat.bjt.module.home.notice.ui.NoticeItemActivity;
@@ -41,6 +44,9 @@ import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
 import com.orm.SugarRecord;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,7 +59,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 
 public class HomeFragment extends BaseFragment implements NoticeContract.View, SearchContactContract.View,
-        BGARefreshLayout.BGARefreshLayoutDelegate, GetUserInfoContract.View {
+        BGARefreshLayout.BGARefreshLayoutDelegate, GetUserInfoContract.View, BannerContract.View {
     @BindView(R.id.banner_guide_content)
     BGABanner mContentBanner;
     @BindView(R.id.tv_content)
@@ -67,11 +73,14 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     private NoticeBean.SysNoticeListBean sysNoticeListBean;
     private NoticeContract.Presenter presenter;
     private SearchContactContract.Presenter searchPresenter;
+    private BannerContract.Presenter bannerPresenter;
     private String token;
+    private List<String> bannerPath;
 
     protected void initView() {
         presenter = new NoticePresenter(this);
         searchPresenter = new SearchContactPresenter(this);
+        bannerPresenter = new BannerPresenter(this);
         token = DataUtil.getToken(mContext);
         presenter.getAllNotice(token);
 
@@ -95,6 +104,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
         mRefreshLayout.setDelegate(this);
         mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        bannerPresenter.getBannerList(token);
     }
 
     @Override
@@ -184,15 +194,36 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     @Override
     public void getAllNoticeResult(NoticeBean bean) {
         mRefreshLayout.endRefreshing();
+        List<NoticeBean.SysNoticeListBean> list = new ArrayList<>();
         update();
         if (bean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = bean.getSysNoticeList();
             if (sysNoticeList != null && sysNoticeList.size() > 0) {
-                sysNoticeListBean = sysNoticeList.get(0);
+                list.addAll(sysNoticeList);
+            }
+            List<NoticeBean.SysNoticeListBean> buildNoticeList = bean.getBuildNoticeList();
+            if (buildNoticeList != null && buildNoticeList.size() > 0) {
+                list.addAll(buildNoticeList);
+            }
+            if (list.size() > 0) {
+                Collections.sort(list, new Comparator<NoticeBean.SysNoticeListBean>() {
+                    @Override
+                    public int compare(NoticeBean.SysNoticeListBean o1, NoticeBean.SysNoticeListBean o2) {
+                        if (o1.getCtime() < o2.getCtime()) {
+                            return 1;
+                        } else if (o1.getCtime() == o2.getCtime()) {
+                            return 0;
+                        }
+                        return -1;
+                    }
+                });
+
+                sysNoticeListBean = list.get(0);
                 tv_title.setText(sysNoticeListBean.getName());
                 tv_content.setText(sysNoticeListBean.getContent());
             }
         }
+
     }
 
     @Override
@@ -278,6 +309,27 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
             Logger.d(spaceUser.toString());
             SugarRecord.saveInTx(spaceUser);
         }
+    }
+
+    @Override
+    public void getBannerListSuccess(List<BannerBean> list) {
+        if (list != null && list.size() > 0) {
+            Collections.sort(list, new Comparator<BannerBean>() {
+                @Override
+                public int compare(BannerBean o1, BannerBean o2) {
+                    if (o1.getCtime() > o2.getCtime()) {
+                        return 1;
+                    }
+                    return -1;
+                }
+
+            });
+        }
+    }
+
+    @Override
+    public void error(String err) {
+        Logger.e(err);
     }
 }
 

@@ -100,6 +100,13 @@ public class CountMyFragment extends BaseFragment implements ClockContract.View 
 
     @Override
     public void getUserClockTotalSuccess(DakaTotalResult result) {
+        late = 0;
+        leave = 0;
+        absence = 0;
+        field = 0;
+        reset = 0;
+        work = 0;
+
         if (result != null) {
             RuleInput companyClockRule = result.getCompanyClockRule();
             if (companyClockRule == null) return;

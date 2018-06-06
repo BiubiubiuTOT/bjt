@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
@@ -19,7 +20,7 @@ import java.util.List;
  * 邮箱:1256144200@qq.com
  * 打开电脑我们如此接近,关上电脑我们那么遥远
  */
-public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> implements View.OnClickListener {
+public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> {
     private List<CarBean> lists;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private Context mContext;
@@ -45,7 +46,6 @@ public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_mycar, viewGroup, false);
-        view.setOnClickListener(this);
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }
@@ -64,6 +64,12 @@ public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> 
                 mOnItemClickListener.onDelete(view, viewHolder.getAdapterPosition());
             }
         });
+        viewHolder.ll_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListener.onItemClick(view, viewHolder.getAdapterPosition());
+            }
+        });
 
         viewHolder.itemView.setTag(position);
     }
@@ -73,16 +79,11 @@ public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> 
         return lists.size();
     }
 
-    @Override
-    public void onClick(View view) {
-        if (mOnItemClickListener != null) {
-            mOnItemClickListener.onItemClick(view, (int) view.getTag());
-        }
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_number, tv_model, tv_color, tv_delete;
         ImageView iv_car;
+        LinearLayout ll_detail;
 
         public ViewHolder(View view) {
             super(view);
@@ -91,6 +92,7 @@ public class MyCarAdapter extends RecyclerView.Adapter<MyCarAdapter.ViewHolder> 
             tv_delete = view.findViewById(R.id.tv_delete);
             tv_number = view.findViewById(R.id.tv_number);
             iv_car = view.findViewById(R.id.iv_car);
+            ll_detail = view.findViewById(R.id.ll_detail);
         }
     }
 

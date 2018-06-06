@@ -43,7 +43,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:gravity="bottom"
+                    android:lines="1"
                     android:text="@string/tv_notice_default_title"
                     android:textColor="#282828"
                     android:textSize="15sp" />

@@ -3,6 +3,8 @@ package com.bangjiat.bjt.common;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.alibaba.sdk.android.push.MessageReceiver;
@@ -37,6 +39,7 @@ public class MyPushReceiver extends MessageReceiver {
         }
         Log.i(REC_TAG, "收到一条推送通知 ： " + title + ", summary:" + summary);
 //        sendNotification(context, title, summary);
+        setBadgeNum(context);
     }
 
     /**
@@ -120,5 +123,21 @@ public class MyPushReceiver extends MessageReceiver {
         builder.setDefaults(Notification.DEFAULT_VIBRATE);//设置震动
         Notification notification = builder.build();
         manager.notify(0, notification);
+    }
+
+    /**
+     * 设置角标
+     */
+    public void setBadgeNum(Context context) {
+        try {
+            Bundle bunlde = new Bundle();
+            bunlde.putString("package", context.getPackageName());
+            bunlde.putString("class", "com.bangjiat.bjt.module.main.ui.activity.MainActivity");
+            bunlde.putInt("badgenumber", 1);
+            context.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"),
+                    "change_badge", null, bunlde);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

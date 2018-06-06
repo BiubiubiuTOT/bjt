@@ -24,7 +24,7 @@
     <string name="home_more_notice">查看更多公告</string>
     <string name="home_default_notice">国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国庆七天假期，国际互联网金融特区大厦国...</string>
     <string name="home_default_notice_title">国庆放假通知：</string>
-    <string name="home_notice">公告栏</string>
+    <string name="home_notice">公告</string>
     <string name="tv_login_title">让一切更简单</string>
     <string name="tv_login_phone_hint">手机号</string>
     <string name="tv_register_phone_hint">填写手机号</string>
@@ -44,7 +44,7 @@
     <string name="tv_login_message_2">《帮家团协议》</string>
     <string name="tv_register_message">注册即代表阅读并同意</string>
     <string name="tv_register_verificationCode_btn">获取验证码</string>
-    <string name="tv_service_phone">客服热线：0851-84810269</string>
+    <string name="tv_service_phone">客服热线：0851-84810969</string>
     <string name="tv_service_mail">电子邮箱：17385870269@163.com</string>
     <string name="tv_feed_back_hint">请输入具体反馈意见：</string>
     <string name="tv_about_message">\t\t贵州邦佳大数据科技有限公司2017年成立，坐落于贵州金融城-贵阳国际互联网金融特区，是贵阳市政府招商引资企业；是贵州智慧产业集团核心成员。 

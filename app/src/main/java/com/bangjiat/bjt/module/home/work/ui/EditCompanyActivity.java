@@ -18,6 +18,7 @@ import com.bangjiat.bjt.module.home.company.contract.CompanyContract;
 import com.bangjiat.bjt.module.home.company.contract.IntoCompanyContract;
 import com.bangjiat.bjt.module.home.company.presenter.CompanyPresenter;
 import com.bangjiat.bjt.module.home.company.presenter.IntoCompanyPresenter;
+import com.bangjiat.bjt.module.home.work.kaoqin.beans.RuleInput;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfoBean;
@@ -237,6 +238,8 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
     @Override
     public void deleteCompanySuccess() {
         first.delete();
+        RuleInput.deleteAll(RuleInput.class);
+
         show();
     }
 
