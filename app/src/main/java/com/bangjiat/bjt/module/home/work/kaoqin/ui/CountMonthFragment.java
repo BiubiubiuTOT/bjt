@@ -223,25 +223,25 @@ public class CountMonthFragment extends BaseFragment implements ClockContract.Vi
                 List<DakaHistoryResult> lates = new ArrayList<>();//迟到
                 List<DakaHistoryResult> leaves = new ArrayList<>();//早退
                 List<DakaHistoryResult> fields = new ArrayList<>();//外勤
-                Map<String, CountBean> mapAbsence = new HashMap<>();
+                Map<String, CountBean> mapAbsence = new HashMap<>();//出勤
 
                 for (DakaHistoryResult r : results) {
                     int inType = r.getInType();
                     int outType = r.getOutType();
 
-                    if (inType == 2) {
+                    if (inType == 2) {//迟到
                         lates.add(r);
-                    } else if (inType == 3) {
+                    } else if (inType == 3) {//外勤
                         fields.add(r);
                     }
 
-                    if (outType == 2) {
+                    if (outType == 2) {//早退
                         leaves.add(r);
-                    } else if (outType == 3) {
+                    } else if (outType == 3) {//外勤
                         fields.add(r);
                     }
                     String userId = r.getUserId();
-                    if (!mapAbsence.containsKey(userId)) {
+                    if (!mapAbsence.containsKey(userId)) {//第一次统计
                         mapAbsence.put(userId, new CountBean
                                 (r.getUserRealname(), 1, 0));
                     } else {
@@ -317,15 +317,15 @@ public class CountMonthFragment extends BaseFragment implements ClockContract.Vi
                 }
                 Set<String> stringsField = mapFiled.keySet();
                 for (String s : stringsField) {
-                    field.add(mapLate.get(s));
+                    field.add(mapFiled.get(s));
                 }
 
                 String[] workDays = rule.getWorkDay().split(",");
                 List<String> list = Arrays.asList(workDays);
                 int dayOfMonth = TimeUtils.getDayOfMonth();
-                int reset = 0;
+                int reset = 0;//休息天数
+                Calendar calendar1 = Calendar.getInstance();
                 for (int i = 1; i <= dayOfMonth; i++) {
-                    Calendar calendar1 = Calendar.getInstance();
                     calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), i, 0, 0, 0);
                     int i1 = calendar1.get(Calendar.DAY_OF_WEEK);
                     int i2 = i1 - 1;
@@ -336,22 +336,27 @@ public class CountMonthFragment extends BaseFragment implements ClockContract.Vi
                     }
                 }
                 Set<String> stringsAbsence = mapAbsence.keySet();
-                List<String> list1 = new ArrayList<>();
+                List<String> list1 = new ArrayList<>();//旷工
                 for (String s : stringsAbsence) {
                     CountBean e = mapAbsence.get(s);
                     int counts = e.getCounts();
-                    int counts1 = dayOfMonth - reset - counts;
-                    e.setCounts(counts1);
-                    if (counts1 != 0) {
-                        absence.add(e);
-                    }
+                    int counts1 = dayOfMonth - reset - counts;//当前日期-休息天数-出勤天数=旷工天数
+                    if (counts1 > 0) {
+                        e.setCounts(counts1);
+                    } else e.setCounts(0);
 
+                    absence.add(e);
                     list1.add(s);
                 }
 
                 for (WorkersResult.RecordsBean bean : companyUsers) {
                     if (!list1.contains(bean.getUserId())) {
-                        absence.add(new CountBean(bean.getRealname(), dayOfMonth, 0));
+                        absence.add(new CountBean(bean.getRealname(), dayOfMonth - reset, 0));
+                    }
+                }
+                for (CountBean countBean : absence) {
+                    if (countBean.getCounts() == 0) {
+                        absence.remove(countBean);
                     }
                 }
 

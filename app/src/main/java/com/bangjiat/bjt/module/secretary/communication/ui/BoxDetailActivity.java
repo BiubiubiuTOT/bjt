@@ -22,6 +22,7 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.communication.beans.EmailBean;
 import com.bangjiat.bjt.module.secretary.communication.contract.DealBoxContract;
 import com.bangjiat.bjt.module.secretary.communication.presenter.DealBoxPresenter;
+import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
 import com.githang.statusbar.StatusBarCompat;
 import com.orhanobut.logger.Logger;
@@ -133,7 +134,12 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
 
     @OnClick(R.id.iv_response)
     public void clickResponse(View view) {
-
+        ContactBean bean1 = new ContactBean();
+        bean1.setSlaveUserId(bean.getSenderId());
+        bean1.setSlaveNickname(bean.getSender());
+        Intent intent = new Intent(mContext, WriteEmailActivity.class);
+        intent.putExtra("data", bean1);
+        startActivity(intent);
     }
 
     @Override

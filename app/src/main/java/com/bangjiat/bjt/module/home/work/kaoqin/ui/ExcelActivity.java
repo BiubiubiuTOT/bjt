@@ -170,7 +170,6 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
             int dayOfMonth = TimeUtils.getDayOfMonth();
 
             if (results != null && results.size() > 0) {
-                int reset = 0;//休息
                 List<DakaHistoryResult> lates = new ArrayList<>();//迟到
                 List<DakaHistoryResult> leaves = new ArrayList<>();//早退
                 List<DakaHistoryResult> fields = new ArrayList<>();//外勤
@@ -249,7 +248,6 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
                         int counts = countBean.getCounts();
                         countBean.setCounts(counts + 1);
                         countBean.setTime(time + minutes);
-
                     }
                 }
 
@@ -268,6 +266,18 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
                 rows = new String[columns.length][companyUsers.size()];
                 String[] workDays = rule.getWorkDay().split(",");
                 List<String> list = Arrays.asList(workDays);
+                int reset = 0;//休息天数
+                Calendar calendar1 = Calendar.getInstance();
+                for (int i = 1; i <= dayOfMonth; i++) {
+                    calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), i, 0, 0, 0);
+                    int i1 = calendar1.get(Calendar.DAY_OF_WEEK);
+                    int i2 = i1 - 1;
+                    if (i2 == 0) i2 = 7;
+                    String s = String.valueOf(i2);
+                    if (!list.contains(s)) {
+                        reset++;
+                    }
+                }
 
                 for (int i = 0; i < columns.length; i++) {
                     for (int j = 0; j < companyUsers.size(); j++) {
@@ -276,15 +286,6 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
                             rows[i][j] = bean.getRealname();
                         } else if (i <= dayOfMonth) {
                             columns[i] = i + "号";
-                            Calendar calendar1 = Calendar.getInstance();
-                            calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), i, 0, 0, 0);
-                            int i1 = calendar1.get(Calendar.DAY_OF_WEEK);
-                            int i2 = i1 - 1;
-                            if (i2 == 0) i2 = 7;
-                            String s = String.valueOf(i2);
-                            if (!list.contains(s)) {
-                                reset++;
-                            }
 
                             for (DakaHistoryResult r : results) {
                                 if (r.getUserRealname().equals(bean.getRealname()) &&
@@ -319,8 +320,8 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
                                 if (countBean != null) {
                                     int work = countBean.getCounts();
                                     rows[i][j] = String.valueOf(work);
-                                }
-                            } else if (i == dayOfMonth + 2) {
+                                } else rows[i][j] = "0";
+                            } else if (i == dayOfMonth + 2) {//旷工
                                 int work = 0;
                                 CountBean countBean = mapAbsence.get(bean.getUserId());
                                 if (countBean != null) {
@@ -331,14 +332,17 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
                                 CountBean countBean1 = mapLate.get(bean.getUserId());
                                 if (countBean1 != null)
                                     rows[i][j] = String.valueOf(countBean1.getCounts());
+                                else rows[i][j] = "0";
                             } else if (i == dayOfMonth + 4) {
                                 CountBean countBean1 = mapLeave.get(bean.getUserId());
                                 if (countBean1 != null)
                                     rows[i][j] = String.valueOf(countBean1.getCounts());
+                                else rows[i][j] = "0";
                             } else if (i == dayOfMonth + 5) {
                                 CountBean countBean1 = mapFiled.get(bean.getUserId());
                                 if (countBean1 != null)
                                     rows[i][j] = String.valueOf(countBean1.getCounts());
+                                else rows[i][j] = "0";
                             }
                         }
                     }
@@ -367,8 +371,7 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
                             @Override
                             public void draw(Canvas c, Rect rect, CellInfo<String> cellInfo, TableConfig config) {
                                 Paint paint = config.getPaint();
-                                paint.setColor(ContextCompat.getColor(mContext, R.color.black));
-                                paint.setTextSize(30);
+                                paint.setTextSize(20);
                                 paint.setStyle(Paint.Style.FILL);
                                 Paint.FontMetrics fontMetrics = paint.getFontMetrics();
                                 float top = fontMetrics.top;//为基线到字体上边框的距离,即上图中的top
@@ -378,13 +381,18 @@ public class ExcelActivity extends BaseToolBarActivity implements ClockContract.
 
                                 String value = cellInfo.value;
                                 if (!value.isEmpty()) {
+                                    paint.setColor(ContextCompat.getColor(mContext, R.color.black));
                                     c.drawText(value, rect.centerX(), baseLineY, paint);
+                                } else {
+                                    paint.setColor(ContextCompat.getColor(mContext, R.color.red));
+                                    c.drawText("未打卡", rect.centerX(), baseLineY, paint);
                                 }
                             }
                         });
                 table.setTableData(tableData);
             }
         }
+
     }
 
     @Override

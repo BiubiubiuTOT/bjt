@@ -7,9 +7,9 @@ package com.bangjiat.bjt.module.home.work.kaoqin.beans;
  */
 
 public class CountBean {
-    private String name;
-    private int counts;
-    private int time;
+    private String name;//名称
+    private int counts;//次数
+    private int time;//时长
 
     public CountBean(String name, int counts, int time) {
         this.name = name;

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
-import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.work.kaoqin.ui.KaoqinMainActivity;
 import com.bangjiat.bjt.module.home.work.leave.ui.LeaveMainActivity;
 import com.bangjiat.bjt.module.home.work.permission.ui.PermissionMainActivity;
@@ -32,8 +31,8 @@ public class WorkMainActivity extends BaseWhiteToolBarActivity {
         CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
         tv_company_name.setText(first.getCompanyName());
 
-        if (Constants.isCompanyAdmin())
-            card_permission.setVisibility(View.VISIBLE);
+//        if (Constants.isCompanyAdmin())
+        card_permission.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.tv_workers)

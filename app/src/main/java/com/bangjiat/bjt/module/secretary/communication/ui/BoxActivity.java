@@ -204,6 +204,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
             @Override
             public void onItemClick(int position) {
+                if (tv_edit.getVisibility() == View.GONE) return;
+
                 Intent intent = new Intent(mContext, BoxDetailActivity.class);
                 Bundle extras = new Bundle();
                 EmailBean value = boxBeans.get(position);

@@ -23,7 +23,6 @@ public class ParkFragment extends BaseFragment {
 
     protected void initView() {
         if (Constants.isParkAdmin()) {
-            tv_apply_name.setText("停车申请/审批");
             ll_apply.setVisibility(View.VISIBLE);
         } else if (Constants.isCompanyAdmin()) {
             ll_apply.setVisibility(View.VISIBLE);

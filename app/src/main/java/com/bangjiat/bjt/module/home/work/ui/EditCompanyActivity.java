@@ -82,9 +82,6 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
         token = DataUtil.getToken(mContext);
         presenter = new CompanyPresenter(this);
         buildPresenter.isIntoBuilding(token);
-        if (first != null) {
-            intoPresenter.getCompanyDetail(token, first.getCompanyId());
-        }
     }
 
     @OnClick(R.id.tv_delete)
@@ -181,6 +178,9 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
                 isInto = true;
             }
         }
+        if (first != null) {
+            intoPresenter.getCompanyDetail(token, first.getCompanyId());
+        }
     }
 
     @Override
@@ -190,7 +190,7 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
             tv_company.setText(result.getName());
             et_industry.setText(result.getIndustry());
             et_address.setText(result.getAddress());
-            if (DataUtil.isIntoBuilding(mContext)) {
+            if (isInto) {
                 ll_build.setVisibility(View.VISIBLE);
                 tv_build.setText(result.getBuildName());
             }

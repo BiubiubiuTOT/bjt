@@ -68,6 +68,12 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/personal_view" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,6 +98,12 @@
                 android:textColor="@color/personal_message"
                 android:textSize="14sp" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/personal_view" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -149,6 +161,12 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/personal_view" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -173,5 +191,11 @@
                 android:textColor="@color/personal_message"
                 android:textSize="14sp" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:background="@color/personal_view" />
     </LinearLayout>
 </LinearLayout>

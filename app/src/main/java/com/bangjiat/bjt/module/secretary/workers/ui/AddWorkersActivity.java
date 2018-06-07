@@ -3,14 +3,15 @@ package com.bangjiat.bjt.module.secretary.workers.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.CompanyCodeActivity;
@@ -20,7 +21,6 @@ import com.bangjiat.bjt.module.secretary.contact.beans.ScanUser;
 import com.bangjiat.bjt.module.secretary.contact.beans.SearchContactResult;
 import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
-import com.bangjiat.bjt.module.secretary.workers.adapter.AddWorkersAdapter;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
@@ -31,9 +31,6 @@ import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.bertsir.zbar.QrConfig;
@@ -43,14 +40,21 @@ import cn.bertsir.zbar.QrManager;
  * 新增员工
  */
 public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUserContract.View, SearchContactContract.View {
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    @BindView(R.id.et_name)
+    ClearEditText et_name;
+    @BindView(R.id.et_phone)
+    ClearEditText et_phone;
+    @BindView(R.id.et_department)
+    ClearEditText et_department;
+    @BindView(R.id.et_duty)
+    ClearEditText et_duty;
+    @BindView(R.id.et_card)
+    ClearEditText et_card;
 
-    private AddWorkersAdapter mAdapter;
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
     private SearchContactContract.Presenter searchPresenter;
-    private int i;
+    private WorkersResult.RecordsBean bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +65,88 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
     private void initData() {
         presenter = new CompanyUserPresenter(this);
         searchPresenter = new SearchContactPresenter(this);
-        ArrayList<WorkersResult.RecordsBean> lists = new ArrayList<>();
-        lists.add(new WorkersResult.RecordsBean());
-        mAdapter = new AddWorkersAdapter(lists);
+        bean = new WorkersResult.RecordsBean();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
+        et_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                bean.setRealname(String.valueOf(charSequence));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        et_department.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                bean.setDepartment(String.valueOf(charSequence));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        et_duty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                bean.setJob(String.valueOf(charSequence));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        et_phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                bean.setPhone(String.valueOf(charSequence));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        et_card.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                bean.setIdNumber(String.valueOf(charSequence));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     @Override
@@ -88,22 +166,14 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
         tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<WorkersResult.RecordsBean> lists = mAdapter.getLists();
-                Logger.d(lists.toString());
-                i = lists.size();
-                for (WorkersResult.RecordsBean bean : lists) {
-                    presenter.addCompanyUser(DataUtil.getToken(mContext), bean);
-                }
+                Logger.d(bean.toString());
+                presenter.addCompanyUser(DataUtil.getToken(mContext), bean);
             }
         });
 
         toolbar.setNavigationIcon(R.mipmap.back_white);
     }
 
-    @OnClick(R.id.iv_add)
-    public void clickAdd(View view) {
-        mAdapter.add();
-    }
 
     @OnClick(R.id.tv_invite)
     public void clickInvite(View view) {
@@ -173,12 +243,9 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
 
     @Override
     public void addCompanyUserSuccess() {
-        i--;
-        if (i == 0) {
-            error("添加成功");
-            EventBus.getDefault().post("");
-            finish();
-        }
+        error("添加成功");
+        EventBus.getDefault().post("");
+        finish();
     }
 
     @Override
@@ -195,13 +262,13 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
     public void getContactByScanSuccess(ScanUser user) {
         if (user != null) {
             Logger.d(user.toString());
-            List<WorkersResult.RecordsBean> lists = new ArrayList<>();
-            WorkersResult.RecordsBean bean1 = new WorkersResult.RecordsBean();
-            bean1.setPhone(user.getUsername());
-            bean1.setRealname(user.getRealname());
-            bean1.setIdNumber(user.getIdNumber());
-            lists.add(bean1);
-            mAdapter.setLists(lists);
+            String username = user.getUsername();
+            String realname = user.getRealname();
+            String idNumber = user.getIdNumber();
+
+            et_name.setText(realname);
+            et_phone.setText(username);
+            et_card.setText(idNumber);
         }
     }
 }
