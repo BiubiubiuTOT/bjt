@@ -113,7 +113,7 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
     public void getDoorApplyHistorySuccess(ApplyHistoryBean bean) {
         if (bean != null) {
             List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
-            if (records != null) {
+            if (records != null && records.size() > 0) {
                 list = records;
                 mAdapter.setLists(list);
                 ll_none.setVisibility(View.GONE);

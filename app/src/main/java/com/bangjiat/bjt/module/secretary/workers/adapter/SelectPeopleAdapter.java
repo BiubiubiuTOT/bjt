@@ -89,7 +89,8 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
                 map.put(position, !map.get(position));
                 notifyDataSetChanged();
 
-                onCheckListener.onCheckChanged();
+                if (onCheckListener != null)
+                    onCheckListener.onCheckChanged();
             }
         });
 

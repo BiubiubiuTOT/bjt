@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class QrCodeDataUser implements Serializable {
     private String un;//手机号
-    private int type;
+    private int type;//2 个人
 
     public QrCodeDataUser(String un, int type) {
         this.un = un;

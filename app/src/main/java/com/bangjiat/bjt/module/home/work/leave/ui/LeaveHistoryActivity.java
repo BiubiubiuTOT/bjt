@@ -123,7 +123,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
                 return;
             }
         }
-        ll_none.setVisibility(View.GONE);
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.common.UpdateAppUtil;
 import com.bangjiat.bjt.module.home.company.ui.AddOrSelectCompanyActivity;
+import com.bangjiat.bjt.module.home.company.ui.CompanyInfoActivity;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.BannerContract;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
@@ -22,6 +23,7 @@ import com.bangjiat.bjt.module.home.notice.presenter.BannerPresenter;
 import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
 import com.bangjiat.bjt.module.home.notice.ui.AllNoticeActivity;
 import com.bangjiat.bjt.module.home.notice.ui.NoticeItemActivity;
+import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataCompany;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.OpenDoorCodeActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
@@ -43,6 +45,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
 import com.orm.SugarRecord;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,6 +73,8 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     TextView tv_title;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
+    @BindView(R.id.iv_not_read)
+    ImageView iv_not_read;
     private GetUserInfoContract.Presenter userPresenter;
 
     private NoticeBean.SysNoticeListBean sysNoticeListBean;
@@ -76,13 +83,21 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     private BannerContract.Presenter bannerPresenter;
     private String token;
     private List<String> bannerPath;
+    private int type;
 
     protected void initView() {
         presenter = new NoticePresenter(this);
         searchPresenter = new SearchContactPresenter(this);
         bannerPresenter = new BannerPresenter(this);
         token = DataUtil.getToken(mContext);
-        presenter.getAllNotice(token);
+
+        sysNoticeListBean = NoticeBean.SysNoticeListBean.first(NoticeBean.SysNoticeListBean.class);
+        if (sysNoticeListBean == null)
+            presenter.getAllNotice(token);
+        else {
+            tv_title.setText(sysNoticeListBean.getName());
+            tv_content.setText(sysNoticeListBean.getContent());
+        }
 
         userPresenter = new GetUserInfoPresenter(this);
         UserInfo userInfo = UserInfo.first(UserInfo.class);
@@ -163,15 +178,30 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
             @Override
             public void onScanSuccess(String result) {
                 try {
-                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                    if (user != null)
-                        searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
-                    else {
-                        fail("");
+                    type = new JSONObject(result).getInt("type");
+                    if (type == 2) {//好友二维码
+                        QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
+                        if (user != null) {
+                            searchPresenter.searchContact(DataUtil.getToken(mContext), user.getUn());
+                        } else {
+                            fail("");
+                        }
+                    } else if (type == 1) {//公司二维码
+                        QrCodeDataCompany company = new Gson().fromJson(result, QrCodeDataCompany.class);
+                        if (company != null) {
+                            Intent intent = new Intent(mContext, CompanyInfoActivity.class);
+                            intent.putExtra("data", result);
+                            startActivity(intent);
+                        } else {
+                            fail("");
+                        }
                     }
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                     fail("");
+                } catch (JSONException e) {
+                    fail("");
+                    e.printStackTrace();
                 }
             }
         });
@@ -188,6 +218,21 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @Override
     public void dismissDialog() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<NoticeBean.SysNoticeListBean> list = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class);
+        if (list == null) return;
+
+        List<NoticeBean.SysNoticeListBean> aTrue = NoticeBean.SysNoticeListBean.find(NoticeBean.SysNoticeListBean.class, "isRead=?", "1");
+        if (aTrue == null) {
+            iv_not_read.setVisibility(View.VISIBLE);
+        } else {
+            iv_not_read.setVisibility(list.size() == aTrue.size() ? View.GONE : View.VISIBLE);
+        }
 
     }
 
@@ -221,6 +266,20 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
                 sysNoticeListBean = list.get(0);
                 tv_title.setText(sysNoticeListBean.getName());
                 tv_content.setText(sysNoticeListBean.getContent());
+
+                NoticeBean.SysNoticeListBean first = NoticeBean.SysNoticeListBean.first(NoticeBean.SysNoticeListBean.class);
+                if (first != null) {
+                    for (NoticeBean.SysNoticeListBean data : list) {
+                        List<NoticeBean.SysNoticeListBean> sysNoticeListBeans = NoticeBean.SysNoticeListBean.
+                                find(NoticeBean.SysNoticeListBean.class, "sNoticeId=?", String.valueOf(data.getsNoticeId()));
+                        if (sysNoticeListBeans == null) {
+                            data.save();
+                        }
+                    }
+                } else
+                    SugarRecord.saveInTx(list);
+
+                iv_not_read.setVisibility(View.VISIBLE);
             }
         }
 
@@ -252,7 +311,6 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
-        Constants.deleteDb();
         bgaRefreshLayout.beginRefreshing();
         getData();
     }
@@ -287,6 +345,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     @Override
     public void getUserInfoSuccess(UserInfoBean bean) {
         Logger.d(bean);
+        Constants.deleteDb();
 
         UserInfo userInfo = bean.getUserInfo();
         CompanyUserBean companyUser = bean.getCompanyUser();

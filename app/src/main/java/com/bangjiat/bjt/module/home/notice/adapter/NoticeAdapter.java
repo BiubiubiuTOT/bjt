@@ -41,7 +41,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         NoticeBean.SysNoticeListBean noticeBean = lists.get(position);
-//        viewHolder.iv_not_read.setVisibility(noticeBean.isRead() ? View.VISIBLE : View.INVISIBLE);
+        viewHolder.iv_not_read.setVisibility(noticeBean.isRead() ? View.INVISIBLE : View.VISIBLE);
         viewHolder.tv_title.setText(noticeBean.getName());
         viewHolder.tv_content.setText(noticeBean.getContent());
         viewHolder.tv_time.setText(TimeUtils.changeToTime(noticeBean.getCtime()));

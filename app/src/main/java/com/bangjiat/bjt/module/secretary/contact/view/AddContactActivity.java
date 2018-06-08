@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.home.company.ui.CompanyInfoActivity;
+import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataCompany;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
@@ -18,6 +20,9 @@ import com.bangjiat.bjt.module.secretary.contact.contract.SearchContactContract;
 import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresenter;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +35,7 @@ public class AddContactActivity extends BaseColorToolBarActivity implements Sear
     @BindView(R.id.tv_hint)
     TextView tv_hint;
     private SearchContactContract.Presenter presenter;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +62,30 @@ public class AddContactActivity extends BaseColorToolBarActivity implements Sear
             @Override
             public void onScanSuccess(String result) {
                 try {
-                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                    if (user != null)
-                        presenter.searchContact(DataUtil.getToken(mContext), user.getUn());
-                    else {
-                        fail("");
+                    type = new JSONObject(result).getInt("type");
+                    if (type == 2) {
+                        QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
+                        if (user != null) {
+                            presenter.searchContact(DataUtil.getToken(mContext), user.getUn());
+                        } else {
+                            fail("");
+                        }
+                    } else if (type == 1) {
+                        QrCodeDataCompany company = new Gson().fromJson(result, QrCodeDataCompany.class);
+                        if (company != null) {
+                            Intent intent = new Intent(mContext, CompanyInfoActivity.class);
+                            intent.putExtra("data", result);
+                            startActivity(intent);
+                        } else {
+                            fail("");
+                        }
                     }
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                     fail("");
+                } catch (JSONException e) {
+                    fail("");
+                    e.printStackTrace();
                 }
             }
         });

@@ -111,4 +111,14 @@ public class DataUtil {
         SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
         spUtil.clear();
     }
+
+    public static void setReadNotice(Context context, boolean isRead) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        spUtil.putBoolean(SPUtil.OtherSetting.IS_READ_NOTICE, isRead);
+    }
+
+    public static boolean isReadNotice(Context context) {
+        SPUtil spUtil = new SPUtil(context, SPUtil.OtherSetting.OTHER_SETTING);
+        return spUtil.getBoolean(SPUtil.OtherSetting.IS_READ_NOTICE, false);
+    }
 }

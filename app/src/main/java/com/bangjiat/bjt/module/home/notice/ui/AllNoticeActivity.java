@@ -15,6 +15,7 @@ import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
 import com.bangjiat.bjt.module.home.notice.presenter.NoticePresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
+import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +32,7 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     private NoticeContract.Presenter presenter;
     private List<NoticeBean.SysNoticeListBean> list;
+    private NoticeAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +42,13 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     private void initData() {
         presenter = new NoticePresenter(this);
-        presenter.getAllNotice(DataUtil.getToken(mContext));
-
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
+        list = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class);
+        if (list == null)
+            presenter.getAllNotice(DataUtil.getToken(mContext));
+        else
+            setAdapter();
     }
 
 
@@ -96,6 +101,8 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
                 }
             });
 
+            SugarRecord.saveInTx(list);
+
             setAdapter();
             ll_none.setVisibility(View.GONE);
             return;
@@ -104,7 +111,7 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
     }
 
     private void setAdapter() {
-        NoticeAdapter mAdapter = new NoticeAdapter(list);
+        mAdapter = new NoticeAdapter(list);
         recycler_view.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new NoticeAdapter.OnRecyclerViewItemClickListener() {
@@ -116,6 +123,10 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
                 bundle.putSerializable("data", bean);
                 intent.putExtras(bundle);
                 startActivity(intent);
+
+                bean.setRead(true);
+                bean.save();
+                mAdapter.notifyDataSetChanged();
             }
         });
     }

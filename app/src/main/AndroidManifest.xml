@@ -516,7 +516,7 @@
             android:value="bjt.db" />
         <meta-data
             android:name="VERSION"
-            android:value="2" />
+            android:value="4" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -533,7 +533,10 @@
             android:value="165b4a555141dcf0c23f98ea8eae8c94" /> <!-- 请填写你自己的appSecret -->
 
         <activity android:name=".module.home.work.kaoqin.ui.ExcelActivity" />
-        <activity android:name=".module.park.apply.ui.ChooseLotActivity"/>
+        <activity android:name=".module.park.apply.ui.ChooseLotActivity" />
+        <activity android:name=".module.home.work.permission.ui.AdminActivity" />
+        <activity android:name=".module.home.work.permission.ui.AdminDetailActivity" />
+        <activity android:name=".module.home.work.permission.ui.AdminListActivity"></activity>
     </application>
 
 </manifest>

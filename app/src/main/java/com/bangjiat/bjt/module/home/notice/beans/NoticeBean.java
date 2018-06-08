@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.notice.beans;
 
-import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
+import com.orm.dsl.Column;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,7 +33,7 @@ public class NoticeBean implements Serializable {
     }
 
 
-    public static class SysNoticeListBean implements Serializable{
+    public static class SysNoticeListBean extends SugarRecord implements Serializable {
         /**
          * sNoticeId : 1
          * userId : 3
@@ -41,17 +42,32 @@ public class NoticeBean implements Serializable {
          * ctime : 1527851342452
          * source : fgh
          */
-        @SerializedName("bNoticeId")
+        @Column(name = "sNoticeId")
         private int sNoticeId;
+
         private String userId;
         private int buildId;
         private String name;
         private String content;
         private long ctime;
+
+        @Column(name = "isRead")
+        private boolean isRead;
         private String source;
+
+        public boolean isRead() {
+            return isRead;
+        }
+
+        public void setRead(boolean read) {
+            isRead = read;
+        }
 
         public int getsNoticeId() {
             return sNoticeId;
+        }
+
+        public SysNoticeListBean() {
         }
 
         public void setsNoticeId(int sNoticeId) {

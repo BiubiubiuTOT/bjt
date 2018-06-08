@@ -37,6 +37,8 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
     TextView tv_address;
     @BindView(R.id.tv_trade)
     TextView tv_trade;
+    @BindView(R.id.tv_add_company)
+    TextView tv_add_company;
     private Dialog dialog;
     private IntoCompanyContract.Presenter presenter;
     private CompanyDetailResult company;
@@ -48,6 +50,8 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
     }
 
     private void initData() {
+        if (!Constants.isIntoCompany()) tv_add_company.setVisibility(View.VISIBLE);
+
         presenter = new IntoCompanyPresenter(this);
         String str = getIntent().getStringExtra("data");
         try {
@@ -112,12 +116,12 @@ public class CompanyInfoActivity extends BaseWhiteToolBarActivity implements Int
 
     @Override
     public void getCompanyDetailSuccess(CompanyDetailResult result) {
-        if (result!=null){
+        if (result != null) {
             company = result;
             tv_name.setText(result.getName());
             tv_address.setText(result.getAddress());
             tv_trade.setText(result.getIndustry());
-        }else {
+        } else {
             fail("公司不存在");
         }
     }

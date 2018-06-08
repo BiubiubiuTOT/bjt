@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.work.kaoqin.ui.KaoqinMainActivity;
 import com.bangjiat.bjt.module.home.work.leave.ui.LeaveMainActivity;
+import com.bangjiat.bjt.module.home.work.permission.ui.AdminActivity;
 import com.bangjiat.bjt.module.home.work.permission.ui.PermissionMainActivity;
 import com.bangjiat.bjt.module.home.work.worker.ui.WorkerListActivity;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
@@ -47,7 +49,10 @@ public class WorkMainActivity extends BaseWhiteToolBarActivity {
 
     @OnClick(R.id.tv_permission)
     public void clickPermission(View view) {
-        startActivityForResult(new Intent(mContext, PermissionMainActivity.class), DELETE);
+        if (Constants.isCompanyAdmin())
+            startActivityForResult(new Intent(mContext, PermissionMainActivity.class), DELETE);
+        else
+            startActivity(new Intent(mContext, AdminActivity.class));
     }
 
     @OnClick(R.id.tv_kaoqin)

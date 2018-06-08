@@ -107,5 +107,6 @@ public class SPUtil {
         public static final String OTHER_SETTING = "other_setting";
         public static final String IS_RECEIVE_NOTIFICATION = "is_receive_notification";
         public static final String IS_INTO_BUILDING = "is_into_building";
+        public static final String IS_READ_NOTICE = "is_read_notice";
     }
 }  

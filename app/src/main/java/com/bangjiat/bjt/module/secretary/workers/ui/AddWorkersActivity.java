@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.module.home.company.ui.CompanyInfoActivity;
+import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataCompany;
 import com.bangjiat.bjt.module.home.scan.beans.QrCodeDataUser;
 import com.bangjiat.bjt.module.home.scan.ui.CompanyCodeActivity;
 import com.bangjiat.bjt.module.home.scan.ui.ScanActivity;
@@ -30,6 +32,8 @@ import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -55,6 +59,7 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
     private CompanyUserContract.Presenter presenter;
     private SearchContactContract.Presenter searchPresenter;
     private WorkersResult.RecordsBean bean;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,11 +196,30 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
             @Override
             public void onScanSuccess(String result) {
                 try {
-                    QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
-                    searchPresenter.getContactByScan(DataUtil.getToken(mContext), user.getUn());
+                    type = new JSONObject(result).getInt("type");
+                    if (type == 2) {
+                        QrCodeDataUser user = new Gson().fromJson(result, QrCodeDataUser.class);
+                        if (user != null) {
+                            searchPresenter.getContactByScan(DataUtil.getToken(mContext), user.getUn());
+                        } else {
+                            fail("");
+                        }
+                    } else if (type == 1) {
+                        QrCodeDataCompany company = new Gson().fromJson(result, QrCodeDataCompany.class);
+                        if (company != null) {
+                            Intent intent = new Intent(mContext, CompanyInfoActivity.class);
+                            intent.putExtra("data", result);
+                            startActivity(intent);
+                        } else {
+                            fail("");
+                        }
+                    }
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
-                    Toast.makeText(mContext, "二维码解析失败", Toast.LENGTH_SHORT).show();
+                    fail("");
+                } catch (JSONException e) {
+                    fail("");
+                    e.printStackTrace();
                 }
             }
         });

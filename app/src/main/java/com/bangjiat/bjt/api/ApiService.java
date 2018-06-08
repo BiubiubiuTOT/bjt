@@ -897,9 +897,29 @@ public interface ApiService {
 
     /**
      * 99
-     *
-     获取轮播图列表
+     * <p>
+     * 获取轮播图列表
      */
     @GET("api/carousel/select/AppCarouselList")
-    Call<BaseResult<List<BannerBean>>> getBannerList(@Header(Constants.TOKEN_NAME)String token);
+    Call<BaseResult<List<BannerBean>>> getBannerList(@Header(Constants.TOKEN_NAME) String token);
+
+    /**
+     * 100
+     * <p>
+     * 获取被邀请记录
+     */
+    @GET("api/visitor/select/VisitorPage")
+    Call<BaseResult> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
+                                       @Query("page") int page,
+                                       @Query("size") int size);
+
+    /**
+     * 101
+     * <p>
+     * 删除访客记录
+     */
+    @HTTP(method = "DELETE", path = "api/visitor/delete/BuildVisitor", hasBody = true)
+    Call<BaseResult<String>> deleteVistor(@Header(Constants.TOKEN_NAME) String token,
+                                          @Query("type") int type,
+                                          @Query("who") int who);
 }

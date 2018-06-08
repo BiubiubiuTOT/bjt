@@ -30,9 +30,9 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     @BindView(R.id.et_name)
     ClearEditText et_name;
     @BindView(R.id.et_phone)
-    ClearEditText et_phone;
+    TextView et_phone;
     @BindView(R.id.et_id_card)
-    ClearEditText et_card;
+    TextView et_card;
     @BindView(R.id.et_duty)
     ClearEditText et_duty;
     @BindView(R.id.et_department)
@@ -68,21 +68,17 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
             if (!userInfo.getUserId().equals(bean.getUserId()) && !Constants.isCompanyAdmin()) {//不是本人或者没有公司管理员权限的人不能编辑
                 tv_done.setVisibility(View.GONE);
 
-                et_name.setEnabled(false);
-                et_card.setEnabled(false);
                 et_phone.setEnabled(false);
                 et_department.setEnabled(false);
                 et_duty.setEnabled(false);
 
-                et_name.setFocusable(false);
-                et_card.setFocusable(false);
                 et_phone.setFocusable(false);
                 et_department.setFocusable(false);
                 et_duty.setFocusable(false);
             }
-
+            String idNumber = bean.getIdNumber().replaceAll("(\\d{5})\\d{11}(\\w{2})", "$1***********$2");
             et_name.setText(bean.getRealname());
-            et_card.setText(bean.getIdNumber());
+            et_card.setText(idNumber);
             et_phone.setText(bean.getPhone());
             String department = bean.getDepartment();
             if (department != null && !department.equals("null"))

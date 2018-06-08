@@ -102,6 +102,11 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
 
     @OnClick(R.id.card_door)
     public void clickDoor(View view) {
+        if (Constants.isBuildingAdmin()) {
+            startActivity(new Intent(mContext, com.bangjiat.bjt.module.secretary.door.ui.MainActivity.class));
+            return;
+        }
+
         if (Constants.isBuildingAdmin() && !Constants.isCompanyAdmin()) {
             startActivity(new Intent(mContext, com.bangjiat.bjt.module.secretary.door.ui.HistoryActivity.class));
             return;
@@ -130,6 +135,11 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
 
     @OnClick(R.id.card_service)
     public void clickCardService(View view) {
+        if (Constants.isBuildingAdmin()) {
+            startActivity(new Intent(mContext, MainActivity.class));
+            return;
+        }
+
         if (Constants.isBuildingAdmin() && !Constants.isCompanyAdmin()) {
             startActivity(new Intent(mContext, ServiceHistoryActivity.class));
             return;

@@ -42,7 +42,16 @@
             android:textColor="@color/rb_bg"
             android:textSize="15sp" />
 
-
+        <RadioButton
+            android:id="@+id/rb3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="邀请记录"
+            android:textColor="@color/rb_bg"
+            android:textSize="15sp" />
     </RadioGroup>
 
     <android.support.v4.view.ViewPager

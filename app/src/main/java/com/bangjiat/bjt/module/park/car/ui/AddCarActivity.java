@@ -109,11 +109,16 @@ public class AddCarActivity extends BaseWhiteToolBarActivity implements UploadIm
 
     private void initData() {
         UserInfo first = UserInfo.first(UserInfo.class);
-        String realname = first.getRealname();
-        if (!realname.isEmpty()) {
-            et_name.setText(realname);
+        if (first != null) {
+            String realname = first.getRealname();
+            if (realname != null) {
+                et_name.setText(realname);
+            }
+
+            String idNumber = first.getIdNumber();
+            if (idNumber != null)
+                et_id_number.setText(idNumber);
         }
-        et_id_number.setText(first.getIdNumber());
 
         uploadImagePresenter = new UploadImagePresenter(this);
         addCarPresenter = new CarListPresenter(this);

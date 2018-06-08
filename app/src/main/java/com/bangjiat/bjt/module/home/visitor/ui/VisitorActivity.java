@@ -29,9 +29,11 @@ public class VisitorActivity extends BaseToolBarActivity {
     RadioButton rb1;
     @BindView(R.id.rb2)
     RadioButton rb2;
+    @BindView(R.id.rb3)
+    RadioButton rb3;
     private int index;
 
-    private Fragment fragment_visitor, fragment_invite;
+    private Fragment fragment_visitor, fragment_invite, fragment_history;
     private List<Fragment> fragments;
     private MyAdapter myAdapter;
 
@@ -85,6 +87,10 @@ public class VisitorActivity extends BaseToolBarActivity {
                         rb2.setChecked(true);
                     }
                     break;
+                    case 2: {
+                        rb3.setChecked(true);
+                    }
+                    break;
                 }
             }
 
@@ -112,7 +118,6 @@ public class VisitorActivity extends BaseToolBarActivity {
                 }
                 if (viewPager.getCurrentItem() != index) {
                     viewPager.setCurrentItem(index, false);
-
                 }
 
 
@@ -125,10 +130,12 @@ public class VisitorActivity extends BaseToolBarActivity {
     protected void initView() {
         fragment_visitor = new VisitorFragment();
         fragment_invite = new InviteFragment();
+        fragment_history = new HistoryFragment();
 
         fragments = new ArrayList<>();
 
         fragments.add(fragment_visitor);
+        fragments.add(fragment_history);
         fragments.add(fragment_invite);
 
         myAdapter = new MyAdapter(getSupportFragmentManager(), fragments);
