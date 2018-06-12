@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.door.adapter.ApplyHistoryAdapter;
@@ -24,13 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class HistoryActivity extends BaseColorToolBarActivity implements DoorApplyHistoryContract.View {
+public class HistoryActivity extends BaseColorToolBarActivity implements DoorApplyHistoryContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     private static final int DEAL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
 
     private List<ApplyHistoryBean.RecordsBean> list;
     private Dialog dialog;
@@ -51,6 +56,8 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
 
         getData();
         setAdapter();
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     private void getData() {
@@ -111,6 +118,7 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
 
     @Override
     public void getDoorApplyHistorySuccess(ApplyHistoryBean bean) {
+        mRefreshLayout.endRefreshing();
         if (bean != null) {
             List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
@@ -125,12 +133,14 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endRefreshing();
         Logger.e(err);
         Constants.showErrorDialog(mContext, err);
     }
 
     @Override
     public void getAdminDoorApplyHistorySuccess(ApplyHistoryBean bean) {
+        mRefreshLayout.endRefreshing();
         if (bean != null) {
             List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
             if (records != null) {
@@ -142,5 +152,16 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
             }
         }
         ll_none.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        getData();
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

@@ -47,6 +47,8 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     TextView tv_door;
     @BindView(R.id.tv_service)
     TextView tv_service;
+    @BindView(R.id.tv_into_building)
+    TextView tv_into;
 
     private IntoBuildingContract.Presenter presenter;
     private String token;
@@ -98,6 +100,13 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     @Override
     protected int getLayoutResId() {
         return R.layout.fragment_secretary;
+    }
+
+    @OnClick(R.id.tv_into_building)
+    public void clickInto(View view) {
+        if (!isApply) {
+            startActivity(new Intent(mContext, IntoBuildingActivity.class));
+        }
     }
 
     @OnClick(R.id.card_door)
@@ -217,6 +226,8 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
                 DataUtil.setIntoBuilding(mContext);
             }
         }
+        if (!isApply && !Constants.isBuildingAdmin())
+            tv_into.setVisibility(View.VISIBLE);
     }
 }
 

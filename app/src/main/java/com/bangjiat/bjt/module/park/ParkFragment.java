@@ -22,6 +22,11 @@ public class ParkFragment extends BaseFragment {
     LinearLayout ll_apply;
 
     protected void initView() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (Constants.isParkAdmin()) {
             ll_apply.setVisibility(View.VISIBLE);
         } else if (Constants.isCompanyAdmin()) {

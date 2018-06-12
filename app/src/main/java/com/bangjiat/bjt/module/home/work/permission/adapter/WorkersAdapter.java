@@ -31,6 +31,11 @@ public class WorkersAdapter extends RecyclerView.Adapter<WorkersAdapter.ViewHold
         this.mContext = context;
     }
 
+    public void setLists(List<WorkersResult.RecordsBean> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_workers, viewGroup, false);

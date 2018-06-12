@@ -64,6 +64,7 @@
                 android:background="@null"
                 android:hint="@string/tv_register_phone_hint"
                 android:inputType="phone"
+                android:maxLength="11"
                 android:textColor="@color/black"
                 android:textColorHint="@color/register_hint"
                 android:textSize="14sp" />

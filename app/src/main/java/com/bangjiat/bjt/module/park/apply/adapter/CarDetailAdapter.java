@@ -83,7 +83,7 @@ public class CarDetailAdapter extends RecyclerView.Adapter<CarDetailAdapter.View
                 }
 
             }
-            if (Constants.isWorkAdmin() && status == 2) {
+            if (Constants.isCompanyAdmin() && status == 2) {
                 viewHolder.tv_number.setText(lotNumber);
                 viewHolder.tv_number.setEnabled(false);
                 viewHolder.ll_number.setVisibility(View.VISIBLE);

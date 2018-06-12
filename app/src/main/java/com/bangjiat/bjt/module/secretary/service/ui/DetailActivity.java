@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,10 +18,12 @@ import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
+import com.bangjiat.bjt.module.home.work.leave.beans.Progress;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.door.beans.ApprovalServiceInput;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
+import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 import com.bangjiat.bjt.module.secretary.service.contract.ServiceApplyHistoryContract;
 import com.bangjiat.bjt.module.secretary.service.presenter.ServiceApplyHistoryPresenter;
@@ -33,6 +36,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.bangjiat.bjt.module.secretary.service.ui.NewApplyActivity.GET_PERSON;
 
 /**
  * 服务申请 详情
@@ -48,14 +53,19 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
     TextView tv_content;
     @BindView(R.id.rl_btn)
     RelativeLayout rl_btn;
+    @BindView(R.id.ll_reason)
+    LinearLayout ll_reason;
+    @BindView(R.id.tv_reason)
+    TextView tv_reason;
+
 
     private List<String> photoList;
     private ServiceApplyHistoryResult.RecordsBean data;
-    private int type;
     private AlertDialog alertDialog;
     private ServiceApplyHistoryContract.Presenter presenter;
     private Dialog dialog;
     private BuildUser first;
+    private BuildingAdminListResult result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,23 +97,47 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
             Logger.d(photoList.toString());
             setPhotoAdapter();
         }
+        int status = data.getStatus();
         if (Constants.isBuildingAdmin()) {
-            if (data.getStatus() == 1)
+            if (status == 1) {
                 rl_btn.setVisibility(View.VISIBLE);
+            }
             initDia();
+        }
+        if (status == 3) {
+            ll_reason.setVisibility(View.VISIBLE);
+            tv_reason.setText(data.getRemark());
         }
     }
 
     @OnClick(R.id.btn_agree)
     public void clickAgree(View view) {
-        type = 1;
-        alertDialog.show();
+        ApprovalServiceInput input = new ApprovalServiceInput(data.getBApprovalId(), 1);
+        presenter.approvalService(DataUtil.getToken(mContext), first.getBuildId(), input);
     }
 
     @OnClick(R.id.btn_refuse)
     public void clickRefuse(View view) {
-        type = 2;
         alertDialog.show();
+    }
+
+    @OnClick(R.id.btn_to)
+    public void clickTo(View view) {
+        startActivityForResult(new Intent(mContext, BuildingAdminListActivity.class), GET_PERSON);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data1) {
+        super.onActivityResult(requestCode, resultCode, data1);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == GET_PERSON) {
+                result = (BuildingAdminListResult) data1.getSerializableExtra("data");
+                Progress progress = new Progress(result.getUserId(), result.getUsername(), result.getRealname());
+                ApprovalServiceInput input = new ApprovalServiceInput(data.getBApprovalId(), 3);
+                input.setProgress(progress);
+                presenter.approvalService(DataUtil.getToken(mContext), first.getBuildId(), input);
+            }
+        }
     }
 
     private void initDia() {
@@ -136,7 +170,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
                 if (alertDialog.isShowing())
                     alertDialog.dismiss();
 
-                ApprovalServiceInput input = new ApprovalServiceInput(data.getBApprovalId(), string, type);
+                ApprovalServiceInput input = new ApprovalServiceInput(data.getBApprovalId(), string, 2);
                 presenter.approvalService(DataUtil.getToken(mContext), first.getBuildId(), input);
             }
         });

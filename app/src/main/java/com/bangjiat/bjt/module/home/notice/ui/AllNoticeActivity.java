@@ -44,7 +44,7 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
         presenter = new NoticePresenter(this);
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
-        list = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class);
+        list = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class, "ctime desc");
         if (list == null)
             presenter.getAllNotice(DataUtil.getToken(mContext));
         else

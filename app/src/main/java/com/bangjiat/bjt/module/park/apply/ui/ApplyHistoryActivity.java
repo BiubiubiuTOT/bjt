@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 import com.bangjiat.bjt.module.park.apply.adapter.ApplyHistoryAdapter;
@@ -23,19 +24,25 @@ import com.bangjiat.bjt.module.park.apply.presenter.ParkApplyPresenter;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
 import com.dou361.dialogui.DialogUIUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements ParkApplyContract.View {
+public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements ParkApplyContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     private static final int DEAL_SUCCESS = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
     private List<ParkApplyHistoryResult.RecordsBean> list;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
+    private ApplyHistoryAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,9 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
         getData();
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        setAdapter();
     }
 
     private void getData() {
@@ -62,7 +72,8 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
     }
 
     private void setAdapter() {
-        ApplyHistoryAdapter mAdapter = new ApplyHistoryAdapter(list, mContext);
+        list = new ArrayList<>();
+        mAdapter = new ApplyHistoryAdapter(list, mContext);
         recycler_view.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new ApplyHistoryAdapter.OnRecyclerViewItemClickListener() {
@@ -108,6 +119,7 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endRefreshing();
         Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
     }
 
@@ -133,11 +145,12 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
 
     @Override
     public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             List<ParkApplyHistoryResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 list = records;
-                setAdapter();
+                mAdapter.setLists(list);
                 ll_none.setVisibility(View.GONE);
                 return;
             }
@@ -148,5 +161,16 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
     @Override
     public void getLotListSuccess(List<LotResult> results) {
 
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        getData();
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

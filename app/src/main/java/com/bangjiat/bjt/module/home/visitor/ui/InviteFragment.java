@@ -12,6 +12,7 @@ import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.home.visitor.adapter.VisitorAdapter;
+import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.visitor.contract.VisitorContract;
 import com.bangjiat.bjt.module.home.visitor.presenter.VisitorPresenter;
@@ -56,8 +57,40 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
         list = new ArrayList<>();
         recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
         recycler_view.setHasFixedSize(true);
-        mAdapter = new VisitorAdapter(list);
+        mAdapter = new VisitorAdapter(list, 1);
         recycler_view.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new VisitorAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onAgreeClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onRefuseClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onDelete(View view, int pos) {
+                String[] strings = new String[1];
+                VisitorBean.RecordsBean recordsBean = list.get(pos);
+                strings[0] = String.valueOf(recordsBean.getVisitorId());
+                DeleteHistory history = new DeleteHistory(2, 1, strings);
+                presenter.deleteHistory(DataUtil.getToken(mContext), history);
+
+                list.remove(pos);
+                mAdapter.notifyItemRemoved(pos);
+                mAdapter.notifyItemRangeChanged(pos, list.size() - pos);
+
+                if (list.size() == 0)
+                    ll_none.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 
@@ -100,6 +133,16 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
 
     @Override
     public void addInviteSuccess(String str) {
+
+    }
+
+    @Override
+    public void getHistorySuccess(VisitorBean history) {
+
+    }
+
+    @Override
+    public void deleteHistorySuccess(String string) {
 
     }
 

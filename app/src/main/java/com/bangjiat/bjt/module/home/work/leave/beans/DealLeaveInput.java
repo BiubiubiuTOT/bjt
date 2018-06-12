@@ -10,6 +10,15 @@ public class DealLeaveInput {
     private int leaveId;//申请编号
     private int type;//操作类型1表示同意，2表示拒绝，3表示转批
     private Progress progress;
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public int getLeaveId() {
         return leaveId;

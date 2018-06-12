@@ -5,6 +5,7 @@ import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.InviteBean;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.visitor.contract.VisitorContract;
@@ -69,6 +70,42 @@ public class VisitorModel implements VisitorContract.Model {
                 BaseResult<String> body = response.body();
                 if (body.getStatus() == 200)
                     presenter.addInviteSuccess(body.getData());
+                else presenter.error(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
+
+    @Override
+    public void getHistory(String token, int page, int size) {
+        ApiFactory.getService().getVisitorHistory(token, page, size).enqueue(new MyCallBack<BaseResult<VisitorBean>>() {
+            @Override
+            public void onSuc(Response<BaseResult<VisitorBean>> response) {
+                BaseResult<VisitorBean> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.getHistorySuccess(body.getData());
+                else presenter.error(body.getMessage());
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
+
+    @Override
+    public void deleteHistory(String token, DeleteHistory history) {
+        ApiFactory.getService().deleteVistor(token, history).enqueue(new MyCallBack<BaseResult<String>>() {
+            @Override
+            public void onSuc(Response<BaseResult<String>> response) {
+                BaseResult<String> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.deleteHistorySuccess(body.getData());
                 else presenter.error(body.getMessage());
             }
 

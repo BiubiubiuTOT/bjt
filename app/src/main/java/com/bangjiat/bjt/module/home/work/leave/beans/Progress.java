@@ -11,7 +11,7 @@ public class Progress {////下一步审批人审批进度对象userId,userRealna
     private String userRealname;
     private String username;
 
-    public Progress(String userId, String userRealname, String username) {
+    public Progress(String userId, String username, String userRealname) {
         this.userId = userId;
         this.userRealname = userRealname;
         this.username = username;

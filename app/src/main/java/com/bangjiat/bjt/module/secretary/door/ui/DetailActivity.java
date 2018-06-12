@@ -53,14 +53,14 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
     TextView tv_company_name;
     @BindView(R.id.rl_btn)
     RelativeLayout rl_btn;
-    @BindView(R.id.ll_reason)
-    LinearLayout ll_reason;
     @BindView(R.id.card_time)
     CardView card_time;
     @BindView(R.id.tv_time)
     TextView tv_time;
     @BindView(R.id.tv_reason)
     TextView tv_reason;
+    @BindView(R.id.ll_reason)
+    LinearLayout ll_reason;
 
     private List<DoorApplyDetailResult> list;
     private Dialog dialog;
@@ -98,7 +98,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements DoorAppl
 
         if (status == 2) {
             card_time.setVisibility(View.VISIBLE);
-            tv_time.setText(TimeUtils.changeToTime(recordsBean.getEndTime()));
+            tv_time.setText(TimeUtils.changeToYMD(recordsBean.getEndTime()));
         } else if (status == 3) {
             ll_reason.setVisibility(View.VISIBLE);
             tv_reason.setText(recordsBean.getOpinion());

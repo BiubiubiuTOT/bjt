@@ -157,18 +157,18 @@
             android:id="@+id/iv_response"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/iv_share"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
             android:src="@mipmap/huifu" />
 
         <ImageView
             android:id="@+id/iv_share"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_margin="12dp"
-            android:src="@mipmap/share" />
+            android:src="@mipmap/share"
+            android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

@@ -9,11 +9,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
 import com.bangjiat.bjt.module.secretary.workers.adapter.TextAdapter;
@@ -28,8 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class AdminSettingActivity extends BaseToolBarActivity implements CompanyUserContract.View {
+public class AdminSettingActivity extends BaseToolBarActivity implements CompanyUserContract.View, BGARefreshLayout.BGARefreshLayoutDelegate {
     private static final int UPDATE_ADMIN_SUCCESS = 1;
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
@@ -37,6 +38,9 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
     private List<WorkersResult.RecordsBean> beans;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
+
     private SelectPeopleAdapter adapter;
     private int type;
     private TextView tv_title;
@@ -83,6 +87,9 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
             }
         });
         initDialog();
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        setAdapter();
     }
 
     private void initDialog() {
@@ -116,21 +123,24 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
 
     @Override
     public void error(String err) {
-        Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+        mRefreshLayout.endRefreshing();
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override
     public void getCompanyUserSuccess(WorkersResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null) {
                 beans = records;
-                setAdapter();
+                adapter.setLists(beans);
             }
         }
     }
 
     private void setAdapter() {
+        beans = new ArrayList<>();
         adapter = new SelectPeopleAdapter(beans, mContext);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new SelectPeopleAdapter.OnRecyclerViewItemClickListener() {
@@ -197,4 +207,14 @@ public class AdminSettingActivity extends BaseToolBarActivity implements Company
         }
     }
 
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getCompanyUser(token, 1, 10, 3);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
+    }
 }

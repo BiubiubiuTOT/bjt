@@ -106,6 +106,15 @@ public class ParkApplyHistoryResult implements Serializable {
         private int spaceId;//停车场编号
         private String spaceName;//停车场名称
         private int status;//状态:1待审核，2已通过，3未通过
+        private long terminalTime;
+
+        public long getTerminalTime() {
+            return terminalTime;
+        }
+
+        public void setTerminalTime(long terminalTime) {
+            this.terminalTime = terminalTime;
+        }
 
         public int getApplyId() {
             return applyId;

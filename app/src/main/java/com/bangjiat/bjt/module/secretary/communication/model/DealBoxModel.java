@@ -4,7 +4,6 @@ import com.bangjiat.bjt.api.ApiFactory;
 import com.bangjiat.bjt.api.MyCallBack;
 import com.bangjiat.bjt.common.BaseResult;
 import com.bangjiat.bjt.module.secretary.communication.contract.DealBoxContract;
-import com.orhanobut.logger.Logger;
 
 import retrofit2.Response;
 
@@ -23,7 +22,6 @@ public class DealBoxModel implements DealBoxContract.Model {
 
     @Override
     public void deleteOutBox(String token, String[] strings) {
-        Logger.d(strings);
         ApiFactory.getService().deleteOutBox(token, strings).enqueue(new MyCallBack<BaseResult<String>>() {
             @Override
             public void onSuc(Response<BaseResult<String>> response) {

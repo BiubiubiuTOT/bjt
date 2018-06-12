@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.home.work.permission.adapter.WorkersAdapter;
 import com.bangjiat.bjt.module.home.work.permission.contract.PermissionContract;
 import com.bangjiat.bjt.module.home.work.permission.presenter.PermissionPresenter;
@@ -32,11 +34,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class PermissionTransferActivity extends BaseWhiteToolBarActivity implements
-        CompanyUserContract.View, PermissionContract.View, GetUserInfoContract.View {
+        CompanyUserContract.View, PermissionContract.View, GetUserInfoContract.View, BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.ll_none)
+    LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
+
     private List<WorkersResult.RecordsBean> beans;
     private WorkersAdapter adapter;
     private CompanyUserContract.Presenter presenter;
@@ -57,10 +65,13 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
         presenter = new CompanyUserPresenter(this);
         permissionPresenter = new PermissionPresenter(this);
         token = DataUtil.getToken(mContext);
-        presenter.getCompanyUser(token, 1, 10, 1);
+        presenter.getCompanyUser(token, 1, 10, 4);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        setAdapter();
     }
 
     private void setAdapter() {
@@ -108,6 +119,7 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endRefreshing();
         Constants.showErrorDialog(mContext, err);
         Logger.e(err);
     }
@@ -130,13 +142,17 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
 
     @Override
     public void getCompanyUserSuccess(WorkersResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             List<WorkersResult.RecordsBean> records = result.getRecords();
-            if (records != null) {
+            if (records != null && records.size() > 0) {
                 beans = records;
-                setAdapter();
+                adapter.setLists(beans);
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -200,5 +216,16 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
                         finish();
                     }
                 }).show();
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getCompanyUser(token, 1, 10, 4);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

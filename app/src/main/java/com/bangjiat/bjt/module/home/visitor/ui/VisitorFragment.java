@@ -13,6 +13,7 @@ import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.home.visitor.adapter.VisitorAdapter;
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.visitor.contract.VisitorContract;
 import com.bangjiat.bjt.module.home.visitor.presenter.VisitorPresenter;
@@ -56,11 +57,12 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
         mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
+
     private void setAdapter() {
         list = new ArrayList<>();
         recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
         recycler_view.setHasFixedSize(true);
-        mAdapter = new VisitorAdapter(list);
+        mAdapter = new VisitorAdapter(list, 1);
         recycler_view.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new VisitorAdapter.OnRecyclerViewItemClickListener() {
@@ -83,6 +85,22 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
                 type = 3;
 
                 presenter.dealVisitor(DataUtil.getToken(mContext), new DealVisitorInput(recordsBean.getVisitorId(), type));
+            }
+
+            @Override
+            public void onDelete(View view, int pos) {
+                String[] strings = new String[1];
+                VisitorBean.RecordsBean recordsBean = list.get(pos);
+                strings[0] = String.valueOf(recordsBean.getVisitorId());
+                DeleteHistory history = new DeleteHistory(1, 1, strings);
+                presenter.deleteHistory(DataUtil.getToken(mContext), history);
+
+                list.remove(pos);
+                mAdapter.notifyItemRemoved(pos);
+                mAdapter.notifyItemRangeChanged(pos, list.size() - pos);
+
+                if (list.size() == 0)
+                    ll_none.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -112,6 +130,7 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
         if (bean != null) {
             List<VisitorBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
+                Logger.d(records.toString());
                 list = records;
                 mAdapter.setLists(list);
                 ll_none.setVisibility(View.GONE);
@@ -133,14 +152,25 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
     }
 
     @Override
+    public void getHistorySuccess(VisitorBean history) {
+
+    }
+
+    @Override
+    public void deleteHistorySuccess(String string) {
+
+    }
+
+    @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
         presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 1);
-        bgaRefreshLayout.beginRefreshing();
+        mRefreshLayout.beginRefreshing();
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        mRefreshLayout.beginLoadingMore();
+        return true;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.main.ui.fragment;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -46,10 +47,14 @@ import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
 import com.orm.SugarRecord;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -86,12 +91,13 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     private int type;
 
     protected void initView() {
+        EventBus.getDefault().register(this);
         presenter = new NoticePresenter(this);
         searchPresenter = new SearchContactPresenter(this);
         bannerPresenter = new BannerPresenter(this);
         token = DataUtil.getToken(mContext);
 
-        sysNoticeListBean = NoticeBean.SysNoticeListBean.first(NoticeBean.SysNoticeListBean.class);
+        sysNoticeListBean = NoticeBean.SysNoticeListBean.last(NoticeBean.SysNoticeListBean.class);
         if (sysNoticeListBean == null)
             presenter.getAllNotice(token);
         else {
@@ -271,15 +277,15 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
                 if (first != null) {
                     for (NoticeBean.SysNoticeListBean data : list) {
                         List<NoticeBean.SysNoticeListBean> sysNoticeListBeans = NoticeBean.SysNoticeListBean.
-                                find(NoticeBean.SysNoticeListBean.class, "sNoticeId=?", String.valueOf(data.getsNoticeId()));
-                        if (sysNoticeListBeans == null) {
+                                find(NoticeBean.SysNoticeListBean.class, "ctime=?", String.valueOf(data.getCtime()));
+                        if (sysNoticeListBeans.isEmpty()) {
                             data.save();
                         }
                     }
                 } else
                     SugarRecord.saveInTx(list);
 
-                iv_not_read.setVisibility(View.VISIBLE);
+                onResume();
             }
         }
 
@@ -352,6 +358,8 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         List<BuildUser> buildUser = bean.getBuildUser();
         List<SpaceUser> spaceUser = bean.getSpaceUser();
 
+        if (userInfo == null) return;
+
         DataUtil.setPhone(mContext, userInfo.getPhone());
         DataUtil.setUserId(mContext, userInfo.getUserId());
 
@@ -387,8 +395,29 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(mContext);
+    }
+
+    @Override
     public void error(String err) {
         Logger.e(err);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSettingEvent(String s) {
+        if (s.isEmpty()) return;
+
+        Logger.d("收到消息推送： " + s);
+
+        Resources res = getResources();
+        String[] formats = res.getStringArray(R.array.push);
+        List<String> list = Arrays.asList(formats);
+        if (list.contains(s)) {
+            presenter.getAllNotice(token);
+            userPresenter.getUserInfo(token);
+        }
     }
 }
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.common.TimeUtils;
@@ -129,7 +130,12 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
 
     @OnClick(R.id.iv_share)
     public void clickShare(View view) {
-
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, "http://www.bangjiat.com/");
+        share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(share, "分享邮件"));
     }
 
     @OnClick(R.id.iv_response)
@@ -170,6 +176,7 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
     @Override
     public void fail(String err) {
         Logger.e(err);
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override
@@ -188,12 +195,14 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
                         wcbMenu.dismiss();
 
                         String[] strings = new String[1];
-                        strings[0] = String.valueOf(bean.getEmailId());
 
                         if (type == 1) {
+                            strings[0] = String.valueOf(bean.getEmailId());
                             presenter.deleteOutBox(token, strings);
-                        } else
+                        } else {
+                            strings[0] = String.valueOf(bean.getRecordId());
                             presenter.deleteInBox(token, strings);
+                        }
 
                     }
                 })

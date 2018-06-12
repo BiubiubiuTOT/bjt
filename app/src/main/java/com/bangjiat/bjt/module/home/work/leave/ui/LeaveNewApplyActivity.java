@@ -76,7 +76,7 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
         list.add("事假");
         list.add("病假");
         list.add("出差");
-        list.add("年假");
+        list.add("其他");
 
         initPicker();
         initStartTimePicker();
@@ -192,7 +192,7 @@ public class LeaveNewApplyActivity extends BaseWhiteToolBarActivity implements L
         leaveBean.setEndTime(end);
         leaveBean.setReason(reason);
         leaveBean.setType(type);
-        leaveBean.setProgress(new Progress(result.getUserId(), result.getRealname(), result.getPhone()));
+        leaveBean.setProgress(new Progress(result.getUserId(), result.getPhone(), result.getRealname()));
 
         Logger.d(leaveBean.toString());
         presenter.addLeave(DataUtil.getToken(mContext), leaveBean);

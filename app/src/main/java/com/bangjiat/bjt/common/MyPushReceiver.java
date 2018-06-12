@@ -11,6 +11,8 @@ import com.alibaba.sdk.android.push.MessageReceiver;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
 import com.bangjiat.bjt.R;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Map;
 
 public class MyPushReceiver extends MessageReceiver {
@@ -40,6 +42,7 @@ public class MyPushReceiver extends MessageReceiver {
         Log.i(REC_TAG, "收到一条推送通知 ： " + title + ", summary:" + summary);
 //        sendNotification(context, title, summary);
         setBadgeNum(context);
+        EventBus.getDefault().post(title);
     }
 
     /**

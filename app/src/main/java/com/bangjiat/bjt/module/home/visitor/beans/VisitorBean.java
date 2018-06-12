@@ -237,5 +237,28 @@ public class VisitorBean {
         public void setVisitorPhone(String visitorPhone) {
             this.visitorPhone = visitorPhone;
         }
+
+        @Override
+        public String toString() {
+            return "RecordsBean{" +
+                    "buildId=" + buildId +
+                    ", ctime=" + ctime +
+                    ", idcardBack='" + idcardBack + '\'' +
+                    ", idcardFront='" + idcardFront + '\'' +
+                    ", interviewName='" + interviewName + '\'' +
+                    ", interviewPhone='" + interviewPhone + '\'' +
+                    ", interviewUserId='" + interviewUserId + '\'' +
+                    ", remark='" + remark + '\'' +
+                    ", status=" + status +
+                    ", type=" + type +
+                    ", useCount=" + useCount +
+                    ", visitMatter='" + visitMatter + '\'' +
+                    ", visitTime=" + visitTime +
+                    ", visitorFront='" + visitorFront + '\'' +
+                    ", visitorId=" + visitorId +
+                    ", visitorName='" + visitorName + '\'' +
+                    ", visitorPhone='" + visitorPhone + '\'' +
+                    '}';
+        }
     }
 }

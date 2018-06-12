@@ -26,7 +26,7 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private OnCheckListener onCheckListener;
     private Context mContext;
-    private final HashMap<Integer, Boolean> map;
+    private HashMap<Integer, Boolean> map;
     private boolean isShowCheck;
 
     public HashMap<Integer, Boolean> getMap() {
@@ -50,6 +50,15 @@ public class SelectPeopleAdapter extends RecyclerView.Adapter<SelectPeopleAdapte
             map.put(i, false);
         }
 
+    }
+
+    public void setLists(List<WorkersResult.RecordsBean> lists) {
+        this.lists = lists;
+        map = new HashMap<>();
+        for (int i = 0; i < lists.size(); i++) {
+            map.put(i, false);
+        }
+        notifyDataSetChanged();
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         String s = lists.get(position);
-        Glide.with(mContext).load(s).centerCrop().into(viewHolder.iv_image);
+        Glide.with(mContext).load(s).centerCrop().error(R.mipmap.error).into(viewHolder.iv_image);
 
         viewHolder.itemView.setTag(position);
     }

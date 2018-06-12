@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.visitor.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,8 +12,10 @@ import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.module.home.scan.ui.OpenDoorCodeActivity;
 import com.bangjiat.bjt.module.home.visitor.adapter.VisitorAdapter;
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.visitor.contract.VisitorContract;
 import com.bangjiat.bjt.module.home.visitor.presenter.VisitorPresenter;
@@ -50,7 +53,7 @@ public class HistoryFragment extends BaseFragment implements VisitorContract.Vie
     @Override
     protected void initView() {
         presenter = new VisitorPresenter(this);
-        presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 1);
+        presenter.getHistory(DataUtil.getToken(mContext), 1, 10);
         setAdapter();
         mRefreshLayout.setDelegate(this);
         mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
@@ -60,13 +63,13 @@ public class HistoryFragment extends BaseFragment implements VisitorContract.Vie
         list = new ArrayList<>();
         recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
         recycler_view.setHasFixedSize(true);
-        mAdapter = new VisitorAdapter(list);
+        mAdapter = new VisitorAdapter(list, 2);
         recycler_view.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new VisitorAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                startActivity(new Intent(mContext, OpenDoorCodeActivity.class));
             }
 
             @Override
@@ -83,6 +86,22 @@ public class HistoryFragment extends BaseFragment implements VisitorContract.Vie
                 type = 3;
 
                 presenter.dealVisitor(DataUtil.getToken(mContext), new DealVisitorInput(recordsBean.getVisitorId(), type));
+            }
+
+            @Override
+            public void onDelete(View view, int pos) {
+                String[] strings = new String[1];
+                VisitorBean.RecordsBean recordsBean = list.get(pos);
+                strings[0] = String.valueOf(recordsBean.getVisitorId());
+                DeleteHistory history = new DeleteHistory(1, 2, strings);
+                presenter.deleteHistory(DataUtil.getToken(mContext), history);
+
+                list.remove(pos);
+                mAdapter.notifyItemRemoved(pos);
+                mAdapter.notifyItemRangeChanged(pos, list.size() - pos);
+
+                if (list.size() == 0)
+                    ll_none.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -108,17 +127,7 @@ public class HistoryFragment extends BaseFragment implements VisitorContract.Vie
 
     @Override
     public void success(VisitorBean bean) {
-        mRefreshLayout.endRefreshing();
-        if (bean != null) {
-            List<VisitorBean.RecordsBean> records = bean.getRecords();
-            if (records != null && records.size() > 0) {
-                list = records;
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
-                return;
-            }
-        }
-        ll_none.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -133,8 +142,29 @@ public class HistoryFragment extends BaseFragment implements VisitorContract.Vie
     }
 
     @Override
+    public void getHistorySuccess(VisitorBean history) {
+        mRefreshLayout.endRefreshing();
+        if (history != null) {
+            List<VisitorBean.RecordsBean> records = history.getRecords();
+            if (records != null && records.size() > 0) {
+                Logger.d(records.toString());
+                list = records;
+                mAdapter.setLists(list);
+                ll_none.setVisibility(View.GONE);
+                return;
+            }
+        }
+        ll_none.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void deleteHistorySuccess(String string) {
+
+    }
+
+    @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
-        presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 1);
+        presenter.getHistory(DataUtil.getToken(mContext), 1, 10);
         bgaRefreshLayout.beginRefreshing();
     }
 

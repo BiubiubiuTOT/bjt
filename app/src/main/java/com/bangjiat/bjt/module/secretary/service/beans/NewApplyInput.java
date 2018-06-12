@@ -44,10 +44,12 @@ public class NewApplyInput {
     public static class ProgressBean {
         private String userId;
         private String userRealname;
+        private String username;
 
-        public ProgressBean(String userId, String userRealname) {
+        public ProgressBean(String userId, String userRealname, String username) {
             this.userId = userId;
             this.userRealname = userRealname;
+            this.username = username;
         }
     }
 }

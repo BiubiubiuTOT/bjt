@@ -129,4 +129,10 @@
         <item>出差</item>
         <item>其他</item>
     </string-array>
+
+    <string-array name="push">
+        <item>加入公司</item>
+        <item>权限更改</item>
+        <item>已被公司管理员删除</item>
+    </string-array>
 </resources>

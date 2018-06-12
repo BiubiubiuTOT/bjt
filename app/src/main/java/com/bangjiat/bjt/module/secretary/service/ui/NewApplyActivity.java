@@ -208,7 +208,7 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
 
     private void save() {
         NewApplyInput input = new NewApplyInput(title, content,
-                new NewApplyInput.ProgressBean(result.getUserId(), result.getRealname()));
+                new NewApplyInput.ProgressBean(result.getUserId(), result.getRealname(), result.getUsername()));
         presenter.addNewApply(DataUtil.getToken(mContext), input);
     }
 
@@ -354,7 +354,7 @@ public class NewApplyActivity extends BaseToolBarActivity implements NewServiceA
 
     private void save1() {
         NewApplyInput input = new NewApplyInput(title, content,
-                new NewApplyInput.ProgressBean(result.getUserId(), result.getRealname()), strImage);
+                new NewApplyInput.ProgressBean(result.getUserId(), result.getRealname(), result.getUsername()), strImage);
         presenter.addNewApply(DataUtil.getToken(mContext), input);
     }
 

@@ -76,7 +76,6 @@ public class HistoryDetailAdapter extends RecyclerView.Adapter<HistoryDetailAdap
         viewHolder.tv_time.setText(TimeUtils.changeToTime(bean.getLastTime()));
         viewHolder.tv_name.setText(bean.getUserRealname());
 
-
         viewHolder.itemView.setTag(position);
     }
 

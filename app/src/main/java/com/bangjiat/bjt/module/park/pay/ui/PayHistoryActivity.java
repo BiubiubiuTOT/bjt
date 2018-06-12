@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.pay.adapter.PayHistoryAdapter;
 import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
@@ -25,12 +26,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayContract.View {
+public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
     private Dialog dialog;
     private PayContract.Presenter presenter;
     private PayHistoryAdapter mAdapter;
@@ -62,6 +67,8 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
                 startActivity(intent);
             }
         });
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     @Override
@@ -108,6 +115,7 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
     @Override
     public void fail(String err) {
         Logger.e(err);
+        mRefreshLayout.endRefreshing();
         Constants.showErrorDialog(mContext, err);
     }
 
@@ -118,6 +126,7 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
 
     @Override
     public void getParkPayHistorySuccess(ParkPayHistory history) {
+        mRefreshLayout.endRefreshing();
         if (history != null) {
             List<ParkPayHistory.RecordsBean> records = history.getRecords();
             if (records != null && records.size() > 0) {
@@ -128,5 +137,16 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
             }
         }
         ll_none.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getParkPayHistory(DataUtil.getToken(mContext), "", 1, 10);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

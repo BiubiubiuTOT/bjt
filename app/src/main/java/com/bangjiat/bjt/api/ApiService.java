@@ -9,6 +9,7 @@ import com.bangjiat.bjt.module.home.company.beans.DeleteCompanyInput;
 import com.bangjiat.bjt.module.home.company.beans.IntoCompanyInput;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.InviteBean;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.work.kaoqin.beans.DakaHistoryResult;
@@ -652,7 +653,6 @@ public interface ApiService {
     @GET("api/companyLeave/select/LeaveSelfPage")
 //可不传：1、待审批、2、通过、3、未通过
     Call<BaseResult<CompanyLeaveResult>> getSelefLeve(@Header(Constants.TOKEN_NAME) String token,
-                                                      @Query("status") int status,
                                                       @Query("page") int page,
                                                       @Query("size") int size);
 
@@ -909,9 +909,9 @@ public interface ApiService {
      * 获取被邀请记录
      */
     @GET("api/visitor/select/VisitorPage")
-    Call<BaseResult> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
-                                       @Query("page") int page,
-                                       @Query("size") int size);
+    Call<BaseResult<VisitorBean>> getVisitorHistory(@Header(Constants.TOKEN_NAME) String token,
+                                                    @Query("page") int page,
+                                                    @Query("size") int size);
 
     /**
      * 101
@@ -920,6 +920,5 @@ public interface ApiService {
      */
     @HTTP(method = "DELETE", path = "api/visitor/delete/BuildVisitor", hasBody = true)
     Call<BaseResult<String>> deleteVistor(@Header(Constants.TOKEN_NAME) String token,
-                                          @Query("type") int type,
-                                          @Query("who") int who);
+                                          @Body DeleteHistory his);
 }

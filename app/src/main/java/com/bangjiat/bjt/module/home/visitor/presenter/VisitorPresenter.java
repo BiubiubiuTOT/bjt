@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.home.visitor.presenter;
 
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
+import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.InviteBean;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
 import com.bangjiat.bjt.module.home.visitor.contract.VisitorContract;
@@ -63,7 +64,7 @@ public class VisitorPresenter implements VisitorContract.Presenter {
             error("请填写对方姓名");
             return;
         }
-        if (bean.getVisitorPhone().isEmpty()){
+        if (bean.getVisitorPhone().isEmpty()) {
             error("请添加对方号码");
             return;
         }
@@ -76,5 +77,29 @@ public class VisitorPresenter implements VisitorContract.Presenter {
     public void addInviteSuccess(String str) {
         view.dismissDialog();
         view.addInviteSuccess(str);
+    }
+
+    @Override
+    public void getHistory(String token, int page, int size) {
+        view.showDialog();
+        model.getHistory(token, page, size);
+    }
+
+    @Override
+    public void getHistorySuccess(VisitorBean history) {
+        view.dismissDialog();
+        view.getHistorySuccess(history);
+    }
+
+    @Override
+    public void deleteHistory(String token, DeleteHistory history) {
+        view.showDialog();
+        model.deleteHistory(token, history);
+    }
+
+    @Override
+    public void deleteHistorySuccess(String string) {
+        view.dismissDialog();
+        view.deleteHistorySuccess(string);
     }
 }

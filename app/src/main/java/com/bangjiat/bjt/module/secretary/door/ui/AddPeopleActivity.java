@@ -13,6 +13,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.CompanyUserBean;
 import com.bangjiat.bjt.module.secretary.door.adapter.SelectPeopleAdapter;
 import com.bangjiat.bjt.module.secretary.door.contract.DoorApplyContract;
 import com.bangjiat.bjt.module.secretary.door.presenter.DoorApplyPresenter;
@@ -56,6 +57,10 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
         presenter.getCompanyUser(token, 1, 10, 2);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
+
+        CompanyUserBean companyUserBean = CompanyUserBean.first(CompanyUserBean.class);
+        if (companyUserBean != null)
+            tv_company_name.setText(companyUserBean.getCompanyName());
     }
 
     private int getSelectCount() {
@@ -143,8 +148,7 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
     public void getCompanyUserSuccess(WorkersResult result) {
         if (result != null) {
             List<WorkersResult.RecordsBean> records = result.getRecords();
-            if (records != null&&records.size()>0) {
-                tv_company_name.setText(records.get(0).getCompanyName());
+            if (records != null && records.size() > 0) {
                 beans = records;
                 if (adapter != null) {
                     adapter.setLists(records);

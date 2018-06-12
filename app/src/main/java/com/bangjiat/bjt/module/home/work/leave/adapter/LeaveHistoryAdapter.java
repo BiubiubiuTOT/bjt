@@ -32,6 +32,11 @@ public class LeaveHistoryAdapter extends RecyclerView.Adapter<LeaveHistoryAdapte
         this.mContext = context;
     }
 
+    public void setLists(List<CompanyLeaveResult.RecordsBean> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_leave, viewGroup, false);

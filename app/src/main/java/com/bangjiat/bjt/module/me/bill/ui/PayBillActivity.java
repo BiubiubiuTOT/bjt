@@ -25,6 +25,8 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.xgr.easypay.EasyPay;
 import com.xgr.easypay.alipay.AliPay;
 import com.xgr.easypay.alipay.AlipayInfoImpli;
@@ -178,7 +180,23 @@ public class PayBillActivity extends BaseColorToolBarActivity implements PayCont
 
         if (type == 1) {
             alipay(str);
-        } else wxpay(parseJson(str));
+        } else {
+            if (!isWXAppInstalledAndSupported()) {
+                fail("微信未安装");
+                return;
+            }
+            wxpay(parseJson(str));
+        }
+    }
+
+    private boolean isWXAppInstalledAndSupported() {
+        IWXAPI msgApi = WXAPIFactory.createWXAPI(this, null);
+        msgApi.registerApp("wx432ba0b2e3addde9");
+
+        boolean sIsWXAppInstalledAndSupported = msgApi.isWXAppInstalled()
+                && msgApi.isWXAppSupportAPI();
+
+        return sIsWXAppInstalledAndSupported;
     }
 
     @Override

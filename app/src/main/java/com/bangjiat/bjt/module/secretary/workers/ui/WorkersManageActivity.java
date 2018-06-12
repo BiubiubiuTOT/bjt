@@ -15,6 +15,7 @@ import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
@@ -39,17 +40,21 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 /**
  * 员工管理
  */
-public class WorkersManageActivity extends BaseToolBarActivity implements CompanyUserContract.View {
+public class WorkersManageActivity extends BaseToolBarActivity implements CompanyUserContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.tv_delete)
     TextView tv_delete;
     @BindView(R.id.card_delete)
     CardView card_delete;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
 
     private Toolbar toolbar;
 
@@ -152,6 +157,9 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
         });
 
         initDialog();
+        setAdapter();
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     private void showDelete() {
@@ -178,6 +186,7 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     }
 
     private void setAdapter() {
+        beans = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
         adapter = new SelectPeopleAdapter(beans, mContext);
@@ -302,16 +311,18 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
 
     @Override
     public void error(String err) {
-        Constants.showErrorDialog(mContext,err);
+        mRefreshLayout.endRefreshing();
+        Constants.showErrorDialog(mContext, err);
     }
 
     @Override
     public void getCompanyUserSuccess(WorkersResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null) {
                 beans = records;
-                setAdapter();
+                adapter.setLists(beans);
             }
         }
     }
@@ -333,5 +344,16 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
     @Override
     public void addCompanyUserSuccess() {
 
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getCompanyUser(token, 1, 10, 1);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

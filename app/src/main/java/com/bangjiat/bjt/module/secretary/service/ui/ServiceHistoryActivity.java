@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.service.adapter.HistoryAdapter;
@@ -24,13 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class ServiceHistoryActivity extends BaseColorToolBarActivity implements ServiceApplyHistoryContract.View {
+public class ServiceHistoryActivity extends BaseColorToolBarActivity implements ServiceApplyHistoryContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     private static final int DEAL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
 
     private List<ServiceApplyHistoryResult.RecordsBean> list;
     private Dialog dialog;
@@ -54,6 +59,8 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
         token = DataUtil.getToken(mContext);
         getData();
         setAdapter();
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     private void getData() {
@@ -111,6 +118,7 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
 
     @Override
     public void success(ServiceApplyHistoryResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             list = result.getRecords();
             if (list != null && list.size() > 0) {
@@ -125,6 +133,7 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endRefreshing();
         Constants.showErrorDialog(mContext, err);
     }
 
@@ -135,6 +144,7 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
 
     @Override
     public void getAdminHistorySuccess(ServiceApplyHistoryResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             list = result.getRecords();
             if (list != null && list.size() > 0) {
@@ -145,5 +155,16 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
             }
         }
         ll_none.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        getData();
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

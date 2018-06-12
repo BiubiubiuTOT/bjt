@@ -138,4 +138,14 @@ public class InviteActivity extends BaseToolBarActivity implements VisitorContra
     public void addInviteSuccess(String str) {
         Constants.showSuccessExitDialog(this, "邀请访问成功");
     }
+
+    @Override
+    public void getHistorySuccess(VisitorBean history) {
+
+    }
+
+    @Override
+    public void deleteHistorySuccess(String string) {
+
+    }
 }

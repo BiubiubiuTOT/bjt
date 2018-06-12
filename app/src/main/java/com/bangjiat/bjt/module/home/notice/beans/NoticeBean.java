@@ -42,13 +42,13 @@ public class NoticeBean implements Serializable {
          * ctime : 1527851342452
          * source : fgh
          */
-        @Column(name = "sNoticeId")
         private int sNoticeId;
 
         private String userId;
         private int buildId;
         private String name;
         private String content;
+
         private long ctime;
 
         @Column(name = "isRead")

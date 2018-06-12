@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.ClearEditText;
+import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
@@ -43,11 +45,13 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 /**
  * 发件箱
  */
-public class BoxActivity extends BaseToolBarActivity implements BoxContract.View, DealBoxContract.View {
+public class BoxActivity extends BaseToolBarActivity implements BoxContract.View, DealBoxContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate{
     public static final int WRITE_EMAIL = 2;
     public static final int DELETE = 3;
     @BindView(R.id.recycler_view)
@@ -64,6 +68,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     ClearEditText et_search;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
 
     private TextView tv_select;
     private TextView tv_done;
@@ -113,6 +119,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             }
         });
         setAdapter();
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     private void setAdapter() {
@@ -443,6 +451,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
     @Override
     public void success(EmailResult list) {
+        mRefreshLayout.endRefreshing();
         if (list != null) {
             List<EmailBean> records = list.getRecords();
             if (records != null && records.size() > 0) {
@@ -458,6 +467,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
     @Override
     public void fail(String err) {
+        mRefreshLayout.endRefreshing();
+        Constants.showErrorDialog(mContext,err);
         Logger.e(err);
     }
 
@@ -478,5 +489,16 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     @Override
     public void getUnReadCountsSuccess(String s) {
 
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        getBox();
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

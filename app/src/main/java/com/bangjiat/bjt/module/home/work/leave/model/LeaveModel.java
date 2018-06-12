@@ -44,7 +44,7 @@ public class LeaveModel implements LeaveContract.Model {
 
     @Override
     public void getCompanyLeave(String token, int status, int page, int size) {
-        ApiFactory.getService().getCompanyLeave(token, status, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<CompanyLeaveResult>>() {
+        ApiFactory.getService().getCompanyLeave(token, status, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<CompanyLeaveResult>>() {
             @Override
             public void onSuc(Response<BaseResult<CompanyLeaveResult>> response) {
                 BaseResult<CompanyLeaveResult> body = response.body();
@@ -62,7 +62,7 @@ public class LeaveModel implements LeaveContract.Model {
 
     @Override
     public void getSelfLeave(String token, int status, int page, int size) {
-        ApiFactory.getService().getSelefLeve(token, status, page,  Constants.SIZE).enqueue(new MyCallBack<BaseResult<CompanyLeaveResult>>() {
+        ApiFactory.getService().getSelefLeve(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<CompanyLeaveResult>>() {
             @Override
             public void onSuc(Response<BaseResult<CompanyLeaveResult>> response) {
                 BaseResult<CompanyLeaveResult> body = response.body();

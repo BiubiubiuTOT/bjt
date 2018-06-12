@@ -32,6 +32,11 @@ public class ApplyHistoryAdapter extends RecyclerView.Adapter<ApplyHistoryAdapte
         this.mContext = context;
     }
 
+    public void setLists(List<ParkApplyHistoryResult.RecordsBean> lists) {
+        this.lists = lists;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_apply_history_1, viewGroup, false);

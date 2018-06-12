@@ -9,7 +9,30 @@
     tools:context="com.bangjiat.bjt.module.secretary.service.ui.DetailActivity">
 
     <include layout="@layout/toolbar_2" />
+    <LinearLayout
+        android:id="@+id/ll_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拒绝原因："
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,7 +166,16 @@
             android:textColor="@color/white"
             android:textSize="13sp" />
 
-
+        <Button
+            android:id="@+id/btn_to"
+            android:layout_width="50dp"
+            android:layout_height="34dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/approval_to_bg"
+            android:text="转批"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
         <Button
             android:id="@+id/btn_agree"
             android:layout_width="50dp"

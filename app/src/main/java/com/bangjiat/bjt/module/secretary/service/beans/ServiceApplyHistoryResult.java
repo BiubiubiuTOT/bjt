@@ -99,6 +99,14 @@ public class ServiceApplyHistoryResult {
         private String username;
         private String utime;
 
+        public String getbApprovalId() {
+            return bApprovalId;
+        }
+
+        public void setbApprovalId(String bApprovalId) {
+            this.bApprovalId = bApprovalId;
+        }
+
         public String getApplication() {
             return application;
         }

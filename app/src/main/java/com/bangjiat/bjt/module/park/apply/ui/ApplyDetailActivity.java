@@ -2,17 +2,24 @@ package com.bangjiat.bjt.module.park.apply.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.CarDetailAdapter;
 import com.bangjiat.bjt.module.park.apply.beans.DealParkApplyInput;
@@ -23,12 +30,17 @@ import com.bangjiat.bjt.module.park.apply.beans.ParkingResult;
 import com.bangjiat.bjt.module.park.apply.contract.ParkApplyContract;
 import com.bangjiat.bjt.module.park.apply.presenter.ParkApplyPresenter;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,6 +54,17 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
     TextView tv_company_name;
     @BindView(R.id.rl_btn)
     RelativeLayout rl_btn;
+    @BindView(R.id.ll_reason)
+    LinearLayout ll_reason;
+    @BindView(R.id.tv_reason)
+    TextView tv_reason;
+    @BindView(R.id.tv_time)
+    TextView tv_time;
+    @BindView(R.id.card_time)
+    CardView card_time;
+    @BindView(R.id.tv_start_time)
+    TextView tv_start_time;
+
     ParkApplyHistoryResult.RecordsBean bean;
     private List<ParkApplyDetail> details;
     int applyId;
@@ -50,6 +73,10 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
     private ParkApplyDetail detail;
+    private android.app.AlertDialog alertDialog;
+    private String remark;
+    private long terminalTime;
+    private TimePickerView pvTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +98,45 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
             if (details != null && details.size() > 0) {
                 setAdapter();
             }
-            if (Constants.isParkAdmin() && bean.getStatus() == 1) {
+            int status = bean.getStatus();
+            if (Constants.isParkAdmin() && status == 1) {
                 rl_btn.setVisibility(View.VISIBLE);
             }
+            if (status != 3) {
+                card_time.setVisibility(View.VISIBLE);
+            }
+            if (status == 3) {
+                ll_reason.setVisibility(View.VISIBLE);
+                tv_reason.setText(bean.getOpinion());
+            }
+            if (status == 2) {
+                tv_time.setText(TimeUtils.changeToYMD(bean.getTerminalTime()));
+            }
         }
+        tv_start_time.setText(TimeUtils.getTime());
+
+        initDia();
+        initDate();
+    }
+
+    private void initDate() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH) + 1, startDate.get(Calendar.DAY_OF_MONTH));
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2030, 0, 1);
+
+        pvTime = new TimePickerBuilder(mContext, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                long time = date.getTime();
+                terminalTime = time;
+                tv_time.setText(TimeUtils.changeToYMD(time));
+            }
+        }).setSubmitColor(Color.BLACK)//确定按钮文字颜色
+                .setCancelColor(Color.BLACK)//取消按钮文字颜色
+                .setDate(startDate)// 如果不设置的话，默认是系统时间*/
+                .setRangDate(startDate, endDate)//起始终止年月日设定
+                .build();
     }
 
     private void setAdapter() {
@@ -109,27 +171,83 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
     @OnClick(R.id.btn_refuse)
     public void clickRefuse(View view) {
         type = 2;
+        alertDialog.show();
+    }
 
-        deal();
+    @OnClick(R.id.tv_time)
+    public void clickTime(View view) {
+        int status = bean.getStatus();
+        if (Constants.isParkAdmin() && status == 1) {
+            pvTime.show();
+        }
+    }
+
+    private void initDia() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.refluse_message, null);
+        Button btn_cancel = view.findViewById(R.id.btn_cancel);
+        Button btn_submit = view.findViewById(R.id.btn_submit);
+        final ClearEditText et_msg = view.findViewById(R.id.et_msg);
+
+
+        builder.setCancelable(false)
+                .setView(view);
+        alertDialog = builder.create();
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+            }
+        });
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remark = et_msg.getText().toString();
+                if (remark.isEmpty()) {
+                    error("请填写拒绝原因");
+                    return;
+                }
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+
+                deal();
+            }
+        });
     }
 
     private void deal() {
         DealParkApplyInput input = new DealParkApplyInput();
         input.setApplyId(applyId);
         input.setType(type);
+
+        if (type == 2) {
+            input.setOpinion(remark);
+        }
+
         List<DealParkApplyInput.Detail> details = new ArrayList<>();
         List<ParkApplyDetail> lists = mAdapter.getLists();
         for (ParkApplyDetail detail : lists) {
-            details.add(new DealParkApplyInput.Detail(detail.getUserId(), detail.getType(), detail.getLotNumber()));
+            int detailType = detail.getType();
+            if (detailType == 2) {//临时停车
+                details.add(new DealParkApplyInput.Detail(detail.getUserId(), detailType, detail.getDetailId()));
+            } else {
+                details.add(new DealParkApplyInput.Detail(detail.getUserId(), detailType, detail.getLotNumber(), terminalTime, detail.getDetailId()));
+            }
         }
+
         input.setDetailList(details);
-        Logger.d(details.toString());
         presenter.dealParkApply(DataUtil.getToken(mContext), input);
     }
 
     @OnClick(R.id.btn_agree)
     public void clickAgree(View view) {
         type = 1;
+        if (terminalTime == 0) {
+            error("请选择截止日期");
+            return;
+        }
         deal();
     }
 

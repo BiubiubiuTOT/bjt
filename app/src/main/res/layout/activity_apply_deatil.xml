@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/red"
+        android:gravity="center"
         android:orientation="horizontal"
         android:padding="10dp"
         android:visibility="gone">
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="拒绝原因："
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tv_reason"

@@ -5,12 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
+import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.TimeUtils;
@@ -44,17 +49,24 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     TextView tv_start_time;
     @BindView(R.id.tv_end_time)
     TextView tv_end_time;
-    @BindView(R.id.tv_reason)
-    TextView tv_reason;
+    @BindView(R.id.tv_reasons)
+    TextView tv_reasons;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
     @BindView(R.id.rl_btn)
     RelativeLayout rl_btn;
+    @BindView(R.id.tv_reason)
+    TextView tv_reason;
+    @BindView(R.id.ll_reason)
+    LinearLayout ll_reason;
+
     private Dialog dialog;
     private int type;
     private WorkersResult.RecordsBean result;
     private Progress progress;
     private LeaveContract.Presenter presenter;
+    private android.app.AlertDialog alertDialog;
+    private String remark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +89,7 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
             String approver = bean.getApprover();
             List<ApproverBean> list = new Gson().fromJson(approver, new TypeToken<List<ApproverBean>>() {
             }.getType());
-            list.add(0, new ApproverBean(bean.getBeginTime(), 4, bean.getApplyer()));
+            list.add(0, new ApproverBean(bean.getCtime(), 4, bean.getApplyer()));
             HistoryDetailAdapter mAdapter = new HistoryDetailAdapter(list, mContext);
             recycler_view.setAdapter(mAdapter);
             Logger.d(list.toString());
@@ -90,9 +102,14 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
                         rl_btn.setVisibility(View.VISIBLE);
                     }
                 }
+                if (status == 2) {
+//                    ll_reason.setVisibility(View.VISIBLE);
+//                    tv_reasons.setText(bean.getOpinion());
+                }
             }
 
         }
+        initDia();
     }
 
     @OnClick(R.id.btn_agree)
@@ -107,6 +124,8 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
         input.setType(type);
         if (progress != null)
             input.setProgress(progress);
+        if (!TextUtils.isEmpty(remark))
+            input.setRemark(remark);
 
         Logger.d(input.toString());
         presenter.dealLeave(DataUtil.getToken(mContext), input);
@@ -115,9 +134,43 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
     @OnClick(R.id.btn_refuse)
     public void clickRefuse(View view) {
         type = 2;
-        deal();
+        alertDialog.show();
     }
 
+    private void initDia() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.refluse_message, null);
+        Button btn_cancel = view.findViewById(R.id.btn_cancel);
+        Button btn_submit = view.findViewById(R.id.btn_submit);
+        final ClearEditText et_msg = view.findViewById(R.id.et_msg);
+
+
+        builder.setCancelable(false)
+                .setView(view);
+        alertDialog = builder.create();
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+            }
+        });
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remark = et_msg.getText().toString();
+                if (remark.isEmpty()) {
+                    error("请填写拒绝原因");
+                    return;
+                }
+                if (alertDialog.isShowing())
+                    alertDialog.dismiss();
+
+                deal();
+            }
+        });
+    }
 
     @OnClick(R.id.btn_to)
     public void clickTo(View view) {
@@ -187,7 +240,7 @@ public class LeaveDetailActivity extends BaseWhiteToolBarActivity implements Lea
         if (resultCode == RESULT_OK) {
             if (requestCode == GET_PERSON) {
                 result = (WorkersResult.RecordsBean) data.getSerializableExtra("data");
-                progress = new Progress(result.getUserId(), result.getRealname(), result.getPhone());
+                progress = new Progress(result.getUserId(), result.getPhone(), result.getRealname());
                 deal();
             }
         }

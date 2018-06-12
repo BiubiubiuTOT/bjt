@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
@@ -49,6 +51,8 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
     private UserInfo userInfo;
     @BindView(R.id.tv_name)
     TextView tv_name;
+    @BindView(R.id.tv_des)
+    TextView tv_des;
 
     @Override
     protected void initView() {
@@ -61,6 +65,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
         userInfo = UserInfo.first(UserInfo.class);
         if (userInfo != null) {
             setText(userInfo);
+//            tv_des.setText("");
         } else presenter.getUserInfo(DataUtil.getToken(mContext));
     }
 
@@ -128,6 +133,17 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
                         wcbMenu.dismiss();
                         Constants.deleteDb();
                         DataUtil.clearOtherSetting(mContext);
+                        PushServiceFactory.getCloudPushService().unbindAccount(new CommonCallback() {
+                            @Override
+                            public void onSuccess(String s) {
+                                Logger.d("阿里云解绑成功");
+                            }
+
+                            @Override
+                            public void onFailed(String s, String s1) {
+                                Logger.d("阿里云解绑失败： " + s + " " + s1);
+                            }
+                        });
 
                         DataUtil.setLogin(mContext, false);
                         startActivity(new Intent(mContext, LoginActivity.class));

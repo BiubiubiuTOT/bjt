@@ -18,9 +18,9 @@ public class ApiFactory {
     private static ApiService apiService;
 
     static OkHttpClient client = new OkHttpClient.Builder()
-            .readTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
 //            .addInterceptor(new HttpLoggingInterceptor())
             .build();
 

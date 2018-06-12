@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.module.home.work.leave.adapter.LeaveHistoryAdapter;
 import com.bangjiat.bjt.module.home.work.leave.beans.CompanyLeaveResult;
 import com.bangjiat.bjt.module.home.work.leave.contract.LeaveContract;
@@ -19,11 +20,13 @@ import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.dou361.dialogui.DialogUIUtils;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements LeaveContract.View {
+public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements LeaveContract.View, BGARefreshLayout.BGARefreshLayoutDelegate {
     private static final int DEAL_SUCCESS = 2;
     private Dialog dialog;
     private LeaveContract.Presenter presenter;
@@ -31,6 +34,8 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     RecyclerView recyclerView;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
     private LeaveHistoryAdapter mAdapter;
     private List<CompanyLeaveResult.RecordsBean> list;
     private String token;
@@ -47,7 +52,10 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         token = DataUtil.getToken(mContext);
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
         getData();
+        setAdapter();
     }
 
     private void getData() {
@@ -59,6 +67,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     }
 
     private void setAdapter() {
+        list = new ArrayList<>();
         mAdapter = new LeaveHistoryAdapter(list, mContext);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new LeaveHistoryAdapter.OnRecyclerViewItemClickListener() {
@@ -103,6 +112,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endRefreshing();
         Logger.e(err);
         Constants.showErrorDialog(this, err);
     }
@@ -114,11 +124,13 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
 
     @Override
     public void getCompanyLeaveSuccess(CompanyLeaveResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             List<CompanyLeaveResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 list = records;
-                setAdapter();
+                mAdapter.setLists(list);
+
                 ll_none.setVisibility(View.GONE);
                 return;
             }
@@ -128,17 +140,33 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
 
     @Override
     public void getSelfLeaveSuccess(CompanyLeaveResult result) {
+        mRefreshLayout.endRefreshing();
         if (result != null) {
             List<CompanyLeaveResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 list = records;
-                setAdapter();
+                mAdapter.setLists(list);
+
+                ll_none.setVisibility(View.GONE);
+                return;
             }
         }
+        ll_none.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void dealLeaveSuccess() {
 
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        getData();
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

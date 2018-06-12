@@ -11,12 +11,23 @@ import java.util.List;
 public class DealParkApplyInput {
     private int applyId;
     private int type;//操作类型1表示同意，2表示拒绝
+    private String opinion;
     private List<Detail> detailList;
+
+    public String getOpinion() {
+        return opinion;
+    }
+
+    public void setOpinion(String opinion) {
+        this.opinion = opinion;
+    }
 
     public static class Detail {
         private String userId;
         private int type;//1、固定,2、临时
         private String lotNumber;//车位编号
+        private long terminalTime;
+        private int detailId;
 
         public String getUserId() {
             return userId;
@@ -42,10 +53,34 @@ public class DealParkApplyInput {
             this.lotNumber = lotNumber;
         }
 
-        public Detail(String userId, int type, String lotNumber) {
+        public long getTerminalTime() {
+            return terminalTime;
+        }
+
+        public void setTerminalTime(long terminalTime) {
+            this.terminalTime = terminalTime;
+        }
+
+        public int getDetailId() {
+            return detailId;
+        }
+
+        public void setDetailId(int detailId) {
+            this.detailId = detailId;
+        }
+
+        public Detail(String userId, int type, int detailId) {
+            this.userId = userId;
+            this.type = type;
+            this.detailId = detailId;
+        }
+
+        public Detail(String userId, int type, String lotNumber, long terminalTime, int detailId) {
             this.userId = userId;
             this.type = type;
             this.lotNumber = lotNumber;
+            this.terminalTime = terminalTime;
+            this.detailId = detailId;
         }
 
         @Override

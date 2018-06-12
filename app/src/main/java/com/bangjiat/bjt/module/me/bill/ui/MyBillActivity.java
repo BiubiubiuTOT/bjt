@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.bill.adapter.BillAdapter;
@@ -32,8 +33,10 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class MyBillActivity extends BaseToolBarActivity implements QueryBillContract.View {
+public class MyBillActivity extends BaseToolBarActivity implements QueryBillContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     private static final int PAY_SUCCESS = 2;
     private Dialog dialog;
     private QueryBillContract.Presenter presenter;
@@ -44,6 +47,8 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     RecyclerView recyclerView;
     @BindView(R.id.ll_none)
     LinearLayout ll_none;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
     private String start;
     private String end;
 
@@ -57,6 +62,9 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
         presenter = new QueryBillPresenter(this);
         initDia();
         presenter.getPageBill(DataUtil.getToken(mContext), 1, 10);
+        setAdapter();
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
     }
 
     @Override
@@ -86,8 +94,6 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     }
 
     private void initDia() {
-        setAdapter();
-
         Calendar lastYear = Calendar.getInstance();
         lastYear.add(Calendar.YEAR, -1);
         Date today = new Date();
@@ -184,6 +190,7 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
 
     @Override
     public void getPageBillSuccess(PageBillBean billBean) {
+        mRefreshLayout.endRefreshing();
         if (billBean != null) {
             List<PageBillBean.RecordsBean> records = billBean.getRecords();
             if (records != null && records.size() > 0) {
@@ -201,7 +208,19 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
 
     @Override
     public void getPageBillFail(String err) {
+        mRefreshLayout.endRefreshing();
         Logger.e(err);
         Constants.showErrorDialog(mContext, err);
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getPageBill(DataUtil.getToken(mContext), 1, 10);
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return false;
     }
 }

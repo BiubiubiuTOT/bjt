@@ -1,5 +1,7 @@
 package com.bangjiat.bjt.module.secretary.door.beans;
 
+import com.bangjiat.bjt.module.home.work.leave.beans.Progress;
+
 /**
  * @author ligh
  * @email 1256144200@qq.com
@@ -10,6 +12,15 @@ public class ApprovalServiceInput {
     private String bApprovalId;
     private String remark;
     private int type;//操作类型1表示同意，2表示拒绝，3表示转批
+    private Progress progress;
+
+    public Progress getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Progress progress) {
+        this.progress = progress;
+    }
 
     public ApprovalServiceInput(String bApprovalId, String remark, int type) {//拒绝
         this.bApprovalId = bApprovalId;
