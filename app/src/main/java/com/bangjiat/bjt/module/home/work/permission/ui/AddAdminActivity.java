@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adorkable.iosdialog.AlertDialog;
@@ -15,6 +14,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.home.work.permission.contract.PermissionContract;
 import com.bangjiat.bjt.module.home.work.permission.presenter.PermissionPresenter;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
@@ -39,8 +39,6 @@ public class AddAdminActivity extends BaseToolBarActivity implements CompanyUser
         , BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
 
@@ -51,6 +49,9 @@ public class AddAdminActivity extends BaseToolBarActivity implements CompanyUser
     private CompanyUserContract.Presenter presenter;
     private String token;
     private PermissionContract.Presenter permissionPresenter;
+    private ReplaceViewHelper mReplaceViewHelper;
+    private int pages;
+    private int current = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +87,13 @@ public class AddAdminActivity extends BaseToolBarActivity implements CompanyUser
 
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         presenter = new CompanyUserPresenter(this);
         permissionPresenter = new PermissionPresenter(this);
         token = DataUtil.getToken(mContext);
-        presenter.getCompanyUser(token, 1, 10, 4);
+        presenter.getCompanyUser(token, current, 10, 4);
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
         setAdapter();
     }
 
@@ -191,6 +193,7 @@ public class AddAdminActivity extends BaseToolBarActivity implements CompanyUser
     @Override
     public void error(String err) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Constants.showErrorDialog(mContext, err);
         Logger.e(err);
     }
@@ -198,18 +201,27 @@ public class AddAdminActivity extends BaseToolBarActivity implements CompanyUser
     @Override
     public void getCompanyUserSuccess(WorkersResult result) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (result != null) {
+            pages = result.getPages();
+            current = result.getCurrent();
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 beans = records;
-                adapter.setLists(beans);
-                adapter.setShowCheck(true);
 
-                ll_none.setVisibility(View.GONE);
+                if (current > 1) {
+                    adapter.setLists(beans);
+                    recyclerView.smoothScrollToPosition(0);
+                } else {
+                    adapter.setLists(beans);
+                }
+
+                adapter.setShowCheck(true);
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override
@@ -252,14 +264,21 @@ public class AddAdminActivity extends BaseToolBarActivity implements CompanyUser
 
     }
 
+
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        beans = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
-        presenter.getCompanyUser(token, 1, 10, 4);
+        presenter.getCompanyUser(token, current, 10, 4);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            presenter.getCompanyUser(token, current, 10, 4);
+            return true;
+        } else return false;
     }
 }

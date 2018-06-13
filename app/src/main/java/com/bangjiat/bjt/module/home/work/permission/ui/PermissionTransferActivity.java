@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.adorkable.iosdialog.AlertDialog;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.home.work.permission.adapter.WorkersAdapter;
 import com.bangjiat.bjt.module.home.work.permission.contract.PermissionContract;
 import com.bangjiat.bjt.module.home.work.permission.presenter.PermissionPresenter;
@@ -40,10 +40,9 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
         CompanyUserContract.View, PermissionContract.View, GetUserInfoContract.View, BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     private List<WorkersResult.RecordsBean> beans;
     private WorkersAdapter adapter;
@@ -52,6 +51,8 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
     private String token;
     private Dialog dialog;
     private GetUserInfoContract.Presenter userPresenter;
+    private int pages;
+    private int current=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +61,13 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         beans = new ArrayList<>();
         userPresenter = new GetUserInfoPresenter(this);
         presenter = new CompanyUserPresenter(this);
         permissionPresenter = new PermissionPresenter(this);
         token = DataUtil.getToken(mContext);
-        presenter.getCompanyUser(token, 1, 10, 4);
+        presenter.getCompanyUser(token, current, 10, 4);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
@@ -120,6 +122,7 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
     @Override
     public void error(String err) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Constants.showErrorDialog(mContext, err);
         Logger.e(err);
     }
@@ -143,16 +146,24 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
     @Override
     public void getCompanyUserSuccess(WorkersResult result) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (result != null) {
+            pages = result.getPages();
+            current = result.getCurrent();
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 beans = records;
-                adapter.setLists(beans);
-                ll_none.setVisibility(View.GONE);
+                if (current > 1) {
+                    adapter.setLists(beans);
+                    recyclerView.smoothScrollToPosition(0);
+                } else {
+                    adapter.setLists(beans);
+                }
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override
@@ -218,14 +229,21 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
                 }).show();
     }
 
+
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        beans = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
-        presenter.getCompanyUser(token, 1, 10, 4);
+        presenter.getCompanyUser(token, current, 10, 4);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            presenter.getCompanyUser(token, current, 10, 4);
+            return true;
+        } else return false;
     }
 }

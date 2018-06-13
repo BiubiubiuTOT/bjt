@@ -10,8 +10,6 @@
 
     <include layout="@layout/toolbar_1" />
 
-    <include layout="@layout/no_data_page" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

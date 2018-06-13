@@ -18,9 +18,18 @@ public class UserInfoBean {
 
     private UserInfo userInfo;
     private int count;
+    private String park;
     private CompanyUserBean companyUser;
     private List<BuildUser> buildUser;
     private List<SpaceUser> spaceUser;
+
+    public String getPark() {
+        return park;
+    }
+
+    public void setPark(String park) {
+        this.park = park;
+    }
 
     public List<BuildUser> getBuildUser() {
         return buildUser;

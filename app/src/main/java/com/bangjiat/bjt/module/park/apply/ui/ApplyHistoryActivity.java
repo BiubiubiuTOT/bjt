@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.SpaceUser;
 import com.bangjiat.bjt.module.park.apply.adapter.ApplyHistoryAdapter;
@@ -35,14 +35,15 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
     private static final int DEAL_SUCCESS = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
     private List<ParkApplyHistoryResult.RecordsBean> list;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
     private ApplyHistoryAdapter mAdapter;
+    private ReplaceViewHelper mReplaceViewHelper;
+    private int pages;
+    private int current = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +53,14 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
 
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         presenter = new ParkApplyPresenter(this);
 
         getData();
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
         setAdapter();
     }
 
@@ -66,9 +68,9 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
         boolean parkAdmin = Constants.isParkAdmin();
         SpaceUser user = SpaceUser.first(SpaceUser.class);
         if (!parkAdmin)
-            presenter.getParkApplyHistory(DataUtil.getToken(mContext), 1, 10, 0);
+            presenter.getParkApplyHistory(DataUtil.getToken(mContext), current, 10, 0);
         else
-            presenter.getParkApplyHistory(DataUtil.getToken(mContext), 1, 10, user.getSpaceId());
+            presenter.getParkApplyHistory(DataUtil.getToken(mContext), current, 10, user.getSpaceId());
     }
 
     private void setAdapter() {
@@ -147,15 +149,23 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
     public void getParkApplyHistorySuccess(ParkApplyHistoryResult result) {
         mRefreshLayout.endRefreshing();
         if (result != null) {
+            pages = result.getPages();
+            current = result.getCurrent();
             List<ParkApplyHistoryResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 list = records;
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recycler_view.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
+
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
     }
 
     @Override
@@ -165,12 +175,18 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        list = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
         getData();
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            getData();
+            return true;
+        } else return false;
     }
 }

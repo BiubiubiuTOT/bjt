@@ -70,7 +70,12 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
     @Override
     public void onResume() {
         super.onResume();
-        if (Constants.isCompanyAdmin()) {//公司管理员
+        if (Constants.isBuildingAdmin()) {//楼宇管理员
+            show();
+
+            tv_door.setText("·门禁审批·");
+            tv_service.setText("·服务审批·");
+        } else if (Constants.isCompanyAdmin()) {//公司管理员
             show();
 
             tv_door.setText("·门禁申请·");
@@ -79,11 +84,6 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
             isInto = DataUtil.isIntoBuilding(mContext);//是否入驻楼宇
             if (!isInto)
                 presenter.isIntoBuilding(token);
-        } else if (Constants.isBuildingAdmin()) {//楼宇管理员
-            show();
-
-            tv_door.setText("·门禁审批·");
-            tv_service.setText("·服务审批·");
         } else {
             ll_admin.setVisibility(View.GONE);
         }

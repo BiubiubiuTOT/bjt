@@ -4,13 +4,13 @@ import android.app.Dialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.home.visitor.adapter.VisitorAdapter;
 import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
 import com.bangjiat.bjt.module.home.visitor.beans.VisitorBean;
@@ -29,14 +29,15 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class InviteFragment extends BaseFragment implements VisitorContract.View, BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
     private VisitorContract.Presenter presenter;
     private Dialog dialog;
     private List<VisitorBean.RecordsBean> list;
     private VisitorAdapter mAdapter;
+    private ReplaceViewHelper mReplaceViewHelper;
+    private int pages;
+    private int current=1;
 
 
     @Override
@@ -45,7 +46,8 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
         presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 2);
         setAdapter();
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
+        mReplaceViewHelper = new ReplaceViewHelper(mContext);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
                 mAdapter.notifyItemRangeChanged(pos, list.size() - pos);
 
                 if (list.size() == 0)
-                    ll_none.setVisibility(View.VISIBLE);
+                    mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
             }
         });
     }
@@ -107,6 +109,7 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endLoadingMore();
         mRefreshLayout.endRefreshing();
         Logger.e(err);
         Constants.showErrorDialog(mContext, err);
@@ -114,17 +117,26 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
 
     @Override
     public void success(VisitorBean bean) {
+        mRefreshLayout.endLoadingMore();
         mRefreshLayout.endRefreshing();
         if (bean != null) {
+            pages = bean.getPages();
+            current = bean.getCurrent();
             List<VisitorBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
                 list = records;
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recycler_view.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
+
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
     }
 
     @Override
@@ -146,15 +158,22 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
 
     }
 
+
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
-        presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 2);
+        current = 1;
+        list = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
+        presenter.getVisitorHistory(DataUtil.getToken(mContext), current, 10, 2);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            presenter.getVisitorHistory(DataUtil.getToken(mContext), current, 10, 2);
+            return true;
+        } else return false;
     }
 
 }

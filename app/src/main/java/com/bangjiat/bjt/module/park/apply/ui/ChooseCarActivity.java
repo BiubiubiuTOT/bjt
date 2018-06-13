@@ -7,12 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.ChooseCarAdapter;
 import com.bangjiat.bjt.module.park.apply.beans.LotResult;
@@ -36,13 +36,12 @@ import butterknife.BindView;
 public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
 
     private List<CarBean> list;
     private ChooseCarAdapter mAdapter;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,7 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         presenter = new ParkApplyPresenter(this);
         presenter.getWorkersCar(DataUtil.getToken(mContext));
 
@@ -134,10 +134,10 @@ public class ChooseCarActivity extends BaseToolBarActivity implements ParkApplyC
             Logger.d(list.toString());
             setAdapter();
 
-            ll_none.setVisibility(View.GONE);
+            mReplaceViewHelper.removeView();
             return;
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override

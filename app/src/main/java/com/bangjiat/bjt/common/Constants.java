@@ -44,7 +44,7 @@ public class Constants {
     public static final String TOKEN_NAME_SPECIAL = "j4sc-b-token";
 
 
-    public static final int SIZE = 100;
+    public static final int SIZE = 10;
 
     public static String[] WEEK = {"周一", "周二", "周三",
             "周四", "周五", "周六", "周日"};
@@ -269,5 +269,6 @@ public class Constants {
         SugarRecord.deleteAll(RuleInput.class);
         SugarRecord.deleteAll(SpaceUser.class);
         SugarRecord.deleteAll(BuildUser.class);
+//        SugarRecord.deleteAll(NoticeBean.SysNoticeListBean.class);
     }
 }

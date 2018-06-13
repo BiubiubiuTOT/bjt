@@ -21,18 +21,11 @@
         android:layout_height="match_parent"
         android:background="#303030">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/mine_color"
-            android:orientation="vertical">
-
-            <include layout="@layout/no_data_page" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/mine_color" />
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 </LinearLayout>

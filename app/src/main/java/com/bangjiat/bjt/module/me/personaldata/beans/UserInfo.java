@@ -35,6 +35,15 @@ public class UserInfo extends SugarRecord implements Serializable {
     private String nickname;//昵称
     private String idNumber;//昵称
     private String job;//昵称
+    private String park;
+
+    public String getPark() {
+        return park;
+    }
+
+    public void setPark(String park) {
+        this.park = park;
+    }
 
     public UserInfo(String nickname, int sex, String birthday, String phone) {
         this.phone = phone;

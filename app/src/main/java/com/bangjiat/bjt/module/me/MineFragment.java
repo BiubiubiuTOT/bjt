@@ -15,6 +15,7 @@ import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
+import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.main.account.ui.LoginActivity;
 import com.bangjiat.bjt.module.main.ui.activity.AboutActivity;
 import com.bangjiat.bjt.module.main.ui.activity.ContactServiceActivity;
@@ -31,6 +32,7 @@ import com.bangjiat.bjt.module.me.setting.ui.SettingActivity;
 import com.bangjiat.bjt.module.secretary.contact.util.GlideCircleTransform;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.orm.SugarRecord;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,7 +67,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
         userInfo = UserInfo.first(UserInfo.class);
         if (userInfo != null) {
             setText(userInfo);
-//            tv_des.setText("");
+            tv_des.setText(userInfo.getPark());
         } else presenter.getUserInfo(DataUtil.getToken(mContext));
     }
 
@@ -131,6 +133,7 @@ public class MineFragment extends BaseFragment implements GetUserInfoContract.Vi
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         wcbMenu.dismiss();
+                        SugarRecord.deleteAll(NoticeBean.SysNoticeListBean.class);
                         Constants.deleteDb();
                         DataUtil.clearOtherSetting(mContext);
                         PushServiceFactory.getCloudPushService().unbindAccount(new CommonCallback() {

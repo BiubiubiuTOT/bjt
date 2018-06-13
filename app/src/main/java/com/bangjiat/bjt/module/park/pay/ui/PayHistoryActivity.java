@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.pay.adapter.PayHistoryAdapter;
 import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
@@ -32,14 +32,15 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
         , BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
     private Dialog dialog;
     private PayContract.Presenter presenter;
     private PayHistoryAdapter mAdapter;
+    private ReplaceViewHelper mReplaceViewHelper;
     private List<ParkPayHistory.RecordsBean> list;
+    private int pages;
+    private int current = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,9 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         presenter = new PayPresenter(this);
-        presenter.getParkPayHistory(DataUtil.getToken(mContext), "", 1, 10);
+        presenter.getParkPayHistory(DataUtil.getToken(mContext), "", current, 10);
 
         list = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -68,7 +70,7 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
             }
         });
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
     }
 
     @Override
@@ -116,6 +118,7 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
     public void fail(String err) {
         Logger.e(err);
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Constants.showErrorDialog(mContext, err);
     }
 
@@ -127,26 +130,42 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
     @Override
     public void getParkPayHistorySuccess(ParkPayHistory history) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (history != null) {
+            pages = history.getPages();
+            current = history.getCurrent();
             List<ParkPayHistory.RecordsBean> records = history.getRecords();
             if (records != null && records.size() > 0) {
                 list = records;
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recyclerView.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
+
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
+
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        list = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
-        presenter.getParkPayHistory(DataUtil.getToken(mContext), "", 1, 10);
+        presenter.getParkPayHistory(DataUtil.getToken(mContext), "", current, 10);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            presenter.getParkPayHistory(DataUtil.getToken(mContext), "", current, 10);
+            return true;
+        } else return false;
     }
 }

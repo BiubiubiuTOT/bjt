@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.secretary.contact.beans.ContactBean;
 import com.bangjiat.bjt.module.secretary.contact.contract.ContactContract;
@@ -60,9 +60,8 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
     TextView mOverlay;
     @BindView(R.id.pb)
     ProgressBar mProgressBar;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     private Dialog dialog;
+    private ReplaceViewHelper mReplaceViewHelper;
     private ContactContract.Presenter presenter;
 
     @Override
@@ -101,6 +100,7 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
 
     private void initView() {
         // 注册订阅者
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         EventBus.getDefault().register(this);
         mSideLetterBar.setOverlay(mOverlay);
         presenter = new ContactPresenter(this);
@@ -253,12 +253,14 @@ public class ContactListActivity extends BaseToolBarActivity implements ContactC
         if (bean != null && bean.size() > 0) {
             mContactList = ContactsUtils.getContactList(bean);
             handler.sendEmptyMessage(0);
-            ll_none.setVisibility(View.GONE);
+            mReplaceViewHelper.removeView();
             return;
         }
 
         mSideLetterBar.setVisibility(View.GONE);
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(mRecyclerView, R.layout.no_data_page);
         mProgressBar.setVisibility(View.GONE);
     }
+
+
 }

@@ -7,12 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.park.pay.adapter.PayAdapter;
 import com.bangjiat.bjt.module.park.pay.beans.ParkPayHistory;
@@ -31,11 +31,10 @@ import butterknife.BindView;
 public class PayMainActivity extends BaseToolBarActivity implements PayContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     private Dialog dialog;
     private PayContract.Presenter presenter;
     List<PayListResult> beans;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +49,7 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
         presenter.getPayList(DataUtil.getToken(mContext));
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
+        mReplaceViewHelper = new ReplaceViewHelper(this);
     }
 
     private void setAdapter(final List<PayListResult> beans) {
@@ -113,10 +113,10 @@ public class PayMainActivity extends BaseToolBarActivity implements PayContract.
         if (str != null && str.size() > 0) {
             beans = str;
             setAdapter(beans);
-            ll_none.setVisibility(View.GONE);
+            mReplaceViewHelper.removeView();
             return;
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override

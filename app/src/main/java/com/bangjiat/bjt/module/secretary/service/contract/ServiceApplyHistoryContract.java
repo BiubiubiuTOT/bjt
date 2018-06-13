@@ -11,9 +11,9 @@ import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult
 
 public interface ServiceApplyHistoryContract {
     interface Model {
-        void getHistory(String token, int page, int size);
+        void getHistory(String token, int page);
 
-        void getAdminHistory(String token, int id, int page, int size, int status);
+        void getAdminHistory(String token, int id, int page, int status);
 
         void approvalService(String token, int id, ApprovalServiceInput input);
     }
@@ -33,7 +33,7 @@ public interface ServiceApplyHistoryContract {
     }
 
     interface Presenter {
-        void getHistory(String token, int page, int size);
+        void getHistory(String token, int page);
 
         void success(ServiceApplyHistoryResult result);
 
@@ -43,7 +43,7 @@ public interface ServiceApplyHistoryContract {
 
         void approvalServiceSuccess();
 
-        void getAdminHistory(String token, int id, int page, int size, int status);
+        void getAdminHistory(String token, int id, int page, int status);
 
         void getAdminHistorySuccess(ServiceApplyHistoryResult result);
     }

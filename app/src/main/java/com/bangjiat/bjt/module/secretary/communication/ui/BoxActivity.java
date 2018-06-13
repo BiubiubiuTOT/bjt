@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +19,7 @@ import com.bangjiat.bjt.common.ClearEditText;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.common.WCBMenu;
 import com.bangjiat.bjt.common.WcbBean;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
@@ -51,7 +51,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
  * 发件箱
  */
 public class BoxActivity extends BaseToolBarActivity implements BoxContract.View, DealBoxContract.View
-        , BGARefreshLayout.BGARefreshLayoutDelegate{
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     public static final int WRITE_EMAIL = 2;
     public static final int DELETE = 3;
     @BindView(R.id.recycler_view)
@@ -66,10 +66,9 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     TextView tv_edit;
     @BindView(R.id.et_search)
     ClearEditText et_search;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     private TextView tv_select;
     private TextView tv_done;
@@ -86,6 +85,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     public static final int IN = 0;
     public static final int OUT = 1;
     private List<WcbBean> mList;
+    private int pages;
+    private int current = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         mList = new ArrayList<>();
         mList.add(new WcbBean("删除邮件", getResources().getColor(R.color.red)));
         presenter = new BoxPresenter(this);
@@ -120,7 +122,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
         });
         setAdapter();
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
     }
 
     private void setAdapter() {
@@ -428,9 +430,9 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
     private void getBox() {
         if (type == 1) {
-            presenter.getOutBoxList(token, "", 1, 10);
+            presenter.getOutBoxList(token, "", current, 10);
         } else {
-            presenter.getInBoxList(token, "", 1, 10);
+            presenter.getInBoxList(token, "", current, 10);
         }
     }
 
@@ -452,23 +454,32 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     @Override
     public void success(EmailResult list) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (list != null) {
+            pages = list.getPages();
+            current = list.getCurrent();
             List<EmailBean> records = list.getRecords();
             if (records != null && records.size() > 0) {
                 boxBeans = records;
-                mAdapter.setLists(boxBeans);
+                if (current > 1) {
+                    mAdapter.setLists(boxBeans);
+                    recyclerView.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(boxBeans);
+                }
 
-                ll_none.setVisibility(View.GONE);
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override
     public void fail(String err) {
         mRefreshLayout.endRefreshing();
-        Constants.showErrorDialog(mContext,err);
+        mRefreshLayout.endLoadingMore();
+        Constants.showErrorDialog(mContext, err);
         Logger.e(err);
     }
 
@@ -493,12 +504,18 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        boxBeans = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
         getBox();
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            getBox();
+            return true;
+        } else return false;
     }
 }

@@ -16,6 +16,7 @@ import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.adapter.SelectPeopleAdapter;
@@ -70,6 +71,9 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     private TextAdapter textAdapter;
     @BindView(R.id.card_delete)
     CardView card_delete;
+    private ReplaceViewHelper mReplaceViewHelper;
+    private int pages;
+    private int current = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,11 +152,12 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         EventBus.getDefault().register(this);
         beans = new ArrayList<>();
         presenter = new CompanyUserPresenter(this);
         token = DataUtil.getToken(mContext);
-        presenter.getCompanyUser(token, 1, 10, 1);
+        presenter.getCompanyUser(token, current, 10, 1);
 
         texts = new ArrayList<>();
         texts.add("添加人员");
@@ -188,7 +193,7 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
                 .radius(8)
                 .gravity(IndicatorBuilder.GRAVITY_RIGHT)
                 .ArrowRectage(0.9f)
-                .layoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false))
+                .layoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true))
                 .adapter(textAdapter).create();
         addDialog.setCanceledOnTouchOutside(true);
     }
@@ -291,7 +296,7 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String s) {
-        presenter.getCompanyUser(DataUtil.getToken(mContext), 1, 10, 1);
+        presenter.getCompanyUser(DataUtil.getToken(mContext), current, 10, 1);
     }
 
     @Override
@@ -318,19 +323,32 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
     @Override
     public void error(String err) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Constants.showErrorDialog(mContext, err);
     }
 
     @Override
     public void getCompanyUserSuccess(WorkersResult result) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (result != null) {
+            pages = result.getPages();
+            current = result.getCurrent();
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null) {
                 beans = records;
-                adapter.setLists(beans);
+                if (current > 1) {
+                    adapter.setLists(beans);
+                    recyclerView.smoothScrollToPosition(0);
+                } else {
+                    adapter.setLists(beans);
+                }
+
+                mReplaceViewHelper.removeView();
+                return;
             }
         }
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override
@@ -352,14 +370,21 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
 
     }
 
+
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        beans = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
-        presenter.getCompanyUser(token, 1, 10, 1);
+        presenter.getCompanyUser(token, current, 10, 1);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            presenter.getCompanyUser(token, current, 10, 1);
+            return true;
+        } else return false;
     }
 }

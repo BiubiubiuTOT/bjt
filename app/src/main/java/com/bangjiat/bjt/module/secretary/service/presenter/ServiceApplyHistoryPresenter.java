@@ -21,9 +21,9 @@ public class ServiceApplyHistoryPresenter implements ServiceApplyHistoryContract
     }
 
     @Override
-    public void getHistory(String token, int page, int size) {
+    public void getHistory(String token, int page) {
         view.showDialog();
-        model.getHistory(token, page, size);
+        model.getHistory(token, page);
     }
 
     @Override
@@ -51,9 +51,9 @@ public class ServiceApplyHistoryPresenter implements ServiceApplyHistoryContract
     }
 
     @Override
-    public void getAdminHistory(String token, int id, int page, int size, int status) {
+    public void getAdminHistory(String token, int id, int page, int status) {
         view.showDialog();
-        model.getAdminHistory(token, id, page, size, status);
+        model.getAdminHistory(token, id, page, status);
     }
 
     @Override

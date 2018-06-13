@@ -59,7 +59,7 @@
         </LinearLayout>
 
     </LinearLayout>
-    <include layout="@layout/no_data_page" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,7 +68,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/mine_color" />
 
         <TextView
             android:id="@+id/letter_overlay"

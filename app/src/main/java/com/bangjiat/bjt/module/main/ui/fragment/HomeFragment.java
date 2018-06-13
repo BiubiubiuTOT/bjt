@@ -363,6 +363,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
         DataUtil.setPhone(mContext, userInfo.getPhone());
         DataUtil.setUserId(mContext, userInfo.getUserId());
 
+        userInfo.setPark(bean.getPark());
         userInfo.save();
         if (companyUser != null)
             companyUser.save();

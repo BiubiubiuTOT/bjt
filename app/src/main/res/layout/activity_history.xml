@@ -9,25 +9,19 @@
 
     <include layout="@layout/toolbar" />
 
+
     <cn.bingoogolapple.refreshlayout.BGARefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rl_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#303030">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/mine_color"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/mine_color" />
 
-            <include layout="@layout/no_data_page" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 </LinearLayout>

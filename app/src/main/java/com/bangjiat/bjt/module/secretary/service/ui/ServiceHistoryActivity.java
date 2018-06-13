@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.service.adapter.HistoryAdapter;
@@ -32,8 +32,6 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
     private static final int DEAL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
 
@@ -42,6 +40,9 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
     private ServiceApplyHistoryContract.Presenter presenter;
     private HistoryAdapter mAdapter;
     private String token;
+    private int pages;
+    private int current = 1;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +61,17 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
         getData();
         setAdapter();
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
+        mReplaceViewHelper = new ReplaceViewHelper(this);
     }
 
     private void getData() {
         if (Constants.isCompanyAdmin()) {
-            presenter.getHistory(token, 1, 10);
+            presenter.getHistory(token, current);
         } else if (Constants.isBuildingAdmin()) {
             BuildUser first = BuildUser.first(BuildUser.class);
             Logger.d(first.toString());
-            presenter.getAdminHistory(token, first.getBuildId(), 1, 10, 2);
+            presenter.getAdminHistory(token, first.getBuildId(), current, 2);
         }
     }
 
@@ -118,22 +120,13 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
 
     @Override
     public void success(ServiceApplyHistoryResult result) {
-        mRefreshLayout.endRefreshing();
-        if (result != null) {
-            list = result.getRecords();
-            if (list != null && list.size() > 0) {
-                Logger.d(list.toString());
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
-                return;
-            }
-        }
-        ll_none.setVisibility(View.VISIBLE);
+        setData(result);
     }
 
     @Override
     public void error(String err) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Constants.showErrorDialog(mContext, err);
     }
 
@@ -144,27 +137,46 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
 
     @Override
     public void getAdminHistorySuccess(ServiceApplyHistoryResult result) {
+        setData(result);
+    }
+
+    private void setData(ServiceApplyHistoryResult result) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (result != null) {
-            list = result.getRecords();
-            if (list != null && list.size() > 0) {
-                Logger.d(list.toString());
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
+            pages = result.getPages();
+            current = result.getCurrent();
+            List<ServiceApplyHistoryResult.RecordsBean> lists = result.getRecords();
+            if (lists != null && lists.size() > 0) {
+                list.addAll(lists);
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recycler_view.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
+
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
     }
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        list = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
         getData();
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            getData();
+            return true;
+        } else return false;
     }
 }

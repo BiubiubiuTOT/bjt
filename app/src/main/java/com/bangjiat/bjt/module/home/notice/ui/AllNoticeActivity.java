@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.home.notice.adapter.NoticeAdapter;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
 import com.bangjiat.bjt.module.home.notice.contract.NoticeContract;
@@ -27,12 +27,11 @@ import butterknife.BindView;
 public class AllNoticeActivity extends BaseWhiteToolBarActivity implements NoticeContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
 
     private NoticeContract.Presenter presenter;
     private List<NoticeBean.SysNoticeListBean> list;
     private NoticeAdapter mAdapter;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +40,16 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         presenter = new NoticePresenter(this);
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
         list = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class, "ctime desc");
-        if (list == null)
+        if (list == null) {
+            list = new ArrayList<>();
             presenter.getAllNotice(DataUtil.getToken(mContext));
-        else
-            setAdapter();
+        }
+        setAdapter();
     }
 
 
@@ -75,7 +76,6 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     @Override
     public void getAllNoticeResult(NoticeBean noticeBean) {
-        list = new ArrayList<>();
         if (noticeBean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = noticeBean.getSysNoticeList();
             if (sysNoticeList != null && sysNoticeList.size() > 0) {
@@ -103,11 +103,11 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
             SugarRecord.saveInTx(list);
 
-            setAdapter();
-            ll_none.setVisibility(View.GONE);
+            mAdapter.setLists(list);
+            mReplaceViewHelper.removeView();
             return;
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
     }
 
     private void setAdapter() {

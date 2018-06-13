@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseWhiteToolBarActivity;
 import com.bangjiat.bjt.module.park.apply.adapter.ParkingAdapter;
 import com.bangjiat.bjt.module.park.apply.beans.LotResult;
@@ -29,11 +29,10 @@ import butterknife.BindView;
 public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements ParkApplyContract.View {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     private Dialog dialog;
     private ParkApplyContract.Presenter presenter;
     private List<ParkingResult.PageDataBean.RecordsBean> list;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +46,7 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setHasFixedSize(true);
+        mReplaceViewHelper = new ReplaceViewHelper(this);
     }
 
     private void setAdapter() {
@@ -105,12 +105,13 @@ public class ChooseParkingActivity extends BaseWhiteToolBarActivity implements P
                 if (records != null && records.size() > 0) {
                     list = records;
                     setAdapter();
-                    ll_none.setVisibility(View.GONE);
+
+                    mReplaceViewHelper.removeView();
                     return;
                 }
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override

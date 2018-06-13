@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.door.adapter.ApplyHistoryAdapter;
@@ -32,8 +32,6 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
     private static final int DEAL = 2;
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
 
@@ -42,6 +40,10 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
     private DoorApplyHistoryContract.Presenter presenter;
     private String token;
     private ApplyHistoryAdapter mAdapter;
+    private int pages;
+    private int current = 1;
+    private BuildUser first;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +52,23 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         list = new ArrayList<>();
         presenter = new DoorApplyHistoryPresenter(this);
         token = DataUtil.getToken(mContext);
+        first = BuildUser.first(BuildUser.class);
 
         getData();
         setAdapter();
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
     }
 
     private void getData() {
         if (Constants.isCompanyAdmin()) {
-            presenter.getDoorApplyHistory(token, 1, 10);
+            presenter.getDoorApplyHistory(token, current, 10);
         } else if (Constants.isBuildingAdmin()) {
-            BuildUser first = BuildUser.first(BuildUser.class);
-            Logger.d(first.toString());
-            presenter.getAdminDoorApplyHistory(token, first.getBuildId(), 1, 10);
+            presenter.getAdminDoorApplyHistory(token, first.getBuildId(), current, 10);
         }
     }
 
@@ -118,21 +120,12 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
 
     @Override
     public void getDoorApplyHistorySuccess(ApplyHistoryBean bean) {
-        mRefreshLayout.endRefreshing();
-        if (bean != null) {
-            List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
-            if (records != null && records.size() > 0) {
-                list = records;
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
-                return;
-            }
-        }
-        ll_none.setVisibility(View.VISIBLE);
+        setData(bean);
     }
 
     @Override
     public void error(String err) {
+        mRefreshLayout.endLoadingMore();
         mRefreshLayout.endRefreshing();
         Logger.e(err);
         Constants.showErrorDialog(mContext, err);
@@ -140,28 +133,46 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
 
     @Override
     public void getAdminDoorApplyHistorySuccess(ApplyHistoryBean bean) {
-        mRefreshLayout.endRefreshing();
-        if (bean != null) {
-            List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
-            if (records != null) {
-                list = records;
-                mAdapter.setLists(list);
+        setData(bean);
+    }
 
-                ll_none.setVisibility(View.GONE);
+    private void setData(ApplyHistoryBean bean) {
+        mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
+        if (bean != null) {
+            pages = bean.getPages();
+            current = bean.getCurrent();
+            List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
+            if (records != null && records.size() > 0) {
+                list = records;
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recycler_view.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
+
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
     }
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        list = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
         getData();
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            getData();
+            return true;
+        } else return false;
     }
 }

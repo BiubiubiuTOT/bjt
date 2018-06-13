@@ -4,13 +4,13 @@ import android.app.Dialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.BaseFragment;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.home.visitor.adapter.VisitorAdapter;
 import com.bangjiat.bjt.module.home.visitor.beans.DealVisitorInput;
 import com.bangjiat.bjt.module.home.visitor.beans.DeleteHistory;
@@ -30,10 +30,9 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class VisitorFragment extends BaseFragment implements VisitorContract.View, BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     private Dialog dialog;
     private VisitorContract.Presenter presenter;
@@ -41,6 +40,8 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
     private int type;
     private VisitorBean.RecordsBean recordsBean;
     private VisitorAdapter mAdapter;
+    private int pages;
+    private int current=1;
 
 
     @Override
@@ -50,11 +51,12 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
 
     @Override
     protected void initView() {
+        mReplaceViewHelper = new ReplaceViewHelper(mContext);
         presenter = new VisitorPresenter(this);
         presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 1);
         setAdapter();
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
     }
 
 
@@ -100,7 +102,7 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
                 mAdapter.notifyItemRangeChanged(pos, list.size() - pos);
 
                 if (list.size() == 0)
-                    ll_none.setVisibility(View.VISIBLE);
+                    mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
             }
         });
     }
@@ -121,23 +123,33 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
     public void error(String err) {
         Logger.e(err);
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Constants.showErrorDialog(mContext, err);
     }
 
     @Override
     public void success(VisitorBean bean) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (bean != null) {
+            pages = bean.getPages();
+            current = bean.getCurrent();
             List<VisitorBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
                 Logger.d(records.toString());
                 list = records;
-                mAdapter.setLists(list);
-                ll_none.setVisibility(View.GONE);
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recycler_view.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
+
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
     }
 
     @Override
@@ -163,14 +175,19 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
-        presenter.getVisitorHistory(DataUtil.getToken(mContext), 1, 10, 1);
-        mRefreshLayout.beginRefreshing();
+        current = 1;
+        list = new ArrayList<>();
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getVisitorHistory(DataUtil.getToken(mContext), current, 10, 1);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        mRefreshLayout.beginLoadingMore();
-        return true;
+        if (current < pages) {
+            current++;
+            presenter.getVisitorHistory(DataUtil.getToken(mContext), current, 10, 1);
+            return true;
+        } else return false;
     }
 }
 

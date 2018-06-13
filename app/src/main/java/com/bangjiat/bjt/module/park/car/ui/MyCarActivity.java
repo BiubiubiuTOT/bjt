@@ -8,12 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.park.car.adapter.MyCarAdapter;
 import com.bangjiat.bjt.module.park.car.beans.CarBean;
@@ -33,23 +33,22 @@ public class MyCarActivity extends BaseToolBarActivity implements CarListContrac
     private static final int ADD_CAR = 3;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
 
     private Dialog dialog;
     private CarListContract.Presenter presenter;
     private List<CarBean> carBean;
     private MyCarAdapter mAdapter;
+    private ReplaceViewHelper mReplaceViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
         initData();
-
     }
 
     private void initData() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         carBean = new ArrayList<>();
         presenter = new CarListPresenter(this);
         presenter.getCarList(DataUtil.getToken(mContext));
@@ -79,7 +78,7 @@ public class MyCarActivity extends BaseToolBarActivity implements CarListContrac
                 mAdapter.notifyItemRangeChanged(pos, carBean.size() - pos);
 
                 if (carBean.size() == 0)
-                    ll_none.setVisibility(View.VISIBLE);
+                    mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
             }
         });
         // 可以用在：当点击外部空白处时，关闭正在展开的侧滑菜单。我个人觉得意义不大，
@@ -144,10 +143,11 @@ public class MyCarActivity extends BaseToolBarActivity implements CarListContrac
         if (bean != null && bean.size() > 0) {
             carBean = bean;
             mAdapter.setLists(carBean);
-            ll_none.setVisibility(View.GONE);
+
+            mReplaceViewHelper.removeView();
             return;
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
 

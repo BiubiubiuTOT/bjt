@@ -24,7 +24,7 @@ public class ServiceApplyHistoryModel implements ServiceApplyHistoryContract.Mod
     }
 
     @Override
-    public void getHistory(String token, int page, int size) {
+    public void getHistory(String token, int page) {
         ApiFactory.getService().getServiceApplyHistory(token, page, Constants.SIZE).enqueue(new MyCallBack<BaseResult<ServiceApplyHistoryResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ServiceApplyHistoryResult>> response) {
@@ -42,7 +42,7 @@ public class ServiceApplyHistoryModel implements ServiceApplyHistoryContract.Mod
     }
 
     @Override
-    public void getAdminHistory(String token, int id, int page, int size, int status) {
+    public void getAdminHistory(String token, int id, int page, int status) {
         ApiFactory.getService().getAdminServiceApplyHistory(token, id, page, Constants.SIZE, status).enqueue(new MyCallBack<BaseResult<ServiceApplyHistoryResult>>() {
             @Override
             public void onSuc(Response<BaseResult<ServiceApplyHistoryResult>> response) {

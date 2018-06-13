@@ -61,6 +61,8 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
         CompanyUserBean companyUserBean = CompanyUserBean.first(CompanyUserBean.class);
         if (companyUserBean != null)
             tv_company_name.setText(companyUserBean.getCompanyName());
+
+        setAdapter();
     }
 
     private int getSelectCount() {
@@ -150,16 +152,13 @@ public class AddPeopleActivity extends BaseToolBarActivity implements DoorApplyC
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
                 beans = records;
-                if (adapter != null) {
-                    adapter.setLists(records);
-                } else {
-                    setAdapter();
-                }
+                adapter.setLists(records);
             }
         }
     }
 
     private void setAdapter() {
+        beans = new ArrayList<>();
         adapter = new SelectPeopleAdapter(beans, mContext);
         recyclerView.setAdapter(adapter);
 

@@ -10,13 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.Constants;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.common.RefreshViewHolder;
+import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.common.TimeUtils;
 import com.bangjiat.bjt.module.main.ui.activity.BaseToolBarActivity;
 import com.bangjiat.bjt.module.me.bill.adapter.BillAdapter;
@@ -45,12 +45,13 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     private BillAdapter mAdapter;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.ll_none)
-    LinearLayout ll_none;
     @BindView(R.id.rl_refresh)
     BGARefreshLayout mRefreshLayout;
     private String start;
     private String end;
+    private ReplaceViewHelper mReplaceViewHelper;
+    private int current=1;
+    private int pages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +60,13 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     }
 
     private void initView() {
+        mReplaceViewHelper = new ReplaceViewHelper(this);
         presenter = new QueryBillPresenter(this);
         initDia();
-        presenter.getPageBill(DataUtil.getToken(mContext), 1, 10);
+        presenter.getPageBill(DataUtil.getToken(mContext), current, 10);
         setAdapter();
         mRefreshLayout.setDelegate(this);
-        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, true));
     }
 
     @Override
@@ -191,36 +193,52 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     @Override
     public void getPageBillSuccess(PageBillBean billBean) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         if (billBean != null) {
+            pages = billBean.getPages();
+            current = billBean.getCurrent();
             List<PageBillBean.RecordsBean> records = billBean.getRecords();
             if (records != null && records.size() > 0) {
                 Logger.d(records.toString());
 
                 list = records;
-                mAdapter.setLists(list);
+                if (current > 1) {
+                    mAdapter.setLists(list);
+                    recyclerView.smoothScrollToPosition(0);
+                } else {
+                    mAdapter.setLists(list);
+                }
 
-                ll_none.setVisibility(View.GONE);
+                mReplaceViewHelper.removeView();
                 return;
             }
         }
-        ll_none.setVisibility(View.VISIBLE);
+        mReplaceViewHelper.toReplaceView(recyclerView, R.layout.no_data_page);
     }
 
     @Override
     public void getPageBillFail(String err) {
         mRefreshLayout.endRefreshing();
+        mRefreshLayout.endLoadingMore();
         Logger.e(err);
         Constants.showErrorDialog(mContext, err);
     }
 
+
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        current = 1;
+        list = new ArrayList<>();
         bgaRefreshLayout.beginRefreshing();
-        presenter.getPageBill(DataUtil.getToken(mContext), 1, 10);
+        presenter.getPageBill(DataUtil.getToken(mContext), current, 10);
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
-        return false;
+        if (current < pages) {
+            current++;
+            presenter.getPageBill(DataUtil.getToken(mContext), current, 10);
+            return true;
+        } else return false;
     }
 }
