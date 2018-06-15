@@ -93,6 +93,8 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == DEAL_SUCCESS) {
+                current = 1;
+                list = new ArrayList<>();
                 getData();
             }
         }
@@ -153,7 +155,7 @@ public class ApplyHistoryActivity extends BaseWhiteToolBarActivity implements Pa
             current = result.getCurrent();
             List<ParkApplyHistoryResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recycler_view.smoothScrollToPosition(0);

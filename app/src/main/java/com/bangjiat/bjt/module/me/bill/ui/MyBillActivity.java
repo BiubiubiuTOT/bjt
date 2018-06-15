@@ -50,7 +50,7 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     private String start;
     private String end;
     private ReplaceViewHelper mReplaceViewHelper;
-    private int current=1;
+    private int current = 1;
     private int pages;
 
     @Override
@@ -173,7 +173,9 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == PAY_SUCCESS) {
-            presenter.getPageBill(DataUtil.getToken(mContext), 1, 10,
+            current = 1;
+            list = new ArrayList<>();
+            presenter.getPageBill(DataUtil.getToken(mContext), current, 10,
                     TimeUtils.changeToLong(start),
                     TimeUtils.changeToLong(end));
         }
@@ -201,7 +203,7 @@ public class MyBillActivity extends BaseToolBarActivity implements QueryBillCont
             if (records != null && records.size() > 0) {
                 Logger.d(records.toString());
 
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recyclerView.smoothScrollToPosition(0);

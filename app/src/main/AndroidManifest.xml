@@ -114,6 +114,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".module.main.ui.activity.WebActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".module.home.visitor.ui.VisitorActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -532,11 +536,26 @@
             android:name="com.alibaba.app.appsecret"
             android:value="165b4a555141dcf0c23f98ea8eae8c94" /> <!-- 请填写你自己的appSecret -->
 
-        <activity android:name=".module.home.work.kaoqin.ui.ExcelActivity" />
-        <activity android:name=".module.park.apply.ui.ChooseLotActivity" />
-        <activity android:name=".module.home.work.permission.ui.AdminActivity" />
-        <activity android:name=".module.home.work.permission.ui.AdminDetailActivity" />
-        <activity android:name=".module.home.work.permission.ui.AdminListActivity"></activity>
+        <activity
+            android:name=".module.home.work.kaoqin.ui.ExcelActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.park.apply.ui.ChooseLotActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.AdminActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.AdminDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.work.permission.ui.AdminListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

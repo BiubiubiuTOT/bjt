@@ -27,8 +27,27 @@ public class BuildingAdminListModel implements BuildingAdminListContract.Model {
     public void getAdminList(String token) {
         ApiFactory.getService().getBuildingAdminList(token).enqueue(new MyCallBack<BaseResult<List<BuildingAdminListResult>>>() {
             @Override
-            public void onSuc(Response<BaseResult<List<BuildingAdminListResult> >> response) {
-                BaseResult<List<BuildingAdminListResult> > body = response.body();
+            public void onSuc(Response<BaseResult<List<BuildingAdminListResult>>> response) {
+                BaseResult<List<BuildingAdminListResult>> body = response.body();
+                if (body.getStatus() == 200)
+                    presenter.success(body.getData());
+                else presenter.error(body.getMessage());
+
+            }
+
+            @Override
+            public void onFail(String message) {
+                presenter.error(message);
+            }
+        });
+    }
+
+    @Override
+    public void getAdminList(String token, int buildId) {
+        ApiFactory.getService().getBuildingAdminList(token, buildId).enqueue(new MyCallBack<BaseResult<List<BuildingAdminListResult>>>() {
+            @Override
+            public void onSuc(Response<BaseResult<List<BuildingAdminListResult>>> response) {
+                BaseResult<List<BuildingAdminListResult>> body = response.body();
                 if (body.getStatus() == 200)
                     presenter.success(body.getData());
                 else presenter.error(body.getMessage());

@@ -152,7 +152,7 @@ public class PermissionTransferActivity extends BaseWhiteToolBarActivity impleme
             current = result.getCurrent();
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
-                beans = records;
+                beans.addAll(records);
                 if (current > 1) {
                     adapter.setLists(beans);
                     recyclerView.smoothScrollToPosition(0);

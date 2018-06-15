@@ -130,4 +130,22 @@ public class BannerBean {
     public void setType(int type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "BannerBean{" +
+                "belong=" + belong +
+                ", carouselId=" + carouselId +
+                ", ctime=" + ctime +
+                ", imagePath='" + imagePath + '\'' +
+                ", link='" + link + '\'' +
+                ", name='" + name + '\'' +
+                ", orderValue=" + orderValue +
+                ", remark='" + remark + '\'' +
+                ", showEndTime=" + showEndTime +
+                ", showStartTime=" + showStartTime +
+                ", status=" + status +
+                ", type=" + type +
+                '}';
+    }
 }

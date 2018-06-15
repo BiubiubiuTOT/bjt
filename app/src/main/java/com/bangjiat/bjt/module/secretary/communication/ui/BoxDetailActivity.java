@@ -92,7 +92,7 @@ public class BoxDetailActivity extends BaseToolBarActivity implements DealBoxCon
 
             type = getIntent().getIntExtra("type", 1);
             if (type == 1) {
-                tv_title.setText("发件箱");
+                toolbar_title.setText("发件箱");
                 tv_receiver_name.setText(bean.getReceiver());
             } else {
                 toolbar_title.setText("收件箱");

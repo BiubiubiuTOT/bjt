@@ -93,6 +93,8 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == DEAL) {
+            current = 1;
+            list = new ArrayList<>();
             getData();
         }
     }
@@ -144,7 +146,7 @@ public class HistoryActivity extends BaseColorToolBarActivity implements DoorApp
             current = bean.getCurrent();
             List<ApplyHistoryBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recycler_view.smoothScrollToPosition(0);

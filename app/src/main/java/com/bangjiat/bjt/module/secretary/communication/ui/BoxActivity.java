@@ -420,6 +420,8 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            current = 1;
+            boxBeans = new ArrayList<>();
             if (requestCode == WRITE_EMAIL) {
                 getBox();
             } else if (requestCode == DELETE) {
@@ -460,7 +462,7 @@ public class BoxActivity extends BaseToolBarActivity implements BoxContract.View
             current = list.getCurrent();
             List<EmailBean> records = list.getRecords();
             if (records != null && records.size() > 0) {
-                boxBeans = records;
+                boxBeans.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(boxBeans);
                     recyclerView.smoothScrollToPosition(0);

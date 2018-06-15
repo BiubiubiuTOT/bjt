@@ -47,13 +47,13 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/mine_color" />
 
-                <com.bangjiat.bjt.common.ClearEditText
-                    android:id="@+id/et_duty"
+                <TextView
+                    android:id="@+id/tv_sex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@null"
-                    android:hint="请输入职务(普通员工可不填)"
+                    android:hint="请选择性别"
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
                     android:textSize="14sp" />
@@ -75,6 +75,26 @@
                     android:textColor="@color/dialog_title"
                     android:textColorHint="@color/personal_message"
                     android:textSize="14sp" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/mine_color" />
+
+                <com.bangjiat.bjt.common.ClearEditText
+                    android:id="@+id/et_duty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@null"
+                    android:hint="请输入职务(普通员工可不填)"
+                    android:textColor="@color/dialog_title"
+                    android:textColorHint="@color/personal_message"
+                    android:textSize="14sp" />
+
 
                 <View
                     android:layout_width="match_parent"

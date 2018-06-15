@@ -442,6 +442,14 @@ public interface ApiService {
     Call<BaseResult<List<BuildingAdminListResult>>> getBuildingAdminList(@Header(Constants.TOKEN_NAME) String token);
 
     /**
+     * 35
+     * 获取楼宇管理员列表
+     */
+    @GET("api/buildApproval/select/BuildUserList")
+    Call<BaseResult<List<BuildingAdminListResult>>> getBuildingAdminList(@Header(Constants.TOKEN_NAME) String token,
+                                                                         @Query("buildId") int buildId);
+
+    /**
      * 36
      * 上传头像
      *

@@ -228,6 +228,8 @@ public class SecretaryFragment extends BaseFragment implements IntoBuildingContr
         }
         if (!isApply && !Constants.isBuildingAdmin())
             tv_into.setVisibility(View.VISIBLE);
+        else
+            tv_into.setVisibility(View.GONE);
     }
 }
 

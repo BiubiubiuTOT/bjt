@@ -98,6 +98,8 @@ public class ServiceHistoryActivity extends BaseColorToolBarActivity implements 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == DEAL) {
+            current = 1;
+            list = new ArrayList<>();
             getData();
         }
     }

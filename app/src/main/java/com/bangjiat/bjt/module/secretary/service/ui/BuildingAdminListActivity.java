@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
+import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
 import com.bangjiat.bjt.module.secretary.service.adapter.AdminListAdapter;
 import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
 import com.bangjiat.bjt.module.secretary.service.contract.BuildingAdminListContract;
@@ -28,6 +29,7 @@ public class BuildingAdminListActivity extends BaseColorToolBarActivity implemen
     private BuildingAdminListContract.Presenter presenter;
     private List<BuildingAdminListResult> list;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +37,13 @@ public class BuildingAdminListActivity extends BaseColorToolBarActivity implemen
     }
 
     private void initView() {
+        BuildUser first = BuildUser.first(BuildUser.class);
+        int type = getIntent().getIntExtra("type", 0);
         presenter = new BuildingAdminListPresenter(this);
-        presenter.getAdminList(DataUtil.getToken(mContext));
+        if (type == 1) {
+            presenter.getAdminList(DataUtil.getToken(mContext), first.getBuildId());
+        } else
+            presenter.getAdminList(DataUtil.getToken(mContext));
         recycler_view.setLayoutManager(new LinearLayoutManager(mContext));
         recycler_view.setHasFixedSize(true);
     }

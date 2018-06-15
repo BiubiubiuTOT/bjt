@@ -141,27 +141,14 @@
                         android:layout_height="0.5dp"
                         android:background="@color/mine_color" />
 
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="26dp"
-                        android:layout_marginTop="10dp"
-                        android:text="暂无公告信息"
-                        android:textColor="#282828"
-                        android:textSize="@dimen/mine_exit_text_size" />
-
-                    <TextView
-                        android:id="@+id/tv_content"
+                    <com.gongwen.marqueen.MarqueeView
+                        android:id="@+id/marqueeView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="26dp"
-                        android:ellipsize="end"
-                        android:lineSpacingMultiplier="1.3"
-                        android:lines="3"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
+                        android:flipInterval="4000"
+                        android:inAnimation="@anim/in_right"
+                        android:outAnimation="@anim/out_left"
+                        app:marqueeAnimDuration="2000" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

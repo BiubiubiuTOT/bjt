@@ -296,6 +296,8 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String s) {
+        current = 1;
+        beans = new ArrayList<>();
         presenter.getCompanyUser(DataUtil.getToken(mContext), current, 10, 1);
     }
 
@@ -336,7 +338,7 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
             current = result.getCurrent();
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null) {
-                beans = records;
+                beans.addAll(records);
                 if (current > 1) {
                     adapter.setLists(beans);
                     recyclerView.smoothScrollToPosition(0);
@@ -353,10 +355,12 @@ public class WorkerListActivity extends BaseToolBarActivity implements CompanyUs
 
     @Override
     public void deleteCompanyUserSuccess() {
+        current = 1;
+        beans = new ArrayList<>();
         size--;
         if (size == 0) {
             error("删除成功");
-            presenter.getCompanyUser(token, 1, 10, 1);
+            presenter.getCompanyUser(token, current, 10, 1);
         }
     }
 

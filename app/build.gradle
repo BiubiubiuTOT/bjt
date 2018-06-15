@@ -16,7 +16,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.2.5"
+        versionName "1.2.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -148,4 +148,5 @@ dependencies {
     }//阿里云推送
     compile files('libs/jxl.jar') //excel
     compile 'com.github.huangyanbin:SmartTable:2.2.0'
+    compile 'com.gongwen:marqueelibrary:1.1.3'
 }

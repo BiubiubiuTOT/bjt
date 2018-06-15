@@ -28,6 +28,12 @@ public class BuildingAdminListPresenter implements BuildingAdminListContract.Pre
     }
 
     @Override
+    public void getAdminList(String token, int buildId) {
+        view.showDialog();
+        model.getAdminList(token, buildId);
+    }
+
+    @Override
     public void error(String err) {
         view.dismissDialog();
         view.error(err);

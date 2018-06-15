@@ -290,7 +290,9 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String s) {
-        presenter.getCompanyUser(DataUtil.getToken(mContext), 1, 10, 1);
+        current = 1;
+        beans = new ArrayList<>();
+        presenter.getCompanyUser(DataUtil.getToken(mContext), current, 10, 1);
     }
 
     @Override
@@ -330,7 +332,7 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
             current = result.getCurrent();
             List<WorkersResult.RecordsBean> records = result.getRecords();
             if (records != null) {
-                beans = records;
+                beans.addAll(records);
                 if (current > 1) {
                     adapter.setLists(beans);
                     recyclerView.smoothScrollToPosition(0);
@@ -347,10 +349,12 @@ public class WorkersManageActivity extends BaseToolBarActivity implements Compan
 
     @Override
     public void deleteCompanyUserSuccess() {
+        current = 1;
+        beans = new ArrayList<>();
         size--;
         if (size == 0) {
             error("删除成功");
-            presenter.getCompanyUser(token, 1, 10, 1);
+            presenter.getCompanyUser(token, current, 10, 1);
         }
     }
 

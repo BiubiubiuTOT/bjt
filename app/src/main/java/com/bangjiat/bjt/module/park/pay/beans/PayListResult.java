@@ -41,6 +41,15 @@ public class PayListResult implements Serializable {
     private int type;
     private String userId;
     private String resource;
+    private long terminalTime;
+
+    public long getTerminalTime() {
+        return terminalTime;
+    }
+
+    public void setTerminalTime(long terminalTime) {
+        this.terminalTime = terminalTime;
+    }
 
     public String getResource() {
         return resource;

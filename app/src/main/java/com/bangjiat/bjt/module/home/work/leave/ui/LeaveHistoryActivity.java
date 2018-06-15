@@ -87,6 +87,8 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == DEAL_SUCCESS) {
+            current = 1;
+            list = new ArrayList<>();
             getData();
         }
     }
@@ -142,7 +144,7 @@ public class LeaveHistoryActivity extends BaseWhiteToolBarActivity implements Le
             current = result.getCurrent();
             List<CompanyLeaveResult.RecordsBean> records = result.getRecords();
             if (records != null && records.size() > 0) {
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recyclerView.smoothScrollToPosition(0);

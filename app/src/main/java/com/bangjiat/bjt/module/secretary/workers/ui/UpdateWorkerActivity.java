@@ -1,6 +1,7 @@
 package com.bangjiat.bjt.module.secretary.workers.ui;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,10 +19,16 @@ import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.githang.statusbar.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,6 +46,8 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     ClearEditText et_department;
     @BindView(R.id.ll_delete)
     RelativeLayout rl_delete;
+    @BindView(R.id.tv_sex)
+    TextView tv_sex;
 
     WorkersResult.RecordsBean bean;
     private Dialog dialog;
@@ -46,6 +55,9 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
     private String token;
     private UserInfo userInfo;
     private TextView tv_done;
+    private List<String> options1Items;
+    private OptionsPickerView<String> pvSexs;
+    private int sex;
 
 
     @Override
@@ -54,9 +66,27 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.white));
 
         initData();
+        initSexPicker();
+    }
+
+    private void initSexPicker() {
+        pvSexs = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                sex = options1;
+                tv_sex.setText(options1Items.get(options1));
+            }
+        }).setSubmitColor(Color.BLACK)
+                .setCancelColor(Color.BLACK).build();
+        pvSexs.setPicker(options1Items);
+
     }
 
     private void initData() {
+        options1Items = new ArrayList<>();
+        options1Items.add("男");
+        options1Items.add("女");
+
         token = DataUtil.getToken(mContext);
         presenter = new CompanyUserPresenter(this);
         bean = (WorkersResult.RecordsBean) getIntent().getSerializableExtra("data");
@@ -71,15 +101,18 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
                 et_phone.setEnabled(false);
                 et_department.setEnabled(false);
                 et_duty.setEnabled(false);
+                tv_sex.setEnabled(false);
 
                 et_phone.setFocusable(false);
                 et_department.setFocusable(false);
                 et_duty.setFocusable(false);
+                tv_sex.setFocusable(false);
             }
             String idNumber = bean.getIdNumber().replaceAll("(\\d{5})\\d{11}(\\w{2})", "$1***********$2");
             et_name.setText(bean.getRealname());
             et_card.setText(idNumber);
             et_phone.setText(bean.getPhone());
+            tv_sex.setText(bean.getSex() == 0 ? "男" : "女");
             String department = bean.getDepartment();
             if (department != null && !department.equals("null"))
                 et_department.setText(department);
@@ -90,6 +123,11 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
         }
 
 
+    }
+
+    @OnClick(R.id.tv_sex)
+    public void clickSex(View view) {
+        pvSexs.show();
     }
 
     @Override
@@ -117,6 +155,7 @@ public class UpdateWorkerActivity extends BaseToolBarActivity implements Company
                 bean.setDepartment(et_department.getText().toString());
                 bean.setJob(et_duty.getText().toString());
                 bean.setRealname(et_name.getText().toString());
+                bean.setSex(sex);
 
                 presenter.updateCompanyUser(token, bean);
             }

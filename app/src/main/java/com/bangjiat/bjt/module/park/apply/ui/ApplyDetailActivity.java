@@ -95,10 +95,16 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
             details = new Gson().fromJson(bean.getDetail(), new TypeToken<List<ParkApplyDetail>>() {
             }.getType());
 
+            int status = bean.getStatus();
             if (details != null && details.size() > 0) {
                 setAdapter();
+                ParkApplyDetail detail = details.get(0);
+
+                if (status == 2) {
+                    tv_time.setText(TimeUtils.changeToYMD(detail.getTerminalTime()));
+                }
+                tv_start_time.setText(TimeUtils.changeToYMD(detail.getCtime()));
             }
-            int status = bean.getStatus();
             if (Constants.isParkAdmin() && status == 1) {
                 rl_btn.setVisibility(View.VISIBLE);
             }
@@ -109,11 +115,8 @@ public class ApplyDetailActivity extends BaseWhiteToolBarActivity implements Par
                 ll_reason.setVisibility(View.VISIBLE);
                 tv_reason.setText(bean.getOpinion());
             }
-            if (status == 2) {
-                tv_time.setText(TimeUtils.changeToYMD(bean.getTerminalTime()));
-            }
+
         }
-        tv_start_time.setText(TimeUtils.getTime());
 
         initDia();
         initDate();

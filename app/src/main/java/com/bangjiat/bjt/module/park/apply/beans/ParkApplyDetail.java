@@ -20,6 +20,15 @@ public class ParkApplyDetail {
     private String resource;
     private int status;
     private String lotNumber;
+    private long terminalTime;
+
+    public long getTerminalTime() {
+        return terminalTime;
+    }
+
+    public void setTerminalTime(long terminalTime) {
+        this.terminalTime = terminalTime;
+    }
 
     public String getLotNumber() {
         return lotNumber;

@@ -137,7 +137,7 @@ public class VisitorFragment extends BaseFragment implements VisitorContract.Vie
             List<VisitorBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
                 Logger.d(records.toString());
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recycler_view.smoothScrollToPosition(0);

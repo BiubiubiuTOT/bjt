@@ -88,6 +88,15 @@ public class WorkersResult {
         private String realname;
         private int type;
         private String userId;
+        private int sex;
+
+        public int getSex() {
+            return sex;
+        }
+
+        public void setSex(int sex) {
+            this.sex = sex;
+        }
 
         public int getCompanyId() {
             return companyId;

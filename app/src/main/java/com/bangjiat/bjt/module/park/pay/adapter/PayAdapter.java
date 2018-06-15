@@ -46,9 +46,11 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final PayListResult historyBean = lists.get(position);
         viewHolder.tv_number.setText("车牌号：" + historyBean.getPlateNumber());
+        viewHolder.tv_time1.setText("停车有效期：" + TimeUtils.changeToYMD(historyBean.getCtime()) + "至"
+                + TimeUtils.changeToYMD(historyBean.getTerminalTime()));
         viewHolder.tv_parking.setText("停车场：" + historyBean.getSpaceName());
         viewHolder.tv_time.setText("缴费起止日期：" + TimeUtils.changeToYMD(historyBean.getBeginTime())
-                + "到" + TimeUtils.changeToYMD(historyBean.getEndTime()));
+                + "至" + TimeUtils.changeToYMD(historyBean.getEndTime()));
         Glide.with(mContext).load(historyBean.getResource()).centerCrop().error(R.mipmap.my_head).into(viewHolder.iv_car);
 
         viewHolder.itemView.setTag(position);
@@ -67,12 +69,13 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> impl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_number, tv_parking, tv_time;
+        TextView tv_number, tv_parking, tv_time, tv_time1;
         ImageView iv_car;
 
         public ViewHolder(View view) {
             super(view);
             tv_number = view.findViewById(R.id.tv_number);
+            tv_time1 = view.findViewById(R.id.tv_time1);
             tv_parking = view.findViewById(R.id.tv_parking);
             tv_time = view.findViewById(R.id.tv_time);
             iv_car = view.findViewById(R.id.iv_car);

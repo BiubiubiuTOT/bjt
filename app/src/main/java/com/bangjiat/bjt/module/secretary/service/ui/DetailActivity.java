@@ -21,13 +21,18 @@ import com.bangjiat.bjt.common.FullImageActivity;
 import com.bangjiat.bjt.module.home.work.leave.beans.Progress;
 import com.bangjiat.bjt.module.main.ui.activity.BaseColorToolBarActivity;
 import com.bangjiat.bjt.module.me.personaldata.beans.BuildUser;
+import com.bangjiat.bjt.module.me.personaldata.beans.UserInfo;
 import com.bangjiat.bjt.module.secretary.door.beans.ApprovalServiceInput;
 import com.bangjiat.bjt.module.secretary.service.adapter.ImageAdapter;
 import com.bangjiat.bjt.module.secretary.service.beans.BuildingAdminListResult;
+import com.bangjiat.bjt.module.secretary.service.beans.DetailResult;
 import com.bangjiat.bjt.module.secretary.service.beans.ServiceApplyHistoryResult;
 import com.bangjiat.bjt.module.secretary.service.contract.ServiceApplyHistoryContract;
 import com.bangjiat.bjt.module.secretary.service.presenter.ServiceApplyHistoryPresenter;
 import com.dou361.dialogui.DialogUIUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -57,7 +62,8 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
     LinearLayout ll_reason;
     @BindView(R.id.tv_reason)
     TextView tv_reason;
-
+    @BindView(R.id.tv_to)
+    TextView tv_to;
 
     private List<String> photoList;
     private ServiceApplyHistoryResult.RecordsBean data;
@@ -87,6 +93,7 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
             tv_title.setText(data.getApplication());
 
             String sources = data.getSources();
+
             if (sources != null) {
                 Logger.d(sources);
                 String[] split = sources.split("\\|");
@@ -99,8 +106,39 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
         }
         int status = data.getStatus();
         if (Constants.isBuildingAdmin()) {
-            if (status == 1) {
-                rl_btn.setVisibility(View.VISIBLE);
+            String approvalUser = data.getApprovalUser();
+            UserInfo first = UserInfo.first(UserInfo.class);
+            try {
+                List<DetailResult> detailResults = new Gson().fromJson(approvalUser, new TypeToken<List<DetailResult>>() {
+                }.getType());
+                if (detailResults != null && detailResults.size() > 0) {
+                    DetailResult detailResult = detailResults.get(detailResults.size() - 1);
+                    if (!detailResult.getUserId().equals(first.getUserId())) {
+                        if (status == 1) {
+                            rl_btn.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (status == 1) {
+                            tv_to.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+                if (detailResults == null) {
+                    if (status == 1) {
+                        rl_btn.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (detailResults.size() == 0) {
+                        if (status == 1) {
+                            rl_btn.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+                if (status == 1) {
+                    rl_btn.setVisibility(View.VISIBLE);
+                }
             }
             initDia();
         }
@@ -123,7 +161,9 @@ public class DetailActivity extends BaseColorToolBarActivity implements ServiceA
 
     @OnClick(R.id.btn_to)
     public void clickTo(View view) {
-        startActivityForResult(new Intent(mContext, BuildingAdminListActivity.class), GET_PERSON);
+        Intent intent = new Intent(mContext, BuildingAdminListActivity.class);
+        intent.putExtra("type", 1);
+        startActivityForResult(intent, GET_PERSON);
     }
 
     @Override

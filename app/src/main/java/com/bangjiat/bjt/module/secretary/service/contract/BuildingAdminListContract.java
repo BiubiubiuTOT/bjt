@@ -13,6 +13,8 @@ import java.util.List;
 public interface BuildingAdminListContract {
     interface Model {
         void getAdminList(String token);
+
+        void getAdminList(String token, int buildId);
     }
 
     interface View {
@@ -22,11 +24,13 @@ public interface BuildingAdminListContract {
 
         void error(String err);
 
-        void success(List<BuildingAdminListResult>  result);
+        void success(List<BuildingAdminListResult> result);
     }
 
     interface Presenter {
         void getAdminList(String token);
+
+        void getAdminList(String token, int buildId);
 
         void error(String err);
 

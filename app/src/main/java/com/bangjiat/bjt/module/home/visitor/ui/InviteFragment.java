@@ -37,7 +37,7 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
     private VisitorAdapter mAdapter;
     private ReplaceViewHelper mReplaceViewHelper;
     private int pages;
-    private int current=1;
+    private int current = 1;
 
 
     @Override
@@ -124,7 +124,7 @@ public class InviteFragment extends BaseFragment implements VisitorContract.View
             current = bean.getCurrent();
             List<VisitorBean.RecordsBean> records = bean.getRecords();
             if (records != null && records.size() > 0) {
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recycler_view.smoothScrollToPosition(0);

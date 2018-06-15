@@ -136,7 +136,7 @@ public class PayHistoryActivity extends BaseWhiteToolBarActivity implements PayC
             current = history.getCurrent();
             List<ParkPayHistory.RecordsBean> records = history.getRecords();
             if (records != null && records.size() > 0) {
-                list = records;
+                list.addAll(records);
                 if (current > 1) {
                     mAdapter.setLists(list);
                     recyclerView.smoothScrollToPosition(0);

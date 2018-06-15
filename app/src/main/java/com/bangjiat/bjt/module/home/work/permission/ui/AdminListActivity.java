@@ -57,7 +57,7 @@ public class AdminListActivity extends BaseColorToolBarActivity implements Compa
         beans = new ArrayList<>();
         presenter = new CompanyUserPresenter(this);
         token = DataUtil.getToken(mContext);
-        presenter.getCompanyUser(token, 1, 10, 4);
+        presenter.getCompanyUser(token, 1, 10, 3);
         CompanyUserBean first = CompanyUserBean.first(CompanyUserBean.class);
         if (first != null)
             tv_company_name.setText(first.getCompanyName());

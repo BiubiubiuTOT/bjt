@@ -48,8 +48,13 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
         if (list == null) {
             list = new ArrayList<>();
             presenter.getAllNotice(DataUtil.getToken(mContext));
+        } else {
+            if (list.size() == 0) {
+                mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
+            } else
+                setAdapter();
         }
-        setAdapter();
+
     }
 
 
