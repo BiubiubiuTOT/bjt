@@ -3,6 +3,7 @@ package com.bangjiat.bjt.module.home.work.ui;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,6 +74,8 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
         if (!Constants.isCompanyAdmin()) {//公司管理员才能修改公司信息
             et_address.setEnabled(false);
             et_industry.setEnabled(false);
+            et_address.setFocusable(false);
+            et_industry.setFocusable(false);
             tv_done.setVisibility(View.GONE);
             tv_title.setText("公司信息");
         }
@@ -190,9 +193,10 @@ public class EditCompanyActivity extends BaseToolBarActivity implements
             tv_company.setText(result.getName());
             et_industry.setText(result.getIndustry());
             et_address.setText(result.getAddress());
-            if (isInto) {
+            String buildName = result.getBuildName();
+            if (!TextUtils.isEmpty(buildName)) {
                 ll_build.setVisibility(View.VISIBLE);
-                tv_build.setText(result.getBuildName());
+                tv_build.setText(buildName);
             }
         }
     }

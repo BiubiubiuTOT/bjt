@@ -134,6 +134,7 @@
         <item>加入公司</item>
         <item>权限更改</item>
         <item>系统公告</item>
+        <item>楼宇公告</item>
         <item>已被公司管理员删除</item>
     </string-array>
 </resources>

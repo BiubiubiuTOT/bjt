@@ -2,6 +2,10 @@ package com.bangjiat.bjt.module.home.work.kaoqin.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Message;
 import android.util.Log;
 import android.view.Display;
@@ -457,7 +461,17 @@ public class DakaFragment extends BaseFragment implements RoleContract.View, Dis
         showDia();
     }
 
+    // 播放默认铃声
+    // 返回Notification id
+    public void playSound(final Context context) {
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(context, notification);
+        r.play();
+    }
+
+
     private void showDia() {
+        playSound(mContext);
         new com.adorkable.iosdialog.AlertDialog(mContext).builder().setMsg("打卡成功").setCancelable(false).
                 setPositiveButton("确定", new View.OnClickListener() {
                     @Override

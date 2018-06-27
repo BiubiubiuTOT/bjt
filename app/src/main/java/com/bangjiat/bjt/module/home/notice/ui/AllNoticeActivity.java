@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.bangjiat.bjt.R;
 import com.bangjiat.bjt.common.DataUtil;
+import com.bangjiat.bjt.common.RefreshViewHolder;
 import com.bangjiat.bjt.common.ReplaceViewHelper;
 import com.bangjiat.bjt.module.home.notice.adapter.NoticeAdapter;
 import com.bangjiat.bjt.module.home.notice.beans.NoticeBean;
@@ -23,8 +24,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class AllNoticeActivity extends BaseWhiteToolBarActivity implements NoticeContract.View {
+public class AllNoticeActivity extends BaseWhiteToolBarActivity implements NoticeContract.View
+        , BGARefreshLayout.BGARefreshLayoutDelegate {
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
 
@@ -32,6 +35,9 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
     private List<NoticeBean.SysNoticeListBean> list;
     private NoticeAdapter mAdapter;
     private ReplaceViewHelper mReplaceViewHelper;
+    @BindView(R.id.rl_refresh)
+    BGARefreshLayout mRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,8 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
         presenter = new NoticePresenter(this);
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         recycler_view.setHasFixedSize(true);
+        mRefreshLayout.setDelegate(this);
+        mRefreshLayout.setRefreshViewHolder(new RefreshViewHolder(mContext, false));
         list = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class, "ctime desc");
         if (list == null) {
             list = new ArrayList<>();
@@ -51,9 +59,9 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
         } else {
             if (list.size() == 0) {
                 mReplaceViewHelper.toReplaceView(recycler_view, R.layout.no_data_page);
-            } else
-                setAdapter();
+            }
         }
+        setAdapter();
 
     }
 
@@ -81,6 +89,7 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     @Override
     public void getAllNoticeResult(NoticeBean noticeBean) {
+        mRefreshLayout.endRefreshing();
         if (noticeBean != null) {
             List<NoticeBean.SysNoticeListBean> sysNoticeList = noticeBean.getSysNoticeList();
             if (sysNoticeList != null && sysNoticeList.size() > 0) {
@@ -106,7 +115,30 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
                 }
             });
 
-            SugarRecord.saveInTx(list);
+            List<NoticeBean.SysNoticeListBean> first = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class);
+            if (first != null) {
+                List<String> strings = new ArrayList<>();
+                for (NoticeBean.SysNoticeListBean bean : list) {
+                    strings.add(String.valueOf(bean.getCtime()));
+                }
+
+                for (NoticeBean.SysNoticeListBean listBean : first) {
+                    if (!strings.contains(String.valueOf(listBean.getCtime()))) listBean.delete();
+                }
+
+                for (NoticeBean.SysNoticeListBean data : list) {
+                    List<NoticeBean.SysNoticeListBean> sysNoticeListBeans = NoticeBean.SysNoticeListBean.
+                            find(NoticeBean.SysNoticeListBean.class, "ctime=?", String.valueOf(data.getCtime()));
+                    if (!sysNoticeListBeans.isEmpty()) {
+                        NoticeBean.SysNoticeListBean sysNoticeListBean = sysNoticeListBeans.get(0);
+                        boolean read = sysNoticeListBean.isRead();
+                        sysNoticeListBean.delete();
+                        data.setRead(read);
+                    }
+                    data.save();
+                }
+            } else
+                SugarRecord.saveInTx(list);
 
             mAdapter.setLists(list);
             mReplaceViewHelper.removeView();
@@ -138,6 +170,19 @@ public class AllNoticeActivity extends BaseWhiteToolBarActivity implements Notic
 
     @Override
     public void showError(String err) {
+        mRefreshLayout.endRefreshing();
         Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout bgaRefreshLayout) {
+        list = new ArrayList<>();
+        bgaRefreshLayout.beginRefreshing();
+        presenter.getAllNotice(DataUtil.getToken(mContext));
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout bgaRefreshLayout) {
+        return true;
     }
 }

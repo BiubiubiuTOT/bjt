@@ -121,12 +121,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
             }
         });
 
-        sysNoticeListBean = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class);
-        if (sysNoticeListBean == null)
-            presenter.getAllNotice(token);
-        else if (sysNoticeListBean.size() == 0) {
-            presenter.getAllNotice(token);
-        } else setData(sysNoticeListBean);
+        presenter.getAllNotice(token);
 
         userPresenter = new GetUserInfoPresenter(this);
         UserInfo userInfo = UserInfo.first(UserInfo.class);
@@ -196,7 +191,11 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @OnClick(R.id.tv_visitor)
     public void clickVisitor(View view) {
-        startActivity(new Intent(mContext, Constants.isIntoCompany() ? VisitorActivity.class : AddOrSelectCompanyActivity.class));
+        if (Constants.isBuildingAdmin()) {
+            startActivity(new Intent(mContext, VisitorActivity.class));
+        } else {
+            startActivity(new Intent(mContext, Constants.isIntoCompany() ? VisitorActivity.class : AddOrSelectCompanyActivity.class));
+        }
     }
 
     @OnClick(R.id.iv_scan)
@@ -206,8 +205,12 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
 
     @OnClick(R.id.tv_open_door)
     public void clickOpenDoor(View view) {
-        startActivity(new Intent(mContext, Constants.isIntoCompany() ?
-                OpenDoorCodeActivity.class : AddOrSelectCompanyActivity.class));
+        if (Constants.isBuildingAdmin()) {
+            startActivity(new Intent(mContext, OpenDoorCodeActivity.class));
+        } else {
+            startActivity(new Intent(mContext, Constants.isIntoCompany() ?
+                    OpenDoorCodeActivity.class : AddOrSelectCompanyActivity.class));
+        }
     }
 
     @OnClick(R.id.tv_work)
@@ -278,6 +281,7 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
             iv_not_read.setVisibility(View.VISIBLE);
         } else {
             iv_not_read.setVisibility(list.size() == aTrue.size() ? View.GONE : View.VISIBLE);
+            setData(list);
         }
 
     }
@@ -310,14 +314,28 @@ public class HomeFragment extends BaseFragment implements NoticeContract.View, S
                 });
 
 
-                NoticeBean.SysNoticeListBean first = NoticeBean.SysNoticeListBean.first(NoticeBean.SysNoticeListBean.class);
+                List<NoticeBean.SysNoticeListBean> first = NoticeBean.SysNoticeListBean.listAll(NoticeBean.SysNoticeListBean.class);
                 if (first != null) {
+                    List<String> strings = new ArrayList<>();
+                    for (NoticeBean.SysNoticeListBean bean1 : list) {
+                        strings.add(String.valueOf(bean1.getCtime()));
+                    }
+
+                    for (NoticeBean.SysNoticeListBean listBean : first) {
+                        if (!strings.contains(String.valueOf(listBean.getCtime())))
+                            listBean.delete();
+                    }
+
                     for (NoticeBean.SysNoticeListBean data : list) {
                         List<NoticeBean.SysNoticeListBean> sysNoticeListBeans = NoticeBean.SysNoticeListBean.
                                 find(NoticeBean.SysNoticeListBean.class, "ctime=?", String.valueOf(data.getCtime()));
-                        if (sysNoticeListBeans.isEmpty()) {
-                            data.save();
+                        if (!sysNoticeListBeans.isEmpty()) {
+                            NoticeBean.SysNoticeListBean sysNoticeListBean = sysNoticeListBeans.get(0);
+                            boolean read = sysNoticeListBean.isRead();
+                            sysNoticeListBean.delete();
+                            data.setRead(read);
                         }
+                        data.save();
                     }
                 } else
                     SugarRecord.saveInTx(list);

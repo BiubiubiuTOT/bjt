@@ -2,6 +2,7 @@ package com.bangjiat.bjt.module.secretary.workers.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -26,6 +27,9 @@ import com.bangjiat.bjt.module.secretary.contact.presenter.SearchContactPresente
 import com.bangjiat.bjt.module.secretary.workers.beans.WorkersResult;
 import com.bangjiat.bjt.module.secretary.workers.contract.CompanyUserContract;
 import com.bangjiat.bjt.module.secretary.workers.presenter.CompanyUserPresenter;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -34,6 +38,9 @@ import com.orhanobut.logger.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,20 +61,42 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
     ClearEditText et_duty;
     @BindView(R.id.et_card)
     ClearEditText et_card;
+    @BindView(R.id.tv_sex)
+    TextView tv_sex;
 
     private Dialog dialog;
     private CompanyUserContract.Presenter presenter;
     private SearchContactContract.Presenter searchPresenter;
     private WorkersResult.RecordsBean bean;
     private int type;
+    private OptionsPickerView<String> pvSexs;
+    private List<String> options1Items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
+        initSexPicker();
+    }
+
+    private void initSexPicker() {
+        pvSexs = new OptionsPickerBuilder(mContext, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                bean.setSex(options1);
+                tv_sex.setText(options1Items.get(options1));
+            }
+        }).setSubmitColor(Color.BLACK)
+                .setCancelColor(Color.BLACK).build();
+        pvSexs.setPicker(options1Items);
+
     }
 
     private void initData() {
+        options1Items = new ArrayList<>();
+        options1Items.add("男");
+        options1Items.add("女");
+
         presenter = new CompanyUserPresenter(this);
         searchPresenter = new SearchContactPresenter(this);
         bean = new WorkersResult.RecordsBean();
@@ -179,6 +208,11 @@ public class AddWorkersActivity extends BaseToolBarActivity implements CompanyUs
         toolbar.setNavigationIcon(R.mipmap.back_white);
     }
 
+
+    @OnClick(R.id.tv_sex)
+    public void clickSex(View view) {
+        pvSexs.show();
+    }
 
     @OnClick(R.id.tv_invite)
     public void clickInvite(View view) {
